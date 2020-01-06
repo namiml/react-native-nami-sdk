@@ -1,0 +1,33 @@
+{
+  "name": "react-native-nami-sdk",
+  "version": "0.1.0",
+  "description": "React Native Module for Nami",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ios": "react-native run-ios",
+    "ios-setup": "cd ios && rm -rf Pods && rm -rf build && pod install",
+    "start": "react-native start"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": "Francisco Pena and Kendall",
+  "license": "ISC",
+  "dependencies": {},
+  "peerDependencies": {
+    "react": ">= 16.0.0-alpha.12",
+    "react-native": ">= 0.45.0"
+  },
+  "devDependencies": {
+    "standard": "^8.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/namiml/react-native-nami-sdk.git"
+  },
+  "homepage": "https://github.com/namiml/react-native-nami-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/namiml/react-native-nami-sdk/issues"
+  }
+}
