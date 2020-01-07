@@ -12,6 +12,7 @@
 		EB1C9AFB23BE9C5700CAD548 /* NamiStoreKitHelperBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF823BE9C5600CAD548 /* NamiStoreKitHelperBridge.m */; };
 		EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerProxy.m */; };
 		EB1C9AFD23BE9C5700CAD548 /* NamiEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */; };
+		EBC59E5D23C5514B008A123A /* Nami.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5C23C5514B008A123A /* Nami.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,7 @@
 		EB1C9AF823BE9C5600CAD548 /* NamiStoreKitHelperBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiStoreKitHelperBridge.m; sourceTree = "<group>"; };
 		EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiPaywallManagerProxy.m; sourceTree = "<group>"; };
 		EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiEmitter.m; sourceTree = "<group>"; };
+		EBC59E5C23C5514B008A123A /* Nami.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Nami.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			children = (
 				B3E7B5881CC2AC0600A0062D /* RNNami.h */,
 				B3E7B5891CC2AC0600A0062D /* RNNami.m */,
+				EBC59E5C23C5514B008A123A /* Nami.m */,
 				EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */,
 				EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerProxy.m */,
 				EB1C9AF823BE9C5600CAD548 /* NamiStoreKitHelperBridge.m */,
@@ -172,6 +175,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBC59E5D23C5514B008A123A /* Nami.m in Sources */,
 				EB1C9AFB23BE9C5700CAD548 /* NamiStoreKitHelperBridge.m in Sources */,
 				EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerProxy.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNNami.m in Sources */,
