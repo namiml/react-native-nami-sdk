@@ -53,7 +53,10 @@ RCT_EXTERN_METHOD(configureWithAppID:(NSString)appID)
   [[Nami shared] configureWithAppID:appID];
 }
 
-
+RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
+- (void)performNamiCommand: (NSString *)command {
+    [NamiCommand performCommand:command];
+}
 
 @end
 
