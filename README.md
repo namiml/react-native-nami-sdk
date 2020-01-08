@@ -30,17 +30,20 @@ const App = () => {
   }
 
   useEffect(() => {
-		console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge) // to see whats coming out the console in debug mode
+    // to see whats coming out the console in debug mode
+    console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
+    
     eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
     NativeModules.NamiBridge.configureWithAppID('YOUR_APP_ID');
 
-	}, []);
-}
+  }, []);
+
 
   return (
     <>Your View</>
   );
+}
 
-	export default App;
+export default App;
 ```
