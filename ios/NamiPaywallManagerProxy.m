@@ -48,16 +48,6 @@ RCT_EXTERN_METHOD(presentPaywallNoArg)
   [[NamiPaywallManager shared] raisePaywallFromVC:nil];
 }
 
-RCT_EXTERN_METHOD(configureWithAppID:(NSString)appID)
-- (void)configureWithAppID: (NSString *)appID {
-  [[Nami shared] configureWithAppID:appID];
-}
-
-RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
-- (void)performNamiCommand: (NSString *)command {
-    [NamiCommand performCommand:command];
-}
-
 @end
 
 @implementation NamiPaywallManagerBridge
