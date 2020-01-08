@@ -2,7 +2,7 @@
 # react-native-nami-sdk
 
 ## Getting started iOS Steps
-1. `npm install react-native-nami-sdk --save` or `$ yarn add react-native-nami-sdk`
+1. `npm install react-native-nami-sdk --save` or `yarn add react-native-nami-sdk`
 2. add the following to your package.json scripts `"ios-setup": "cd ios && rm -rf Pods && rm -rf build && pod install"`
 3. `npm run ios-setup` or `$ yarn run ios-setup`
 4. `npm run ios` or `yarn run ios`
