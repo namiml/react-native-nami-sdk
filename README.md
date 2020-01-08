@@ -24,9 +24,9 @@ const App = () => {
   }
 
   const onSessionConnect = (event) => {
-	  console.log("Products changed: ", event);
-    setProducts(event.products)
-	  setSubscribe(products.length === 0)
+    console.log("Products changed: ", event);
+    setProducts(event.products);
+    setSubscribe(products.length === 0);
   }
 
   useEffect(() => {
