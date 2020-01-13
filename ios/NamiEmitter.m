@@ -37,10 +37,11 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
     }];
       
       [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
+          [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMeta:paywallMetadata];
       }];
                  
       [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
-          
+          [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMeta:paywallMetadata];
       }];
       
   }
@@ -113,7 +114,7 @@ bool hasNamiEmitterListeners;
                         forPaywall:(NSString * _Nonnull) developerPaywallID
                       withProducts:(NSArray<NamiMetaProduct *> * _Nullable) products
                        paywallMeta:(NamiMetaPaywall * _Nonnull) paywallMetadata  {
-  if (hasNamiEmitterListeners) {
+    if (hasNamiEmitterListeners) {
     NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
     for (NamiMetaProduct *product in products) {
       [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];
