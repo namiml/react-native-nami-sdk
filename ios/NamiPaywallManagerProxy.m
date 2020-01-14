@@ -44,7 +44,7 @@ RCT_EXTERN_METHOD(sharedInstance)
 }
 
 RCT_EXTERN_METHOD(presentPaywallNoArg)
-- (void)presentPaywallNoArg {
+- (void)raisePaywall {
   [[NamiPaywallManager shared] raisePaywallFromVC:nil];
 }
 

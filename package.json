@@ -1,6 +1,6 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "React Native Module for Nami",
   "main": "index.js",
   "scripts": {

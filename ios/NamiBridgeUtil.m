@@ -25,7 +25,9 @@
         productDict[@"localizedPrice"] = productInt.localizedPrice;
         productDict[@"localizedMultipliedPrice"] = productInt.localizedMultipliedPrice;
         productDict[@"price"] = productInt.price.stringValue;
-        productDict[@"priceLocale"] = productInt.priceLocale.localeIdentifier;
+        productDict[@"priceLanguage"] = productInt.priceLocale.languageCode;
+        productDict[@"priceCountry"] = productInt.priceLocale.countryCode;
+        productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
         
         if (@available(iOS 12.0, *)) {
             productDict[@"subscriptionGroupIdentifier"] = productInt.subscriptionGroupIdentifier;
@@ -38,8 +40,8 @@
                 NSUInteger numberOfUnits = subscriptionPeriod.numberOfUnits;
                 SKProductPeriodUnit periodUnit = subscriptionPeriod.unit;
                 
-                productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lui", numberOfUnits];
-                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%lui", periodUnit];
+                productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lui", (unsigned long)numberOfUnits];
+                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%lui", (unsigned long)periodUnit];
             }
         }
 

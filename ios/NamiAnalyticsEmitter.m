@@ -85,6 +85,7 @@ bool hasNamiAanlyticsEmitterListeners;
 - (void)sendAnalyticsEventForAction:(NamiAnalyticsActionType)action
                       anayticsItems:(NSDictionary *)anayticsItems {
   if (hasNamiAanlyticsEmitterListeners) {
+      NSLog(@"Pre-sanitized analytics dictionary is :\n%@", anayticsItems);
       NSDictionary *sendAnalyitcsDict = [self sanitizeAnalyticsItems:anayticsItems];
     
       NSString *actionName = @"UNKNOWN";
