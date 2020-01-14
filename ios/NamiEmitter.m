@@ -29,7 +29,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 {
   self = [super init];
   if (self) {
-    hasListeners = NO;
+    hasNamiEmitterListeners = NO;
     
     // Tell Nami to listen for purchases and we'll forward them on to listeners
     [[NamiStoreKitHelper shared] registerWithPurchasesChangedHandler:^(NSArray<NamiMetaPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
@@ -37,10 +37,11 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
     }];
       
       [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
+          [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMeta:paywallMetadata];
       }];
                  
       [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
-          
+          [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMeta:paywallMetadata];
       }];
       
   }
@@ -75,20 +76,20 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
   return @{@"initialPurchasedProducts" : [self allPurchasedProducts]};
 }
 
-bool hasListeners;
+bool hasNamiEmitterListeners;
 
 // Will be called when this module's first listener is added.
 -(void)startObserving {
-    hasListeners = YES;
+    hasNamiEmitterListeners = YES;
 }
 
 // Will be called when this module's last listener is removed, or on dealloc.
 -(void)stopObserving {
-    hasListeners = NO;
+    hasNamiEmitterListeners = NO;
 }
 
 - (void)sendEventPurchased {
-  if (hasListeners) {
+  if (hasNamiEmitterListeners) {
     NSArray<NamiMetaPurchase *> *purchases = NamiStoreKitHelper.shared.allPurchasedProducts;
     NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
     for (NamiMetaProduct *purchase in purchases) {
@@ -102,7 +103,7 @@ bool hasListeners;
 - (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC
                        forPaywall:(NSString * _Nonnull) developerPaywallID
                       paywallMeta:(NamiMetaPaywall * _Nonnull) paywallMetadata {
-  if (hasListeners) {
+  if (hasNamiEmitterListeners) {
       // Pass along paywall ID and paywall metadata for use in sign-in provider.
       [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
                                                         @"paywallMeta": paywallMetadata.namiPaywallInfoDict, }];
@@ -113,7 +114,7 @@ bool hasListeners;
                         forPaywall:(NSString * _Nonnull) developerPaywallID
                       withProducts:(NSArray<NamiMetaProduct *> * _Nullable) products
                        paywallMeta:(NamiMetaPaywall * _Nonnull) paywallMetadata  {
-  if (hasListeners) {
+    if (hasNamiEmitterListeners) {
     NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
     for (NamiMetaProduct *product in products) {
       [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];

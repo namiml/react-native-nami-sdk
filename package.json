@@ -1,6 +1,6 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "0.1.9",
+  "version": "0.1.14",
   "description": "React Native Module for Nami",
   "main": "index.js",
   "scripts": {
@@ -16,12 +16,12 @@
   "license": "ISC",
   "dependencies": {
     "react": ">= 16.9.0",
-    "react-native": ">= 0.61.5",
+    "react-native": ">= 0.61.4",
     "expo-cli": "^3.11.3"
   },
   "peerDependencies": {
     "react": ">= 16.9.0",
-    "react-native": ">= 0.61.5"
+    "react-native": ">= 0.61.4"
   },
   "devDependencies": {
     "standard": "^8.6.0"

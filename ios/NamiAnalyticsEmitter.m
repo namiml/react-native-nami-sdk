@@ -31,7 +31,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 {
   self = [super init];
   if (self) {
-    hasListeners = NO;
+    hasNamiAanlyticsEmitterListeners = NO;
     
       [NamiAnalyticsSupport registerAnalyticsHandlerWithHandler: ^(NamiAnalyticsActionType actionType , NSDictionary<NSString *,id> * _Nonnull anaytlicsDict) {
           [self sendAnalyticsEventForAction:actionType anayticsItems:anaytlicsDict];
@@ -70,21 +70,22 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
   return @{};
 }
 
-bool hasListeners;
+bool hasNamiAanlyticsEmitterListeners;
 
 // Will be called when this module's first listener is added.
 -(void)startObserving {
-    hasListeners = YES;
+    hasNamiAanlyticsEmitterListeners = YES;
 }
 
 // Will be called when this module's last listener is removed, or on dealloc.
 -(void)stopObserving {
-    hasListeners = NO;
+    hasNamiAanlyticsEmitterListeners = NO;
 }
 
 - (void)sendAnalyticsEventForAction:(NamiAnalyticsActionType)action
                       anayticsItems:(NSDictionary *)anayticsItems {
-  if (hasListeners) {
+  if (hasNamiAanlyticsEmitterListeners) {
+      NSLog(@"Pre-sanitized analytics dictionary is :\n%@", anayticsItems);
       NSDictionary *sendAnalyitcsDict = [self sanitizeAnalyticsItems:anayticsItems];
     
       NSString *actionName = @"UNKNOWN";
