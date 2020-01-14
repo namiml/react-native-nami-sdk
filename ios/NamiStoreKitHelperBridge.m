@@ -46,9 +46,9 @@ RCT_EXTERN_METHOD(clearBypassStoreKitPurchases)
   [[NamiStoreKitHelper shared] clearBypassStoreKitPurchases];
 }
 
-RCT_EXTERN_METHOD(bypassStoreKit)
-- (void)bypassStoreKit {
-  [[NamiStoreKitHelper shared] bypassStoreKitWithBypass:YES];
+RCT_EXTERN_METHOD(bypassStoreKit:(BOOL)bypass)
+- (void)bypassStoreKit: (BOOL) bypass {
+  [[NamiStoreKitHelper shared] bypassStoreKitWithBypass:bypass];
 }
 
 RCT_EXTERN_METHOD(anyProductPurchased:(NSArray)namiCommand)
