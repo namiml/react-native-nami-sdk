@@ -48,6 +48,11 @@ RCT_EXTERN_METHOD(raisePaywall)
   [[NamiPaywallManager shared] raisePaywallFromVC:nil];
 }
 
+RCT_EXTERN_METHOD(canRaisePaywall)
+- (BOOL)canRaisePaywall {
+    return [[NamiPaywallManager shared] canRaisePaywall];
+}
+
 @end
 
 @implementation NamiPaywallManagerBridge

@@ -51,6 +51,11 @@ RCT_EXTERN_METHOD(bypassStoreKit)
   [[NamiStoreKitHelper shared] bypassStoreKitWithBypass:YES];
 }
 
+RCT_EXTERN_METHOD(anyProductPurchased:(NSArray)namiCommand)
+- (BOOL)anyProductPurchased: (NSArray *)productIDs {
+    return [[NamiStoreKitHelper shared] anyProductPurchased:productIDs];
+}
+
 //RCT_EXTERN_METHOD(configureWithAppID:(NSString)appID)
 //- (void)configureWithAppID: (NSString *)appID {
 //  [[Nami shared] configureWithAppID:appID];
