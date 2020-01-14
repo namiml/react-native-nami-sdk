@@ -30,7 +30,7 @@
         productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
         
         if (@available(iOS 12.0, *)) {
-            productDict[@"subscriptionGroupIdentifier"] = productInt.subscriptionGroupIdentifier;
+            productDict[@"subscriptionGroupIdentifier"] = [NSString stringWithString:productInt.subscriptionGroupIdentifier];
         }
         
         if (@available(iOS 11.2, *)) {
@@ -40,8 +40,8 @@
                 NSUInteger numberOfUnits = subscriptionPeriod.numberOfUnits;
                 SKProductPeriodUnit periodUnit = subscriptionPeriod.unit;
                 
-                productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lui", (unsigned long)numberOfUnits];
-                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%lui", (unsigned long)periodUnit];
+                productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lu", (unsigned long)numberOfUnits];
+                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%lu", (unsigned long)periodUnit];
             }
         }
 
