@@ -3,7 +3,7 @@
 //  RNNami
 //
 //  Created by Kendall Gelner on 1/7/20.
-//  Copyright © 2020 Nami ML. All rights reserved.
+//  Copyright © 2020 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
