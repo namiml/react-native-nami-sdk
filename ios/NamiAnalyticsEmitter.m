@@ -85,7 +85,6 @@ bool hasNamiAanlyticsEmitterListeners;
 - (void)sendAnalyticsEventForAction:(NamiAnalyticsActionType)action
                       anayticsItems:(NSDictionary *)anayticsItems {
   if (hasNamiAanlyticsEmitterListeners) {
-      NSLog(@"Pre-sanitized analytics dictionary is :\n%@", anayticsItems);
       NSDictionary *sendAnalyitcsDict = [self sanitizeAnalyticsItems:anayticsItems];
     
       NSString *actionName = @"UNKNOWN";
@@ -129,27 +128,27 @@ bool hasNamiAanlyticsEmitterListeners;
         for (NamiMetaProduct *product in (NSArray *)rawProducts) {
             [productsSanitized addObject:[NamiBridgeUtil productToProductDict:product]];
         }
-        sanitizedDictionary[@"paywallProducts_NamiMetaProduct"] = productsSanitized;
+        sanitizedDictionary[@"paywallProducts"] = productsSanitized;
     }
 
 
-    NSDate *purchseTimestamp = (NSDate *)(anayticsItems[@"purchasedProductPurchaseTimestamp_Date"]);
+    NSDate *purchseTimestamp = (NSDate *)(anayticsItems[@"purchasedProductPurchaseTimestamp"]);
     if (purchseTimestamp != NULL && [purchseTimestamp isKindOfClass:[NSDate class]])
     {
         NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
         NSISO8601DateFormatOptions options = NSISO8601DateFormatWithInternetDateTime | NSISO8601DateFormatWithDashSeparatorInDate | NSISO8601DateFormatWithColonSeparatorInTime | NSISO8601DateFormatWithTimeZone;
         
-        sanitizedDictionary[@"purchasedProductPurchaseTimestamp_Date"] =  [NSISO8601DateFormatter stringFromDate:purchseTimestamp timeZone:UTC formatOptions:options];
+        sanitizedDictionary[@"purchasedProductPurchaseTimestamp"] =  [NSISO8601DateFormatter stringFromDate:purchseTimestamp timeZone:UTC formatOptions:options];
     }
     
-    NSDictionary *purchasedProductDict = [self productDictIfProductPresentInAnalyticsItems:anayticsItems forKey:@"purchasedProduct_NamiMetaProduct"];
+    NSDictionary *purchasedProductDict = [self productDictIfProductPresentInAnalyticsItems:anayticsItems forKey:@"purchasedProduct"];
     if ( purchasedProductDict != NULL ) {
-        sanitizedDictionary[@"purchasedProduct_NamiMetaProduct"] = purchasedProductDict;
+        sanitizedDictionary[@"purchasedProduct"] = purchasedProductDict;
         sanitizedDictionary[@"purchasedProductPrice"] = purchasedProductDict[@"price"];
         sanitizedDictionary[@"purchasedProductLocale"] = purchasedProductDict[@"priceLocale"];
     }
     
-    NSNumber *activityType = anayticsItems[@"purchaseActivityType_ActivityType"];
+    NSNumber *activityType = anayticsItems[@"purchaseActivityType"];
     if (activityType != NULL && [activityType isKindOfClass:[NSNumber class]] ) {
         switch (activityType.intValue) {
             case 0: //newPurchase

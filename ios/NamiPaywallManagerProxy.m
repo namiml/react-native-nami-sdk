@@ -48,6 +48,12 @@ RCT_EXTERN_METHOD(raisePaywall)
   [[NamiPaywallManager shared] raisePaywallFromVC:nil];
 }
 
+RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
+{
+    BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
+    completion(@[[NSNumber numberWithBool:canRaise]]);
+}
+
 @end
 
 @implementation NamiPaywallManagerBridge
