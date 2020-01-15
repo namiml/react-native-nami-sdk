@@ -37,11 +37,11 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
     }];
       
       [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
-          [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMeta:paywallMetadata];
+          [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
       }];
                  
       [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
-          [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMeta:paywallMetadata];
+          [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
       }];
       
   }
@@ -102,18 +102,18 @@ bool hasNamiEmitterListeners;
 
 - (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC
                        forPaywall:(NSString * _Nonnull) developerPaywallID
-                      paywallMeta:(NamiMetaPaywall * _Nonnull) paywallMetadata {
+                      paywallMetadata:(NamiMetaPaywall * _Nonnull) paywallMetadata {
   if (hasNamiEmitterListeners) {
       // Pass along paywall ID and paywall metadata for use in sign-in provider.
       [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
-                                                        @"paywallMeta": paywallMetadata.namiPaywallInfoDict, }];
+                                                        @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
   }
 }
 
 - (void)sendPaywallActivatedFromVC:(UIViewController * _Nullable) fromVC
                         forPaywall:(NSString * _Nonnull) developerPaywallID
                       withProducts:(NSArray<NamiMetaProduct *> * _Nullable) products
-                       paywallMeta:(NamiMetaPaywall * _Nonnull) paywallMetadata  {
+                       paywallMetadata:(NamiMetaPaywall * _Nonnull) paywallMetadata  {
     if (hasNamiEmitterListeners) {
     NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
     for (NamiMetaProduct *product in products) {
@@ -122,7 +122,7 @@ bool hasNamiEmitterListeners;
     
       [self sendEventWithName:@"AppPaywallActivate" body:@{ @"products": productDicts,
                                                             @"developerPaywallID": developerPaywallID,
-                                                            @"paywallMeta": paywallMetadata.namiPaywallInfoDict, }];
+                                                            @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
   }
 }
 
