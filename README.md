@@ -7,7 +7,14 @@
 3. `npm run ios-setup` or `yarn run ios-setup`
 4. `npm run ios` or `yarn run ios`
 
-## Usage go here: [See an example here.](https://github.com/namiml/nami-react-native) or look at the example below
+## For Exmaples on how to use it
+
+- [Basic Example Repo Instructions](./examples/BasicExample/README.md)
+
+- [Analytics Example Repo Instructions](./examples/AnalyticsExample/README.md)
+
+## Usage
+
 ```javascript
 import {
   NativeEventEmitter,
