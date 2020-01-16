@@ -1,3 +1,4 @@
 /samples
 /samples/BasicExample/__tests__
 /samples/AnalyticsExample/__tests__
+yarn.lock
