@@ -3,7 +3,7 @@
 //  namiReactNative
 //
 //  Created by Kendall Gelner on 11/22/19.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Copyright © 2019 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -71,4 +71,3 @@ RCT_EXPORT_MODULE_NO_LOAD(NamiPaywallManagerBridge, NamiPaywallManagerBridge)
 
 
 @end
-

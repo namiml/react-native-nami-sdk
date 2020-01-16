@@ -1,19 +1,36 @@
 {
   "name": "react-native-nami-sdk",
   "version": "0.1.18",
-  "description": "React Native Module for Nami",
+  "description": "React Native Module for Nami - The Smartest Way to Sell Subscriptions.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ios": "react-native run-ios",
-    "ios-setup": "cd ios && rm -rf Pods && rm -rf build && pod install",
+    "ios-setup": "cd ios && pod install",
+    "ios-clean": "cd ios && rm -rf Pods && rm -rf build",
     "start": "react-native start"
   },
   "keywords": [
-    "react-native"
+    "in-app-purchase",
+    "ios",
+    "ipados",
+    "paywall",
+    "react-native",
+    "storekit",
+    "subscriptions"
   ],
-  "author": "Francisco Pena and Kendall",
-  "license": "ISC",
+  "author": "Nami ML, Inc.",
+  "contributors": [
+    {
+      "name": "Francisco Pena",
+      "email": "francisco.pena@namiml.com"
+    },
+    {
+      "name": "Kendall Gelner",
+      "email": "kendall.gelner@namiml.com"
+    }
+  ],
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "react": ">= 16.9.0",
     "react-native": ">= 0.61.4",
@@ -30,7 +47,7 @@
     "type": "git",
     "url": "git+https://github.com/namiml/react-native-nami-sdk.git"
   },
-  "homepage": "https://github.com/namiml/react-native-nami-sdk#readme",
+  "homepage": "https://www.nami.ml",
   "bugs": {
     "url": "https://github.com/namiml/react-native-nami-sdk/issues"
   }
