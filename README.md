@@ -19,6 +19,6 @@ Our bridge code is available as an NPM package.  To get started, simply install 
 3. Build the project with either NPM or yarn: `npm run ios-setup` or `yarn run ios-setup`
 4. Run your app in the iOS simulator: `npm run ios` or `yarn run ios`
 
-Examples of how to use the Nami SDK can be found in the **Examples/** directory of this repository.
+Examples of how to use the Nami SDK can be found in the **examples/** directory of this repository.
 
 More information on configuring and using the SDK is available in our docs at [https://docs.namiml.com](https://docs.namiml.com).
