@@ -3,7 +3,7 @@
 //  namiReactNative
 //
 //  Created by Kendall Helmstetter Gelner on 12/11/19.
-//  Copyright © 2019 Facebook. All rights reserved.
+//  Copyright © 2019 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -30,22 +30,22 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
   self = [super init];
   if (self) {
     hasNamiEmitterListeners = NO;
-    
+
     // Tell Nami to listen for purchases and we'll forward them on to listeners
     [[NamiStoreKitHelper shared] registerWithPurchasesChangedHandler:^(NSArray<NamiMetaPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
       [self sendEventPurchased];
     }];
-      
+
       [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
           [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
       }];
-                 
+
       [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
           [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
       }];
-      
+
   }
-  
+
   return self;
 }
 
@@ -95,7 +95,7 @@ bool hasNamiEmitterListeners;
     for (NamiMetaProduct *purchase in purchases) {
       [productIDs addObject:purchase.productIdentifier];
     }
-    
+
     [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs}];
   }
 }
@@ -119,7 +119,7 @@ bool hasNamiEmitterListeners;
     for (NamiMetaProduct *product in products) {
       [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];
     }
-    
+
       [self sendEventWithName:@"AppPaywallActivate" body:@{ @"products": productDicts,
                                                             @"developerPaywallID": developerPaywallID,
                                                             @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];

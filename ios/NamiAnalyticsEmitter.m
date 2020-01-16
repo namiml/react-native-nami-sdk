@@ -3,7 +3,7 @@
 //  RNNami
 //
 //  Created by Kendall Gelner on 1/9/20.
-//  Copyright © 2020 Facebook. All rights reserved.
+//  Copyright © 2020 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -32,14 +32,14 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
   self = [super init];
   if (self) {
     hasNamiAanlyticsEmitterListeners = NO;
-    
+
       [NamiAnalyticsSupport registerAnalyticsHandlerWithHandler: ^(NamiAnalyticsActionType actionType , NSDictionary<NSString *,id> * _Nonnull anaytlicsDict) {
           [self sendAnalyticsEventForAction:actionType anayticsItems:anaytlicsDict];
       }];
-      
+
     // Tell Nami to listen for purchases and we'll forward them on to listeners
   }
-  
+
   return self;
 }
 
@@ -86,7 +86,7 @@ bool hasNamiAanlyticsEmitterListeners;
                       anayticsItems:(NSDictionary *)anayticsItems {
   if (hasNamiAanlyticsEmitterListeners) {
       NSDictionary *sendAnalyitcsDict = [self sanitizeAnalyticsItems:anayticsItems];
-    
+
       NSString *actionName = @"UNKNOWN";
       switch (action) {
           case NamiAnalyticsActionTypePaywallRaise:
@@ -102,7 +102,7 @@ bool hasNamiAanlyticsEmitterListeners;
               actionName = @"purchase_activity";
               break;
       }
-      
+
       [self sendEventWithName:@"NamiAnalyticsSent" body:@{@"actionType" : actionName, @"analyticsItems": sendAnalyitcsDict}];
   }
 }
@@ -121,7 +121,7 @@ bool hasNamiAanlyticsEmitterListeners;
 
 - (NSDictionary <NSString *, id> *) sanitizeAnalyticsItems:(NSDictionary *)anayticsItems {
     NSMutableDictionary<NSString *, id> *sanitizedDictionary = [NSMutableDictionary dictionaryWithDictionary:anayticsItems];
-    
+
     id rawProducts = anayticsItems[@"paywallProducts"];
     if ([rawProducts isKindOfClass:[NSArray class]]) {
         NSMutableArray<NSDictionary *> *productsSanitized = [NSMutableArray new];
@@ -137,17 +137,17 @@ bool hasNamiAanlyticsEmitterListeners;
     {
         NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
         NSISO8601DateFormatOptions options = NSISO8601DateFormatWithInternetDateTime | NSISO8601DateFormatWithDashSeparatorInDate | NSISO8601DateFormatWithColonSeparatorInTime | NSISO8601DateFormatWithTimeZone;
-        
+
         sanitizedDictionary[@"purchasedProductPurchaseTimestamp"] =  [NSISO8601DateFormatter stringFromDate:purchseTimestamp timeZone:UTC formatOptions:options];
     }
-    
+
     NSDictionary *purchasedProductDict = [self productDictIfProductPresentInAnalyticsItems:anayticsItems forKey:@"purchasedProduct"];
     if ( purchasedProductDict != NULL ) {
         sanitizedDictionary[@"purchasedProduct"] = purchasedProductDict;
         sanitizedDictionary[@"purchasedProductPrice"] = purchasedProductDict[@"price"];
         sanitizedDictionary[@"purchasedProductLocale"] = purchasedProductDict[@"priceLocale"];
     }
-    
+
     NSNumber *activityType = anayticsItems[@"purchaseActivityType"];
     if (activityType != NULL && [activityType isKindOfClass:[NSNumber class]] ) {
         switch (activityType.intValue) {
@@ -167,7 +167,7 @@ bool hasNamiAanlyticsEmitterListeners;
                 break;
         }
     }
-    
+
     return sanitizedDictionary;
 }
 

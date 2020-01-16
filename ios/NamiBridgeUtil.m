@@ -3,7 +3,7 @@
 //  RNNami
 //
 //  Created by Kendall Gelner on 1/9/20.
-//  Copyright © 2020 Facebook. All rights reserved.
+//  Copyright © 2020 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -16,7 +16,7 @@
 
     + (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiMetaProduct *)product {
         NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
-        
+
         productDict[@"productIdentifier"] = product.productIdentifier;
 
         SKProduct *productInt = product.product;
@@ -28,18 +28,18 @@
         productDict[@"priceLanguage"] = productInt.priceLocale.languageCode;
         productDict[@"priceCountry"] = productInt.priceLocale.countryCode;
         productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
-        
+
         if (@available(iOS 12.0, *)) {
             productDict[@"subscriptionGroupIdentifier"] = [NSString stringWithString:productInt.subscriptionGroupIdentifier];
         }
-        
+
         if (@available(iOS 11.2, *)) {
             SKProductSubscriptionPeriod *subscriptionPeriod = productInt.subscriptionPeriod;
-                    
+
             if (subscriptionPeriod != NULL) {
                 NSUInteger numberOfUnits = subscriptionPeriod.numberOfUnits;
                 SKProductPeriodUnit periodUnit = subscriptionPeriod.unit;
-                
+
                 productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lu", (unsigned long)numberOfUnits];
                 productDict[@"periodUnit"] = [NSString stringWithFormat:@"%lu", (unsigned long)periodUnit];
             }
