@@ -11,7 +11,7 @@ React-Native bridge for the Nami SDK
 
 3- clone the project -> `git clone https://github.com/namiml/react-native-nami-sdk.git` 
 
-4- Go into the project -> `cd react-native-nami-sdk/examples/AnalyticsExample`
+4- Go into the project -> `cd react-native-nami-sdk/examples/Analytics`
 
 5- Install Dependencies -> `yarn install`
 
