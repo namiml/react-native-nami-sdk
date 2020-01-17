@@ -19,7 +19,7 @@ import firebase from '@react-native-firebase/app';
 import analytics from '@react-native-firebase/analytics';
 
 const HomeScreen = (props) => {
-   
+
   const {navigate} = props.navigation;
   const [products, setProducts] = useState([])
   const { NamiEmitter } = NativeModules;
@@ -96,7 +96,7 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
 
-    console.log('it run')
+    console.log('Starting Nami.')
     console.log(firebase)
 
     // Need to find somewhere that can activate this sooner
@@ -129,13 +129,13 @@ const HomeScreen = (props) => {
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Introduction</Text>
               <Text style={styles.sectionDescription}>
-                This application demonstrates common calls used in a Nami enabled application.
+                This application demonstrates common calls used in a Nami enabled application and sends analytics data about Paywalls and Purchases to Google Analytics.
               </Text>
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Instructions</Text>
               <Text style={styles.sectionDescription}>
-                if you suspend and resume this app three times in the simulator, an example paywall will be raised - or you can use the <Text style={styles.highlight}>Subscribe</Text> button below to raise the same paywall.
+                If you suspend and resume this app three times in the simulator, an example paywall will be raised - or you can use the <Text style={styles.highlight}>Subscribe</Text> button below to raise the same paywall.
               </Text>
             </View>
             <View style={styles.sectionContainer}>
