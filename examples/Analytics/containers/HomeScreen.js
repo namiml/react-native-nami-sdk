@@ -106,7 +106,6 @@ const HomeScreen = (props) => {
     console.log('Starting Nami.')
     console.log(firebase)
 
-    // Need to find somewhere that can activate this sooner
     NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
     NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
     NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
