@@ -42,7 +42,6 @@ const HomeScreen = (props) => {
       case 'paywall_raise':
         if (analyticsItems) {
           if(analyticsItems.paywallProducts && analyticsItems.paywallProducts.length) {
-            console.log(analyticsItems.paywallProducts, 'analyticsItems.paywallProducts')
             let products = analyticsItems.paywallProducts.map((product, index) => {
              return product.productIdentifier
             }).join(', ')
