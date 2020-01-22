@@ -38,9 +38,6 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
 
-    console.log('it run')
-
-    // Need to find somewhere that can activate this sooner
     console.log('Nami Bridge is');
     console.log(NativeModules.NamiBridge);    
 
