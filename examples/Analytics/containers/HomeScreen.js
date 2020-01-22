@@ -41,6 +41,13 @@ const HomeScreen = (props) => {
     switch (actionType) {
       case 'paywall_raise':
         if (analyticsItems) {
+          if(analyticsItems.paywallProducts && analyticsItems.paywallProducts.length) {
+            let products = analyticsItems.paywallProducts.map((product, index) => {
+             return product.productIdentifier
+            }).join(', ')
+            googleData["paywallProducts"] = products;
+          }
+          
           if (analyticsItems.paywallName) {
             let paywallName = analyticsItems.paywallName
             googleData["paywallName"] = paywallName
@@ -99,7 +106,6 @@ const HomeScreen = (props) => {
     console.log('Starting Nami.')
     console.log(firebase)
 
-    // Need to find somewhere that can activate this sooner
     NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
     NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
     NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
