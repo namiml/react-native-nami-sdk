@@ -57,6 +57,6 @@ buck-out/
 *.jsbundle
 
 # CocoaPods
-/ios/Pods/
-/ios/GoogleService-Info.plist
-/ios/Podfile.lock
+ios/Pods/
+ios/Podfile.lock
+ios/GoogleService-Info.plist
