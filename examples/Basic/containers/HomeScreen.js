@@ -35,6 +35,18 @@ const HomeScreen = (props) => {
 	  console.log("Data for paywall raise ", event);
   }
 
+  const onSignInActivated = (event) => {
+            // Add code to present UI for sign-in
+               console.log("Data for sign-in ", event);
+        }
+
+  const activateAbout = () => {
+         console.log('triggering core action');
+          NativeModules.NamiBridge.coreActionWithLabel("About"); 
+          navigate('About') ;
+      } 
+
+
 
   useEffect(() => {
 
@@ -49,6 +61,9 @@ const HomeScreen = (props) => {
     eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
     console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge) // to see whats coming out the console in debug mode
+
+    eventEmitter.addListener('SignInActivate', onSignInActivated);
+
 
     NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
     NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
@@ -71,7 +86,7 @@ const HomeScreen = (props) => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-            <Button title="Go to About" onPress={() => navigate('About')}/>
+            <Button title="Go to About" onPress={() => activateAbout()}/>
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Introduction</Text>
