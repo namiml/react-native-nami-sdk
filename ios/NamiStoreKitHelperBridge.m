@@ -65,8 +65,6 @@ RCT_EXPORT_METHOD(buyProduct:(nonnull NSString*)productID completion:(RCTRespons
             [[NamiStoreKitHelper shared] buyProduct:useProduct fromPaywall:nil responseHandler:^(NSArray<NamiMetaPurchase *> * _Nonnull purchase, NamiPurchaseState purchaseState, NSError * _Nullable error) {
                 if (purchaseState == NamiPurchaseStatePurchased) {
                     completion(@[[NSNumber numberWithBool:true]]);
-                } else {
-                    completion(@[[NSNumber numberWithBool:success]]);
                 }
             }];
         } else {
