@@ -57,6 +57,24 @@ RCT_EXPORT_METHOD(anyProductPurchased:(nonnull NSArray*)productIDs completion:(R
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
+RCT_EXPORT_METHOD(buyProduct:(nonnull NSString*)productID completion:(RCTResponseSenderBlock)completion)
+{
+    [[NamiStoreKitHelper shared] productsForProductIdentifersWithProductIDs:@[productID] productHandler:^(BOOL success, NSArray<NamiMetaProduct *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
+        NamiMetaProduct *useProduct = products.firstObject;
+        if (useProduct != nil) {
+            [[NamiStoreKitHelper shared] buyProduct:useProduct fromPaywall:nil responseHandler:^(NSArray<NamiMetaPurchase *> * _Nonnull purchase, NamiPurchaseState purchaseState, NSError * _Nullable error) {
+                if (purchaseState == NamiPurchaseStatePurchased) {
+                    completion(@[[NSNumber numberWithBool:true]]);
+                } else {
+                    completion(@[[NSNumber numberWithBool:success]]);
+                }
+            }];
+        } else {
+            completion(@[[NSNumber numberWithBool:false]]);
+        }
+    }];
+}
+
 @end
 
 @implementation NamiStoreKitHelperBridge
