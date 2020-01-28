@@ -32,18 +32,33 @@ const HomeScreen = (props) => {
   }
 
   const onPaywallShouldRaise = (event) => {
+    // Add code to present your custom paywall here
 	  console.log("Data for paywall raise ", event);
+  }
+
+  const onSignInActivated = (event) => {
+    // Add code to present UI for sign-in
+    console.log("Data for sign-in ", event);
+  }
+
+  const activateAbout = () => {
+    console.log('Triggering core action');
+    NativeModules.NamiBridge.coreActionWithLabel("About");
+    navigate('About') ;
   }
 
 
   useEffect(() => {
 
     console.log('Nami Bridge is');
-    console.log(NativeModules.NamiBridge);    
+    console.log(NativeModules.NamiBridge);
 
     eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
-    console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge) // to see whats coming out the console in debug mode
+    console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
+
+    eventEmitter.addListener('SignInActivate', onSignInActivated);
+
 
     NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
     NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
@@ -66,7 +81,7 @@ const HomeScreen = (props) => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-            <Button title="Go to About" onPress={() => navigate('About')}/>
+            <Button title="Go to About" onPress={() => activateAbout()}/>
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Introduction</Text>
