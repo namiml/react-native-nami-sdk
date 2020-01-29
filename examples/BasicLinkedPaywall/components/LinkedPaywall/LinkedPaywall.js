@@ -19,7 +19,6 @@ const LinkedPaywall = (props) => {
   }
   
   return (
-
     <Modal
       animationType="slide"
       transparent={false}
@@ -49,7 +48,7 @@ const LinkedPaywall = (props) => {
                   style={styles.subscriptionButton}
                   onPress={() => purchase(product.productIdentifier)}
                   underlayColor='#fff'>
-                  <Text style={styles.subscriptionText}>{product.localizedTitle} - {product.localizedMultipliedPrice}</Text>
+                  <Text style={styles.subscriptionText}>{product.localizedTitle} - {product.localizedPrice}</Text>
                 </TouchableOpacity>
               )
             })}

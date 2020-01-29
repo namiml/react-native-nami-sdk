@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "ios-setup": "cd ios && pod install",
-    "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build && pod install",
+    "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build && pod install && pod update",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
