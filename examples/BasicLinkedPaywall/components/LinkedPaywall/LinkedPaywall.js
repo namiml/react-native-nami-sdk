@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Text, Button, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules } from 'react-native';
+import { Modal, Text, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules } from 'react-native';
 import theme from '../../theme';
 
 const LinkedPaywall = (props) => {
