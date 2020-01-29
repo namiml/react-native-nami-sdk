@@ -1,4 +1,3 @@
 /examples
-/examples/BasicExample/__tests__
-/examples/AnalyticsExample/__tests__
 yarn.lock
+.codeclimate.yml
