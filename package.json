@@ -1,6 +1,6 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "description": "React Native Module for Nami - The Smartest Way to Sell Subscriptions.",
   "main": "index.js",
   "scripts": {
