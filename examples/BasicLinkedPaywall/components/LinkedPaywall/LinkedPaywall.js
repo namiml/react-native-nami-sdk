@@ -17,8 +17,7 @@ const LinkedPaywall = (props) => {
       }
     );
   }
-
-  console.log(data)
+  
   return (
 
     <Modal
