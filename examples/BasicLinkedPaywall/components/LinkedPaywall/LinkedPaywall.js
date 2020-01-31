@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Text, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules } from 'react-native';
+import { Modal, Text, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules, Alert } from 'react-native';
 import theme from '../../theme';
 
 const LinkedPaywall = (props) => {
@@ -12,7 +12,12 @@ const LinkedPaywall = (props) => {
     NativeModules.NamiStoreKitHelperBridge.buyProduct(productIdentifier,
       (purchased) => {
         if (purchased) {
-          setOpen(!open)
+          Alert.alert(
+            'Purchase Complete', 
+            'Your Subscription was successfull!',
+            [{text: 'OK', onPress: () => setOpen(!open)}],
+            {cancelable: false},
+          );
         }
       }
     );
