@@ -18,6 +18,13 @@ const LinkedPaywall = (props) => {
             [{text: 'OK', onPress: () => setOpen(!open)}],
             {cancelable: false},
           );
+        } else {
+          Alert.alert(
+            'Purchase Failed', 
+            'Your Subscription fail!',
+            [{text: 'OK', onPress: () => setOpen(!open)}],
+            {cancelable: false},
+          );
         }
       }
     );
