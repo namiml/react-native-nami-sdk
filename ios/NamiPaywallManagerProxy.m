@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <Nami/Nami.h>
+#import "NamiBridgeUtil.h"
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
@@ -52,6 +53,32 @@ RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
 {
     BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
     completion(@[[NSNumber numberWithBool:canRaise]]);
+}
+
+RCT_EXPORT_METHOD(presentNamiPaywall:products:(NSArray *)productDicts metapaywallDefinition:(NSDictionary *)paywallDict)
+{
+    NSString *paywallDeveloperID = paywallDict[@"developerPaywallID"];
+    if ( paywallDeveloperID != nil ) {
+        [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:paywallDeveloperID :^(NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull paywallDevloperID, NamiMetaPaywall * _Nullable namiMetaPaywall) {
+            [[NamiPaywallManager shared] presentNamiPaywallFromVC:nil products:products paywallMetadata:namiMetaPaywall backgroundImage:namiMetaPaywall.backgroundImage forNami:false];
+        }];
+    } else {
+        // No way to handle this case for now as we cannot cretae a NamiMetaPaywall
+    }
+}
+
+RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPaywallID completion:(RCTResponseSenderBlock)completion)
+{
+    [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:developerPaywallID :^(NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nullable paywallMetadata) {
+        NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
+        for (NamiMetaProduct *product in products) {
+          [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];
+        }
+        NSArray *wrapperArray = @[@{ @"products": productDicts,
+                                                                @"developerPaywallID": developerPaywallID,
+                                                                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
+        completion(wrapperArray);
+    }];
 }
 
 @end

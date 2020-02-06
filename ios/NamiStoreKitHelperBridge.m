@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <Nami/Nami.h>
+#import "NamiBridgeUtil.h"
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
@@ -49,6 +50,22 @@ RCT_EXTERN_METHOD(clearBypassStoreKitPurchases)
 RCT_EXTERN_METHOD(bypassStoreKit:(BOOL)bypass)
 - (void)bypassStoreKit: (BOOL) bypass {
   [[NamiStoreKitHelper shared] bypassStoreKitWithBypass:bypass];
+}
+
+RCT_EXPORT_METHOD(allPurchasedProducts:(RCTResponseSenderBlock)completion)
+{
+    NSArray <NamiMetaPurchase *> *purchases = [[NamiStoreKitHelper shared] allPurchasedProducts];
+    NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
+    BOOL anyProductNil = NO;
+    for ( NamiMetaPurchase *purchaseRecord in purchases ) {
+        if ( purchaseRecord.metaProduct == nil ) {
+            anyProductNil = YES;
+        }
+        NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
+        [convertedPurchaseDicts addObject:purchaseDict];
+    }
+    
+    completion(purchases);
 }
 
 RCT_EXPORT_METHOD(anyProductPurchased:(nonnull NSArray*)productIDs completion:(RCTResponseSenderBlock)completion)

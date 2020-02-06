@@ -19,10 +19,7 @@
 
 #import "NamiBridgeUtil.h"
 
-
 @interface RCT_EXTERN_MODULE(NamiAnalyticsEmitter, RCTEventEmitter)
-RCT_EXTERN_METHOD(allPurchasedProducts)
-RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 @end
 
 @implementation NamiAnalyticsEmitter : RCTEventEmitter
@@ -41,21 +38,6 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
   }
 
   return self;
-}
-
-- (void) getPurchasedProducts : (RCTResponseSenderBlock) callback  {
-  NSArray *allProducts = [self allPurchasedProducts];
-  callback(allProducts);
-}
-
-- (NSArray<NSString *> *)allPurchasedProducts {
-  NSArray<NamiMetaPurchase *> *purchases = NamiStoreKitHelper.shared.allPurchasedProducts;
-  NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-  for (NamiMetaProduct *purchase in purchases) {
-    [productIDs addObject:purchase.productIdentifier];
-  }
-
-  return productIDs;
 }
 
 + (BOOL)requiresMainQueueSetup {
@@ -135,10 +117,7 @@ bool hasNamiAanlyticsEmitterListeners;
     NSDate *purchseTimestamp = (NSDate *)(anayticsItems[@"purchasedProductPurchaseTimestamp"]);
     if (purchseTimestamp != NULL && [purchseTimestamp isKindOfClass:[NSDate class]])
     {
-        NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
-        NSISO8601DateFormatOptions options = NSISO8601DateFormatWithInternetDateTime | NSISO8601DateFormatWithDashSeparatorInDate | NSISO8601DateFormatWithColonSeparatorInTime | NSISO8601DateFormatWithTimeZone;
-
-        sanitizedDictionary[@"purchasedProductPurchaseTimestamp"] =  [NSISO8601DateFormatter stringFromDate:purchseTimestamp timeZone:UTC formatOptions:options];
+        sanitizedDictionary[@"purchasedProductPurchaseTimestamp"] = [NamiBridgeUtil javascriptDateFromNSDate:purchseTimestamp];
     }
 
     NSDictionary *purchasedProductDict = [self productDictIfProductPresentInAnalyticsItems:anayticsItems forKey:@"purchasedProduct"];
