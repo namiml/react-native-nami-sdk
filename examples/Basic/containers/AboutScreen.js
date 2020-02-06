@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,8 +6,6 @@ import {
   View,
   Text,
   StatusBar,
-  Button,
-  NativeEventEmitter,
   NativeModules
 } from 'react-native';
 
