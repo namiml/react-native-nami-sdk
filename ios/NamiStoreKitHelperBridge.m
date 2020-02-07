@@ -55,6 +55,7 @@ RCT_EXTERN_METHOD(bypassStoreKit:(BOOL)bypass)
 RCT_EXPORT_METHOD(allPurchasedProducts:(RCTResponseSenderBlock)completion)
 {
     NSArray <NamiMetaPurchase *> *purchases = [[NamiStoreKitHelper shared] allPurchasedProducts];
+    NSLog(@"From SDK, all purchased products are %@", purchases);
     NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
     BOOL anyProductNil = NO;
     for ( NamiMetaPurchase *purchaseRecord in purchases ) {
@@ -65,7 +66,7 @@ RCT_EXPORT_METHOD(allPurchasedProducts:(RCTResponseSenderBlock)completion)
         [convertedPurchaseDicts addObject:purchaseDict];
     }
     
-    completion(purchases);
+    completion(convertedPurchaseDicts);
 }
 
 RCT_EXPORT_METHOD(anyProductPurchased:(nonnull NSArray*)productIDs completion:(RCTResponseSenderBlock)completion)
