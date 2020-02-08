@@ -44,6 +44,29 @@ const HomeScreen = (props) => {
   const activateAbout = () => {
     console.log('Triggering core action');
     NativeModules.NamiBridge.coreActionWithLabel("About");
+
+    NativeModules.NamiStoreKitHelperBridge.allPurchasedProducts(
+		   (purchases) => {
+		       console.log("purchases found ", purchases);
+
+		       // Goal: "Subscribed to Wondery+ Annual Plan.  Your next payment of $34.99 will be billed on S\ep. 19, 2020."   
+
+		       if(purchases && purchases.length) {
+				   var options = {
+				       month: 'long',
+				       day: 'numeric',
+				       year: 'numeric'
+				   };
+
+			   let formatPurchases = purchases.map((purchase, index) => {
+				   return `Subscribed to ${purchase.metaProduct.localizedTitle}. Your next payment of ${purchase.metaProduct.localizedMultipliedPrice} will be billed on ${new Date(purchase.subscriptionExpirationDate).toLocaleDateString('en-US', options)}`
+			       }) 
+			   console.log(formatPurchases)
+		       }
+		   }
+                );
+
+
     navigate('About') ;
   }
 
@@ -60,7 +83,9 @@ const HomeScreen = (props) => {
     eventEmitter.addListener('SignInActivate', onSignInActivated);
 
 
-    NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
+
+
+    //    NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
     NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
     NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
 
