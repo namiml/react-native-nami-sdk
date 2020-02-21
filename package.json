@@ -1,10 +1,11 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "description": "React Native Module for Nami - The Smartest Way to Sell Subscriptions.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "android": "react-native run-android",
     "ios": "react-native run-ios",
     "ios-setup": "cd ios && pod install",
     "ios-clean": "cd ios && rm -rf Pods && rm -rf build",
