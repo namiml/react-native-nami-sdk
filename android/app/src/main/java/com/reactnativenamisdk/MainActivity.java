@@ -1,6 +1,11 @@
 package com.reactnativenamisdk;
 
 import com.facebook.react.ReactActivity;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Promise;
+import android.util.Log;
 
 public class MainActivity extends ReactActivity {
 
@@ -10,6 +15,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "reactNativeNamiSdk";
+    return "NamiBridge";
   }
+
 }
