@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: artifacts:nami-sdk-android-0.0.1-release:unspecified@jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/nami-sdk-android-0.0.1-release/build/.transforms/59eb5dc00fc7ea1affa192654618bf0a/jetified-nami-sdk-android-0.0.1-release/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/nami-sdk-android-0.0.1-release/build/.transforms/59eb5dc00fc7ea1affa192654618bf0a/jetified-nami-sdk-android-0.0.1-release/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
