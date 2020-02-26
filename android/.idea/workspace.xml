@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="684ab265-8ece-42a1-8dc8-6d85cb63644e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/reactnativenamisdk/NamiBridge.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/reactnativenamisdk/NamiBridge.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/reactnativenamisdk/NamiEmitter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/reactnativenamisdk/NamiEmitter.kt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

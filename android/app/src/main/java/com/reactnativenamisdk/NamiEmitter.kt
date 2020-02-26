@@ -2,11 +2,19 @@ package com.reactnativenamisdk
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.Promise
+
 import android.util.Log
+
+import com.namiml.Nami
+import com.namiml.NamiConfiguration
+import com.namiml.NamiLogLevel
+import com.namiml.BuildConfig
 
 class NamiEmitter : NativeModule {
 
@@ -18,10 +26,18 @@ class NamiEmitter : NativeModule {
 //        [[NamiStoreKitHelper shared] registerWithPurchasesChangedHandler:^(NSArray<NamiMetaPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
 //            [self sendEventPurchased];
 //        }];
+
+
 //
 //        [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
 //            [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
 //        }];
+
+        NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallID ->
+            Toast.makeText(context, "Sign in clicked", Toast.LENGTH_SHORT).show()
+        }
+
+
 //
 //        [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
 //            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
