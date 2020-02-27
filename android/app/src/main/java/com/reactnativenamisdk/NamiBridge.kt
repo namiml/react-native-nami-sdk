@@ -39,7 +39,7 @@ class NamiBridge : ReactContextBaseJavaModule() {
         Nami.configure(
                 NamiConfiguration.build(
                         this,
-                        "REPLACEWITHREALAPPID"
+                        appID: appID
                 ) {
                     namiLogLevel = NamiLogLevel.DEBUG.takeIf { BuildConfig.DEBUG } ?: NamiLogLevel.ERROR
                 }
@@ -60,6 +60,10 @@ class NamiBridge : ReactContextBaseJavaModule() {
 
     internal fun coreActionWithLabel(label: String): Void {
 //        [Nami coreActionWithLabel:label];
+    }
+
+    override fun getName(): String {
+        return "NamiBridge"
     }
 
 }

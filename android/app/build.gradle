@@ -202,6 +202,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-moshi:2.7.1'
     implementation 'com.squareup.moshi:moshi:1.9.2'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.2'
+    implementation 'com.nami:nami-sdk-android:0.0.1'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

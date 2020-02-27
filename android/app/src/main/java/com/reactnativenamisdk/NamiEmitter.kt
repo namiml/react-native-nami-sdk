@@ -10,13 +10,25 @@ import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.Promise
 
 import android.util.Log
+import android.widget.Toast
 
 import com.namiml.Nami
 import com.namiml.NamiConfiguration
 import com.namiml.NamiLogLevel
 import com.namiml.BuildConfig
+import com.namiml.NamiPaywallManager
 
 class NamiEmitter : NativeModule {
+    override fun onCatalystInstanceDestroy() {
+    }
+
+    override fun getName(): String {
+        return "NamiEmitter"
+    }
+
+    override fun canOverrideExistingModule(): Boolean {
+        return false
+    }
 
     override fun initialize() {
 
@@ -72,7 +84,7 @@ class NamiEmitter : NativeModule {
 
     }
 
-    internal fun emitSignInActivated(paywallDeveloperID: String): Void {
+    internal fun emitSignInActivated(paywallDeveloperID: String)  {
 //        if (hasNamiEmitterListeners) {
 //            // Pass along paywall ID and paywall metadata for use in sign-in provider.
 //            [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
@@ -93,7 +105,7 @@ class NamiEmitter : NativeModule {
 
     }
 
-    internal fun emitPurchaseMade(paywallDeveloperID: String): Void {
+    internal fun emitPurchaseMade(paywallDeveloperID: String)  {
 
 //        if (hasNamiEmitterListeners) {
 //            NSArray<NamiMetaPurchase *> *purchases = NamiStoreKitHelper.shared.allPurchasedProducts;

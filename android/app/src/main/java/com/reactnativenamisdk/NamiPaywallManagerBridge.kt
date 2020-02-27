@@ -12,13 +12,13 @@ import android.util.Log
 
 class NamiPaywallManagerBridge : NativeModule {
 
-    internal fun raisePaywall(): Void {
+    internal fun raisePaywall()  {
 //        [[NamiPaywallManager shared] raisePaywallFromVC:nil];
 
         Log.e("ReactNative", "Raising Paywall: ")
     }
 
-    internal fun presentNamiPaywall(products: String, metaPaywallDefinition: String): Void {
+    internal fun presentNamiPaywall(products: String, metaPaywallDefinition: String)  {
         // Array of product dicts, and dictionary of paywall metadata from Nami
 
 //        NSString *paywallDeveloperID = paywallDict[@"developerPaywallID"];
@@ -33,7 +33,7 @@ class NamiPaywallManagerBridge : NativeModule {
         Log.e("ReactNative", "Raising Nami Paywall: ")
     }
 
-    internal fun fetchCustomPaywallMetaForDeveloperID(developerPaywallID: String, p: Promise): Void {
+    internal fun fetchCustomPaywallMetaForDeveloperID(developerPaywallID: String, p: Promise)  {
 
 //        [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:developerPaywallID :^(NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nullable paywallMetadata) {
 //            NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
@@ -57,7 +57,7 @@ class NamiPaywallManagerBridge : NativeModule {
     }
 
 
-    internal fun canRaisePaywall(p: Promise): Void {
+    internal fun canRaisePaywall(p: Promise) {
 //        BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
 //        completion(@[[NSNumber numberWithBool:canRaise]]);
 
@@ -65,5 +65,19 @@ class NamiPaywallManagerBridge : NativeModule {
         map.putString("key1", "Value1")
         map.putString("key1", "Value1")
         p.resolve(map)
+    }
+
+    override fun onCatalystInstanceDestroy() {
+    }
+
+    override fun getName(): String {
+        return "NamiPaywallManagerBridge"
+    }
+
+    override fun canOverrideExistingModule(): Boolean {
+        return false
+    }
+
+    override fun initialize() {
     }
 }

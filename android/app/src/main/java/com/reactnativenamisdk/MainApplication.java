@@ -2,13 +2,15 @@ package com.reactnativenamisdk;
 
 import android.app.Application;
 import android.content.Context;
-import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.ArrayList;
+
+import com.reactnativenamisdk.Nami;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -16,13 +18,14 @@ public class MainApplication extends Application implements ReactApplication {
       new ReactNativeHost(this) {
         @Override
         public boolean getUseDeveloperSupport() {
-          return BuildConfig.DEBUG;
+          return true
         }
 
         @Override
         protected List<ReactPackage> getPackages() {
-          @SuppressWarnings("UnnecessaryLocalVariable")
-          List<ReactPackage> packages = new PackageList(this).getPackages();
+          ReactPackage namiPackage = new Nami();
+          List<ReactPackage> packages = new ArrayList();
+          packages.add(namiPackage);
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           return packages;
@@ -52,7 +55,7 @@ public class MainApplication extends Application implements ReactApplication {
    * @param context
    */
   private static void initializeFlipper(Context context) {
-    if (BuildConfig.DEBUG) {
+    if (true) {
       try {
         /*
          We use reflection here to pick up the class that initializes Flipper,
