@@ -11,12 +11,16 @@ import com.facebook.react.bridge.Promise
 
 import android.util.Log
 import android.widget.Toast
+import com.facebook.react.modules.core.DeviceEventManagerModule
 
 import com.namiml.Nami
 import com.namiml.NamiConfiguration
 import com.namiml.NamiLogLevel
 import com.namiml.BuildConfig
 import com.namiml.NamiPaywallManager
+
+import com.reactnativenamisdk.MainActivity
+
 
 class NamiEmitter : NativeModule {
     override fun onCatalystInstanceDestroy() {
@@ -58,7 +62,7 @@ class NamiEmitter : NativeModule {
 
     }
 
-    internal fun emitPaywallRaise(paywallDeveloperID: String): Void {
+    internal fun emitPaywallRaise(paywallDeveloperID: String)  {
 //        if (hasNamiEmitterListeners) {
 //            NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
 //            for (NamiMetaProduct *product in products) {
@@ -75,8 +79,7 @@ class NamiEmitter : NativeModule {
         map.putString("key1", "Value1")
 
         try {
-            getReactInstanceManager().getCurrentReactContext()!!
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            MainActivity.getReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("customEventName", map)
         } catch (e: Exception) {
             Log.e("ReactNative", "Caught Exception: " + e.message)
@@ -96,8 +99,7 @@ class NamiEmitter : NativeModule {
         map.putString("key1", "Value1")
 
         try {
-            getReactInstanceManager().getCurrentReactContext()!!
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            MainActivity.getReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("customEventName", map)
         } catch (e: Exception) {
             Log.e("ReactNative", "Caught Exception: " + e.message)
@@ -122,13 +124,11 @@ class NamiEmitter : NativeModule {
         map.putString("key1", "Value1")
 
         try {
-            getReactInstanceManager().getCurrentReactContext()!!
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            MainActivity.getReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("customEventName", map)
         } catch (e: Exception) {
             Log.e("ReactNative", "Caught Exception: " + e.message)
         }
-
     }
 
 }

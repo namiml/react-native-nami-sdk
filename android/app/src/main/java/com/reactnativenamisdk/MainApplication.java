@@ -10,21 +10,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.reactnativenamisdk.Nami;
-
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
         @Override
         public boolean getUseDeveloperSupport() {
-          return true
+          return true;
         }
 
         @Override
         protected List<ReactPackage> getPackages() {
           ReactPackage namiPackage = new Nami();
-          List<ReactPackage> packages = new ArrayList();
+          ArrayList<ReactPackage> packages = new ArrayList<ReactPackage>();
           packages.add(namiPackage);
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
@@ -52,26 +50,18 @@ public class MainApplication extends Application implements ReactApplication {
   /**
    * Loads Flipper in React Native templates.
    *
-   * @param context
+   * @param context  Loading Flipper
    */
-  private static void initializeFlipper(Context context) {
-    if (true) {
-      try {
-        /*
-         We use reflection here to pick up the class that initializes Flipper,
-        since Flipper library is not available in release mode
-        */
-        Class<?> aClass = Class.forName("com.facebook.flipper.ReactNativeFlipper");
-        aClass.getMethod("initializeFlipper", Context.class).invoke(null, context);
-      } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-      } catch (NoSuchMethodException e) {
-        e.printStackTrace();
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
-      } catch (InvocationTargetException e) {
-        e.printStackTrace();
-      }
-    }
+private static void initializeFlipper(Context context) {
+  try {
+    /*
+     We use reflection here to pick up the class that initializes Flipper,
+    since Flipper library is not available in release mode
+    */
+    Class<?> aClass = Class.forName("com.facebook.flipper.ReactNativeFlipper");
+    aClass.getMethod("initializeFlipper", Context.class).invoke(null, context);
+  } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+    e.printStackTrace();
   }
+}
 }
