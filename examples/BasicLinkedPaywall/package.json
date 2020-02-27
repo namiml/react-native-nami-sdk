@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android-setup": "cd android && rm -rf .gradle && rm -rf .idea && rm -rf android.iml && rm -rf local.properties",
     "ios": "react-native run-ios",
     "ios-setup": "cd ios && pod install",
     "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build && pod install && pod update",
@@ -16,7 +17,7 @@
     "react": "16.9.0",
     "react-native": "0.61.4",
     "react-native-gesture-handler": "^1.5.3",
-    "react-native-nami-sdk": "../../",
+    "react-native-nami-sdk": "^0.1.25",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.6.2",
     "react-native-screens": "^2.0.0-alpha.32",
