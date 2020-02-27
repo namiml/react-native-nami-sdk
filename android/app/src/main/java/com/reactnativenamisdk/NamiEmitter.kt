@@ -1,16 +1,10 @@
 package com.reactnativenamisdk
 
 import com.facebook.react.ReactPackage
-import com.facebook.react.bridge.NativeModule
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.WritableArray
-import com.facebook.react.bridge.WritableMap
-import com.facebook.react.bridge.Promise
 
 import android.util.Log
 import android.widget.Toast
+import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 
 import com.namiml.Nami
@@ -62,7 +56,8 @@ class NamiEmitter : NativeModule {
 
     }
 
-    internal fun emitPaywallRaise(paywallDeveloperID: String)  {
+    @ReactMethod
+    public fun emitPaywallRaise(paywallDeveloperID: String)  {
 //        if (hasNamiEmitterListeners) {
 //            NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
 //            for (NamiMetaProduct *product in products) {
@@ -87,7 +82,7 @@ class NamiEmitter : NativeModule {
 
     }
 
-    internal fun emitSignInActivated(paywallDeveloperID: String)  {
+    public fun emitSignInActivated(paywallDeveloperID: String)  {
 //        if (hasNamiEmitterListeners) {
 //            // Pass along paywall ID and paywall metadata for use in sign-in provider.
 //            [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
@@ -107,7 +102,7 @@ class NamiEmitter : NativeModule {
 
     }
 
-    internal fun emitPurchaseMade(paywallDeveloperID: String)  {
+    public fun emitPurchaseMade(paywallDeveloperID: String)  {
 
 //        if (hasNamiEmitterListeners) {
 //            NSArray<NamiMetaPurchase *> *purchases = NamiStoreKitHelper.shared.allPurchasedProducts;

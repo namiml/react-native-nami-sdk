@@ -1,26 +1,24 @@
 package com.reactnativenamisdk
 
 import com.facebook.react.ReactPackage
-import com.facebook.react.bridge.NativeModule
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.WritableArray
-import com.facebook.react.bridge.WritableMap
-import com.facebook.react.bridge.Promise
 import android.util.Log
+import com.facebook.react.bridge.*
 
 class NamiStoreKitHelperBridge : NativeModule {
 
-    internal fun clearBypassStoreKitPurchases()  {
+    @ReactMethod
+    public fun clearBypassStoreKitPurchases()  {
 //        return [NamiStoreKitHelper shared];
     }
 
-
-    internal fun bypassStoreKit(bypass: Boolean?) {
+    @ReactMethod
+    public fun bypassStoreKit(bypass: Boolean?) {
 //        [[NamiStoreKitHelper shared] bypassStoreKitWithBypass:bypass];
 
     }
 
-    internal fun allPurchasedProducts(p: Promise)  {
+    @ReactMethod
+    public fun allPurchasedProducts(p: Promise)  {
 //        NSArray <NamiMetaPurchase *> *purchases = [[NamiStoreKitHelper shared] allPurchasedProducts];
 //        NSLog(@"From SDK, purchases are currently %@", purchases);
 //        NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
@@ -42,7 +40,8 @@ class NamiStoreKitHelperBridge : NativeModule {
         p.resolve(map)
     }
 
-    internal fun anyProductPurchased(productIDs: String, p: Promise)  {
+    @ReactMethod
+    public fun anyProductPurchased(productIDs: String, p: Promise)  {
 //        BOOL active = [[NamiStoreKitHelper shared] anyProductPurchased:productIDs];
 //        completion(@[[NSNumber numberWithBool:active]]);
 
@@ -53,7 +52,8 @@ class NamiStoreKitHelperBridge : NativeModule {
         p.resolve(map)
     }
 
-    internal fun buyProduct(productID: String, p: Promise)  {
+    @ReactMethod
+    public fun buyProduct(productID: String, p: Promise)  {
 
 //        [[NamiStoreKitHelper shared] productsForProductIdentifersWithProductIDs:@[productID] productHandler:^(BOOL success, NSArray<NamiMetaProduct *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
 //            NSLog(@"Products found are %@, product fetch error is %@", products, [error localizedDescription]);

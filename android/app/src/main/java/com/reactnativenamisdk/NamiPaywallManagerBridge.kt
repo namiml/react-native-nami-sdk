@@ -2,23 +2,21 @@ package com.reactnativenamisdk
 
 
 import com.facebook.react.ReactPackage
-import com.facebook.react.bridge.NativeModule
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.WritableArray
-import com.facebook.react.bridge.WritableMap
-import com.facebook.react.bridge.Promise
 import android.util.Log
+import com.facebook.react.bridge.*
 
 
 class NamiPaywallManagerBridge : NativeModule {
 
-    internal fun raisePaywall()  {
+    @ReactMethod
+    public fun raisePaywall()  {
 //        [[NamiPaywallManager shared] raisePaywallFromVC:nil];
 
         Log.e("ReactNative", "Raising Paywall: ")
     }
 
-    internal fun presentNamiPaywall(products: String, metaPaywallDefinition: String)  {
+    @ReactMethod
+    public fun presentNamiPaywall(products: String, metaPaywallDefinition: String)  {
         // Array of product dicts, and dictionary of paywall metadata from Nami
 
 //        NSString *paywallDeveloperID = paywallDict[@"developerPaywallID"];
@@ -33,7 +31,8 @@ class NamiPaywallManagerBridge : NativeModule {
         Log.e("ReactNative", "Raising Nami Paywall: ")
     }
 
-    internal fun fetchCustomPaywallMetaForDeveloperID(developerPaywallID: String, p: Promise)  {
+    @ReactMethod
+    public fun fetchCustomPaywallMetaForDeveloperID(developerPaywallID: String, p: Promise)  {
 
 //        [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:developerPaywallID :^(NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nullable paywallMetadata) {
 //            NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
@@ -57,7 +56,7 @@ class NamiPaywallManagerBridge : NativeModule {
     }
 
 
-    internal fun canRaisePaywall(p: Promise) {
+    public fun canRaisePaywall(p: Promise) {
 //        BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
 //        completion(@[[NSNumber numberWithBool:canRaise]]);
 

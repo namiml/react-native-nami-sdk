@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule
+import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.uimanager.ReactShadowNode
@@ -29,7 +30,8 @@ class Nami : ReactPackage {
 
 class NamiBridge : NativeModule {
 
-    internal fun configureWithAppID(appID: String) {
+    @ReactMethod
+    public fun configureWithAppID(appID: String) {
 
 //        Context useContext = MainActivity.getContext();
 //        Possible alternative way to get a context
@@ -54,15 +56,17 @@ class NamiBridge : NativeModule {
 
     }
 
-    internal fun enterCoreContentWithLabel(label: String) {
+    @ReactMethod
+    public fun enterCoreContentWithLabel(label: String) {
 //        [Nami enterCoreContentWithLabel:label];
     }
-
-    internal fun exitCoreContentWithLabel(label: String) {
+    @ReactMethod
+    public fun exitCoreContentWithLabel(label: String) {
 //        [Nami exitCoreContentWithLabel:label];
     }
 
-    internal fun coreActionWithLabel(label: String) {
+    @ReactMethod
+    public fun coreActionWithLabel(label: String) {
 //        [Nami coreActionWithLabel:label];
     }
 
