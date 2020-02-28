@@ -1,6 +1,6 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "description": "React Native Module for Nami - The Smartest Way to Sell Subscriptions.",
   "main": "index.js",
   "scripts": {
@@ -33,13 +33,15 @@
   ],
   "license": "SEE LICENSE FILE",
   "dependencies": {
+    "@react-native-community/cli-platform-android": "^2.9.0",
+    "expo-cli": "^3.11.3",
     "react": ">= 16.9.0",
-    "react-native": ">= 0.61.4",
-    "expo-cli": "^3.11.3"
+    "react-native": ">= 0.61.4"
   },
   "peerDependencies": {
     "react": ">= 16.9.0",
-    "react-native": ">= 0.61.4"
+    "react-native": ">= 0.61.4",
+    "@react-native-community/cli-platform-android": "^2.9.0"
   },
   "devDependencies": {
     "standard": "^8.6.0"
