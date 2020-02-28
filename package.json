@@ -20,7 +20,11 @@
     "storekit",
     "subscriptions"
   ],
-  "author": "Nami ML, Inc.",
+  "author": {
+    "username": "namiml",
+    "name": "Nami ML, Inc.",
+    "email": "francisco.pena@namiml.com"
+  },
   "contributors": [
     {
       "name": "Francisco Pena",
@@ -32,21 +36,13 @@
     }
   ],
   "license": "SEE LICENSE FILE",
-  "dependencies": {
-    "@react-native-community/cli-platform-android": "^2.9.0",
-    "@react-native-community/masked-view": "^0.1.5",
-    "expo-cli": "^3.11.3",
-    "react": ">= 16.9.0",
-    "react-native": ">= 0.61.4"
-  },
   "peerDependencies": {
-    "react": ">= 16.9.0",
-    "react-native": ">= 0.61.4",
-    "@react-native-community/cli-platform-android": "^2.9.0",
-    "@react-native-community/masked-view": "^0.1.5"
+    "react": "^16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x"
   },
   "devDependencies": {
-    "standard": "^8.6.0"
+    "react": "^16.9.0",
+    "react-native": "^0.61.5"
   },
   "repository": {
     "type": "git",
