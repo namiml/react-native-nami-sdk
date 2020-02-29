@@ -11,10 +11,6 @@ import com.namiml.Nami;
 import com.namiml.NamiConfiguration;
 import com.namiml.NamiLogLevel;
 
-import com.reactnativenamisdk.MainActivity;
-
-
-
 public class RnNamiModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
@@ -37,7 +33,7 @@ public class RnNamiModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void configureWithAppID(String appID) {
-        NamiConfiguration.Builder builder = new NamiConfiguration.Builder(MainActivity.getContext(), appID);
+        NamiConfiguration.Builder builder = new NamiConfiguration.Builder(reactContext, appID);
         if (BuildConfig.DEBUG) {
             builder.logLevel(NamiLogLevel.DEBUG);
         }
