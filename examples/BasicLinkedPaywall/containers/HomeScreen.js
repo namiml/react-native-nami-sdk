@@ -61,15 +61,6 @@ const HomeScreen = (props) => {
     console.log('Nami Bridge is');
     console.log(NativeModules.NamiBridge);
 
-    eventEmitter.addListener('PurchasesChanged', onSessionConnect);
-    eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
-    console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
-
-    eventEmitter.addListener('SignInActivate', onSignInActivated);
-
-
-    NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
-    NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
     NativeModules.NamiBridge.configureWithAppID("eea3721d-a13f-4a94-872a-3c2b795953da");
 
   }, []);

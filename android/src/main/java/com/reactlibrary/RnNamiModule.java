@@ -5,6 +5,16 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 
+
+import com.namiml.BuildConfig;
+import com.namiml.Nami;
+import com.namiml.NamiConfiguration;
+import com.namiml.NamiLogLevel;
+
+import com.reactnativenamisdk.MainActivity;
+
+
+
 public class RnNamiModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
@@ -23,5 +33,14 @@ public class RnNamiModule extends ReactContextBaseJavaModule {
     public void sampleMethod(String stringArgument, int numberArgument, Callback callback) {
         // TODO: Implement some actually useful functionality
         callback.invoke("Received numberArgument: " + numberArgument + " stringArgument: " + stringArgument);
+    }
+
+    @ReactMethod
+    public void configureWithAppID(String appID) {
+        NamiConfiguration.Builder builder = new NamiConfiguration.Builder(MainActivity.getContext(), appID);
+        if (BuildConfig.DEBUG) {
+            builder.logLevel(NamiLogLevel.DEBUG);
+        }
+        Nami.configure(builder.build());
     }
 }
