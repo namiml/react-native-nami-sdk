@@ -1,5 +1,6 @@
 package com.nami.reactlibrary;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +18,11 @@ public class NamiBridgePackage implements ReactPackage {
     @NotNull
     @Override
     public List<NativeModule> createNativeModules(@NotNull ReactApplicationContext reactContext) {
-        return Collections.<NativeModule>singletonList(new NamiBridgeModule(reactContext));
+        List<NativeModule> moduleList = new ArrayList<NativeModule>();
+        moduleList.add(new NamiBridgeModule(reactContext));
+        moduleList.add(new NamiPaywallManagerBridgeModule(reactContext));
+
+        return moduleList;
     }
 
     @Override
