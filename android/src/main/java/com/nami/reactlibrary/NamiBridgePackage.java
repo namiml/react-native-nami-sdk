@@ -25,7 +25,6 @@ public class NamiBridgePackage implements ReactPackage {
         return moduleList;
     }
 
-    @Override
     public List<Class<? extends JavaScriptModule>> createJSModules() {
         return null;
     }
