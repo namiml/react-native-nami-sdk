@@ -11,15 +11,18 @@ import com.namiml.Nami;
 import com.namiml.NamiConfiguration;
 import com.namiml.NamiLogLevel;
 
+import org.jetbrains.annotations.NotNull;
+
 public class NamiBridgeModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
 
-    public NamiBridgeModule(ReactApplicationContext reactContext) {
+    NamiBridgeModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
     }
 
+    @NotNull
     @Override
     public String getName() {
         return "NamiBridge";
