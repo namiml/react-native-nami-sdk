@@ -59,8 +59,7 @@ const HomeScreen = (props) => {
   useEffect(() => {
 
     console.log('Nami Bridge is');
-
-
+    console.log(NativeModules.NamiBridge)
     NativeModules.NamiBridge.configureWithAppID("eea3721d-a13f-4a94-872a-3c2b795953da");
 
   }, []);
