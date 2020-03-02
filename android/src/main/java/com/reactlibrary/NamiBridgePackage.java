@@ -10,14 +10,19 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
 
-public class RnNamiPackage implements ReactPackage {
+
+public class NamiBridgePackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-        return Arrays.<NativeModule>asList(new RnNamiModule(reactContext));
+        return Arrays.<NativeModule>asList(new NamiBridgeModule(reactContext));
     }
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Collections.emptyList();
     }
+    
 }
+
+
+

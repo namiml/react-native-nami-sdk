@@ -11,18 +11,18 @@ import com.namiml.Nami;
 import com.namiml.NamiConfiguration;
 import com.namiml.NamiLogLevel;
 
-public class RnNamiModule extends ReactContextBaseJavaModule {
+public class NamiBridgeModule extends ReactContextBaseJavaModule {
 
     private final ReactApplicationContext reactContext;
 
-    public RnNamiModule(ReactApplicationContext reactContext) {
+    public NamiBridgeModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
     }
 
     @Override
     public String getName() {
-        return "RnNami";
+        return "NamiBridge";
     }
 
     @ReactMethod
