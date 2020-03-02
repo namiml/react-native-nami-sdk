@@ -1,4 +1,4 @@
-package com.reactlibrary;
+package com.nami.reactlibrary;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,6 +18,11 @@ public class NamiBridgePackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(@NotNull ReactApplicationContext reactContext) {
         return Collections.<NativeModule>singletonList(new NamiBridgeModule(reactContext));
+    }
+
+    @Override
+    public List<Class<? extends JavaScriptModule>> createJSModules() {
+        return null;
     }
 
     @NotNull
