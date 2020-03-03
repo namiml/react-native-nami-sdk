@@ -52,7 +52,7 @@ public class NamiBridgeModule extends ReactContextBaseJavaModule {
 
         //Application fred = (reactContext as Application);
 
-        NamiConfiguration.Builder builder = new NamiConfiguration.Builder(reactContext, appID);
+        NamiConfiguration.Builder builder = new NamiConfiguration.Builder(appContext, appID);
         if (BuildConfig.DEBUG) {
             builder.logLevel(NamiLogLevel.DEBUG);
         }
