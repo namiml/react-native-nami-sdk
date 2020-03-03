@@ -1,5 +1,9 @@
 package com.nami.reactlibrary;
 
+import android.app.Application;
+import android.content.Context;
+import android.util.Log;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -36,10 +40,25 @@ public class NamiBridgeModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void configureWithAppID(String appID) {
+        Log.e("ReactNative", "Nami Configure called with appID " + appID);
+        Log.e("ReactNative", "Nami Configure called with context " + reactContext);
+        Log.e("ReactNative", "Nami Configure called with context.applicationContext " + reactContext.getApplicationContext());
+
+        Context appContext = reactContext.getApplicationContext();
+        boolean fred = (appContext instanceof Application);
+        Log.e("ReactNative", "Nami Configure called with (context as Application) ");
+        System.out.println(fred);
+        Log.e("ReactNative", "Nami end Application check ");
+
+        //Application fred = (reactContext as Application);
+
         NamiConfiguration.Builder builder = new NamiConfiguration.Builder(reactContext, appID);
         if (BuildConfig.DEBUG) {
             builder.logLevel(NamiLogLevel.DEBUG);
         }
-        Nami.configure(builder.build());
+        NamiConfiguration builtConfig = builder.build();
+        Log.e("ReactNative", "Nami Configuration object is " + builtConfig.toString());
+
+        Nami.configure(builtConfig);
     }
 }
