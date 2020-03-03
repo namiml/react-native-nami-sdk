@@ -39,37 +39,16 @@ public class NamiPaywallManagerBridgeModule extends ReactContextBaseJavaModule {
     public void raisePaywall() {
 //        [[NamiPaywallManager shared] raisePaywallFromVC:nil];
         if (NamiPaywallManager.canRaisePaywall()) {
-            Activity activity = getActivity(reactContext);
+            final Activity activity = getCurrentActivity();
             if (activity != null) {
                 NamiPaywallManager.raisePaywall(activity, false);
                 Log.e("ReactNative", "Raising Paywall: ");
+            } else {
+                Log.e("ReactNative", "Activity from react getCurrentActivity was null. ");
             }
         } else {
             Log.e("ReactNative", "Paywall not raised, SDK says paywall cannot be raised at this time. ");
         }
     }
 
-
-    public Activity getActivity(Context context)
-    {
-        if (context == null)
-        {
-            Log.e("ReactNative", "Context was null, no activity found. ");
-            return null;
-        }
-        else if (context instanceof ContextWrapper)
-        {
-            if (context instanceof Activity)
-            {
-                return (Activity) context;
-            }
-            else
-            {
-                return getActivity(((ContextWrapper) context).getBaseContext());
-            }
-        }
-
-        Log.e("ReactNative", "No activity found in context. ");
-        return null;
-    }
 }
