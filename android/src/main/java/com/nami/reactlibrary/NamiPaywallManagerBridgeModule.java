@@ -38,11 +38,15 @@ public class NamiPaywallManagerBridgeModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void raisePaywall() {
 //        [[NamiPaywallManager shared] raisePaywallFromVC:nil];
+
+        final Activity activity = getCurrentActivity();
+        Log.e("ReactNative", "Nami Activity to raise paywall is " + activity.toString());
+
         if (NamiPaywallManager.canRaisePaywall()) {
-            final Activity activity = getCurrentActivity();
+            Log.e("ReactNative", "NAMI - About to raise Paywall ");
             if (activity != null) {
-                NamiPaywallManager.raisePaywall(activity, false);
                 Log.e("ReactNative", "Raising Paywall: ");
+                NamiPaywallManager.raisePaywall(activity, false);
             } else {
                 Log.e("ReactNative", "Activity from react getCurrentActivity was null. ");
             }
