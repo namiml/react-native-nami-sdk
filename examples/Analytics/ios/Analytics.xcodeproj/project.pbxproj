@@ -669,7 +669,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.namiml.TestProducts-Linked";
+				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.TestProducts;
 				PRODUCT_NAME = Analytics;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -688,7 +688,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.namiml.TestProducts-Linked";
+				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.TestProducts;
 				PRODUCT_NAME = Analytics;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
