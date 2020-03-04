@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -19,6 +21,7 @@ import com.namiml.NamiPaywallManager;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 
 
 public class NamiPaywallManagerBridgeModule extends ReactContextBaseJavaModule {
@@ -53,6 +56,16 @@ public class NamiPaywallManagerBridgeModule extends ReactContextBaseJavaModule {
         } else {
             Log.e("ReactNative", "Paywall not raised, SDK says paywall cannot be raised at this time. ");
         }
+    }
+    @ReactMethod
+    public void canRaisePaywall(Promise p) {
+//        BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
+//        completion(@[[NSNumber numberWithBool:canRaise]]);
+
+        ArrayList<Boolean> canRaiseResult = new ArrayList<Boolean>();
+
+        canRaiseResult.add(NamiPaywallManager.canRaisePaywall());
+        p.resolve(canRaiseResult);
     }
 
 }
