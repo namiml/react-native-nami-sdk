@@ -13,6 +13,8 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 
 
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableNativeArray;
 import com.namiml.BuildConfig;
 import com.namiml.Nami;
 import com.namiml.NamiConfiguration;
@@ -58,14 +60,16 @@ public class NamiPaywallManagerBridgeModule extends ReactContextBaseJavaModule {
         }
     }
     @ReactMethod
-    public void canRaisePaywall(Promise p) {
+    public void canRaisePaywall(Callback successCallback) {
 //        BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
 //        completion(@[[NSNumber numberWithBool:canRaise]]);
 
-        ArrayList<Boolean> canRaiseResult = new ArrayList<Boolean>();
 
-        canRaiseResult.add(NamiPaywallManager.canRaisePaywall());
-        p.resolve(canRaiseResult);
+        WritableArray canRaiseResult = new WritableNativeArray();
+
+
+        canRaiseResult.pushBoolean(NamiPaywallManager.canRaisePaywall());
+        successCallback.invoke(canRaiseResult);
     }
 
 }
