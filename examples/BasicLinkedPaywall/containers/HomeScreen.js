@@ -62,12 +62,6 @@ const HomeScreen = (props) => {
     console.log(NativeModules.NamiBridge, 'NamiBridge');
     console.log(NativeModules.NamiPaywallManagerBridge, 'NamiPaywallManagerBridge')
     NativeModules.NamiBridge.configureWithAppID("eea3721d-a13f-4a94-872a-3c2b795953da");
-    //    NativeModules.NamiBridge.configureWithAppID("2dc699a5-43c6-4e3a-9166-957e1640741b");
-    //    NativeModules.NamiPaywallManagerBridge.canRaisePaywall( (result) => {
-    //		       console.log("canRaisePaywall ", result);
-    //	}
-    //	);
-
   }, []);
 
   return (
