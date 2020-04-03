@@ -13,7 +13,6 @@ import com.facebook.react.bridge.JavaScriptModule;
 
 import org.jetbrains.annotations.NotNull;
 
-
 public class NamiBridgePackage implements ReactPackage {
     @NotNull
     @Override
@@ -21,6 +20,7 @@ public class NamiBridgePackage implements ReactPackage {
         List<NativeModule> moduleList = new ArrayList<NativeModule>();
         moduleList.add(new NamiBridgeModule(reactContext));
         moduleList.add(new NamiPaywallManagerBridgeModule(reactContext));
+        moduleList.add(new NamiEmitter(reactContext));
 
         return moduleList;
     }

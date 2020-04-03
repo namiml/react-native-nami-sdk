@@ -1,0 +1,148 @@
+package com.nami.reactlibrary
+
+import android.util.Log
+import android.widget.Toast
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.modules.core.DeviceEventManagerModule
+
+
+import com.namiml.NamiPaywallManager
+import com.namiml.api.model.SKU
+import com.namiml.api.model.NamiPaywall
+import java.util.ArrayList
+
+
+public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+
+    fun NamiEmitter(reactContext: ReactApplicationContext?) {
+        Log.e("ReactNative", "In Emitter Initialize(reactContext)")
+
+        NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
+            val productList:List<SKU> = products ?: ArrayList<SKU>()
+
+            emitPaywallRaise(context, paywallData, productList, developerPaywallId)
+        }
+
+        NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallId ->
+            emitSignInActivated(context, paywallData, developerPaywallId)
+        }
+    }
+
+    override fun onCatalystInstanceDestroy() {
+    }
+
+    override fun getName(): String {
+        return "NamiEmitter"
+    }
+
+    override fun canOverrideExistingModule(): Boolean {
+        return false
+    }
+
+    override fun initialize() {
+
+//        hasNamiEmitterListeners = NO;
+//
+//        // Tell Nami to listen for purchases and we'll forward them on to listeners
+//        [[NamiStoreKitHelper shared] registerWithPurchasesChangedHandler:^(NSArray<NamiMetaPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
+//            [self sendEventPurchased];
+//        }];
+
+
+//
+//        [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
+//            [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
+//        }];
+
+        NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallID ->
+            Toast.makeText(context, "Sign in clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        Log.e("ReactNative", "In Emitter Initialize()")
+        NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
+            emitPaywallRaise(paywallDeveloperID = "fred")
+        }
+
+//
+//        [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
+//            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
+//        }];
+
+
+    }
+
+    public fun emitPaywallRaise(activity: java.lang.ref.WeakReference<android.app.Activity>, paywallData: NamiPaywall, productDicts: List<SKU>, paywallDeveloperID: String? )   {
+//        if (hasNamiEmitterListeners) {
+//            NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
+//            for (NamiMetaProduct *product in products) {
+//                [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];
+//            }
+//
+//            [self sendEventWithName:@"AppPaywallActivate" body:@{ @"products": productDicts,
+//                @"developerPaywallID": developerPaywallID,
+//                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
+//        }
+
+
+
+        val map = Arguments.createMap()
+        map.putString("developerPaywallID", paywallDeveloperID )
+        map.putString("paywallMetadata", "Need TO Map NamiPaywall Object")
+
+        try {
+            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("AppPaywallActivate", map)
+        } catch (e: Exception) {
+            Log.e("ReactNative", "Caught Exception: " + e.message)
+        }
+
+    }
+
+    public fun emitSignInActivated(activity: java.lang.ref.WeakReference<android.app.Activity>, paywallData: NamiPaywall, paywallDeveloperID: String?)  {
+//        if (hasNamiEmitterListeners) {
+//            // Pass along paywall ID and paywall metadata for use in sign-in provider.
+//            [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
+//                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
+//        }
+
+        val map = Arguments.createMap()
+        map.putString("developerPaywallID", paywallDeveloperID )
+        map.putString("paywallMetadata", "Need TO Map NamiPaywall Object")
+
+        try {
+            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("SignInActivate", map)
+        } catch (e: Exception) {
+            Log.e("ReactNative", "Caught Exception: " + e.message)
+        }
+
+    }
+
+    public fun emitPurchaseMade(paywallDeveloperID: String)  {
+
+//        if (hasNamiEmitterListeners) {
+//            NSArray<NamiMetaPurchase *> *purchases = NamiStoreKitHelper.shared.allPurchasedProducts;
+//            NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
+//            for (NamiMetaProduct *purchase in purchases) {
+//                [productIDs addObject:purchase.productIdentifier];
+//            }
+//
+//            [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs}];
+//        }
+
+        val map = Arguments.createMap()
+        map.putString("key1", "Value1")
+        map.putString("key1", "Value1")
+
+        try {
+            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("customEventName", map)
+        } catch (e: Exception) {
+            Log.e("ReactNative", "Caught Exception: " + e.message)
+        }
+    }
+
+}
