@@ -62,7 +62,7 @@ const HomeScreen = (props) => {
     console.log(NativeModules.NamiPaywallManagerBridge, 'NamiPaywallManagerBridge')
 
     var configDict = {
-	'appPlatformID': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
+	'appPlatformID': '54635e21-87ed-4ed6-9119-9abb493bc9b0',
 	"logLevel": "DEBUG"
     };
     
