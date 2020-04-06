@@ -39,19 +39,15 @@ _RCT_EXTERN_REMAP_METHOD(sharedInstance,shared,YES)
 @end
 @implementation NamiPaywallManagerBridge (RCTExternModule)
 
-RCT_EXTERN_METHOD(sharedInstance)
-- (NamiPaywallManager *)sharedInstance {
-  return [NamiPaywallManager shared];
-}
 
 RCT_EXTERN_METHOD(raisePaywall)
 - (void)raisePaywall {
-  [[NamiPaywallManager shared] raisePaywallFromVC:nil];
+  [NamiPaywallManager raisePaywallFromVC:nil];
 }
 
 RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
 {
-    BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
+    BOOL canRaise = [NamiPaywallManager canRaisePaywall];
     completion(@[[NSNumber numberWithBool:canRaise]]);
 }
 
@@ -59,8 +55,8 @@ RCT_EXPORT_METHOD(presentNamiPaywall:products:(NSArray *)productDicts metapaywal
 {
     NSString *paywallDeveloperID = paywallDict[@"developerPaywallID"];
     if ( paywallDeveloperID != nil ) {
-        [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:paywallDeveloperID :^(NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull paywallDevloperID, NamiMetaPaywall * _Nullable namiMetaPaywall) {
-            [[NamiPaywallManager shared] presentNamiPaywallFromVC:nil products:products paywallMetadata:namiMetaPaywall backgroundImage:namiMetaPaywall.backgroundImage forNami:false];
+        [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:paywallDeveloperID :^(NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull paywallDevloperID, NamiPaywall * _Nullable namiMetaPaywall) {
+            [NamiPaywallManager presentNamiPaywallFromVC:nil products:products paywallMetadata:namiMetaPaywall backgroundImage:namiMetaPaywall.backgroundImage forNami:false];
         }];
     } else {
         // No way to handle this case for now as we cannot cretae a NamiMetaPaywall
@@ -69,9 +65,9 @@ RCT_EXPORT_METHOD(presentNamiPaywall:products:(NSArray *)productDicts metapaywal
 
 RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPaywallID completion:(RCTResponseSenderBlock)completion)
 {
-    [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:developerPaywallID :^(NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nullable paywallMetadata) {
+    [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:developerPaywallID :^(NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nullable paywallMetadata) {
         NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
-        for (NamiMetaProduct *product in products) {
+        for (NamiSKU *product in products) {
           [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];
         }
         NSArray *wrapperArray = @[@{ @"products": productDicts,

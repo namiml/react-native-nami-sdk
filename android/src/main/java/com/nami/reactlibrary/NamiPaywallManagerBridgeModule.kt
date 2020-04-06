@@ -1,4 +1,4 @@
-package com.nami.reactlibrary;
+package com.nami.reactlibrary
 
 import android.app.Activity
 import android.content.Context
@@ -24,7 +24,7 @@ import com.namiml.api.model.NamiPaywall
 
 import org.jetbrains.annotations.NotNull
 
-import java.util.ArrayList;
+import java.util.ArrayList
 
 
 public class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -35,8 +35,7 @@ public class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContex
 
     }
 
-    @Override
-    public fun getName(): String  {
+    public override fun getName(): String  {
         return "NamiPaywallManagerBridge"
     }
 

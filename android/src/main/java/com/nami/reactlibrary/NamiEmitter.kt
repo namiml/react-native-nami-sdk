@@ -12,6 +12,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.NamiPaywallManager
 import com.namiml.api.model.SKU
 import com.namiml.api.model.NamiPaywall
+import java.lang.ref.WeakReference
 import java.util.ArrayList
 
 
@@ -27,7 +28,9 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
         }
 
         NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallId ->
-            emitSignInActivated(context, paywallData, developerPaywallId)
+            currentActivity?.let {
+                emitSignInActivated(WeakReference(it) , paywallData, developerPaywallId)
+            }
         }
     }
 
@@ -63,7 +66,7 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
 
         Log.e("ReactNative", "In Emitter Initialize()")
         NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            emitPaywallRaise(paywallDeveloperID = "fred")
+            emitPaywallRaise(context, paywallData, products, developerPaywallId)
         }
 
 //
@@ -74,7 +77,7 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
 
     }
 
-    public fun emitPaywallRaise(activity: java.lang.ref.WeakReference<android.app.Activity>, paywallData: NamiPaywall, productDicts: List<SKU>, paywallDeveloperID: String? )   {
+     fun emitPaywallRaise(activity: java.lang.ref.WeakReference<android.app.Activity>, paywallData: NamiPaywall, productDicts: List<SKU>, paywallDeveloperID: String? )   {
 //        if (hasNamiEmitterListeners) {
 //            NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
 //            for (NamiMetaProduct *product in products) {

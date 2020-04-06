@@ -14,10 +14,10 @@
 
 @implementation NamiBridgeUtil : NSObject
 
-    + (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiMetaProduct *)product {
+    + (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiSKU *)product {
         NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
 
-        productDict[@"productIdentifier"] = product.productIdentifier;
+        productDict[@"skuIdentifier"] = product.platformID;
 
         SKProduct *productInt = product.product;
         productDict[@"localizedTitle"] = productInt.localizedTitle;
@@ -48,25 +48,25 @@
         return productDict;
     }
 
- + (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiMetaPurchase *)purchase {
+ + (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiPurchase *)purchase {
      NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
      
-     purchaseDict[@"productIdentifier"] = purchase.productIdentifier;
+     purchaseDict[@"productIdentifier"] = purchase.skuID;
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
      purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
-     purchaseDict[@"isSubscription"] = purchase.isSubscription ? @"true" : @"false";
      
-     NSDate *subscriptionExpirationDate = purchase.subscriptionExpirationDate;
+     NSDate *subscriptionExpirationDate = purchase.exipres;
      if (subscriptionExpirationDate != nil) {
          purchaseDict[@"subscriptionExpirationDate"] = [self javascriptDateFromNSDate:subscriptionExpirationDate];
      }
      
      purchaseDict[@"purchaseSource"] =  [[NSString alloc] initWithFormat:@"%d", (int)purchase.purchaseSource];
      
-     NamiMetaProduct *product = purchase.metaProduct;
-     if (product != nil) {
-         purchaseDict[@"metaProduct"] = [self productToProductDict:product];
-     }
+     // TODO: Fix product return for purchase
+//     NamiSKU *productID = purchase.skuID;
+//     if (product != nil) {
+//         purchaseDict[@"metaProduct"] = [self productToProductDict:product];
+//     }
      
      return purchaseDict;
  }

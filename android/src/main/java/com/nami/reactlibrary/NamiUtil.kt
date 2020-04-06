@@ -43,7 +43,7 @@ import java.util.*
 fun productToProductDict( sku: SKU) : Map<String,String> {
     var productDict = mutableMapOf<String, String>()
 
-    productDict["skuPlatformIdentifier"] = product.productIdentifier
+    productDict["skuPlatformIdentifier"] = sku.skuRefId
 
     productDict["localizedTitle"] = sku.name
 //    productDict["localizedDescription"] = sku.

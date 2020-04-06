@@ -44,7 +44,8 @@ RCT_EXTERN_METHOD(sharedInstance)
 
 RCT_EXTERN_METHOD(configureWithAppID:(NSString)appID)
 - (void)configureWithAppID: (NSString *)appID {
-  [[Nami shared] configureWithAppID:appID];
+    NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformID:appID];
+    [Nami configureWithNamiConfig:config];
 }
 
 RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
@@ -54,17 +55,17 @@ RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
 
 RCT_EXTERN_METHOD(enterCoreContentWithLabel:(NSString)namiCommand)
 - (void)enterCoreContentWithLabel: (NSString *)label {
-    [Nami enterCoreContentWithLabel:label];
+    [NamiMLManager enterCoreContentWithLabel:label];
 }
 
 RCT_EXTERN_METHOD(exitCoreContentWithLabel:(NSString)namiCommand)
 - (void)exitCoreContentWithLabel: (NSString *)label {
-    [Nami exitCoreContentWithLabel:label];
+    [NamiMLManager exitCoreContentWithLabel:label];
 }
 
 RCT_EXTERN_METHOD(coreActionWithLabel:(NSString)namiCommand)
 - (void)coreActionWithLabel: (NSString *)label {
-    [Nami coreActionWithLabel:label];
+    [NamiMLManager coreActionWithLabel:label];
 }
 
 @end

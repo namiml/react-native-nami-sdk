@@ -44,22 +44,22 @@ RCT_EXTERN_METHOD(sharedInstance)
 
 RCT_EXTERN_METHOD(clearBypassStoreKitPurchases)
 - (void)clearBypassStoreKitPurchases {
-  [[NamiStoreKitHelper shared] clearBypassStoreKitPurchases];
+  [NamiPurchaseManager clearBypassStorePurchases];
 }
 
 RCT_EXTERN_METHOD(bypassStoreKit:(BOOL)bypass)
 - (void)bypassStoreKit: (BOOL) bypass {
-  [[NamiStoreKitHelper shared] bypassStoreKitWithBypass:bypass];
+  [NamiPurchaseManager bypassStoreWithBypass:bypass];
 }
 
 RCT_EXPORT_METHOD(allPurchasedProducts:(RCTResponseSenderBlock)completion)
 {
-    NSArray <NamiMetaPurchase *> *purchases = [[NamiStoreKitHelper shared] allPurchasedProducts];
+    NSArray <NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
     NSLog(@"From SDK, purchases are currently %@", purchases);
     NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
     BOOL anyProductNil = NO;
-    for ( NamiMetaPurchase *purchaseRecord in purchases ) {
-        if ( purchaseRecord.metaProduct == nil ) {
+    for ( NamiPurchase *purchaseRecord in purchases ) {
+        if ( purchaseRecord.skuID == nil ) {
             anyProductNil = YES;
         }
         NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
@@ -71,17 +71,24 @@ RCT_EXPORT_METHOD(allPurchasedProducts:(RCTResponseSenderBlock)completion)
 
 RCT_EXPORT_METHOD(anyProductPurchased:(nonnull NSArray*)productIDs completion:(RCTResponseSenderBlock)completion)
 {
-    BOOL active = [[NamiStoreKitHelper shared] anyProductPurchased:productIDs];
+    BOOL active = false;
+    for (NamiPurchase *purchase in [NamiPurchaseManager allPurchases]) {
+        if ( [productIDs containsObject:purchase.skuID] ) {
+            active = true;
+            break;
+        }
+    }
+
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
 RCT_EXPORT_METHOD(buyProduct:(nonnull NSString*)productID completion:(RCTResponseSenderBlock)completion)
 {
-    [[NamiStoreKitHelper shared] productsForProductIdentifersWithProductIDs:@[productID] productHandler:^(BOOL success, NSArray<NamiMetaProduct *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
+    [NamiPurchaseManager skusForSKUIDsWithSkuIDs:@[productID] productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
         NSLog(@"Products found are %@, product fetch error is %@", products, [error localizedDescription]);
-        NamiMetaProduct *useProduct = products.firstObject;
+        NamiSKU *useProduct = products.firstObject;
         if (useProduct != nil) {
-            [[NamiStoreKitHelper shared] buyProduct:useProduct fromPaywall:nil responseHandler:^(NSArray<NamiMetaPurchase *> * _Nonnull purchase, NamiPurchaseState purchaseState, NSError * _Nullable error) {
+            [NamiPurchaseManager buySKU:useProduct fromPaywall:nil responseHandler:^(NSArray<NamiPurchase *> * _Nonnull purchase, NamiPurchaseState purchaseState, NSError * _Nullable error) {
                 NSLog(@"Purchase result is %@, purchased is %d, error is %@", purchase, (purchaseState == NamiPurchaseStatePurchased), [error localizedDescription]);
                 if (purchaseState == NamiPurchaseStatePurchased) {
                     completion(@[[NSNumber numberWithBool:true]]);
