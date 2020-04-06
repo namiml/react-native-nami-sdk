@@ -28,8 +28,7 @@ const HomeScreen = (props) => {
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
 
   const subscribeAction = () => {
-      NativeModules.NamiPaywallManagerBridge.raisePaywall();
-    
+      NativeModules.NamiPaywallManagerBridge.raisePaywall();    
   }
 
   const onSessionConnect = (event) => {
@@ -61,7 +60,13 @@ const HomeScreen = (props) => {
     console.log('Nami Bridge is');
     console.log(NativeModules.NamiBridge, 'NamiBridge');
     console.log(NativeModules.NamiPaywallManagerBridge, 'NamiPaywallManagerBridge')
-    NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
+
+    var configDict = {
+	'appPlatformID': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
+	"logLevel": "DEBUG"
+    };
+    
+    NativeModules.NamiBridge.configure(configDict);
     //    NativeModules.NamiBridge.configureWithAppID("2dc699a5-43c6-4e3a-9166-957e1640741b");
     
     NativeModules.NamiPaywallManagerBridge.canRaisePaywall( (result) => {

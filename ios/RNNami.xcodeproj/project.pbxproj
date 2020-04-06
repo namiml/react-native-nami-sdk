@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		B3E7B58A1CC2AC0600A0062D /* RNNami.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNNami.m */; };
 		B4DD215926D2EE78ACA6DBC8 /* libPods-RNNami.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9001AF4D6D9B1BCDDAAD717B /* libPods-RNNami.a */; };
-		EB1C9AFB23BE9C5700CAD548 /* NamiStoreKitHelperBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF823BE9C5600CAD548 /* NamiStoreKitHelperBridge.m */; };
-		EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerProxy.m */; };
+		EB1C9AFB23BE9C5700CAD548 /* NamiPurchaseManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */; };
+		EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */; };
 		EB1C9AFD23BE9C5700CAD548 /* NamiEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */; };
 		EBC59E5D23C5514B008A123A /* Nami.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5C23C5514B008A123A /* Nami.m */; };
 		EBC59E6023C7E2EC008A123A /* NamiAnalyticsEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */; };
@@ -36,8 +36,8 @@
 		B3E7B5891CC2AC0600A0062D /* RNNami.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNami.m; sourceTree = "<group>"; };
 		C5985108C4ACF101FB092F00 /* Pods-RNNami.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNNami.debug.xcconfig"; path = "Target Support Files/Pods-RNNami/Pods-RNNami.debug.xcconfig"; sourceTree = "<group>"; };
 		E1D60D93EB3756555F0112D9 /* Pods-RNNami.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNNami.release.xcconfig"; path = "Target Support Files/Pods-RNNami/Pods-RNNami.release.xcconfig"; sourceTree = "<group>"; };
-		EB1C9AF823BE9C5600CAD548 /* NamiStoreKitHelperBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiStoreKitHelperBridge.m; sourceTree = "<group>"; };
-		EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiPaywallManagerProxy.m; sourceTree = "<group>"; };
+		EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiPurchaseManagerBridge.m; sourceTree = "<group>"; };
+		EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiPaywallManagerBridge.m; sourceTree = "<group>"; };
 		EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiEmitter.m; sourceTree = "<group>"; };
 		EBC59E5C23C5514B008A123A /* Nami.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Nami.m; sourceTree = "<group>"; };
 		EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiAnalyticsEmitter.m; sourceTree = "<group>"; };
@@ -75,8 +75,8 @@
 				EBC59E5C23C5514B008A123A /* Nami.m */,
 				EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */,
 				EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */,
-				EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerProxy.m */,
-				EB1C9AF823BE9C5600CAD548 /* NamiStoreKitHelperBridge.m */,
+				EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */,
+				EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				A1F9B4504EB498545CC2A918 /* Pods */,
 				82475599A9F3B58440ACDC6E /* Frameworks */,
@@ -185,8 +185,8 @@
 			files = (
 				EBC59E6023C7E2EC008A123A /* NamiAnalyticsEmitter.m in Sources */,
 				EBC59E5D23C5514B008A123A /* Nami.m in Sources */,
-				EB1C9AFB23BE9C5700CAD548 /* NamiStoreKitHelperBridge.m in Sources */,
-				EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerProxy.m in Sources */,
+				EB1C9AFB23BE9C5700CAD548 /* NamiPurchaseManagerBridge.m in Sources */,
+				EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerBridge.m in Sources */,
 				EBC59E6323C7F634008A123A /* NamiBridgeUtil.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNNami.m in Sources */,
 				EB1C9AFD23BE9C5700CAD548 /* NamiEmitter.m in Sources */,

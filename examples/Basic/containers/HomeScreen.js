@@ -45,7 +45,7 @@ const HomeScreen = (props) => {
     console.log('Triggering core action');
     NativeModules.NamiBridge.coreActionWithLabel("About");
 
-    NativeModules.NamiStoreKitHelperBridge.allPurchasedProducts(
+    NativeModules.NamiPurchaseManagerBridge.purchases(
 		   (purchases) => {
 		       console.log("purchases found ", purchases);
 
@@ -86,9 +86,15 @@ const HomeScreen = (props) => {
 
 
     //    NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
-    NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
+    NativeModules.NamiPurchaseManagerBridge.bypassStore(true);
     //    NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
-    NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
+
+    var configDict = {
+	'appPlatformID': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
+	"logLevel": "DEBUG"
+    };
+    
+    NativeModules.NamiBridge.configure(configDict);
   }, []);
 
   return (

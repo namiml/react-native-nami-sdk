@@ -15,16 +15,13 @@
 
 #import "React/RCTViewManager.h"
 
-@interface NamiStoreKitHelper (RCTExternModule) <RCTBridgeModule>
+@interface NamiPurchaseManager (RCTExternModule) <RCTBridgeModule>
  @end
 
-@implementation NamiStoreKitHelper (RCTExternModule)
+@implementation NamiPurchaseManager (RCTExternModule)
 RCT_EXPORT_MODULE_NO_LOAD(NamiStoreKitHelper, NamiStoreKitHelper)
 
-
-RCT_EXTERN_METHOD(clearBypassStoreKitPurchases)
-_RCT_EXTERN_REMAP_METHOD(sharedInstance,shared,YES)
-
+RCT_EXTERN_METHOD(clearBypassStorePurchases)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;
@@ -33,26 +30,22 @@ _RCT_EXTERN_REMAP_METHOD(sharedInstance,shared,YES)
 @end
 
 
-@interface NamiStoreKitHelperBridge : NSObject <RCTBridgeModule>
+@interface NamiPurchaseManagerBridge : NSObject <RCTBridgeModule>
 @end
-@implementation NamiStoreKitHelperBridge (RCTExternModule)
+@implementation NamiPurchaseManagerBridge (RCTExternModule)
 
-RCT_EXTERN_METHOD(sharedInstance)
-- (NamiStoreKitHelper *)sharedInstance {
-  return [NamiStoreKitHelper shared];
-}
 
-RCT_EXTERN_METHOD(clearBypassStoreKitPurchases)
-- (void)clearBypassStoreKitPurchases {
+RCT_EXTERN_METHOD(clearBypassStorePurchases)
+- (void)clearBypassStorePurchases {
   [NamiPurchaseManager clearBypassStorePurchases];
 }
 
-RCT_EXTERN_METHOD(bypassStoreKit:(BOOL)bypass)
-- (void)bypassStoreKit: (BOOL) bypass {
+RCT_EXTERN_METHOD(bypassStore:(BOOL)bypass)
+- (void)bypassStore: (BOOL) bypass {
   [NamiPurchaseManager bypassStoreWithBypass:bypass];
 }
 
-RCT_EXPORT_METHOD(allPurchasedProducts:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(purchases:(RCTResponseSenderBlock)completion)
 {
     NSArray <NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
     NSLog(@"From SDK, purchases are currently %@", purchases);
@@ -69,11 +62,11 @@ RCT_EXPORT_METHOD(allPurchasedProducts:(RCTResponseSenderBlock)completion)
     completion(@[convertedPurchaseDicts]);
 }
 
-RCT_EXPORT_METHOD(anyProductPurchased:(nonnull NSArray*)productIDs completion:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(anySKUPurchased:(nonnull NSArray*)skuIDs completion:(RCTResponseSenderBlock)completion)
 {
     BOOL active = false;
     for (NamiPurchase *purchase in [NamiPurchaseManager allPurchases]) {
-        if ( [productIDs containsObject:purchase.skuID] ) {
+        if ( [skuIDs containsObject:purchase.skuID] ) {
             active = true;
             break;
         }
@@ -82,9 +75,9 @@ RCT_EXPORT_METHOD(anyProductPurchased:(nonnull NSArray*)productIDs completion:(R
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
-RCT_EXPORT_METHOD(buyProduct:(nonnull NSString*)productID completion:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(buyProduct:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
 {
-    [NamiPurchaseManager skusForSKUIDsWithSkuIDs:@[productID] productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
+    [NamiPurchaseManager skusForSKUIDsWithSkuIDs:@[skuID] productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
         NSLog(@"Products found are %@, product fetch error is %@", products, [error localizedDescription]);
         NamiSKU *useProduct = products.firstObject;
         if (useProduct != nil) {
@@ -102,8 +95,8 @@ RCT_EXPORT_METHOD(buyProduct:(nonnull NSString*)productID completion:(RCTRespons
 
 @end
 
-@implementation NamiStoreKitHelperBridge
-RCT_EXPORT_MODULE_NO_LOAD(NamiStoreKitHelperBridge, NamiStoreKitHelperBridge)
+@implementation NamiPurchaseManagerBridge
+RCT_EXPORT_MODULE_NO_LOAD(NamiStoreKitHelperBridge, NamiPurchaseManagerBridge)
 
 - (dispatch_queue_t)methodQueue
 {

@@ -32,7 +32,7 @@ public class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactCont
 //    }
 
     @ReactMethod
-    public fun configureWithAppID( appID: String ) {
+    public fun configure( configDict: Map<String,String> ) {
         val reactContext = reactApplicationContext
         Log.e("ReactNative", "Nami Configure called with appID " + appID)
         Log.e("ReactNative", "Nami Configure called with context " + reactContext)
@@ -45,12 +45,19 @@ public class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactCont
 
         //Application fred = (reactContext as Application);
 
-        var builder: NamiConfiguration.Builder  =  NamiConfiguration.Builder(appContext, appID)
+        val appPlatformID: String = configDict["appPlatformID"] ?: "APPPLATFORMID_NOT_FOUND"
 
-        // Will have to figure out how to get this from a react app later... may include that in the call.
-        builder.logLevel(NamiLogLevel.DEBUG)
+        val builder: NamiConfiguration.Builder = NamiConfiguration.Builder(appContext, appPlatformID)
 
-        var builtConfig: NamiConfiguration  = builder.build()
+        val logLevelString = configDict["logLevel"]
+        if (logLevelString == "DEBUG") {
+            // Will have to figure out how to get this from a react app later... may include that in the call.
+            builder.logLevel(NamiLogLevel.DEBUG)
+        } else if (logLevelString == "ERROR") {
+            builder.logLevel(NamiLogLevel.ERROR)
+        }
+
+        var builtConfig: NamiConfiguration = builder.build()
         Log.e("ReactNative", "Nami Configuration object is " + builtConfig.toString());
 
         Nami.configure(builtConfig)

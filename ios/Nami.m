@@ -23,9 +23,6 @@
 RCT_EXPORT_MODULE_NO_LOAD(Nami, Nami)
 
 
-_RCT_EXTERN_REMAP_METHOD(sharedInstance,shared,YES)
-
-
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }
@@ -37,15 +34,24 @@ _RCT_EXTERN_REMAP_METHOD(sharedInstance,shared,YES)
 @end
 @implementation NamiBridge (RCTExternModule)
 
-RCT_EXTERN_METHOD(sharedInstance)
-- (Nami *)sharedInstance {
-  return [Nami shared];
-}
-
-RCT_EXTERN_METHOD(configureWithAppID:(NSString)appID)
-- (void)configureWithAppID: (NSString *)appID {
-    NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformID:appID];
-    [Nami configureWithNamiConfig:config];
+RCT_EXTERN_METHOD(configure:(NSDictionary)configDict)
+- (void)configure: (NSDictionary *)configDict {
+    
+    NSString *appID = configDict[@"appPlatformID"];
+    
+    if ([appID length] > 0 ) {
+        NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformID:appID];
+        
+        NSString *logLevelString = configDict[@"logLevel"];
+        if ([logLevelString isEqualToString:@"DEBUG"]) {
+            // Will have to figure out how to get this from a react app later... may include that in the call.
+            config.logLevel = NamiLogLevelDebug;
+        } else if ([logLevelString isEqualToString:@"ERROR" ]) {
+            config.logLevel = NamiLogLevelError;
+        }
+        
+        [Nami configureWithNamiConfig:config];
+    }
 }
 
 RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
