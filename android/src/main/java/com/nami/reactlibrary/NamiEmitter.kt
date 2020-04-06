@@ -12,6 +12,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.NamiPaywallManager
 import com.namiml.api.model.SKU
 import com.namiml.api.model.NamiPaywall
+import com.namiml.entitlement.billing.NamiSKU
 import java.lang.ref.WeakReference
 import java.util.ArrayList
 
@@ -66,7 +67,8 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
 
         Log.e("ReactNative", "In Emitter Initialize()")
         NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            emitPaywallRaise(context, paywallData, products, developerPaywallId)
+            var sendProducts: List<SKU> = products ?: ArrayList<SKU>()
+            emitPaywallRaise(context, paywallData, sendProducts, developerPaywallId)
         }
 
 //

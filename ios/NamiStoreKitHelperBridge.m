@@ -63,7 +63,7 @@ RCT_EXPORT_METHOD(allPurchasedProducts:(RCTResponseSenderBlock)completion)
             anyProductNil = YES;
         }
         NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
-        [convertedPurchaseDicts addObject:purchaseDict];
+        [convertedPurchaseDicts addObject:purchaseDict];       
     }
     
     completion(@[convertedPurchaseDicts]);

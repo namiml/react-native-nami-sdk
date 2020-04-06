@@ -51,7 +51,7 @@
  + (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiPurchase *)purchase {
      NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
      
-     purchaseDict[@"productIdentifier"] = purchase.skuID;
+     purchaseDict[@"skuIdentifier"] = purchase.skuID;
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
      purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
      
@@ -61,12 +61,6 @@
      }
      
      purchaseDict[@"purchaseSource"] =  [[NSString alloc] initWithFormat:@"%d", (int)purchase.purchaseSource];
-     
-     // TODO: Fix product return for purchase
-//     NamiSKU *productID = purchase.skuID;
-//     if (product != nil) {
-//         purchaseDict[@"metaProduct"] = [self productToProductDict:product];
-//     }
      
      return purchaseDict;
  }
