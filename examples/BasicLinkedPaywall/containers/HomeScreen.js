@@ -59,7 +59,7 @@ const HomeScreen = (props) => {
 
     console.log('Nami Bridge is');
     console.log(NativeModules.NamiBridge, 'NamiBridge');
-    console.log(NativeModules.NamiPaywallManagerBridge, 'NamiPaywallManagerBridge')
+    console.log(NativeModules.NamiPaywallManagerBridge, 'NamiPaywallManagerBridge');
 
     var configDict = {
 	'appPlatformID': '54635e21-87ed-4ed6-9119-9abb493bc9b0',
