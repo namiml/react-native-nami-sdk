@@ -23,6 +23,7 @@ public class NamiBridgePackage implements ReactPackage {
         moduleList.add(new NamiPaywallManagerBridgeModule(reactContext));
         moduleList.add(new NamiPurchaseManagerBridgeModule(reactContext));
         moduleList.add(new NamiEntitlementManagerBridgeModule(reactContext));
+        moduleList.add(new NamiMLManagerBridgeModule(reactContext));
         moduleList.add(new NamiEmitter(reactContext));
 
         return moduleList;

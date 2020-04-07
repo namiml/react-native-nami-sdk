@@ -26,12 +26,27 @@ import org.jetbrains.annotations.NotNull
 
 import java.util.ArrayList
 
-public class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
-    public override fun getName(): String  {
-        return "NamiEntitlementManagerBridge"
+public class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+
+
+    fun NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext?) {
+
     }
 
+    public override fun getName(): String {
+        return "NamiMLManagerBridge"
+    }
 
+    @ReactMethod
+    public fun enterCoreContentWithLabel(label: String ) {
+    }
 
+    @ReactMethod
+    public fun exitCoreContentWithLabel(label: String ) {
+    }
+
+    @ReactMethod
+    public fun coreActionWithLabel(label: String ) {
+    }
 }

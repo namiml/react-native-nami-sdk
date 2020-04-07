@@ -43,7 +43,7 @@ const HomeScreen = (props) => {
 
   const activateAbout = () => {
     console.log('Triggering core action');
-    NativeModules.NamiBridge.coreActionWithLabel("About");
+    NativeModules.NamiMLManagerBridge.coreActionWithLabel("About");
 
     NativeModules.NamiPurchaseManagerBridge.purchases(
 		   (purchases) => {

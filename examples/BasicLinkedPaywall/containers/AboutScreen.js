@@ -17,11 +17,11 @@ const AboutScreen = (props) => {
 
   useEffect(() => {
     console.log('Entering About Screen.');
-    NativeModules.NamiBridge.enterCoreContentWithLabel("AboutScreen");
+    NativeModules.NamiMLManagerBridge.enterCoreContentWithLabel("AboutScreen");
 
     return () => {
       console.log('Exiting About Screen.');
-      NativeModules.NamiBridge.exitCoreContentWithLabel("AboutScreen");
+      NativeModules.NamiMLManagerBridge.exitCoreContentWithLabel("AboutScreen");
     };
   }, [props.navigation]);
 

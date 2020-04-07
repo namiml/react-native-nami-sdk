@@ -25,6 +25,7 @@ public class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationConte
         return "NamiPurchaseManagerBridge"
     }
 
+    @ReactMethod
     public fun buySKU(skuPlatformID: String, resultsCallback: Callback ) {
     var useActivity = currentActivity?.let {
         NamiPurchaseManager.buySKU(it, skuPlatformID, false) {
@@ -34,7 +35,8 @@ public class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationConte
         }
     }
 
-    public fun activePurchases(resultsCallback: Callback ) {
+    @ReactMethod
+    public fun purchases(resultsCallback: Callback ) {
         var resultArray : WritableArray = WritableNativeArray()
         var sendMap = WritableNativeMap()
         sendMap.putString("key1", "data");
