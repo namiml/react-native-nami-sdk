@@ -4,8 +4,10 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.JavaScriptModule
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.shell.MainReactPackage
 import com.facebook.react.uimanager.ViewManager
 import java.util.*
+
 
 class NamiBridgePackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
@@ -24,5 +26,12 @@ class NamiBridgePackage : ReactPackage {
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
         return emptyList()
+    }
+
+    protected fun getPackages(): List<ReactPackage>? {
+        return Arrays.asList<ReactPackage>(
+                MainReactPackage(),
+                NamiBridgePackage()
+        )
     }
 }

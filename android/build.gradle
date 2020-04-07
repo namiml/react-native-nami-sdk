@@ -78,7 +78,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation('com.nami:nami-sdk-android:0.0.3-beta.8') {
+    implementation('com.nami:nami-sdk-android:0.0.3-beta.11') {
         transitive true
     }
 }

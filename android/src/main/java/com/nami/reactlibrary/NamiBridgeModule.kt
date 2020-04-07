@@ -33,8 +33,10 @@ public class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactCont
 
     @ReactMethod
     public fun configure( configDict: Map<String,String> ) {
+        val appPlatformID: String = configDict["appPlatformID"] ?: "APPPLATFORMID_NOT_FOUND"
+
         val reactContext = reactApplicationContext
-        Log.e("ReactNative", "Nami Configure called with appID " + appID)
+        Log.e("ReactNative", "Nami Configure called with appID " + appPlatformID)
         Log.e("ReactNative", "Nami Configure called with context " + reactContext)
         Log.e("ReactNative", "Nami Configure called with context.applicationContext " + reactContext.getApplicationContext())
 
@@ -45,7 +47,6 @@ public class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactCont
 
         //Application fred = (reactContext as Application);
 
-        val appPlatformID: String = configDict["appPlatformID"] ?: "APPPLATFORMID_NOT_FOUND"
 
         val builder: NamiConfiguration.Builder = NamiConfiguration.Builder(appContext, appPlatformID)
 
