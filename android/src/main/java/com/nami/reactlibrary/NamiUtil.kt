@@ -64,23 +64,25 @@ fun paywallToPaywallDict( paywallData: NamiPaywall ): WritableMap {
     paywallMap.putString("tosLink", paywallData.tosLink ?: "")
     val allowClosingStr = if (paywallData.allowClosing) "true" else "false"
     paywallMap.putString("allowClosing", allowClosingStr)
+
+    return paywallMap
 }
 
 
-fun skuToSkuDict( namiSku: NamiSKU) : WritableMap {
+fun skuToSkuDict( namiSKU: NamiSKU) : WritableMap {
     val productDict = Arguments.createMap()
 
-    productDict.putString("skuIdentifier", namiSku.skuId )
-    productDict.putString("localizedTitle", namiSku.skuName )
-    productDict.putString("localizedDescription", namiSku.localizedDescription )
-    productDict.putString("localizedPrice", namiSku.localizedPrice )
-    productDict.putString("localizedMultipliedPrice", namiSku.localizedMultipliedPrice )
-    productDict.putString("price", namiSku.price.toBigDecimal().toPlainString() )
-    productDict.putString("priceLanguage", namiSku.priceLanguage )
-    productDict.putString("priceCountry", namiSku.priceCountry )
-    productDict.putString("priceCurrency", namiSku.priceCurrency )
-    productDict.putString("numberOfUnits", namiSku.numberOfUnits.toString() )
-    productDict.putString("periodUnit", namiSku.periodUnit.toString() )
+    productDict.putString("skuIdentifier", namiSKU.skuId )
+    productDict.putString("localizedTitle", namiSKU.skuName )
+    productDict.putString("localizedDescription", namiSKU.localizedDescription )
+    productDict.putString("localizedPrice", namiSKU.localizedPrice )
+    productDict.putString("localizedMultipliedPrice", namiSKU.localizedMultipliedPrice )
+    productDict.putString("price", namiSKU.price.toBigDecimal().toPlainString() )
+    productDict.putString("priceLanguage", namiSKU.priceLanguage )
+    productDict.putString("priceCountry", namiSKU.priceCountry )
+    productDict.putString("priceCurrency", namiSKU.priceCurrency )
+    productDict.putString("numberOfUnits", namiSKU.numberOfUnits.toString() )
+    productDict.putString("periodUnit", namiSKU.periodUnit.toString() )
 
     return productDict
 }

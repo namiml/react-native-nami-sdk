@@ -14,7 +14,7 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
     fun NamiEmitter(reactContext: ReactApplicationContext?) {
         Log.e("ReactNative", "In Emitter Initialize(reactContext)")
         NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            val productList:List<NamiSKU> = products ?: ArrayList<NamiSKU>()
+            val productList:List<NamiSKU> =  ArrayList<NamiSKU>() //products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(context, paywallData, productList, developerPaywallId)
         }
         NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallId ->
@@ -47,7 +47,7 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
         }
         Log.e("ReactNative", "In Emitter Initialize()")
         NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            var sendProducts: List<SKU> = products ?: ArrayList<SKU>()
+            var sendProducts: List<NamiSKU> = ArrayList<NamiSKU>() //products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(context, paywallData, sendProducts, developerPaywallId)
         }
 //
@@ -79,7 +79,7 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
         val skusArray: WritableArray = Arguments.createArray()
 
         for (sku in productDicts) {
-            val skuMap = skuToSkutDict(sku)
+            val skuMap = skuToSkuDict(sku)
             skusArray.pushMap(skuMap)
         }
 
