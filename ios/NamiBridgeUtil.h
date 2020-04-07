@@ -11,7 +11,7 @@
 
 @interface NamiBridgeUtil : NSObject
 // Converts NamiMetaProduct into javascript compatible dictionary
-+ (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiSKU *)product;
++ (NSDictionary<NSString *,NSString *> *) skuToSKUDict:(NamiSKU *)product;
 
 // Converts NamiMetaPurchase into javascript compatible dictionary
 + (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiSKU *)purchase;

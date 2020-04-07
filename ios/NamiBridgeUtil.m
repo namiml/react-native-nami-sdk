@@ -14,12 +14,12 @@
 
 @implementation NamiBridgeUtil : NSObject
 
-    + (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiSKU *)product {
+    + (NSDictionary<NSString *,NSString *> *) skuToSKUDict:(NamiSKU *)sku {
         NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
 
-        productDict[@"skuIdentifier"] = product.platformID;
+        productDict[@"skuIdentifier"] = sku.platformID;
 
-        SKProduct *productInt = product.product;
+        SKProduct *productInt = sku.product;
         productDict[@"localizedTitle"] = productInt.localizedTitle;
         productDict[@"localizedDescription"] = productInt.localizedDescription;
         productDict[@"localizedPrice"] = productInt.localizedPrice;

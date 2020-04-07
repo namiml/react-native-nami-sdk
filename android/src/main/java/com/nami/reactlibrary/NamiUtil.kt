@@ -1,6 +1,11 @@
 package com.nami.reactlibrary
 
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.WritableMap
+import com.namiml.api.model.NamiPaywall
 import com.namiml.api.model.SKU
+import com.namiml.entitlement.billing.NamiSKU
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,21 +45,42 @@ import java.util.*
 //    return productDict;
 //}
 
-fun productToProductDict( sku: SKU) : Map<String,String> {
-    var productDict = mutableMapOf<String, String>()
+fun paywallToPaywallDict( paywallData: NamiPaywall ): WritableMap {
 
-    productDict["skuPlatformIdentifier"] = sku.skuRefId
+    val paywallMap: WritableMap = Arguments.createMap()
+    paywallMap.putString("title", paywallData.title ?: "")
+    paywallMap.putString("body", paywallData.body ?: "")
 
-    productDict["localizedTitle"] = sku.name
-//    productDict["localizedDescription"] = sku.
-//    productDict["localizedPrice"] = sku.
-//    productDict["localizedMultipliedPrice"] = productInt.localizedMultipliedPrice;
-//    productDict["price"] = productInt.price.stringValue;
-//    productDict["priceLanguage"] = productInt.priceLocale.languageCode;
-//    productDict["priceCountry"] = productInt.priceLocale.countryCode;
-//    productDict["priceCurrency"] = productInt.priceLocale.currencyCode;
-//    productDict["numberOfUnits"] = [NSString stringWithFormat:@"%lu", (unsigned long)numberOfUnits];
-//    productDict["periodUnit"] = [NSString stringWithFormat:@"%lu", (unsigned long)periodUnit];
+    val marketingContentMap = Arguments.createMap()
+    marketingContentMap.putString("title", paywallData.title ?: "")
+    marketingContentMap.putString("body", paywallData.body ?: "")
+    paywallMap.putMap("marketing_content", marketingContentMap)
+
+    paywallMap.putString("id", paywallData.id ?: "")
+    paywallMap.putString("backgroundImageUrlPhone", paywallData.backgroundImageUrlPhone ?: "")
+    paywallMap.putString("backgroundImageUrlTablet", paywallData.backgroundImageUrlTablet ?: "")
+    paywallMap.putString("privacyPolicy", paywallData.privacyPolicy ?: "")
+    paywallMap.putString("purchaseTerms", paywallData.purchaseTerms ?: "")
+    paywallMap.putString("tosLink", paywallData.tosLink ?: "")
+    val allowClosingStr = if (paywallData.allowClosing) "true" else "false"
+    paywallMap.putString("allowClosing", allowClosingStr)
+}
+
+
+fun skuToSkuDict( namiSku: NamiSKU) : WritableMap {
+    val productDict = Arguments.createMap()
+
+    productDict.putString("skuIdentifier", namiSku.skuId )
+    productDict.putString("localizedTitle", namiSku.skuName )
+    productDict.putString("localizedDescription", namiSku.localizedDescription )
+    productDict.putString("localizedPrice", namiSku.localizedPrice )
+    productDict.putString("localizedMultipliedPrice", namiSku.localizedMultipliedPrice )
+    productDict.putString("price", namiSku.price.toBigDecimal().toPlainString() )
+    productDict.putString("priceLanguage", namiSku.priceLanguage )
+    productDict.putString("priceCountry", namiSku.priceCountry )
+    productDict.putString("priceCurrency", namiSku.priceCurrency )
+    productDict.putString("numberOfUnits", namiSku.numberOfUnits.toString() )
+    productDict.putString("periodUnit", namiSku.periodUnit.toString() )
 
     return productDict
 }

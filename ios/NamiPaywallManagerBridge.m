@@ -68,7 +68,7 @@ RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPayw
     [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:developerPaywallID :^(NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nullable paywallMetadata) {
         NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
         for (NamiSKU *product in products) {
-          [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];
+          [productDicts addObject:[NamiBridgeUtil skuToSKUDict:product]];
         }
         NSArray *wrapperArray = @[@{ @"products": productDicts,
                                                                 @"developerPaywallID": developerPaywallID,

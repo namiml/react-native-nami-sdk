@@ -115,12 +115,12 @@ bool hasNamiEmitterListeners;
                       withProducts:(NSArray<NamiSKU *> * _Nullable) products
                        paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata  {
     if (hasNamiEmitterListeners) {
-    NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
-    for (NamiSKU *product in products) {
-      [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];
+    NSMutableArray<NSDictionary<NSString *,NSString *> *> *skuDicts = [NSMutableArray new];
+    for (NamiSKU *sku in products) {
+      [skuDicts addObject:[NamiBridgeUtil skuToSKUDict:sku]];
     }
 
-      [self sendEventWithName:@"AppPaywallActivate" body:@{ @"products": productDicts,
+      [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
                                                             @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
   }

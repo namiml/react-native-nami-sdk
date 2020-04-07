@@ -93,7 +93,7 @@ bool hasNamiAanlyticsEmitterListeners;
 - (NSDictionary *) productDictIfProductPresentInAnalyticsItems:(NSDictionary *)anayticsItems forKey:(NSString *)key {
     NamiSKU *product = (NamiSKU *)anayticsItems[key];
     if (product != NULL && [product isKindOfClass:[NamiSKU class]] ) {
-        return [NamiBridgeUtil productToProductDict:product];
+        return [NamiBridgeUtil skuToSKUDict:product];
     } else {
         return NULL;
     }
@@ -108,7 +108,7 @@ bool hasNamiAanlyticsEmitterListeners;
     if ([rawProducts isKindOfClass:[NSArray class]]) {
         NSMutableArray<NSDictionary *> *productsSanitized = [NSMutableArray new];
         for (NamiSKU *product in (NSArray *)rawProducts) {
-            [productsSanitized addObject:[NamiBridgeUtil productToProductDict:product]];
+            [productsSanitized addObject:[NamiBridgeUtil skuToSKUDict:product]];
         }
         sanitizedDictionary[@"paywallProducts"] = productsSanitized;
     }

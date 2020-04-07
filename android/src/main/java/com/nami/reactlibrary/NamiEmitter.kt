@@ -1,14 +1,12 @@
 package com.nami.reactlibrary
 import android.util.Log
 import android.widget.Toast
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.NamiPaywallManager
 import com.namiml.api.model.SKU
 import com.namiml.api.model.NamiPaywall
+import com.namiml.databinding.NamiSkuButtonGroupBinding
 import com.namiml.entitlement.billing.NamiSKU
 import java.lang.ref.WeakReference
 import java.util.ArrayList
@@ -16,7 +14,7 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
     fun NamiEmitter(reactContext: ReactApplicationContext?) {
         Log.e("ReactNative", "In Emitter Initialize(reactContext)")
         NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            val productList:List<SKU> = products ?: ArrayList<SKU>()
+            val productList:List<NamiSKU> = products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(context, paywallData, productList, developerPaywallId)
         }
         NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallId ->
@@ -57,7 +55,7 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
 //            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
 //        }];
     }
-    fun emitPaywallRaise(activity: android.content.Context, paywallData: NamiPaywall, productDicts: List<SKU>, paywallDeveloperID: String? )   {
+    fun emitPaywallRaise(activity: android.content.Context, paywallData: NamiPaywall, productDicts: List<NamiSKU>, paywallDeveloperID: String? )   {
 //        if (hasNamiEmitterListeners) {
 //            NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
 //            for (NamiMetaProduct *product in products) {
@@ -68,9 +66,25 @@ public class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBa
 //                @"developerPaywallID": developerPaywallID,
 //                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
 //        }
+
+        Log.e("NAMI","Emitting paywall raise signal for developerID" + paywallDeveloperID);
         val map = Arguments.createMap()
         map.putString("developerPaywallID", paywallDeveloperID )
-        map.putString("paywallMetadata", "Need TO Map NamiPaywall Object")
+
+        // Populate paywall metadata map
+        val paywallMap: WritableMap = paywallToPaywallDict(paywallData)
+        map.putMap("paywallMetadata", paywallMap)
+
+        // Populate SKU details
+        val skusArray: WritableArray = Arguments.createArray()
+
+        for (sku in productDicts) {
+            val skuMap = skuToSkutDict(sku)
+            skusArray.pushMap(skuMap)
+        }
+
+        map.putArray("skus", skusArray)
+
         try {
             reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("AppPaywallActivate", map)
