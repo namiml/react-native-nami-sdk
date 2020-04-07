@@ -9,7 +9,7 @@ import com.facebook.react.uimanager.ViewManager
 import java.util.*
 
 
-class NamiBridgePackage : ReactPackage {
+class NamiBridgePackage2 : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
         val moduleList: MutableList<NativeModule> = ArrayList()
         moduleList.add(NamiBridgeModule(reactContext))
