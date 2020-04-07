@@ -57,13 +57,13 @@ fun paywallToPaywallDict( paywallData: NamiPaywall ): WritableMap {
     paywallMap.putMap("marketing_content", marketingContentMap)
 
     paywallMap.putString("id", paywallData.id ?: "")
-    paywallMap.putString("backgroundImageUrlPhone", paywallData.backgroundImageUrlPhone ?: "")
-    paywallMap.putString("backgroundImageUrlTablet", paywallData.backgroundImageUrlTablet ?: "")
-    paywallMap.putString("privacyPolicy", paywallData.privacyPolicy ?: "")
-    paywallMap.putString("purchaseTerms", paywallData.purchaseTerms ?: "")
-    paywallMap.putString("tosLink", paywallData.tosLink ?: "")
+    paywallMap.putString("background_image_url_phone", paywallData.backgroundImageUrlPhone ?: "")
+    paywallMap.putString("background_image_url_tablet", paywallData.backgroundImageUrlTablet ?: "")
+    paywallMap.putString("privacy_policy", paywallData.privacyPolicy ?: "")
+    paywallMap.putString("purchase_terms", paywallData.purchaseTerms ?: "")
+    paywallMap.putString("tos_link", paywallData.tosLink ?: "")
     val allowClosingStr = if (paywallData.allowClosing) "true" else "false"
-    paywallMap.putString("allowClosing", allowClosingStr)
+    paywallMap.putString("allow_closing", allowClosingStr)
 
     return paywallMap
 }
