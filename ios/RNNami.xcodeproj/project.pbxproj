@@ -15,6 +15,7 @@
 		EBC59E5D23C5514B008A123A /* Nami.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5C23C5514B008A123A /* Nami.m */; };
 		EBC59E6023C7E2EC008A123A /* NamiAnalyticsEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */; };
 		EBC59E6323C7F634008A123A /* NamiBridgeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E6223C7F634008A123A /* NamiBridgeUtil.m */; };
+		EBEEAC10243C29C800E01389 /* NamiMLManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +44,7 @@
 		EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiAnalyticsEmitter.m; sourceTree = "<group>"; };
 		EBC59E6223C7F634008A123A /* NamiBridgeUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiBridgeUtil.m; sourceTree = "<group>"; };
 		EBC59E6423C7F7A0008A123A /* NamiBridgeUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NamiBridgeUtil.h; sourceTree = "<group>"; };
+		EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiMLManagerBridge.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 				EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */,
 				EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */,
 				EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */,
+				EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				A1F9B4504EB498545CC2A918 /* Pods */,
 				82475599A9F3B58440ACDC6E /* Frameworks */,
@@ -189,6 +192,7 @@
 				EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerBridge.m in Sources */,
 				EBC59E6323C7F634008A123A /* NamiBridgeUtil.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNNami.m in Sources */,
+				EBEEAC10243C29C800E01389 /* NamiMLManagerBridge.m in Sources */,
 				EB1C9AFD23BE9C5700CAD548 /* NamiEmitter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

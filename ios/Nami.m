@@ -59,20 +59,7 @@ RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
     [NamiCommand performCommand:command];
 }
 
-RCT_EXTERN_METHOD(enterCoreContentWithLabel:(NSString)namiCommand)
-- (void)enterCoreContentWithLabel: (NSString *)label {
-    [NamiMLManager enterCoreContentWithLabel:label];
-}
 
-RCT_EXTERN_METHOD(exitCoreContentWithLabel:(NSString)namiCommand)
-- (void)exitCoreContentWithLabel: (NSString *)label {
-    [NamiMLManager exitCoreContentWithLabel:label];
-}
-
-RCT_EXTERN_METHOD(coreActionWithLabel:(NSString)namiCommand)
-- (void)coreActionWithLabel: (NSString *)label {
-    [NamiMLManager coreActionWithLabel:label];
-}
 
 @end
 

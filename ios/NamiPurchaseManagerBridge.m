@@ -75,7 +75,7 @@ RCT_EXPORT_METHOD(anySKUPurchased:(nonnull NSArray*)skuIDs completion:(RCTRespon
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
-RCT_EXPORT_METHOD(buyProduct:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(buySKU:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
 {
     [NamiPurchaseManager skusForSKUIDsWithSkuIDs:@[skuID] productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
         NSLog(@"Products found are %@, product fetch error is %@", products, [error localizedDescription]);
