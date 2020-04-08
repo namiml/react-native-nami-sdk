@@ -23,11 +23,6 @@
 @implementation NamiPaywallManager (RCTExternModule)
 RCT_EXPORT_MODULE_NO_LOAD(NamiPaywallManager, NamiPaywallManager)
 
-
-RCT_EXTERN_METHOD(presentLivePaywallFromVC:(nullable UIViewController *)vc)
-_RCT_EXTERN_REMAP_METHOD(sharedInstance,shared,YES)
-
-
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }
