@@ -5,7 +5,7 @@ import theme from '../../theme';
 const LinkedPaywall = (props) => {
   const { open, setOpen, data } = props;
   const { title, body } = data.paywallMetadata.marketing_content;
-  const { background_image_url_phone } = data.paywallMetadata;
+  const { backgroundImageUrlPhone } = data.paywallMetadata;
   const { skus } = data;
 
   const purchase = (skuIdentifier) => {
@@ -39,7 +39,7 @@ const LinkedPaywall = (props) => {
       onRequestClose={() => {
         Alert.alert('LinkedPaywall has been closed.');
       }}>
-      <ImageBackground source={{ uri: background_image_url_phone }} style={{ width: '100%', height: '100%' }}>
+      <ImageBackground source={{ uri: backgroundImageUrlPhone }} style={{ width: '100%', height: '100%' }}>
         <View style={styles.sectionContainer}>
           <TouchableOpacity
             onPress={() => setOpen(!open)}
@@ -51,7 +51,7 @@ const LinkedPaywall = (props) => {
           <Text style={styles.sectionTitle}>{title}</Text>
           <Text style={styles.sectionDescription}>{body}</Text>
         </View>
-        <View style={styles.subscriptions}>
+        { skus && !!skus.length && <View style={styles.subscriptions}>
           <View style={styles.sectionContainer}>
             {skus.map((sku, index) => {
               return (
@@ -65,7 +65,7 @@ const LinkedPaywall = (props) => {
               )
             })}
           </View>
-        </View>
+        </View>}
       </ImageBackground>
     </Modal>
   );
@@ -80,7 +80,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 340,
-    borderRadius: 20
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20
   },
   sectionContainer: {
     marginTop: 32,
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 10
   },
   close: {
-    color: 'black',
+    color: theme.white,
     textAlign: 'right'
   },
 
