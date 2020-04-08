@@ -9,7 +9,7 @@ const LinkedPaywall = (props) => {
   const { skus } = data;
 
   const purchase = (skuIdentifier) => {
-    NativeModules.NamiStoreKitHelperBridge.buySKU(skuIdentifier,
+    NativeModules.NamiPurchaseManager.buySKU(skuIdentifier,
       (purchased) => {
         if (purchased) {
           Alert.alert(
