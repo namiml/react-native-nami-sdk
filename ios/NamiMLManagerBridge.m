@@ -19,9 +19,7 @@
  @end
 
 @implementation NamiMLManager (RCTExternModule)
-RCT_EXPORT_MODULE_NO_LOAD(NamiStoreKitHelper, NamiStoreKitHelper)
-
-RCT_EXTERN_METHOD(clearBypassStorePurchases)
+RCT_EXPORT_MODULE_NO_LOAD(NamiMLManager, NamiMLManager)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;

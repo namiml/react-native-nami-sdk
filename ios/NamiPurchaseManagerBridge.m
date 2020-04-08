@@ -1,5 +1,5 @@
 //
-//  NamiStorekitHelperBridge.m
+//  NamiPurchaseManagerBridge.m
 //  namiReactNative
 //
 //  Created by Kendall Helmstetter Gelner on 12/11/19.
@@ -19,7 +19,7 @@
  @end
 
 @implementation NamiPurchaseManager (RCTExternModule)
-RCT_EXPORT_MODULE_NO_LOAD(NamiStoreKitHelper, NamiStoreKitHelper)
+RCT_EXPORT_MODULE_NO_LOAD(NamiPurchaseManager, NamiPurchaseManager)
 
 RCT_EXTERN_METHOD(clearBypassStorePurchases)
 
@@ -75,13 +75,13 @@ RCT_EXPORT_METHOD(anySKUPurchased:(nonnull NSArray*)skuIDs completion:(RCTRespon
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
-RCT_EXPORT_METHOD(buySKU:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
-{
+/// This method does the purchase work, and can optionally be fed a paywall metadata object to pass along to the purcahse flow.
+- (void) doSKUPurchaseWithSKUID:(nonnull NSString*)skuID namiPaywall:(NamiPaywall * _Nullable)namiPaywall completion:(RCTResponseSenderBlock)completion {
     [NamiPurchaseManager skusForSKUIDsWithSkuIDs:@[skuID] productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
         NSLog(@"Products found are %@, product fetch error is %@", products, [error localizedDescription]);
         NamiSKU *useProduct = products.firstObject;
         if (useProduct != nil) {
-            [NamiPurchaseManager buySKU:useProduct fromPaywall:nil responseHandler:^(NSArray<NamiPurchase *> * _Nonnull purchase, NamiPurchaseState purchaseState, NSError * _Nullable error) {
+            [NamiPurchaseManager buySKU:useProduct fromPaywall:namiPaywall responseHandler:^(NSArray<NamiPurchase *> * _Nonnull purchase, NamiPurchaseState purchaseState, NSError * _Nullable error) {
                 NSLog(@"Purchase result is %@, purchased is %d, error is %@", purchase, (purchaseState == NamiPurchaseStatePurchased), [error localizedDescription]);
                 if (purchaseState == NamiPurchaseStatePurchased) {
                     completion(@[[NSNumber numberWithBool:true]]);
@@ -91,12 +91,29 @@ RCT_EXPORT_METHOD(buySKU:(nonnull NSString*)skuID completion:(RCTResponseSenderB
             completion(@[[NSNumber numberWithBool:false]]);
         }
     }];
+
+}
+
+RCT_EXPORT_METHOD(buySKU:(nonnull NSString*)skuID paywallDeveloperID:(nonnull NSString*)paywallDeveloperID completion:(RCTResponseSenderBlock)completion)
+{
+    if (paywallDeveloperID.length > 0) {
+        [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:paywallDeveloperID :^(NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nullable namiPaywall)  {
+            [self doSKUPurchaseWithSKUID:skuID namiPaywall:namiPaywall completion:completion];
+        }];
+    } else {
+        [self doSKUPurchaseWithSKUID:skuID namiPaywall:nil completion:completion];
+    }
+}
+
+RCT_EXPORT_METHOD(buySKU:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
+{
+    [self doSKUPurchaseWithSKUID:skuID namiPaywall:nil completion:completion];
 }
 
 @end
 
 @implementation NamiPurchaseManagerBridge
-RCT_EXPORT_MODULE_NO_LOAD(NamiStoreKitHelperBridge, NamiPurchaseManagerBridge)
+RCT_EXPORT_MODULE_NO_LOAD(NamiPurchaseManagerBridge, NamiPurchaseManagerBridge)
 
 - (dispatch_queue_t)methodQueue
 {
