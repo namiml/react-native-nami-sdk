@@ -26,7 +26,9 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
 
     @ReactMethod
     fun configure(configDict: ReadableMap) {
-        val appPlatformID: String = configDict.getString("appPlatformID") ?: "APPPLATFORMID_NOT_FOUND"
+
+        // Need to be sure we have some valid string.
+        val appPlatformID: String = if (configDict.hasKey("appPlatformID")) configDict.getString("appPlatformID") ?: "APPPLATFORMID_NOT_FOUND" else "APPPLATFORMID_NOT_FOUND"
 
         val reactContext = reactApplicationContext
         Log.e("ReactNative", "Nami Configure called with appID " + appPlatformID)
@@ -43,7 +45,8 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
 
         val builder: NamiConfiguration.Builder = NamiConfiguration.Builder(appContext, appPlatformID)
 
-        val logLevelString = configDict.getString("logLevel")
+        // React native will crash if you request a key from a map that does not exist, so always check key first
+        val logLevelString = if (configDict.hasKey("logLevel")) configDict.getString("logLevel") else ""
         if (logLevelString == "DEBUG") {
             // Will have to figure out how to get this from a react app later... may include that in the call.
             builder.logLevel(NamiLogLevel.DEBUG)
@@ -51,7 +54,8 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
             builder.logLevel(NamiLogLevel.ERROR)
         }
 
-        val developmentMode = configDict.getBoolean("developmentMode")
+
+        val developmentMode = if (configDict.hasKey("developmentMode")) configDict.getBoolean("developmentMode") else false
         if (developmentMode) {
             builder.developmentMode = true
         }
