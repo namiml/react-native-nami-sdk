@@ -5,7 +5,7 @@ import theme from '../../theme';
 const LinkedPaywall = (props) => {
   const { open, setOpen, data } = props;
   const { title, body } = data.paywallMetadata.marketing_content;
-  const { backgroundImageUrlPhone } = data.paywallMetadata;
+  const { background_image_url_phone } = data.paywallMetadata;
   const { skus } = data;
 
   const purchase = (skuIdentifier) => {
@@ -39,7 +39,7 @@ const LinkedPaywall = (props) => {
       onRequestClose={() => {
         Alert.alert('LinkedPaywall has been closed.');
       }}>
-      <ImageBackground source={{ uri: backgroundImageUrlPhone }} style={{ width: '100%', height: '100%' }}>
+      <ImageBackground source={{ uri: background_image_url_phone }} style={{ width: '100%', height: '100%' }}>
         <View style={styles.sectionContainer}>
           <TouchableOpacity
             onPress={() => setOpen(!open)}
