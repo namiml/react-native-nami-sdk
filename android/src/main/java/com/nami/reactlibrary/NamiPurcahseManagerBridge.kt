@@ -12,9 +12,18 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
 
     @ReactMethod
     fun buySKU(skuPlatformID: String, resultsCallback: Callback) {
+       buySKU(skuPlatformID, "", resultsCallback)
+    }
+
+
+    @ReactMethod
+    fun buySKU(skuPlatformID: String, developerPaywallID: String, resultsCallback: Callback) {
         var useActivity = currentActivity?.let {
             NamiPurchaseManager.buySKU(it, skuPlatformID, false) {
+
+                // Currently not sure how to check if purchase worked?  Just return false.
                 var resultArray: WritableArray = WritableNativeArray()
+                resultArray.pushBoolean(false)
                 resultsCallback.invoke(resultArray)
             }
         }
@@ -22,11 +31,10 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
 
     @ReactMethod
     fun purchases(resultsCallback: Callback) {
-        var resultArray: WritableArray = WritableNativeArray()
-        var sendMap = WritableNativeMap()
-        sendMap.putString("key1", "data");
-        resultArray.pushMap(sendMap)
+//        val purchases = NamiPurchaseManager...
 
+        // Pass back empty array until we can get purchases from the SDK
+        var resultArray: WritableArray = WritableNativeArray()
         resultsCallback.invoke(resultArray)
     }
 
