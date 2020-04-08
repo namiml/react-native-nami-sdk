@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86FA58043F9BC23498A02E29 /* libPods-RNNami.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D38955F0C8C312F217C02595 /* libPods-RNNami.a */; };
 		B3E7B58A1CC2AC0600A0062D /* RNNami.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNNami.m */; };
-		B4DD215926D2EE78ACA6DBC8 /* libPods-RNNami.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9001AF4D6D9B1BCDDAAD717B /* libPods-RNNami.a */; };
 		EB1C9AFB23BE9C5700CAD548 /* NamiPurchaseManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */; };
 		EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */; };
 		EB1C9AFD23BE9C5700CAD548 /* NamiEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */; };
@@ -33,11 +33,11 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNNami.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNNami.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		9001AF4D6D9B1BCDDAAD717B /* libPods-RNNami.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNNami.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C0ED6F1EABFB69B20A67C29 /* Pods-RNNami.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNNami.debug.xcconfig"; path = "Target Support Files/Pods-RNNami/Pods-RNNami.debug.xcconfig"; sourceTree = "<group>"; };
+		90B290F36EAE177CDC017BA3 /* Pods-RNNami.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNNami.release.xcconfig"; path = "Target Support Files/Pods-RNNami/Pods-RNNami.release.xcconfig"; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNNami.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNami.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNNami.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNami.m; sourceTree = "<group>"; };
-		C5985108C4ACF101FB092F00 /* Pods-RNNami.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNNami.debug.xcconfig"; path = "Target Support Files/Pods-RNNami/Pods-RNNami.debug.xcconfig"; sourceTree = "<group>"; };
-		E1D60D93EB3756555F0112D9 /* Pods-RNNami.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNNami.release.xcconfig"; path = "Target Support Files/Pods-RNNami/Pods-RNNami.release.xcconfig"; sourceTree = "<group>"; };
+		D38955F0C8C312F217C02595 /* libPods-RNNami.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNNami.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiPurchaseManagerBridge.m; sourceTree = "<group>"; };
 		EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiPaywallManagerBridge.m; sourceTree = "<group>"; };
 		EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiEmitter.m; sourceTree = "<group>"; };
@@ -54,7 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B4DD215926D2EE78ACA6DBC8 /* libPods-RNNami.a in Frameworks */,
+				86FA58043F9BC23498A02E29 /* libPods-RNNami.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,24 +84,24 @@
 				EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */,
 				EB7B50CD243E314900EBA6B7 /* NamiEntitlementManagerBridge.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
-				A1F9B4504EB498545CC2A918 /* Pods */,
 				82475599A9F3B58440ACDC6E /* Frameworks */,
+				A17A44E9FF56BDEADE788165 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
 		82475599A9F3B58440ACDC6E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9001AF4D6D9B1BCDDAAD717B /* libPods-RNNami.a */,
+				D38955F0C8C312F217C02595 /* libPods-RNNami.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A1F9B4504EB498545CC2A918 /* Pods */ = {
+		A17A44E9FF56BDEADE788165 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C5985108C4ACF101FB092F00 /* Pods-RNNami.debug.xcconfig */,
-				E1D60D93EB3756555F0112D9 /* Pods-RNNami.release.xcconfig */,
+				5C0ED6F1EABFB69B20A67C29 /* Pods-RNNami.debug.xcconfig */,
+				90B290F36EAE177CDC017BA3 /* Pods-RNNami.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -287,12 +287,13 @@
 		};
 		58B511F01A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C5985108C4ACF101FB092F00 /* Pods-RNNami.debug.xcconfig */;
+			baseConfigurationReference = 5C0ED6F1EABFB69B20A67C29 /* Pods-RNNami.debug.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
+					"$(SRCROOT)/../../react-native/React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -304,12 +305,13 @@
 		};
 		58B511F11A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E1D60D93EB3756555F0112D9 /* Pods-RNNami.release.xcconfig */;
+			baseConfigurationReference = 90B290F36EAE177CDC017BA3 /* Pods-RNNami.release.xcconfig */;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
+					"$(SRCROOT)/../../react-native/React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
