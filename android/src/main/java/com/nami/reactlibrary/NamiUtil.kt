@@ -1,11 +1,10 @@
 package com.nami.reactlibrary
 
 import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.namiml.api.model.NamiPaywall
 import com.namiml.api.model.SKU
-import com.namiml.entitlement.billing.NamiSKU
+import com.namiml.paywall.NamiSKU
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,7 +44,7 @@ import java.util.*
 //    return productDict;
 //}
 
-fun paywallToPaywallDict( paywallData: NamiPaywall ): WritableMap {
+fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
 
     val paywallMap: WritableMap = Arguments.createMap()
     paywallMap.putString("title", paywallData.title ?: "")
@@ -69,20 +68,20 @@ fun paywallToPaywallDict( paywallData: NamiPaywall ): WritableMap {
 }
 
 
-fun skuToSkuDict( namiSKU: NamiSKU) : WritableMap {
+fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
     val productDict = Arguments.createMap()
 
-    productDict.putString("skuIdentifier", namiSKU.skuId )
-    productDict.putString("localizedTitle", namiSKU.skuName )
-    productDict.putString("localizedDescription", namiSKU.localizedDescription )
-    productDict.putString("localizedPrice", namiSKU.localizedPrice )
-    productDict.putString("localizedMultipliedPrice", namiSKU.localizedMultipliedPrice )
-    productDict.putString("price", namiSKU.price.toBigDecimal().toPlainString() )
-    productDict.putString("priceLanguage", namiSKU.priceLanguage )
-    productDict.putString("priceCountry", namiSKU.priceCountry )
-    productDict.putString("priceCurrency", namiSKU.priceCurrency )
-    productDict.putString("numberOfUnits", namiSKU.numberOfUnits.toString() )
-    productDict.putString("periodUnit", namiSKU.periodUnit.toString() )
+    productDict.putString("skuIdentifier", namiSKU.skuId)
+    productDict.putString("localizedTitle", namiSKU.skuName)
+    productDict.putString("localizedDescription", namiSKU.localizedDescription)
+    productDict.putString("localizedPrice", namiSKU.localizedPrice)
+    productDict.putString("localizedMultipliedPrice", namiSKU.localizedMultipliedPrice)
+    productDict.putString("price", namiSKU.price.toBigDecimal().toPlainString())
+    productDict.putString("priceLanguage", namiSKU.priceLanguage)
+    productDict.putString("priceCountry", namiSKU.priceCountry)
+    productDict.putString("priceCurrency", namiSKU.priceCurrency)
+    productDict.putString("numberOfUnits", namiSKU.numberOfUnits.toString())
+    productDict.putString("periodUnit", namiSKU.periodUnit.toString())
 
     return productDict
 }
@@ -112,13 +111,13 @@ fun skuToSkuDict( namiSKU: NamiSKU) : WritableMap {
 
 
 // Really needs to be a NamiPurchase, when exists...
-fun purchaseToPurchaseDict( sku: SKU ): Map<String,String> {
+fun purchaseToPurchaseDict(sku: SKU): Map<String, String> {
 
-    return HashMap<String,String>()
+    return HashMap<String, String>()
 }
 
 // Convert Java Date to ISO860 UTC date to pass to Javascript
-fun javascriptDateFromKJavaDate( date: Date): String {
+fun javascriptDateFromKJavaDate(date: Date): String {
     val tz = TimeZone.getTimeZone("UTC")
     val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'")
     df.setTimeZone(tz)

@@ -1,22 +1,20 @@
-package com.nami.reactlibrary;
+package com.nami.reactlibrary
 
-import android.app.Application;
-import android.content.Context;
-import android.util.Log;
-import com.facebook.react.bridge.*
+import android.app.Application
+import android.content.Context
+import android.util.Log
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableMap
+import com.namiml.Nami
+import com.namiml.NamiConfiguration
+import com.namiml.NamiLogLevel
 
-
-import com.namiml.BuildConfig;
-import com.namiml.Nami;
-import com.namiml.NamiConfiguration;
-import com.namiml.NamiLogLevel;
-
-import org.jetbrains.annotations.NotNull;
-
-public class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
 
-    public override fun getName(): String {
+    override fun getName(): String {
         return "NamiBridge"
     }
 
@@ -27,7 +25,7 @@ public class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactCont
 //    }
 
     @ReactMethod
-    public fun configure( configDict: ReadableMap ) {
+    fun configure(configDict: ReadableMap) {
         val appPlatformID: String = configDict.getString("appPlatformID") ?: "APPPLATFORMID_NOT_FOUND"
 
         val reactContext = reactApplicationContext

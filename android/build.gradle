@@ -68,7 +68,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.nami:nami-sdk-android:0.0.3-beta.11'
+    implementation 'com.nami:nami-sdk-android:0.0.3-beta.12'
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }
 def configureReactNativePom(def pom) {
