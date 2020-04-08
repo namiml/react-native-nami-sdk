@@ -15,21 +15,6 @@
 #import "React/RCTViewManager.h"
 
 
-@interface NamiMLManager (RCTExternModule) <RCTBridgeModule>
- @end
-
-@implementation NamiMLManager (RCTExternModule)
-RCT_EXPORT_MODULE_NO_LOAD(NamiMLManager, NamiMLManager)
-
-+ (BOOL)requiresMainQueueSetup {
-  return YES;
-}
-
-
-
-@end
-
-
 
 @interface NamiMLManagerBridge : NSObject <RCTBridgeModule>
 @end
