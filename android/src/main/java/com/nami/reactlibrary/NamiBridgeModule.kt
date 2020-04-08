@@ -53,6 +53,11 @@ public class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactCont
             builder.logLevel(NamiLogLevel.ERROR)
         }
 
+        val developmentMode = configDict.getBoolean("developmentMode")
+        if (developmentMode) {
+            builder.developmentMode = true
+        }
+
         val builtConfig: NamiConfiguration = builder.build()
         Log.e("ReactNative", "Nami Configuration object is $builtConfig");
 

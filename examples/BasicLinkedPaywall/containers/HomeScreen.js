@@ -73,7 +73,8 @@ const HomeScreen = (props) => {
 
     var configDict = {
 	'appPlatformID': '54635e21-87ed-4ed6-9119-9abb493bc9b0',
-	"logLevel": "DEBUG"
+	"logLevel": "DEBUG",
+	"developmentMode": true
     };
     
     NativeModules.NamiBridge.configure(configDict);
