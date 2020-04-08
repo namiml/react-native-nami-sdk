@@ -11,21 +11,21 @@ import java.lang.ref.WeakReference
 import java.util.*
 
 class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-    fun NamiEmitter(reactContext: ReactApplicationContext?) {
-        Log.e("ReactNative", "In Emitter Initialize(reactContext)")
-        NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-
-            Log.e("ReactNativeAndroidDridge", "products from regsiterApplicationPaywallProvider callback are " + products)
-
-            val productList: List<NamiSKU> =  products ?: ArrayList<NamiSKU>()
-            emitPaywallRaise(context, paywallData, productList, developerPaywallId)
-        }
-        NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallId ->
-            currentActivity?.let {
-                emitSignInActivated(WeakReference(it), paywallData, developerPaywallId)
-            }
-        }
-    }
+//    fun NamiEmitter(reactContext: ReactApplicationContext?) {
+//        Log.e("ReactNative", "In Emitter Initialize(reactContext)")
+//        NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
+//
+//            Log.e("ReactNativeAndroidDridge", "products from regsiterApplicationPaywallProvider callback are " + products)
+//
+//            val productList: List<NamiSKU> =  products ?: ArrayList<NamiSKU>()
+//            emitPaywallRaise(context, paywallData, productList, developerPaywallId)
+//        }
+//        NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallId ->
+//            currentActivity?.let {
+//                emitSignInActivated(WeakReference(it), paywallData, developerPaywallId)
+//            }
+//        }
+//    }
 
     override fun onCatalystInstanceDestroy() {
     }
@@ -54,7 +54,9 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         }
         Log.e("ReactNative", "In Emitter Initialize()")
         NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            var sendProducts: List<NamiSKU> = ArrayList<NamiSKU>() //products ?: ArrayList<NamiSKU>()
+            Log.e("ReactNativeAndroidDridge", "products from regsiterApplicationPaywallProvider callback are " + products)
+
+            var sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(context, paywallData, sendProducts, developerPaywallId)
         }
 //
