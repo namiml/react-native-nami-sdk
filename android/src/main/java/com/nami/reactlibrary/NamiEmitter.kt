@@ -14,7 +14,10 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     fun NamiEmitter(reactContext: ReactApplicationContext?) {
         Log.e("ReactNative", "In Emitter Initialize(reactContext)")
         NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            val productList: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
+
+            Log.e("ReactNativeAndroidDridge", "products from regsiterApplicationPaywallProvider callback are " + products)
+
+            val productList: List<NamiSKU> =  products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(context, paywallData, productList, developerPaywallId)
         }
         NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallId ->
