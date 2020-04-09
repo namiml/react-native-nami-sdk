@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "android-setup": "cd android && rm -rf .gradle && rm -rf .idea && rm -rf android.iml && rm -rf local.properties",
+    "android-clean": "cd android && rm -rf .gradle && rm -rf .idea && rm -rf android.iml && rm -rf local.properties",
     "ios": "react-native run-ios",
     "ios-setup": "cd ios && pod install",
-    "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build && pod install",
+    "ios-clean": "cd ios && rm -rf Pods && rm -rf build",
+    "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build  && pod update && pod install",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
