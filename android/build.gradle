@@ -51,7 +51,6 @@ android {
 }
 repositories {
     // ref: https://www.baeldung.com/maven-local-repository
-    maven { url("https://nami-test.s3.amazonaws.com/") }
     mavenLocal()
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
