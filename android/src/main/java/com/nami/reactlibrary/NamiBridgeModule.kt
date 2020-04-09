@@ -28,7 +28,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
     fun configure(configDict: ReadableMap) {
 
         // Need to be sure we have some valid string.
-        val appPlatformID: String = if (configDict.hasKey("appPlatformID")) configDict.getString("appPlatformID") ?: "APPPLATFORMID_NOT_FOUND" else "APPPLATFORMID_NOT_FOUND"
+        val appPlatformID: String = if (configDict.hasKey("appPlatformID-google")) configDict.getString("appPlatformID-google") ?: "APPPLATFORMID_NOT_FOUND" else "APPPLATFORMID_NOT_FOUND"
 
         val reactContext = reactApplicationContext
         Log.e("ReactNative", "Nami Configure called with appID " + appPlatformID)

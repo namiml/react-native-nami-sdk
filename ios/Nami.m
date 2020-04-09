@@ -37,7 +37,7 @@ RCT_EXPORT_MODULE_NO_LOAD(Nami, Nami)
 RCT_EXTERN_METHOD(configure:(NSDictionary)configDict)
 - (void)configure: (NSDictionary *)configDict {
     
-    NSString *appID = configDict[@"appPlatformID"];
+    NSString *appID = configDict[@"appPlatformID-apple"];
     
     if ([appID length] > 0 ) {
         NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformID:appID];
