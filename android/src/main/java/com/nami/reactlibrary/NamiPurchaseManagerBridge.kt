@@ -1,6 +1,7 @@
 package com.nami.reactlibrary
 
 
+import android.util.Log
 import com.facebook.react.bridge.*
 import com.namiml.billing.NamiPurchaseManager
 
@@ -8,6 +9,11 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
 
     override fun getName(): String {
         return "NamiPurchaseManagerBridge"
+    }
+
+    @ReactMethod
+    fun bypassStore(bypass: Boolean) {
+        Log.e("ReactNative", "NAMI - bypass store not yet implemented for Android. ")
     }
 
     @ReactMethod
