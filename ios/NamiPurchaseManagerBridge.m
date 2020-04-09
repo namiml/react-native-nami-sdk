@@ -105,11 +105,6 @@ RCT_EXPORT_METHOD(buySKU:(nonnull NSString*)skuID paywallDeveloperID:(nonnull NS
     }
 }
 
-RCT_EXPORT_METHOD(buySKU:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
-{
-    [self doSKUPurchaseWithSKUID:skuID namiPaywall:nil completion:completion];
-}
-
 @end
 
 @implementation NamiPurchaseManagerBridge

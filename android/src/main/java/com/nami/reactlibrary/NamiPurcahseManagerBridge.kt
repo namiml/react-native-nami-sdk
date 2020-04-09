@@ -11,12 +11,6 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
     }
 
     @ReactMethod
-    fun buySKU(skuPlatformID: String, resultsCallback: Callback) {
-       buySKU(skuPlatformID, "", resultsCallback)
-    }
-
-
-    @ReactMethod
     fun buySKU(skuPlatformID: String, developerPaywallID: String, resultsCallback: Callback) {
         var useActivity = currentActivity?.let {
             NamiPurchaseManager.buySKU(it, skuPlatformID, false) {
