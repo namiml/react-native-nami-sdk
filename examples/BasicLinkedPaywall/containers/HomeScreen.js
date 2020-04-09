@@ -23,7 +23,6 @@ const HomeScreen = (props) => {
   const [ open, setOpen ] =  useState(false);
   const [data, setData] = useState(null);
 
-
   const { NamiEmitter } = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
 
@@ -31,11 +30,10 @@ const HomeScreen = (props) => {
     NativeModules.NamiPaywallManagerBridge.canRaisePaywall( (result) => {
     		       console.log("canRaisePaywall ", result);
     	}
-    	);
+    );
 
     console.log("Asking Nami to raise paywall.");
-      
-      NativeModules.NamiPaywallManagerBridge.raisePaywall();    
+    NativeModules.NamiPaywallManagerBridge.raisePaywall();
   }
 
   const onSessionConnect = (event) => {
@@ -72,19 +70,18 @@ const HomeScreen = (props) => {
     eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
 
     var configDict = {
-	'appPlatformID-google': 'a95cef52-35e0-4794-8755-577492c2d5d1',
-	'appPlatformID-apple': '54635e21-87ed-4ed6-9119-9abb493bc9b0',
-	"logLevel": "DEBUG",
-	"developmentMode": true
+	    "appPlatformID-google": "a95cef52-35e0-4794-8755-577492c2d5d1",
+	    "appPlatformID-apple": "54635e21-87ed-4ed6-9119-9abb493bc9b0",
+	    "logLevel": "DEBUG",
+	    "developmentMode": true
     };
-    
+
     NativeModules.NamiBridge.configure(configDict);
-    //    NativeModules.NamiBridge.configureWithAppID("2dc699a5-43c6-4e3a-9166-957e1640741b");
-    
+
     NativeModules.NamiPaywallManagerBridge.canRaisePaywall( (result) => {
     		       console.log("canRaisePaywall ", result);
     	}
-    	);
+    );
 
   }, []);
 
