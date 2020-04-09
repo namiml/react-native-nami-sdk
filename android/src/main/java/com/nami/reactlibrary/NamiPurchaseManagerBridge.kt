@@ -12,6 +12,11 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
     }
 
     @ReactMethod
+    fun clearBypassStorePurchases() {
+        Log.e("ReactNative", "NAMI - bypass store not yet implemented for Android. ")
+    }
+
+    @ReactMethod
     fun bypassStore(bypass: Boolean) {
         Log.e("ReactNative", "NAMI - bypass store not yet implemented for Android. ")
     }
