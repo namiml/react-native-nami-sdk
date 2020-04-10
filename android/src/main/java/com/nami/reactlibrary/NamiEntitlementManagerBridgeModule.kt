@@ -20,4 +20,22 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         resultsCallback.invoke(resultMap)
     }
 
+    @ReactMethod
+    fun activeEntitlements(resultsCallback: Callback) {
+
+        val entitlements = NamiEntitlementManager.activeEntitlements()
+
+        var resultArray: WritableArray = WritableNativeArray()
+        resultsCallback.invoke(resultArray)
+    }
+
+    @ReactMethod
+    fun getEntitlements(resultsCallback: Callback) {
+
+        // TODO: add get entitlements to Android
+
+        var resultArray: WritableArray = WritableNativeArray()
+        resultsCallback.invoke(resultArray)
+    }
+
 }
