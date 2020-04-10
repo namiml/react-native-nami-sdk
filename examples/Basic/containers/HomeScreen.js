@@ -27,27 +27,27 @@ const HomeScreen = (props) => {
   }
 
   const onSessionConnect = (event) => {
-	  console.log("Products changed: ", event);
+	  console.log("ExampleApp: Products changed: ", event);
     setProducts(event.products)
   }
 
   const onPaywallShouldRaise = (event) => {
     // Add code to present your custom paywall here
-	  console.log("Data for paywall raise ", event);
+    console.log("ExampleApp: Data for paywall raise ", event);
   }
 
   const onSignInActivated = (event) => {
     // Add code to present UI for sign-in
-    console.log("Data for sign-in ", event);
+    console.log("ExampleApp: Data for sign-in ", event);
   }
 
   const activateAbout = () => {
-    console.log('Triggering core action');
+    console.log('ExampleApp: Triggering core action');
     NativeModules.NamiMLManagerBridge.coreActionWithLabel("About");
 
     NativeModules.NamiPurchaseManagerBridge.purchases(
 		   (purchases) => {
-		       console.log("purchases found ", purchases);
+		       console.log("ExampleApp: Purchases found ", purchases);
 
 		       // Goal: "Subscribed to Wondery+ Annual Plan.  Your next payment of $34.99 will be billed on S\ep. 19, 2020."   
 
@@ -73,12 +73,12 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
 
-    console.log('Nami Bridge is');
+    console.log('ExampleApp: Nami Bridge is');
     console.log(NativeModules.NamiBridge);
 
     eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
-    console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
+    console.log("ExampleApp: HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
 
     eventEmitter.addListener('SignInActivate', onSignInActivated);
     NativeModules.NamiPurchaseManagerBridge.bypassStore(true);
