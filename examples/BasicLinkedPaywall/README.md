@@ -1,4 +1,4 @@
-# Basic Example App
+# BasicLinkedPaywall Example App
 
 The folder contains a simple example app that shows how to use the React-Native bridge with the Nami SDK.  In particular, this example shows how to build a custom paywall as a component in your React Native app while dynamically loading data from the Nami Control Center.
 
@@ -12,7 +12,7 @@ brew install watchman
 brew install yarn
 ```
 3. Clone the project -> `git clone https://github.com/namiml/react-native-nami-sdk.git`.
-4. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/Basic`.
+4. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/BasicLinkedPaywall`.
 5. Install Dependencies -> `yarn install`.
 
 **iOS Setup**
