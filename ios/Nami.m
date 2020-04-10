@@ -36,6 +36,11 @@ RCT_EXTERN_METHOD(configure:(NSDictionary)configDict)
             config.logLevel = NamiLogLevelError;
         }
         
+        BOOL bypassString = configDict[@"bypassStore"];
+        if (bypassString) {
+            config.bypassStore = true;
+        }
+        
         [Nami configureWithNamiConfig:config];
     }
 }
