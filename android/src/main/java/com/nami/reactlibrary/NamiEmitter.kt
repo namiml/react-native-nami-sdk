@@ -52,9 +52,9 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallID ->
             Toast.makeText(context, "Sign in clicked", Toast.LENGTH_SHORT).show()
         }
-        Log.e("ReactNative", "In Emitter Initialize()")
+        Log.i("NamiBridge", "Nami: Info: In Emitter Initialize()")
         NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            Log.e("ReactNativeAndroidDridge", "products from regsiterApplicationPaywallProvider callback are " + products)
+            Log.i("NamiBridge", "Nami: Info: Products from regsiterApplicationPaywallProvider callback are " + products)
 
             var sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(context, paywallData, sendProducts, developerPaywallId)
@@ -77,7 +77,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
 //        }
 
-        Log.e("NAMI", "Emitting paywall raise signal for developerID" + paywallDeveloperID);
+        Log.i("NamiBridge", "Info: Emitting paywall raise signal for developerID" + paywallDeveloperID);
         val map = Arguments.createMap()
         map.putString("developerPaywallID", paywallDeveloperID)
 
@@ -99,7 +99,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("AppPaywallActivate", map)
         } catch (e: Exception) {
-            Log.e("ReactNative", "Caught Exception: " + e.message)
+            Log.e("NamiBridge", "Caught Exception: " + e.message)
         }
     }
 
@@ -116,7 +116,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("SignInActivate", map)
         } catch (e: Exception) {
-            Log.e("ReactNative", "Caught Exception: " + e.message)
+            Log.e("NamiBridge", "Caught Exception: " + e.message)
         }
     }
 
@@ -137,7 +137,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("customEventName", map)
         } catch (e: Exception) {
-            Log.e("ReactNative", "Caught Exception: " + e.message)
+            Log.e("NamiBridge", "Caught Exception: " + e.message)
         }
     }
 }

@@ -31,14 +31,14 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
         val appPlatformID: String = if (configDict.hasKey("appPlatformID-google")) configDict.getString("appPlatformID-google") ?: "APPPLATFORMID_NOT_FOUND" else "APPPLATFORMID_NOT_FOUND"
 
         val reactContext = reactApplicationContext
-        Log.e("ReactNative", "Nami Configure called with appID " + appPlatformID)
-        Log.e("ReactNative", "Nami Configure called with context " + reactContext)
-        Log.e("ReactNative", "Nami Configure called with context.applicationContext " + reactContext.getApplicationContext())
+        Log.i("NamiBridge", "Configure called with appID " + appPlatformID)
+        Log.i("NamiBridge", "Configure called with context " + reactContext)
+        Log.i("NamiBridge", "Nami Configure called with context.applicationContext " + reactContext.getApplicationContext())
 
         val appContext: Context = reactContext.getApplicationContext()
         val isApplication: Boolean = (appContext is Application)
-        Log.e("ReactNative", "Nami Configure called with (context as Application) " + isApplication + ".")
-        Log.e("ReactNative", "Nami end Application check ");
+        Log.i("NamiBridge", "Configure called with (context as Application) " + isApplication + ".")
+        Log.i("NamiBridge", "End Application check ");
 
         //Application fred = (reactContext as Application);
 
@@ -61,7 +61,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
         }
 
         val builtConfig: NamiConfiguration = builder.build()
-        Log.e("ReactNative", "Nami Configuration object is $builtConfig");
+        Log.i("NamiBridge", "Nami Configuration object is $builtConfig");
 
         Nami.configure(builtConfig)
     }
