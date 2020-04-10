@@ -29,6 +29,22 @@ RCT_EXPORT_METHOD(isEntitlementActive:(nonnull NSString*)entitlementRefID comple
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
+
+RCT_EXPORT_METHOD(getEntitlements:(RCTResponseSenderBlock)completion)
+{
+    NSArray<NamiEntitlement *> *entitlements = [NamiEntitlementManager getEntitlements];
+    
+    completion(@[]);
+}
+
+
+RCT_EXPORT_METHOD(activeEntitlements:(RCTResponseSenderBlock)completion)
+{
+    NSArray<NamiEntitlement *> *entitlements = [NamiEntitlementManager activeEntitlements];
+    
+    completion(@[]);
+}
+
 @end
 
 

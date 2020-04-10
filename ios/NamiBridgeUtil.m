@@ -65,6 +65,14 @@
      return purchaseDict;
  }
 
++ (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
+    NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
+    
+//    purchaseDict[@"name"] = entitlement.na
+   
+    return purchaseDict;
+}
+
 + (NSString *)javascriptDateFromNSDate:(NSDate *)purchseTimestamp {
     NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
     NSISO8601DateFormatOptions options = NSISO8601DateFormatWithInternetDateTime | NSISO8601DateFormatWithDashSeparatorInDate | NSISO8601DateFormatWithColonSeparatorInTime | NSISO8601DateFormatWithTimeZone;
