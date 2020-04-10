@@ -16,35 +16,33 @@
 
 
 
-@interface Nami (RCTExternModule) <RCTBridgeModule>
- @end
-
-@implementation Nami (RCTExternModule)
-RCT_EXPORT_MODULE_NO_LOAD(Nami, Nami)
-
-
-_RCT_EXTERN_REMAP_METHOD(sharedInstance,shared,YES)
-
-
-+ (BOOL)requiresMainQueueSetup {
-  return YES;
-}
-
-@end
-
-
 @interface NamiBridge : NSObject <RCTBridgeModule>
 @end
 @implementation NamiBridge (RCTExternModule)
 
-RCT_EXTERN_METHOD(sharedInstance)
-- (Nami *)sharedInstance {
-  return [Nami shared];
-}
-
-RCT_EXTERN_METHOD(configureWithAppID:(NSString)appID)
-- (void)configureWithAppID: (NSString *)appID {
-  [[Nami shared] configureWithAppID:appID];
+RCT_EXTERN_METHOD(configure:(NSDictionary)configDict)
+- (void)configure: (NSDictionary *)configDict {
+    
+    NSString *appID = configDict[@"appPlatformID-apple"];
+    
+    if ([appID length] > 0 ) {
+        NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformID:appID];
+        
+        NSString *logLevelString = configDict[@"logLevel"];
+        if ([logLevelString isEqualToString:@"DEBUG"]) {
+            // Will have to figure out how to get this from a react app later... may include that in the call.
+            config.logLevel = NamiLogLevelDebug;
+        } else if ([logLevelString isEqualToString:@"ERROR" ]) {
+            config.logLevel = NamiLogLevelError;
+        }
+        
+        BOOL bypassString = configDict[@"bypassStore"];
+        if (bypassString) {
+            config.bypassStore = true;
+        }
+        
+        [Nami configureWithNamiConfig:config];
+    }
 }
 
 RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
@@ -52,20 +50,7 @@ RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
     [NamiCommand performCommand:command];
 }
 
-RCT_EXTERN_METHOD(enterCoreContentWithLabel:(NSString)namiCommand)
-- (void)enterCoreContentWithLabel: (NSString *)label {
-    [Nami enterCoreContentWithLabel:label];
-}
 
-RCT_EXTERN_METHOD(exitCoreContentWithLabel:(NSString)namiCommand)
-- (void)exitCoreContentWithLabel: (NSString *)label {
-    [Nami exitCoreContentWithLabel:label];
-}
-
-RCT_EXTERN_METHOD(coreActionWithLabel:(NSString)namiCommand)
-- (void)coreActionWithLabel: (NSString *)label {
-    [Nami coreActionWithLabel:label];
-}
 
 @end
 

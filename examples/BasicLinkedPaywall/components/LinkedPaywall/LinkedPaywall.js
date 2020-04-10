@@ -6,10 +6,10 @@ const LinkedPaywall = (props) => {
   const { open, setOpen, data } = props;
   const { title, body } = data.paywallMetadata.marketing_content;
   const { background_image_url_phone } = data.paywallMetadata;
-  const { products } = data;
+  const { skus } = data;
 
-  const purchase = (productIdentifier) => {
-    NativeModules.NamiStoreKitHelperBridge.buyProduct(productIdentifier,
+  const purchase = (skuIdentifier) => {
+      NativeModules.NamiPurchaseManagerBridge.buySKU(skuIdentifier, "",
       (purchased) => {
         if (purchased) {
           Alert.alert(
@@ -51,21 +51,21 @@ const LinkedPaywall = (props) => {
           <Text style={styles.sectionTitle}>{title}</Text>
           <Text style={styles.sectionDescription}>{body}</Text>
         </View>
-        <View style={styles.subscriptions}>
+        { skus && !!skus.length && <View style={styles.subscriptions}>
           <View style={styles.sectionContainer}>
-            {products.map((product, index) => {
+            {skus.map((sku, index) => {
               return (
                 <TouchableOpacity
                   key={index}
                   style={styles.subscriptionButton}
-                  onPress={() => purchase(product.productIdentifier)}
+                  onPress={() => purchase(sku.skuIdentifier)}
                   underlayColor='#fff'>
-                  <Text style={styles.subscriptionText}>{product.localizedTitle} - {product.localizedPrice}</Text>
+                  <Text style={styles.subscriptionText}>{sku.localizedTitle} - {sku.localizedPrice}</Text>
                 </TouchableOpacity>
               )
             })}
           </View>
-        </View>
+        </View>}
       </ImageBackground>
     </Modal>
   );
@@ -80,7 +80,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 340,
-    borderRadius: 20
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20
   },
   sectionContainer: {
     marginTop: 32,
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 10
   },
   close: {
-    color: 'black',
+    color: theme.white,
     textAlign: 'right'
   },
 

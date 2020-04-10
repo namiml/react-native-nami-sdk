@@ -14,12 +14,12 @@
 
 @implementation NamiBridgeUtil : NSObject
 
-    + (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiMetaProduct *)product {
+    + (NSDictionary<NSString *,NSString *> *) skuToSKUDict:(NamiSKU *)sku {
         NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
 
-        productDict[@"productIdentifier"] = product.productIdentifier;
+        productDict[@"skuIdentifier"] = sku.platformID;
 
-        SKProduct *productInt = product.product;
+        SKProduct *productInt = sku.product;
         productDict[@"localizedTitle"] = productInt.localizedTitle;
         productDict[@"localizedDescription"] = productInt.localizedDescription;
         productDict[@"localizedPrice"] = productInt.localizedPrice;
@@ -47,5 +47,38 @@
 
         return productDict;
     }
+
+ + (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiPurchase *)purchase {
+     NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
+     
+     purchaseDict[@"skuIdentifier"] = purchase.skuID;
+     purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
+     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
+     
+     NSDate *subscriptionExpirationDate = purchase.exipres;
+     if (subscriptionExpirationDate != nil) {
+         purchaseDict[@"subscriptionExpirationDate"] = [self javascriptDateFromNSDate:subscriptionExpirationDate];
+     }
+     
+     purchaseDict[@"purchaseSource"] =  [[NSString alloc] initWithFormat:@"%d", (int)purchase.purchaseSource];
+     
+     return purchaseDict;
+ }
+
++ (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
+    NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
+    
+//    purchaseDict[@"name"] = entitlement.na
+   
+    return purchaseDict;
+}
+
++ (NSString *)javascriptDateFromNSDate:(NSDate *)purchseTimestamp {
+    NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
+    NSISO8601DateFormatOptions options = NSISO8601DateFormatWithInternetDateTime | NSISO8601DateFormatWithDashSeparatorInDate | NSISO8601DateFormatWithColonSeparatorInTime | NSISO8601DateFormatWithTimeZone;
+    
+    return [NSISO8601DateFormatter stringFromDate:purchseTimestamp timeZone:UTC formatOptions:options];
+}
+
 
 @end

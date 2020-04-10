@@ -32,7 +32,7 @@ const HomeScreen = (props) => {
   }
 
   const onSessionConnect = (event) => {
-	  console.log("Products changed: ", event);
+    console.log("ExampleApp: Products changed: ", event);
     setProducts(event.products)
   }
 
@@ -94,7 +94,7 @@ const HomeScreen = (props) => {
   }
 
   const onNamiAnalyticsReceived = (event) => {
-    console.log("Analytics Dictionary ", event);
+    console.log("ExampleApp: Analytics Dictionary was ", event);
     const { analyticsItems, actionType} = event;
     addAnalyticEvent(analyticsItems, actionType)
   }
@@ -103,12 +103,18 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
 
-    console.log('Starting Nami.')
-    console.log(firebase)
+    console.log('ExampleApp: Starting Nami.')
+    console.log('ExampleApp: firebase is ', firebase)
 
-    NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
-    NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
-    NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
+    NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
+    NativeModules.NamiPurchaseManagerBridge.bypassStore(true);
+
+    var configDict = {
+	'appPlatformID-apple': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
+	'appPlatformID-google': '3d062066-9d3c-430e-935d-855e2c56dd8e',
+        "logLevel": "DEBUG"
+    };
+    NativeModules.NamiBridge.configure(configDict);
 
     eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     analyticsEmitter.addListener('NamiAnalyticsSent', onNamiAnalyticsReceived);

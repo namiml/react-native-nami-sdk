@@ -10,7 +10,14 @@
 #define NamiBridgeUtil_h
 
 @interface NamiBridgeUtil : NSObject
-+ (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiMetaProduct *)product;
+// Converts NamiMetaProduct into javascript compatible dictionary
++ (NSDictionary<NSString *,NSString *> *) skuToSKUDict:(NamiSKU *)product;
+
+// Converts NamiMetaPurchase into javascript compatible dictionary
++ (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiSKU *)purchase;
+
+// Converts NSDate into javascript convertable (UTC) string
++ (NSString *)javascriptDateFromNSDate:(NSDate *)purchseTimestamp;
 @end
 
 #endif /* NamiBridgeUtil_h */

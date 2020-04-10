@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android-clean": "cd android && rm -rf .gradle && rm -rf .idea && rm -rf android.iml && rm -rf local.properties",
     "ios": "react-native run-ios",
     "ios-setup": "cd ios && pod install",
-    "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build && pod install && pod update",
+    "ios-clean": "cd ios && rm -rf Pods && rm -rf build",
+    "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build  && pod update && pod install",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
@@ -18,7 +20,7 @@
     "react": "16.9.0",
     "react-native": "0.61.4",
     "react-native-gesture-handler": "^1.5.3",
-    "react-native-nami-sdk": "^0.1.24",
+    "react-native-nami-sdk": "^0.1.33",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.6.2",
     "react-native-screens": "^2.0.0-alpha.32",

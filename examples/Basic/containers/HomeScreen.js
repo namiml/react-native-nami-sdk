@@ -27,43 +27,70 @@ const HomeScreen = (props) => {
   }
 
   const onSessionConnect = (event) => {
-	  console.log("Products changed: ", event);
+	  console.log("ExampleApp: Products changed: ", event);
     setProducts(event.products)
   }
 
   const onPaywallShouldRaise = (event) => {
     // Add code to present your custom paywall here
-	  console.log("Data for paywall raise ", event);
+    console.log("ExampleApp: Data for paywall raise ", event);
   }
 
   const onSignInActivated = (event) => {
     // Add code to present UI for sign-in
-    console.log("Data for sign-in ", event);
+    console.log("ExampleApp: Data for sign-in ", event);
   }
 
   const activateAbout = () => {
-    console.log('Triggering core action');
-    NativeModules.NamiBridge.coreActionWithLabel("About");
+    console.log('ExampleApp: Triggering core action');
+    NativeModules.NamiMLManagerBridge.coreActionWithLabel("About");
+
+    NativeModules.NamiPurchaseManagerBridge.purchases(
+		   (purchases) => {
+		       console.log("ExampleApp: Purchases found ", purchases);
+
+		       // Goal: "Subscribed to Wondery+ Annual Plan.  Your next payment of $34.99 will be billed on S\ep. 19, 2020."   
+
+		       if(purchases && purchases.length) {
+				   var options = {
+				       month: 'long',
+				       day: 'numeric',
+				       year: 'numeric'
+				   };
+
+			   let formatPurchases = purchases.map((purchase, index) => {
+				   return `Subscribed to ${purchase.metaProduct.localizedTitle}. Your next payment of ${purchase.metaProduct.localizedMultipliedPrice} will be billed on ${new Date(purchase.subscriptionExpirationDate).toLocaleDateString('en-US', options)}`
+			       }) 
+			   console.log(formatPurchases)
+		       }
+		   }
+                );
+
+
     navigate('About') ;
   }
 
 
   useEffect(() => {
 
-    console.log('Nami Bridge is');
+    console.log('ExampleApp: Nami Bridge is');
     console.log(NativeModules.NamiBridge);
 
     eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
-    console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
+    console.log("ExampleApp: HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
 
     eventEmitter.addListener('SignInActivate', onSignInActivated);
+    NativeModules.NamiPurchaseManagerBridge.bypassStore(true);
 
-
-    NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
-    NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
-    NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
-
+    var configDict = {
+	'appPlatformID-apple': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
+	'appPlatformID-google': '3d062066-9d3c-430e-935d-855e2c56dd8e',
+	"logLevel": "DEBUG",
+	"developmentMode": true
+    };
+    
+    NativeModules.NamiBridge.configure(configDict);
   }, []);
 
   return (

@@ -19,43 +19,23 @@
 
 #import "NamiBridgeUtil.h"
 
-
 @interface RCT_EXTERN_MODULE(NamiAnalyticsEmitter, RCTEventEmitter)
-RCT_EXTERN_METHOD(allPurchasedProducts)
-RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 @end
 
 @implementation NamiAnalyticsEmitter : RCTEventEmitter
 
 - (instancetype)init
 {
-  self = [super init];
-  if (self) {
-    hasNamiAanlyticsEmitterListeners = NO;
-
-      [NamiAnalyticsSupport registerAnalyticsHandlerWithHandler: ^(NamiAnalyticsActionType actionType , NSDictionary<NSString *,id> * _Nonnull anaytlicsDict) {
-          [self sendAnalyticsEventForAction:actionType anayticsItems:anaytlicsDict];
-      }];
-
-    // Tell Nami to listen for purchases and we'll forward them on to listeners
-  }
+    self = [super init];
+    if (self) {
+        hasNamiAanlyticsEmitterListeners = NO;
+        
+        [NamiAnalyticsSupport registerAnalyticsHandlerWithHandler: ^(NamiAnalyticsActionType actionType , NSDictionary<NSString *,id> * _Nonnull anaytlicsDict) {
+            [self sendAnalyticsEventForAction:actionType anayticsItems:anaytlicsDict];
+        }];
+    }
 
   return self;
-}
-
-- (void) getPurchasedProducts : (RCTResponseSenderBlock) callback  {
-  NSArray *allProducts = [self allPurchasedProducts];
-  callback(allProducts);
-}
-
-- (NSArray<NSString *> *)allPurchasedProducts {
-  NSArray<NamiMetaPurchase *> *purchases = NamiStoreKitHelper.shared.allPurchasedProducts;
-  NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-  for (NamiMetaProduct *purchase in purchases) {
-    [productIDs addObject:purchase.productIdentifier];
-  }
-
-  return productIDs;
 }
 
 + (BOOL)requiresMainQueueSetup {
@@ -109,9 +89,9 @@ bool hasNamiAanlyticsEmitterListeners;
 
 
 - (NSDictionary *) productDictIfProductPresentInAnalyticsItems:(NSDictionary *)anayticsItems forKey:(NSString *)key {
-    NamiMetaProduct *product = (NamiMetaProduct *)anayticsItems[key];
-    if (product != NULL && [product isKindOfClass:[NamiMetaProduct class]] ) {
-        return [NamiBridgeUtil productToProductDict:product];
+    NamiSKU *product = (NamiSKU *)anayticsItems[key];
+    if (product != NULL && [product isKindOfClass:[NamiSKU class]] ) {
+        return [NamiBridgeUtil skuToSKUDict:product];
     } else {
         return NULL;
     }
@@ -125,8 +105,8 @@ bool hasNamiAanlyticsEmitterListeners;
     id rawProducts = anayticsItems[@"paywallProducts"];
     if ([rawProducts isKindOfClass:[NSArray class]]) {
         NSMutableArray<NSDictionary *> *productsSanitized = [NSMutableArray new];
-        for (NamiMetaProduct *product in (NSArray *)rawProducts) {
-            [productsSanitized addObject:[NamiBridgeUtil productToProductDict:product]];
+        for (NamiSKU *product in (NSArray *)rawProducts) {
+            [productsSanitized addObject:[NamiBridgeUtil skuToSKUDict:product]];
         }
         sanitizedDictionary[@"paywallProducts"] = productsSanitized;
     }
@@ -135,10 +115,7 @@ bool hasNamiAanlyticsEmitterListeners;
     NSDate *purchseTimestamp = (NSDate *)(anayticsItems[@"purchasedProductPurchaseTimestamp"]);
     if (purchseTimestamp != NULL && [purchseTimestamp isKindOfClass:[NSDate class]])
     {
-        NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
-        NSISO8601DateFormatOptions options = NSISO8601DateFormatWithInternetDateTime | NSISO8601DateFormatWithDashSeparatorInDate | NSISO8601DateFormatWithColonSeparatorInTime | NSISO8601DateFormatWithTimeZone;
-
-        sanitizedDictionary[@"purchasedProductPurchaseTimestamp"] =  [NSISO8601DateFormatter stringFromDate:purchseTimestamp timeZone:UTC formatOptions:options];
+        sanitizedDictionary[@"purchasedProductPurchaseTimestamp"] = [NamiBridgeUtil javascriptDateFromNSDate:purchseTimestamp];
     }
 
     NSDictionary *purchasedProductDict = [self productDictIfProductPresentInAnalyticsItems:anayticsItems forKey:@"purchasedProduct"];
