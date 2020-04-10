@@ -26,16 +26,14 @@
 
 - (instancetype)init
 {
-  self = [super init];
-  if (self) {
-    hasNamiAanlyticsEmitterListeners = NO;
-
-      [NamiAnalyticsSupport registerAnalyticsHandlerWithHandler: ^(NamiAnalyticsActionType actionType , NSDictionary<NSString *,id> * _Nonnull anaytlicsDict) {
-          [self sendAnalyticsEventForAction:actionType anayticsItems:anaytlicsDict];
-      }];
-
-    // Tell Nami to listen for purchases and we'll forward them on to listeners
-  }
+    self = [super init];
+    if (self) {
+        hasNamiAanlyticsEmitterListeners = NO;
+        
+        [NamiAnalyticsSupport registerAnalyticsHandlerWithHandler: ^(NamiAnalyticsActionType actionType , NSDictionary<NSString *,id> * _Nonnull anaytlicsDict) {
+            [self sendAnalyticsEventForAction:actionType anayticsItems:anaytlicsDict];
+        }];
+    }
 
   return self;
 }

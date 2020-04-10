@@ -34,7 +34,6 @@ RCT_EXTERN_METHOD(bypassStore:(BOOL)bypass)
 RCT_EXPORT_METHOD(purchases:(RCTResponseSenderBlock)completion)
 {
     NSArray <NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
-    NSLog(@"From SDK, purchases are currently %@", purchases);
     NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
     BOOL anyProductNil = NO;
     for ( NamiPurchase *purchaseRecord in purchases ) {
@@ -64,11 +63,11 @@ RCT_EXPORT_METHOD(anySKUPurchased:(nonnull NSArray*)skuIDs completion:(RCTRespon
 /// This method does the purchase work, and can optionally be fed a paywall metadata object to pass along to the purcahse flow.
 - (void) doSKUPurchaseWithSKUID:(nonnull NSString*)skuID namiPaywall:(NamiPaywall * _Nullable)namiPaywall completion:(RCTResponseSenderBlock)completion {
     [NamiPurchaseManager skusForSKUIDsWithSkuIDs:@[skuID] productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
-        NSLog(@"Products found are %@, product fetch error is %@", products, [error localizedDescription]);
+        NSLog(@"Nami: Info: Products found are %@, product fetch error is %@", products, [error localizedDescription]);
         NamiSKU *useProduct = products.firstObject;
         if (useProduct != nil) {
             [NamiPurchaseManager buySKU:useProduct fromPaywall:namiPaywall responseHandler:^(NSArray<NamiPurchase *> * _Nonnull purchase, NamiPurchaseState purchaseState, NSError * _Nullable error) {
-                NSLog(@"Purchase result is %@, purchased is %d, error is %@", purchase, (purchaseState == NamiPurchaseStatePurchased), [error localizedDescription]);
+                NSLog(@"Nami: Info: Purchase result is %@, purchased is %d, error is %@", purchase, (purchaseState == NamiPurchaseStatePurchased), [error localizedDescription]);
                 if (purchaseState == NamiPurchaseStatePurchased) {
                     completion(@[[NSNumber numberWithBool:true]]);
                 }

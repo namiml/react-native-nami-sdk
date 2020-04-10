@@ -27,41 +27,40 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 
 - (instancetype)init
 {
-  self = [super init];
-  if (self) {
-    hasNamiEmitterListeners = NO;
-
-    // Tell Nami to listen for purchases and we'll forward them on to listeners
-    [[NamiStoreKitHelper shared] registerWithPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
-      [self sendEventPurchased];
-    }];
-
-      [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
-          [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
-      }];
-
-      [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
-          [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
-      }];
-
-  }
-
-  return self;
+    self = [super init];
+    if (self) {
+        hasNamiEmitterListeners = NO;
+        
+        // Tell Nami to listen for purchases and we'll forward them on to listeners
+        [[NamiStoreKitHelper shared] registerWithPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
+            [self sendEventPurchased];
+        }];
+        
+        [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
+            [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
+        }];
+        
+        [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
+            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
+        }];
+        
+    }
+    return self;
 }
 
 - (void) getPurchasedProducts : (RCTResponseSenderBlock) callback  {
-  NSArray *allProducts = [self allPurchasedProducts];
-  callback(allProducts);
+    NSArray *allProducts = [self allPurchasedProducts];
+    callback(allProducts);
 }
 
 - (NSArray<NSString *> *)allPurchasedProducts {
-  NSArray<NamiPurchase *> *purchases = NamiPurchaseManager.allPurchases;
-  NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-  for (NamiPurchase *purchase in purchases) {
-    [productIDs addObject:purchase.skuID];
-  }
-
-  return productIDs;
+    NSArray<NamiPurchase *> *purchases = NamiPurchaseManager.allPurchases;
+    NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
+    for (NamiPurchase *purchase in purchases) {
+        [productIDs addObject:purchase.skuID];
+    }
+    
+    return productIDs;
 }
 
 + (BOOL)requiresMainQueueSetup {
@@ -73,7 +72,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 }
 
 - (NSDictionary<NSString *, NSObject *> *)constantsToExport {
-  return @{@"initialPurchasedProducts" : [self allPurchasedProducts]};
+    return @{@"initialPurchasedProducts" : [self allPurchasedProducts]};
 }
 
 bool hasNamiEmitterListeners;
