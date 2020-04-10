@@ -32,7 +32,7 @@ const HomeScreen = (props) => {
   }
 
   const onSessionConnect = (event) => {
-	  console.log("Products changed: ", event);
+    console.log("ExampleApp: Products changed: ", event);
     setProducts(event.products)
   }
 
@@ -94,7 +94,7 @@ const HomeScreen = (props) => {
   }
 
   const onNamiAnalyticsReceived = (event) => {
-    console.log("Analytics Dictionary ", event);
+    console.log("ExampleApp: Analytics Dictionary was ", event);
     const { analyticsItems, actionType} = event;
     addAnalyticEvent(analyticsItems, actionType)
   }
@@ -103,8 +103,8 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
 
-    console.log('Starting Nami.')
-    console.log(firebase)
+    console.log('ExampleApp: Starting Nami.')
+    console.log('ExampleApp: firebase is ', firebase)
 
     NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
     NativeModules.NamiPurchaseManagerBridge.bypassStore(true);
