@@ -52,9 +52,9 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallID ->
             Toast.makeText(context, "Sign in clicked", Toast.LENGTH_SHORT).show()
         }
-        Log.i("NamiBridge", "Nami: Info: In Emitter Initialize()")
+        Log.i("NamiBridge", "In Emitter Initialize()")
         NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            Log.i("NamiBridge", "Nami: Info: Products from regsiterApplicationPaywallProvider callback are " + products)
+            Log.i("NamiBridge", "Products from registerApplicationPaywallProvider callback are " + products)
 
             var sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(context, paywallData, sendProducts, developerPaywallId)
@@ -77,7 +77,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
 //        }
 
-        Log.i("NamiBridge", "Info: Emitting paywall raise signal for developerID" + paywallDeveloperID);
+        Log.i("NamiBridge", "Emitting paywall raise signal for developerID" + paywallDeveloperID);
         val map = Arguments.createMap()
         map.putString("developerPaywallID", paywallDeveloperID)
 

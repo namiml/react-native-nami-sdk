@@ -26,15 +26,15 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
         Log.i("NamiBridge", "Nami Activity to raise paywall is " + activity.toString());
 
         if (NamiPaywallManager.canRaisePaywall()) {
-            Log.i("NamiBridge", "NAMI - About to raise Paywall ");
+            Log.d("NamiBridge", "About to raise Paywall ");
             if (activity != null) {
                 Log.i("NamiBridge", "Raising Paywall: ");
                 NamiPaywallManager.raisePaywall(activity, false);
             } else {
-                Log.e("NamiBridge", "Activity from react getCurrentActivity was null. ");
+                Log.w("NamiBridge", "Activity from react getCurrentActivity was null.");
             }
         } else {
-            Log.e("NamiBridge", "Paywall not raised, SDK says paywall cannot be raised at this time. ");
+            Log.w("NamiBridge", "Paywall not raised, SDK says paywall cannot be raised at this time.");
         }
     }
 
