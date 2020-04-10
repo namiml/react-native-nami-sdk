@@ -67,6 +67,7 @@ const HomeScreen = (props) => {
     console.log(NativeModules.NamiPaywallManagerBridge, 'NamiPaywallManagerBridge');
     console.log(NativeModules.NamiMLManagerBridge, 'NamiMLManagerBridge');
 
+    eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
 
     var configDict = {
