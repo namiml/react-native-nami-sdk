@@ -15,20 +15,6 @@
 
 #import "React/RCTViewManager.h"
 
-@interface NamiPurchaseManager (RCTExternModule) <RCTBridgeModule>
- @end
-
-@implementation NamiPurchaseManager (RCTExternModule)
-RCT_EXPORT_MODULE_NO_LOAD(NamiPurchaseManager, NamiPurchaseManager)
-
-RCT_EXTERN_METHOD(clearBypassStorePurchases)
-
-+ (BOOL)requiresMainQueueSetup {
-  return YES;
-}
-
-@end
-
 
 @interface NamiPurchaseManagerBridge : NSObject <RCTBridgeModule>
 @end

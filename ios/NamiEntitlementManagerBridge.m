@@ -16,20 +16,6 @@
 #import "React/RCTViewManager.h"
 
 
-@interface NamiEntitlementManager (RCTExternModule) <RCTBridgeModule>
- @end
-
-@implementation NamiEntitlementManager (RCTExternModule)
-RCT_EXPORT_MODULE_NO_LOAD(NamiEntitlementManager, NamiEntitlementManager)
-
-+ (BOOL)requiresMainQueueSetup {
-  return YES;
-}
-
-
-
-@end
-
 
 
 @interface NamiEntitlementManagerBridge : NSObject <RCTBridgeModule>

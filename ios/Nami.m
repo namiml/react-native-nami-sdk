@@ -16,20 +16,6 @@
 
 
 
-@interface Nami (RCTExternModule) <RCTBridgeModule>
- @end
-
-@implementation Nami (RCTExternModule)
-RCT_EXPORT_MODULE_NO_LOAD(Nami, Nami)
-
-
-+ (BOOL)requiresMainQueueSetup {
-  return YES;
-}
-
-@end
-
-
 @interface NamiBridge : NSObject <RCTBridgeModule>
 @end
 @implementation NamiBridge (RCTExternModule)

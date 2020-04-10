@@ -17,19 +17,6 @@
 
 
 
-@interface NamiPaywallManager (RCTExternModule) <RCTBridgeModule>
- @end
-
-@implementation NamiPaywallManager (RCTExternModule)
-RCT_EXPORT_MODULE_NO_LOAD(NamiPaywallManager, NamiPaywallManager)
-
-+ (BOOL)requiresMainQueueSetup {
-  return YES;
-}
-
-@end
-
-
 @interface NamiPaywallManagerBridge : NSObject <RCTBridgeModule>
 @end
 @implementation NamiPaywallManagerBridge (RCTExternModule)
