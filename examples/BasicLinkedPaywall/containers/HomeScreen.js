@@ -28,22 +28,22 @@ const HomeScreen = (props) => {
 
   const subscribeAction = () => {
     NativeModules.NamiPaywallManagerBridge.canRaisePaywall( (result) => {
-    		       console.log("canRaisePaywall ", result);
+    	   console.log("ExampleApp: Nami canRaisePaywall ", result);
     	}
     );
 
-    console.log("Asking Nami to raise paywall.");
+    console.log("ExampleApp: Asking Nami to raise paywall.");
     NativeModules.NamiPaywallManagerBridge.raisePaywall();
   }
 
   const onSessionConnect = (event) => {
-	  console.log("Products changed: ", event);
+	  console.log("ExampleApp: Products changed: ", event);
     setProducts(event.products)
   }
 
   const onPaywallShouldRaise = (event) => {
     // Add code to present your custom paywall here
-    console.log("Data for paywall raise ", event);
+    console.log("ExampleApp: Data for paywall raise ", event);
     setData(event);
     setOpen(!open);
   }
@@ -54,7 +54,7 @@ const HomeScreen = (props) => {
   }
 
   const activateAbout = () => {
-    console.log('Triggering core action');
+    console.log('ExampleApp: Triggering core action');
     NativeModules.NamiMLManagerBridge.coreActionWithLabel("About");
     navigate('About') ;
   }
@@ -62,7 +62,7 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
 
-    console.log('Nami Bridge is');
+    console.log('ExampleApp: Nami Bridge is');
     console.log(NativeModules.NamiBridge, 'NamiBridge');
     console.log(NativeModules.NamiPaywallManagerBridge, 'NamiPaywallManagerBridge');
     console.log(NativeModules.NamiMLManagerBridge, 'NamiMLManagerBridge');
@@ -80,7 +80,7 @@ const HomeScreen = (props) => {
     NativeModules.NamiBridge.configure(configDict);
 
     NativeModules.NamiPaywallManagerBridge.canRaisePaywall( (result) => {
-    		       console.log("canRaisePaywall ", result);
+    		       console.log("ExampleApp: Nami canRaisePaywall ", result);
     	}
     );
 
