@@ -23,7 +23,7 @@ brew install yarn
 4. In XCode, open up the Pods project, go into the Pods/Nami/Frameworks folder.  Click on the Nami.xcframework file.
 5. Open the sidebar in Xcode and look for the react-native-nami-sdk target membership.  If this is not checked, check this box.
 
-![XCode Setup](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/374528e3-1560-4153-a0c5-b2e7d7e8fbc0/Screen_Shot_2020-04-09_at_9.56.40_AM.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20200410%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20200410T021225Z&X-Amz-Expires=86400&X-Amz-Signature=60b67a6f14cc48280ee32131ced5ff315eedbadda1f57e7bd67630e45362ac3b&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Screen_Shot_2020-04-09_at_9.56.40_AM.png%22)
+![XCode Setup](https://nami-public-web.s3.us-east-2.amazonaws.com/react-native-xcode-setup.png)
 
 6. Build and run the app in XCode.
 
