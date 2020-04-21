@@ -1,9 +1,9 @@
 #!/bin/sh
 
 ## Created by Kendall Gelner for NamiML on April 20th, 2020.
-## This script corrects an error in Cocopods Pods.xcodeproject generation, where Nami.xcframeowrk is included as a file reference, but is not used as a build reference for the react-native-nami-sdk bridge pulled in via Podfile.
+## This script corrects an error in Cocoapods Pods.xcodeproject generation, where Nami.xcframework is included as a file reference, but is not used as a build reference for the react-native-nami-sdk bridge pulled in via Podfile.
 
-## Run this script after "pod install", before compilation of the react natuve project.  Run in directory just above generated "Pods" directory.
+## Run this script after "pod install", before compilation of the react native project.  Run in directory just above generated "Pods" directory.
 
 
 PROJECT_FILE="Pods/Pods.xcodeproj/project.pbxproj"
@@ -52,16 +52,16 @@ echo "${BUILD_FILE_LINE}"
 # Find the ID of the react-native-nami-sdk target
 TARGET_ID_REF=`grep "react-native-nami-sdk" ${PROJECT_FILE} | grep "target =" | cut -d " " -f 3`
 
-echo "Found target ID Ref for reaxt-native-nami-sdk: ${TARGET_ID_REF}"
+echo "Found target ID Ref for react-native-nami-sdk: ${TARGET_ID_REF}"
 
 if [ -z "${TARGET_ID_REF}" ]
 then
-    echo "Could not find target ID for react-native-nami-sdk, make sure bridge is added to pacakges.json"
+    echo "Could not find target ID for react-native-nami-sdk, make sure bridge is added to packages.json"
     exit
 fi
 
 
-# Now find the ID for the incldued frameworks section of the react-native-nami-sdk
+# Now find the ID for the included frameworks section of the react-native-nami-sdk
 awkFindFramework='                                                                                                           
 BEGIN { found = 0 }                                                                                                          
 $0 ~ TARGET_ID_REF { if ($0 ~ "= {") { found = 1 } }                                                                         
@@ -77,7 +77,7 @@ echo "Found react-native-nami-sdk Framework Build Phase ID  ${FRAMEWORK_BUILD_PH
 
 if [ -z "${FRAMEWORK_BUILD_PHASE_ID}" ]
 then
-    echo "Could not find Framework section reference ID for react-native-nami-sdk, make sure bridge is added to pacakges.json"
+    echo "Could not find Framework section reference ID for react-native-nami-sdk, make sure bridge is added to packages.json"
     exit
 fi
 
