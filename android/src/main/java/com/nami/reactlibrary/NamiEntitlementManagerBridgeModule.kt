@@ -4,6 +4,7 @@ package com.nami.reactlibrary
 import com.facebook.react.bridge.*
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.entitlement.NamiEntitlementManager
+import com.namiml.entitlement.NamiEntitlementSetter
 
 class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -25,6 +26,15 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val entitlements = NamiEntitlementManager.activeEntitlements()
 
+        val firstEntitlement = entitlements.first()
+
+        val referenceID = firstEntitlement.namiId //???
+        val name = firstEntitlement.name
+        val desc = firstEntitlement.desc
+        val relatedSkus = firstEntitlement.relatedSKUs
+        val activePurcahses = firstEntitlement.activePurchases
+        val isActive = firstEntitlement.isActive()
+
         var resultArray: WritableArray = WritableNativeArray()
         resultsCallback.invoke(resultArray)
     }
@@ -36,6 +46,15 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         var resultArray: WritableArray = WritableNativeArray()
         resultsCallback.invoke(resultArray)
+    }
+
+    @ReactMethod
+    fun setEntitlements(entitlements: ReadableMap) {
+        val namiSetter = NamiEntitlementSetter()
+        namiSetter.referenceId = ""
+        namiSetter.expires = ///???  String should be date?
+        namiSetter.platform = android
+        namiSetter.purchasedSKUid = ""
     }
 
 }
