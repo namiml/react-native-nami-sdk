@@ -50,11 +50,19 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
     @ReactMethod
     fun setEntitlements(entitlements: ReadableMap) {
-        val namiSetter = NamiEntitlementSetter()
-        namiSetter.referenceId = ""
-        namiSetter.expires = ///???  String should be date?
-        namiSetter.platform = android
-        namiSetter.purchasedSKUid = ""
+
+        var referenceID: String = ""
+        if (entitlements.hasKey("referenceID")) {
+            referenceID = entitlements.getString("referenceID") ?: ""
+        }
+
+        if (referenceID.length != 0)
+        {
+            var namiSetter = NamiEntitlementSetter(referenceId = "")
+            namiSetter.expires = ///???  String should be date?
+            namiSetter.platform = android
+            namiSetter.purchasedSKUid = ""
+        }
     }
 
 }
