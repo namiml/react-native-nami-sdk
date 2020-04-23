@@ -57,7 +57,7 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     if target.name  == "react-native-nami-sdk"       
       puts("Found react-native-nami-sdk target.")
-      all_filerefs = installer.pods_project.files { |f| f.name == "Nami.xcframework"  }
+      all_filerefs = installer.pods_project.files
       all_filerefs.each do |fileref|
          if fileref.path.end_with? "Nami.xcframework"
           puts("Found Nami.xcframework fileref.")
