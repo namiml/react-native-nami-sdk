@@ -40,3 +40,24 @@ target 'RNNami' do
   use_native_modules!	
 
 end
+
+post_install do |installer|
+  puts("Attempting to add Nami.xcframework reference to react-native-nami-sdk project.")
+  installer.pods_project.targets.each do |target|
+    if target.name  == "Pods-RNNami"
+      puts("Found Pods-RNNami target.")
+      all_filerefs = installer.pods_project.files
+      all_filerefs.each do |fileref|
+         if fileref.path.end_with? "Nami.xcframework"
+          puts("Found Nami.xcframework fileref.")
+          build_phase = target.frameworks_build_phase
+          puts("Determining if Pods-RNNami build phase needs correction.")
+          unless build_phase.files_references.include?(fileref)
+            puts("Adding Nami.xcframework to Pods-RNNami target")
+            build_phase.add_file_reference(fileref)
+          end
+         end
+      end
+    end
+  end
+end
