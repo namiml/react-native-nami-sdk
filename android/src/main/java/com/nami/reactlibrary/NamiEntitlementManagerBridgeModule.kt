@@ -1,12 +1,14 @@
 package com.nami.reactlibrary
 
 
+import android.util.Log
 import com.facebook.react.bridge.*
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
 import com.namiml.entitlement.NamiEntitlementSetter
 import com.namiml.entitlement.NamiPlatformType
+import java.util.*
 
 class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -51,19 +53,62 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     }
 
     @ReactMethod
-    fun setEntitlements(entitlements: ReadableMap) {
+    fun setEntitlements(entitlements: ReadableArray) {
+        var entitlementsToSet = ArrayList<NamiEntitlementSetter>()
 
-        var referenceID: String = ""
-        if (entitlements.hasKey("referenceID")) {
-            referenceID = entitlements.getString("referenceID") ?: ""
+        val size = entitlements.size()
+        var index = 0
+        while (index < size) {
+            val setterMap: ReadableMap? = entitlements.getMap(index)
+            setterMap?.let {
+                val entitlementSetter = entitlementSetterFromSetterMap(setterMap)
+                entitlementSetter?.let {
+                    entitlementsToSet.add(entitlementSetter)
+                }
+            }
+            index = index + 1
         }
 
-        if (referenceID.length != 0) {
-            var namiSetter = NamiEntitlementSetter(referenceID)
-            namiSetter.expires = ///???  String should be date?
-                    namiSetter.platform = android
-            namiSetter.purchasedSKUid = ""
+        NamiEntitlementManager.setEntitlements(entitlementsToSet)
+    }
+
+    fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
+        if (entitlementSetterMap.hasKey("referenceID")) {
+            val referenceID = entitlementSetterMap.getString("referenceID") ?: ""
+            if (referenceID.isNotEmpty()) {
+                var expires: Date? = null
+
+                var purchasedSKUid: String? = null
+                if (entitlementSetterMap.hasKey("purchasedSKUID")) {
+                    purchasedSKUid = entitlementSetterMap.getString("purchasedSKUID")
+                }
+
+                var platform: NamiPlatformType = NamiPlatformType.UNKNOWN
+                if (entitlementSetterMap.hasKey("platform")) {
+                    platform = when (entitlementSetterMap.getString("platform")) {
+                        "other" -> NamiPlatformType.OTHER
+
+                        "android" -> NamiPlatformType.ANDROID
+
+                        "apple" -> NamiPlatformType.APPLE
+
+                        "roku" -> NamiPlatformType.ROKU
+
+                        "web" -> NamiPlatformType.WEB
+
+                        "unknown" -> NamiPlatformType.UNKNOWN
+
+                        else -> NamiPlatformType.UNKNOWN
+                    }
+                }
+
+                val setter = NamiEntitlementSetter(referenceID, purchasedSKUid, expires, platform)
+                return setter
+            }
         }
+        Log.e("NamiBridge", "Attempted to set entitlement with no referenceID " + entitlementSetterMap);
+
+        return null
     }
 
     fun entitlementDictFromEntitlemment(entitlement: NamiEntitlement): WritableMap? {
@@ -102,7 +147,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val activePurchasesArray: WritableArray = WritableNativeArray()
         val purchases = entitlement.activePurchases
-        purchases?.let {
+        purchases.let {
             for (purchase in purchases) {
                 val purchaseMap = purchaseToPurchaseDict(purchase)
                 activePurchasesArray.pushMap(purchaseMap)
@@ -135,9 +180,6 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val lastPurchase = entitlement.activePurchases.last()
         lastPurchase.let { resultMap.putMap("activePurchase", purchaseToPurchaseDict(lastPurchase)) }
-
-        val namiID: String = entitlement.?: ""
-        resultMap.putString("namiID", namiID)
 
         return resultMap
     }

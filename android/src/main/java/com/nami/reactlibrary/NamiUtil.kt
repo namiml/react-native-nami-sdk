@@ -111,8 +111,6 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     }
     purchaseMap.putMap("purchasedSku", purchasedSkuMap)
 
-    purchaseMap.putString("localizedDescription", purchase.purchase ?: "")
-
     return purchaseMap
 }
 
