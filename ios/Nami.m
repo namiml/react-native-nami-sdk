@@ -50,6 +50,37 @@ RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
     [NamiCommand performCommand:command];
 }
 
+RCT_EXTERN_METHOD(setExternalIdentfier:(NSString)externalIdentifier type:(NSString)type)
+- (void)setExternalIdentfier: (NSString *)externalIdentifier  type:(NSString *)type {
+    
+    NamiExternalIdentifierType useType;
+     
+    if ( [type isEqualToString:@"sha256"] ) {
+        useType = NamiExternalIdentifierTypeSha256;
+    } else {
+        useType = NamiExternalIdentifierTypeUuid;
+    }
+
+    [Nami setExternalIdentifierWithExternalIdentifier:externalIdentifier type:useType];
+}
+
+RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
+{
+    NSString *externalIdentifier = [Nami getExternalIdentifier];
+   
+    if (externalIdentifier == NULL || [externalIdentifier length] == 0) {
+        completion(@[]);
+    } else {
+        completion(@[externalIdentifier]);
+    }
+}
+
+RCT_EXTERN_METHOD(clearExternalIdentfier)
+- (void)clearExternalIdentfier {
+    [Nami clearExternalIdentifier];
+}
+
+
 
 
 @end

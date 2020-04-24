@@ -3,13 +3,8 @@ package com.nami.reactlibrary
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableMap
-import com.namiml.Nami
-import com.namiml.NamiConfiguration
-import com.namiml.NamiLogLevel
+import com.facebook.react.bridge.*
+import com.namiml.*
 
 class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -28,7 +23,8 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
     fun configure(configDict: ReadableMap) {
 
         // Need to be sure we have some valid string.
-        val appPlatformID: String = if (configDict.hasKey("appPlatformID-google")) configDict.getString("appPlatformID-google") ?: "APPPLATFORMID_NOT_FOUND" else "APPPLATFORMID_NOT_FOUND"
+        val appPlatformID: String = if (configDict.hasKey("appPlatformID-google")) configDict.getString("appPlatformID-google")
+                ?: "APPPLATFORMID_NOT_FOUND" else "APPPLATFORMID_NOT_FOUND"
 
         val reactContext = reactApplicationContext
         Log.i("NamiBridge", "Configure called with appID " + appPlatformID)
@@ -65,4 +61,36 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
 
         Nami.configure(builtConfig)
     }
+
+
+    @ReactMethod
+    fun setExternalIdentifier(externalIdentifier: String, type: String) {
+        val useType: NamiExternalIdentifierType
+        if (type == "sha256") {
+            useType = NamiExternalIdentifierType.SHA_256
+        } else {
+            useType = NamiExternalIdentifierType.UUID
+        }
+
+        Nami.setExternalIdentifier(externalIdentifier, useType)
+    }
+
+    @ReactMethod
+    fun getExternalIdentifier(successCallback: Callback) {
+        val canRaiseResult: WritableArray = WritableNativeArray()
+
+        val externalIdentifier = Nami.getExternalIdentifier()
+        externalIdentifier?.let {
+            canRaiseResult.pushString(externalIdentifier)
+        }
+
+        successCallback.invoke(canRaiseResult)
+    }
+
+    @ReactMethod
+    fun clearExternalIdentifier() {
+        Nami.clearExternalIdentifier()
+    }
+
+
 }
