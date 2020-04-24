@@ -18,6 +18,9 @@
 
 // Converts NSDate into javascript convertable (UTC) string
 + (NSString *)javascriptDateFromNSDate:(NSDate *)purchseTimestamp;
+
++ (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement;
+
 @end
 
 #endif /* NamiBridgeUtil_h */

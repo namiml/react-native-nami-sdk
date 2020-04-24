@@ -90,7 +90,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
                 var purchasedSKUid: String? = null
                 if (entitlementSetterMap.hasKey("purchasedSKUID")) {
-                    purchasedSKUid = entitlementSetterMap.getString("purchasedSKUID")
+                    purchasedSKUid = entitlementSetterMap.getString("purchasedSKUid")
                 }
 
                 var platform: NamiPlatformType = NamiPlatformType.UNKNOWN
