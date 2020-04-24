@@ -163,7 +163,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                 activePurchasesArray.pushMap(purchaseMap)
             }
         }
-        resultMap.putArray("activePurchasesArray", activePurchasesArray)
+        resultMap.putArray("activePurchases", activePurchasesArray)
 
 
         val purchasedSKUsArray: WritableArray = WritableNativeArray()
