@@ -28,9 +28,9 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     @ReactMethod
     fun activeEntitlements(resultsCallback: Callback) {
 
-        val entitlements = NamiEntitlementManager.activeEntitlements()
+        val nativeEntitlements = NamiEntitlementManager.activeEntitlements()
 
-        val firstEntitlement = entitlements.first()
+        val firstEntitlement = nativeEntitlements.first()
 
         val referenceID = firstEntitlement.namiId //???
         val name = firstEntitlement.name
@@ -39,7 +39,11 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         val activePurcahses = firstEntitlement.activePurchases
         val isActive = firstEntitlement.isActive()
 
-        var resultArray: WritableArray = WritableNativeArray()
+        val resultArray: WritableArray = WritableNativeArray()
+        for (entitlement in nativeEntitlements) {
+            val entitlementDict = entitlementDictFromEntitlemment(entitlement)
+            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+        }
         resultsCallback.invoke(resultArray)
     }
 
@@ -48,13 +52,19 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         // TODO: add get entitlements to Android
 
-        var resultArray: WritableArray = WritableNativeArray()
+        val nativeEntitlements = NamiEntitlementManager.getEntitlements()
+
+        val resultArray: WritableArray = WritableNativeArray()
+        for (entitlement in nativeEntitlements) {
+            val entitlementDict = entitlementDictFromEntitlemment(entitlement)
+            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+        }
         resultsCallback.invoke(resultArray)
     }
 
     @ReactMethod
     fun setEntitlements(entitlements: ReadableArray) {
-        var entitlementsToSet = ArrayList<NamiEntitlementSetter>()
+        val entitlementsToSet = ArrayList<NamiEntitlementSetter>()
 
         val size = entitlements.size()
         var index = 0
