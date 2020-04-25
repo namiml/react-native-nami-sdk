@@ -66,12 +66,51 @@
  }
 
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
-    NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *,id> *entitlementDict = [NSMutableDictionary new];
+    entitlementDict[@"referenceID"] = [entitlement referenceID];
+    entitlementDict[@"namiID"] = [entitlement namiID];
+    entitlementDict[@"description"] = [entitlement description];
+    entitlementDict[@"isActive"] = @([[entitlement activePurchases] count] > 0);
     
-//    purchaseDict[@"name"] = entitlement.na
+    NSArray <NamiPurchase *>*activePurchases = [entitlement activePurchases];
+    NSMutableArray *convertedActivePurchases = [NSMutableArray array];
+    for (NamiPurchase *purchase in activePurchases) {
+        NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchase];
+        [convertedActivePurchases addObject:purchaseDict];
+    }
+    entitlementDict[@"activePurchases"] = convertedActivePurchases;
+    
+    NSArray <NamiSKU *>*purchasedSKUs = [entitlement purchasedSKUs];
+       NSMutableArray *convertedPurchasedSKUs = [NSMutableArray array];
+       for (NamiSKU *sku in purchasedSKUs) {
+           NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
+           [convertedPurchasedSKUs addObject:skuDict];
+       }
+       entitlementDict[@"purchasedSKUs"] = convertedPurchasedSKUs;
+    
+    
+    NSArray <NamiSKU *>*relatedSKUs = [entitlement relatedSKUs];
+    NSMutableArray *convertedRelatedSKUs = [NSMutableArray array];
+    for (NamiSKU *sku in relatedSKUs) {
+        NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
+        [convertedRelatedSKUs addObject:skuDict];
+    }
+    entitlementDict[@"relatedSKUs"] = convertedRelatedSKUs;
+    
+    NamiPurchase *lastPurchase = [[entitlement activePurchases] lastObject];
+    if (lastPurchase != NULL) {
+        entitlementDict[@"activePurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
+    }
+    
+    NamiSKU *lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
+    if (lastPurchasedSKU != NULL) {
+        entitlementDict[@"purchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
+    }
    
-    return purchaseDict;
+    return entitlementDict;
 }
+
+
 
 + (NSString *)javascriptDateFromNSDate:(NSDate *)purchseTimestamp {
     NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
