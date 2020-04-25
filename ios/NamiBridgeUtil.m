@@ -112,11 +112,11 @@
 
 
 
-+ (NSString *)javascriptDateFromNSDate:(NSDate *)purchseTimestamp {
++ (NSString *)javascriptDateFromNSDate:(NSDate *)purchaseTimestamp {
     NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
     NSISO8601DateFormatOptions options = NSISO8601DateFormatWithInternetDateTime | NSISO8601DateFormatWithDashSeparatorInDate | NSISO8601DateFormatWithColonSeparatorInTime | NSISO8601DateFormatWithTimeZone;
     
-    return [NSISO8601DateFormatter stringFromDate:purchseTimestamp timeZone:UTC formatOptions:options];
+    return [NSISO8601DateFormatter stringFromDate:purchaseTimestamp timeZone:UTC formatOptions:options];
 }
 
 
