@@ -56,6 +56,11 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
             builder.developmentMode = true
         }
 
+        val bypassStoreMode = if (configDict.hasKey("bypassStore")) configDict.getBoolean("bypassStore") else false
+        if (bypassStoreMode) {
+            builder.bypassStoreMode = true
+        }
+
         val builtConfig: NamiConfiguration = builder.build()
         Log.i("NamiBridge", "Nami Configuration object is $builtConfig");
 
