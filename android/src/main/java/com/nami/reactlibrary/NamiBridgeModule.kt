@@ -69,9 +69,12 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
 
 
     @ReactMethod
-    fun setExternalIdentifier(externalIdentifier: String, type: String) {
+    fun setExternalIdentifier(externalIdentifier: String, externalIDType: String) {
+
+        Log.i("NamiBridge", "setting external identifier $externalIdentifier of type $externalIDType");
+
         val useType: NamiExternalIdentifierType
-        if (type == "sha256") {
+        if (externalIDType == "sha256") {
             useType = NamiExternalIdentifierType.SHA_256
         } else {
             useType = NamiExternalIdentifierType.UUID
@@ -88,6 +91,8 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
         externalIdentifier?.let {
             canRaiseResult.pushString(externalIdentifier)
         }
+
+        Log.i("NamiBridge", "getting external identifier, found $externalIdentifier");
 
         successCallback.invoke(canRaiseResult)
     }
