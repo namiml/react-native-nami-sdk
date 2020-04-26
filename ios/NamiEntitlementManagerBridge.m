@@ -26,6 +26,7 @@
 RCT_EXPORT_METHOD(isEntitlementActive:(nonnull NSString*)entitlementRefID completion:(RCTResponseSenderBlock)completion)
 {
     BOOL active = [NamiEntitlementManager isEntitlementActive:entitlementRefID];
+    NSLog(@"Checking for %@ entitlement active, result was %@", entitlementRefID, [NSNumber numberWithBool:active] );
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
@@ -43,7 +44,7 @@ RCT_EXPORT_METHOD(getEntitlements:(RCTResponseSenderBlock)completion)
            }
        }
        
-       completion(entitlementDicts);
+       completion(@[entitlementDicts]);
 }
 
 
@@ -60,7 +61,7 @@ RCT_EXPORT_METHOD(activeEntitlements:(RCTResponseSenderBlock)completion)
         }
     }
     
-    completion(entitlementDicts);
+    completion(@[entitlementDicts]);
 }
 
 RCT_EXPORT_METHOD(setEntitlements:(NSArray *)entitlementSetterDicts)
@@ -70,6 +71,7 @@ RCT_EXPORT_METHOD(setEntitlements:(NSArray *)entitlementSetterDicts)
 
     for (NSDictionary *entitlementSetterDict in entitlementSetterDicts) {
         NSString *referenceID = entitlementSetterDict[@"referenceID"];
+        NSLog(@"Entitlement to set, referenceID is %@, whole entitlement %@", referenceID, entitlementSetterDict);
         if (referenceID != NULL && [referenceID length] > 0) {
             NSString *purchasedSKUid = entitlementSetterDict[@"purchasedSKUid"];
             NSString *expiresStr = entitlementSetterDict[@"expires"];

@@ -30,7 +30,9 @@
         productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
 
         if (@available(iOS 12.0, *)) {
-            productDict[@"subscriptionGroupIdentifier"] = [NSString stringWithString:productInt.subscriptionGroupIdentifier];
+            if (productInt != nil && productInt.subscriptionGroupIdentifier != nil) {
+                productDict[@"subscriptionGroupIdentifier"] = [NSString stringWithString:productInt.subscriptionGroupIdentifier];
+            }
         }
 
         if (@available(iOS 11.2, *)) {
@@ -41,7 +43,7 @@
                 SKProductPeriodUnit periodUnit = subscriptionPeriod.unit;
 
                 productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lu", (unsigned long)numberOfUnits];
-                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%lu", (unsigned long)periodUnit];
+                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%u", (unsigned int)periodUnit];
             }
         }
 
@@ -76,7 +78,9 @@
     NSMutableArray *convertedActivePurchases = [NSMutableArray array];
     for (NamiPurchase *purchase in activePurchases) {
         NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchase];
-        [convertedActivePurchases addObject:purchaseDict];
+        if (purchaseDict != nil) {
+            [convertedActivePurchases addObject:purchaseDict];
+        }
     }
     entitlementDict[@"activePurchases"] = convertedActivePurchases;
     
@@ -84,7 +88,9 @@
        NSMutableArray *convertedPurchasedSKUs = [NSMutableArray array];
        for (NamiSKU *sku in purchasedSKUs) {
            NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
-           [convertedPurchasedSKUs addObject:skuDict];
+           if (skuDict != nil) {
+               [convertedPurchasedSKUs addObject:skuDict];
+           }
        }
        entitlementDict[@"purchasedSKUs"] = convertedPurchasedSKUs;
     
@@ -93,7 +99,9 @@
     NSMutableArray *convertedRelatedSKUs = [NSMutableArray array];
     for (NamiSKU *sku in relatedSKUs) {
         NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
-        [convertedRelatedSKUs addObject:skuDict];
+        if (skuDict != nil) {
+            [convertedRelatedSKUs addObject:skuDict];
+        }
     }
     entitlementDict[@"relatedSKUs"] = convertedRelatedSKUs;
     
