@@ -30,15 +30,6 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val nativeEntitlements = NamiEntitlementManager.activeEntitlements()
 
-        val firstEntitlement = nativeEntitlements.first()
-
-        val referenceID = firstEntitlement.namiId //???
-        val name = firstEntitlement.name
-        val desc = firstEntitlement.desc
-        val relatedSkus = firstEntitlement.relatedSKUs
-        val activePurcahses = firstEntitlement.activePurchases
-        val isActive = firstEntitlement.isActive()
-
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in nativeEntitlements) {
             val entitlementDict = entitlementDictFromEntitlemment(entitlement)
@@ -49,8 +40,6 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
     @ReactMethod
     fun getEntitlements(resultsCallback: Callback) {
-
-        // TODO: add get entitlements to Android
 
         val nativeEntitlements = NamiEntitlementManager.getEntitlements()
 
