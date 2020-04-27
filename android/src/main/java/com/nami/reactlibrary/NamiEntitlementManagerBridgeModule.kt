@@ -43,6 +43,8 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val nativeEntitlements = NamiEntitlementManager.getEntitlements()
 
+        Log.i("NamiBridge", "getEntitlements result is $nativeEntitlements")
+
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in nativeEntitlements) {
             val entitlementDict = entitlementDictFromEntitlemment(entitlement)
@@ -114,6 +116,8 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         var resultMap: WritableMap = WritableNativeMap()
         val referenceID: String = entitlement.referenceId ?: ""
         resultMap.putString("referenceId", referenceID)
+
+        Log.i("NamiBridge", "Processing entitlement into Javascript Map with referenceID $referenceID")
 
         if (referenceID.isEmpty()) {
             // Without a reference ID, do not use this object
