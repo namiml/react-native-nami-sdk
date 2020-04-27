@@ -19,13 +19,7 @@ brew install yarn
 
 1. Install CocoaPods -> `sudo gem install cocoapods`
 2. `cd ios && pod update`
-3. `open BasicLinkedPaywall.xcworkspace`
-4. In XCode, open up the Pods project, go into the Pods/Nami/Frameworks folder.  Click on the Nami.xcframework file.
-5. Open the sidebar in Xcode and look for the react-native-nami-sdk target membership.  If this is not checked, check this box.
-
-![XCode Setup](https://nami-public-web.s3.us-east-2.amazonaws.com/react-native-xcode-setup.png)
-
-6. Build and run the app in XCode.
+3. Either run `yarn run ios` or `open BasicLinkedPaywall.xcworkspace` and build and run in Xcode.
 
 **Android Setup**
 
