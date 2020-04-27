@@ -4,7 +4,6 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.namiml.api.model.NamiPaywall
-import com.namiml.api.model.SKU
 import com.namiml.billing.NamiPurchase
 import com.namiml.paywall.NamiSKU
 import java.text.DateFormat
