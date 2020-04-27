@@ -74,6 +74,11 @@
     entitlementDict[@"description"] = [entitlement description];
     entitlementDict[@"isActive"] = @([[entitlement activePurchases] count] > 0);
     
+    if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceID] length] == 0) {
+        NSLog(@"NamiBridge: Bad entitement in system, empty referenceID.");
+        return nil;
+    }
+    
     NSArray <NamiPurchase *>*activePurchases = [entitlement activePurchases];
     NSMutableArray *convertedActivePurchases = [NSMutableArray array];
     for (NamiPurchase *purchase in activePurchases) {

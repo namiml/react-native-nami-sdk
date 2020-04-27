@@ -95,6 +95,8 @@ RCT_EXPORT_METHOD(setEntitlements:(NSArray *)entitlementSetterDicts)
             setter = [setter initWithId:referenceID platform:platform purchasedSKUid:purchasedSKUid expires:expires];
             
             [entitlementSetters addObject:setter];
+        } else {
+            NSLog(@"Warning, entitlement to set had empty referenceID, whole entitlement is \n %@", entitlementSetterDict);
         }
     }
     
