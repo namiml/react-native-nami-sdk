@@ -103,6 +103,10 @@ RCT_EXPORT_METHOD(setEntitlements:(NSArray *)entitlementSetterDicts)
     [NamiEntitlementManager setEntitlements:entitlementSetters];
 }
 
+RCT_EXPORT_METHOD(clearAllEntitlements) {
+    [NamiEntitlementManager clearAllEntitlements];
+}
+
 
 @end
 

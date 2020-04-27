@@ -73,6 +73,11 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         NamiEntitlementManager.setEntitlements(entitlementsToSet)
     }
 
+    @ReactMethod
+    fun clearAllEntitlements() {
+//        NamiEntitlementManager.clearAllEntitlements()
+    }
+
     fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
         if (entitlementSetterMap.hasKey("referenceID")) {
             val referenceID = entitlementSetterMap.getString("referenceID") ?: ""
