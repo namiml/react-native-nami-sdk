@@ -3,6 +3,7 @@ package com.nami.reactlibrary
 
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.namiml.Nami
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
@@ -183,12 +184,15 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         // For react, provide the most recent active purchase and sku from the arrays
 
-        val lastPurchaseSkKU = entitlement.purchasedSKUs.last()
-        lastPurchaseSkKU.let { resultMap.putMap("purchasedSKU", skuToSkuDict(lastPurchaseSkKU)) }
+        if (entitlement.purchasedSKUs.count() > 0) {
+            val lastPurchaseSKU = entitlement.purchasedSKUs.last()
+            lastPurchaseSKU.let { resultMap.putMap("purchasedSKU", skuToSkuDict(lastPurchaseSKU)) }
+        }
 
-        val lastPurchase = entitlement.activePurchases.last()
-        lastPurchase.let { resultMap.putMap("activePurchase", purchaseToPurchaseDict(lastPurchase)) }
-
+        if (entitlement.activePurchases.count() > 0) {
+            val lastPurchase = entitlement.activePurchases.last()
+            lastPurchase.let { resultMap.putMap("activePurchase", purchaseToPurchaseDict(lastPurchase)) }
+        }
         return resultMap
     }
 
