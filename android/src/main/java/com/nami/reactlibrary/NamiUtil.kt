@@ -2,8 +2,9 @@ package com.nami.reactlibrary
 
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableMap
+import com.facebook.react.bridge.WritableNativeMap
 import com.namiml.api.model.NamiPaywall
-import com.namiml.api.model.SKU
+import com.namiml.billing.NamiPurchase
 import com.namiml.paywall.NamiSKU
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -86,34 +87,30 @@ fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
     return productDict
 }
 
-//+ (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiMetaPurchase *)purchase {
-//    NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
-//
-//    purchaseDict[@"productIdentifier"] = purchase.productIdentifier;
-//    purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
-//    purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
-//    purchaseDict[@"isSubscription"] = purchase.isSubscription ? @"true" : @"false";
-//
-//    NSDate *subscriptionExpirationDate = purchase.subscriptionExpirationDate;
-//    if (subscriptionExpirationDate != nil) {
-//        purchaseDict[@"subscriptionExpirationDate"] = [self javascriptDateFromNSDate:subscriptionExpirationDate];
-//    }
-//
-//    purchaseDict[@"purchaseSource"] =  [[NSString alloc] initWithFormat:@"%d", (int)purchase.purchaseSource];
-//
-//    NamiMetaProduct *product = purchase.metaProduct;
-//    if (product != nil) {
-//        purchaseDict[@"metaProduct"] = [self productToProductDict:product];
-//    }
-//
-//    return purchaseDict;
-//}
-
-
 // Really needs to be a NamiPurchase, when exists...
-fun purchaseToPurchaseDict(sku: SKU): Map<String, String> {
+fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
+    val purchaseMap = WritableNativeMap()
 
-    return HashMap<String, String>()
+    purchaseMap.putString("localizedDescription", purchase.localizedDescription ?: "")
+    purchaseMap.putString("source", purchase.source ?: "")
+    purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier ?: "")
+    val expires = purchase.expires
+    expires?.let {
+        purchaseMap.putString("expires", javascriptDateFromKJavaDate(expires))
+    }
+    purchaseMap.putBoolean("fromNami", purchase.fromNami)
+
+    // TODO: map kotlin dictionary into arbitrary map?
+    purchaseMap.putMap("platformMetadata",  WritableNativeMap())
+
+    var purchasedSkuMap: WritableMap = WritableNativeMap()
+    val purchasedSKU = purchase.purchasedSKU
+    purchasedSKU?.let {
+        purchasedSkuMap = skuToSkuDict(purchasedSKU)
+    }
+    purchaseMap.putMap("purchasedSku", purchasedSkuMap)
+
+    return purchaseMap
 }
 
 // Convert Java Date to ISO860 UTC date to pass to Javascript

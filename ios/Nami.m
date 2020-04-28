@@ -20,8 +20,7 @@
 @end
 @implementation NamiBridge (RCTExternModule)
 
-RCT_EXTERN_METHOD(configure:(NSDictionary)configDict)
-- (void)configure: (NSDictionary *)configDict {
+RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
     
     NSString *appID = configDict[@"appPlatformID-apple"];
     
@@ -45,10 +44,38 @@ RCT_EXTERN_METHOD(configure:(NSDictionary)configDict)
     }
 }
 
-RCT_EXTERN_METHOD(performNamiCommand:(NSString)namiCommand)
-- (void)performNamiCommand: (NSString *)command {
+RCT_EXPORT_METHOD(performNamiCommand: (NSString *)command) {
     [NamiCommand performCommand:command];
 }
+
+RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier  type:(NSString *)type) {
+    
+    NamiExternalIdentifierType useType;
+     
+    if ( [type isEqualToString:@"sha256"] ) {
+        useType = NamiExternalIdentifierTypeSha256;
+    } else {
+        useType = NamiExternalIdentifierTypeUuid;
+    }
+
+    [Nami setExternalIdentifierWithExternalIdentifier:externalIdentifier type:useType];
+}
+
+RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
+{
+    NSString *externalIdentifier = [Nami getExternalIdentifier];
+   
+    if (externalIdentifier == NULL || [externalIdentifier length] == 0) {
+        completion(@[]);
+    } else {
+        completion(@[externalIdentifier]);
+    }
+}
+
+RCT_EXPORT_METHOD(clearExternalIdentifier) {
+    [Nami clearExternalIdentifier];
+}
+
 
 
 

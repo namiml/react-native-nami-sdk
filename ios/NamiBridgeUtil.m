@@ -30,7 +30,9 @@
         productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
 
         if (@available(iOS 12.0, *)) {
-            productDict[@"subscriptionGroupIdentifier"] = [NSString stringWithString:productInt.subscriptionGroupIdentifier];
+            if (productInt != nil && productInt.subscriptionGroupIdentifier != nil) {
+                productDict[@"subscriptionGroupIdentifier"] = [NSString stringWithString:productInt.subscriptionGroupIdentifier];
+            }
         }
 
         if (@available(iOS 11.2, *)) {
@@ -41,7 +43,7 @@
                 SKProductPeriodUnit periodUnit = subscriptionPeriod.unit;
 
                 productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lu", (unsigned long)numberOfUnits];
-                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%lu", (unsigned long)periodUnit];
+                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%u", (unsigned int)periodUnit];
             }
         }
 
@@ -66,18 +68,68 @@
  }
 
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
-    NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *,id> *entitlementDict = [NSMutableDictionary new];
+    entitlementDict[@"referenceID"] = [entitlement referenceID];
+    entitlementDict[@"namiID"] = [entitlement namiID];
+    entitlementDict[@"description"] = [entitlement description];
+    entitlementDict[@"isActive"] = @([[entitlement activePurchases] count] > 0);
     
-//    purchaseDict[@"name"] = entitlement.na
+    if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceID] length] == 0) {
+        NSLog(@"NamiBridge: Bad entitement in system, empty referenceID.");
+        return nil;
+    }
+    
+    NSArray <NamiPurchase *>*activePurchases = [entitlement activePurchases];
+    NSMutableArray *convertedActivePurchases = [NSMutableArray array];
+    for (NamiPurchase *purchase in activePurchases) {
+        NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchase];
+        if (purchaseDict != nil) {
+            [convertedActivePurchases addObject:purchaseDict];
+        }
+    }
+    entitlementDict[@"activePurchases"] = convertedActivePurchases;
+    
+    NSArray <NamiSKU *>*purchasedSKUs = [entitlement purchasedSKUs];
+       NSMutableArray *convertedPurchasedSKUs = [NSMutableArray array];
+       for (NamiSKU *sku in purchasedSKUs) {
+           NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
+           if (skuDict != nil) {
+               [convertedPurchasedSKUs addObject:skuDict];
+           }
+       }
+       entitlementDict[@"purchasedSKUs"] = convertedPurchasedSKUs;
+    
+    
+    NSArray <NamiSKU *>*relatedSKUs = [entitlement relatedSKUs];
+    NSMutableArray *convertedRelatedSKUs = [NSMutableArray array];
+    for (NamiSKU *sku in relatedSKUs) {
+        NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
+        if (skuDict != nil) {
+            [convertedRelatedSKUs addObject:skuDict];
+        }
+    }
+    entitlementDict[@"relatedSKUs"] = convertedRelatedSKUs;
+    
+    NamiPurchase *lastPurchase = [[entitlement activePurchases] lastObject];
+    if (lastPurchase != NULL) {
+        entitlementDict[@"activePurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
+    }
+    
+    NamiSKU *lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
+    if (lastPurchasedSKU != NULL) {
+        entitlementDict[@"purchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
+    }
    
-    return purchaseDict;
+    return entitlementDict;
 }
 
-+ (NSString *)javascriptDateFromNSDate:(NSDate *)purchseTimestamp {
+
+
++ (NSString *)javascriptDateFromNSDate:(NSDate *)purchaseTimestamp {
     NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
     NSISO8601DateFormatOptions options = NSISO8601DateFormatWithInternetDateTime | NSISO8601DateFormatWithDashSeparatorInDate | NSISO8601DateFormatWithColonSeparatorInTime | NSISO8601DateFormatWithTimeZone;
     
-    return [NSISO8601DateFormatter stringFromDate:purchseTimestamp timeZone:UTC formatOptions:options];
+    return [NSISO8601DateFormatter stringFromDate:purchaseTimestamp timeZone:UTC formatOptions:options];
 }
 
 
