@@ -69,13 +69,14 @@
 
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
     NSMutableDictionary<NSString *,id> *entitlementDict = [NSMutableDictionary new];
+    NSLog(@"Converting enttilement %@", entitlement);
     entitlementDict[@"referenceID"] = [entitlement referenceID];
     entitlementDict[@"namiID"] = [entitlement namiID];
     entitlementDict[@"description"] = [entitlement description];
     entitlementDict[@"isActive"] = @([[entitlement activePurchases] count] > 0);
     
     if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceID] length] == 0) {
-        NSLog(@"NamiBridge: Bad entitement in system, empty referenceID.");
+        NSLog(@"NamiBridge: Bad entitlement in system, empty referenceID.");
         return nil;
     }
     

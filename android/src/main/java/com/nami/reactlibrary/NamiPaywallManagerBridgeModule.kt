@@ -22,14 +22,14 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
     fun raisePaywall() {
 //        [[NamiPaywallManager shared] raisePaywallFromVC:nil];
 
-        var activity: Activity? = currentActivity
+        val activity: Activity? = currentActivity
         Log.i("NamiBridge", "Nami Activity to raise paywall is " + activity.toString());
 
         if (NamiPaywallManager.canRaisePaywall()) {
             Log.d("NamiBridge", "About to raise Paywall ");
             if (activity != null) {
                 Log.i("NamiBridge", "Raising Paywall: ");
-                NamiPaywallManager.raisePaywall(activity, false);
+                NamiPaywallManager.raisePaywall(activity)
             } else {
                 Log.w("NamiBridge", "Activity from react getCurrentActivity was null.");
             }
