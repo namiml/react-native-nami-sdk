@@ -35,9 +35,34 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
             config.logLevel = NamiLogLevelError;
         }
         
-        BOOL bypassString = configDict[@"bypassStore"];
-        if (bypassString) {
-            config.bypassStore = true;
+        NSObject *bypassString = configDict[@"bypassStore"];
+        if ( bypassString != NULL )
+        {
+            NSLog(@"bypassStore from dictionary is %@", configDict[@"bypassStore"]);
+            if ([bypassString isKindOfClass:[NSNumber class]]) {
+                config.bypassStore = [((NSNumber *)bypassString) boolValue];
+            } else if ([bypassString isKindOfClass:[NSString class]] ) {
+                if ([[((NSString *)bypassString) lowercaseString] hasPrefix:@"t"] )
+                {
+                    // bypass is false by default, so we only worry about checking for enabling bypass
+                    config.bypassStore = true;
+                }
+            }
+        }
+        
+        NSObject *developmentModeString = configDict[@"developmentMode"];
+        if ( developmentModeString != NULL )
+        {
+            NSLog(@"bypassStore from dictionary is %@", configDict[@"developmentMode"]);
+            if ([developmentModeString isKindOfClass:[NSNumber class]]) {
+                config.developmentMode = [((NSNumber *)developmentModeString) boolValue];
+            } else if ([developmentModeString isKindOfClass:[NSString class]] ) {
+                if ([[((NSString *)developmentModeString) lowercaseString] hasPrefix:@"t"] )
+                {
+                    // bypass is false by default, so we only worry about checking for enabling bypass
+                    config.developmentMode = true;
+                }
+            }
         }
         
         [Nami configureWithNamiConfig:config];
