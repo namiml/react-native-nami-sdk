@@ -18,13 +18,33 @@
 
 
 @interface NamiPaywallManagerBridge : NSObject <RCTBridgeModule>
+@property (atomic) BOOL blockPaywallRaise;
 @end
+
+
 @implementation NamiPaywallManagerBridge (RCTExternModule)
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self setBlockPaywallRaise:false];
+        [NamiPaywallManager registerApplicationAutoRaisePaywallBlocker:^BOOL{
+            NSLog(@"Block paywall raise set to %d", [self blockPaywallRaise]);
+            return ![self blockPaywallRaise];
+        }];
+    }
+    return self;
+}
 
 RCT_EXTERN_METHOD(raisePaywall)
 - (void)raisePaywall {
   [NamiPaywallManager raisePaywallFromVC:nil];
+}
+
+RCT_EXPORT_METHOD(blockPaywallRaise:(BOOL)blockRaise)
+{
+    [self setBlockPaywallRaise:blockRaise];
 }
 
 RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
@@ -33,7 +53,7 @@ RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
     completion(@[[NSNumber numberWithBool:canRaise]]);
 }
 
-RCT_EXPORT_METHOD(presentNamiPaywall:products:(NSArray *)productDicts metapaywallDefinition:(NSDictionary *)paywallDict)
+RCT_EXPORT_METHOD(presentNamiPaywall:skuIDs:(NSArray *)skuIDs metapaywallDefinition:(NSDictionary *)paywallDict)
 {
     NSString *paywallDeveloperID = paywallDict[@"developerPaywallID"];
     if ( paywallDeveloperID != nil ) {
@@ -58,6 +78,13 @@ RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPayw
         completion(wrapperArray);
     }];
 }
+
+
+RCT_EXPORT_METHOD(paywallImpression:(NSString *)developerPaywallID)
+{
+    [NamiPaywallManager paywallImpressionWithDeveloperID:developerPaywallID];
+}
+
 
 @end
 
