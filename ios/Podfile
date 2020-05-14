@@ -5,7 +5,7 @@ source 'https://cdn.cocoapods.org/'
 
 target 'RNNami' do	
   # Pods for RNNami	
-  pod 'Nami', '~> 2.0.2'
+  pod 'Nami', '~> 2.0.4'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"	
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"	
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"	
