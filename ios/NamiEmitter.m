@@ -133,14 +133,23 @@ bool hasNamiEmitterListeners;
         NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
         NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
         for (NamiPurchase *purchase in purchases) {
-            [productIDs addObject:purchase.skuID];
+            if (purchase.skuID != nil) {
+                [productIDs addObject:purchase.skuID];
+            }
         }
         
         NSString *convertedState = [self purchaseStateToString:purchaseState];
         
-        [self sendEventWithName:@"PurchasesChanged" body:@{@"skuIDs": productIDs,
-                                                           @"purchaseState": convertedState,
-                                                           @"errorDescription": [error localizedDescription] }];
+        NSString *localizedErrorDescription = [error localizedDescription];
+        
+        NSMutableDictionary *sendDict = [NSMutableDictionary dictionary];
+        sendDict[@"skuIDs"] =  productIDs;
+        sendDict[@"purchaseState"] = convertedState;
+        if (localizedErrorDescription != nil) {
+           sendDict[@"errorDescription"] = localizedErrorDescription;
+        }
+        
+        [self sendEventWithName:@"PurchasesChanged" body:sendDict];
     }
 }
 
