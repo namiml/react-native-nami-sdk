@@ -68,10 +68,10 @@ RCT_EXPORT_METHOD(anySKUPurchased:(nonnull NSArray*)skuIDs completion:(RCTRespon
         NamiSKU *useProduct = products.firstObject;
         if (useProduct != nil) {
             [NamiPurchaseManager buySKU:useProduct fromPaywall:namiPaywall responseHandler:^(NSArray<NamiPurchase *> * _Nonnull purchase, NamiPurchaseState purchaseState, NSError * _Nullable error) {
-                NSLog(@"NamiBridge: Info: Purchase result is %@, purchased is %d, error is %@", purchase, (purchaseState == NamiPurchaseStatePurchased), [error localizedDescription]);
+                NSLog(@"NamiBridge: Info: Purchase result is %@, purchased is %d, purchaseState is %@, error is %@", purchase, (purchaseState == NamiPurchaseStatePurchased), [NSNumber numberWithInt:(int)purchaseState], [error localizedDescription]);
                 if (purchaseState == NamiPurchaseStatePurchased) {
                     completion(@[[NSNumber numberWithBool:true]]);
-                }
+                } 
             }];
         } else {
             completion(@[[NSNumber numberWithBool:false]]);
