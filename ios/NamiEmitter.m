@@ -32,8 +32,10 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
         hasNamiEmitterListeners = NO;
         
         // Tell Nami to listen for purchases and we'll forward them on to listeners
-        [[NamiStoreKitHelper shared] registerWithPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
-            [self sendEventPurchased];
+        [NamiPurchaseManager registerWithPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
+            if ( purchaseState == NamiPurchaseStatePurchased ) {
+                [self sendEventPurchasedWithState:purchaseState error:error];
+            }
         }];
         
         [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
@@ -87,16 +89,62 @@ bool hasNamiEmitterListeners;
     hasNamiEmitterListeners = NO;
 }
 
-- (void)sendEventPurchased {
-  if (hasNamiEmitterListeners) {
-    NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
-    NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-    for (NamiPurchase *purchase in purchases) {
-      [productIDs addObject:purchase.skuID];
+-(NSString *)purchaseStateToString:(NamiPurchaseState)purchaseState {
+    switch (purchaseState) {
+  
+        case NamiPurchaseStatePending:
+            return @"PENDING";
+            break;
+        case NamiPurchaseStatePurchased:
+            return @"PURCHASED";
+            break;
+        case NamiPurchaseStateConsumed:
+            return @"CONSUMED";
+            break;
+        case NamiPurchaseStateResubscribed:
+            return @"RESUBSCRIBED";
+            break;
+        case NamiPurchaseStateUnsubscribed:
+            return @"UNSUBSCRIBED";
+            break;
+        case NamiPurchaseStatePurchasedNotValidated:
+            return @"PURCHASEDNOTVALIDATED";
+            break;
+        case NamiPurchaseStateDeferred:
+            return @"DEFERRED";
+            break;
+        case NamiPurchaseStateFailed:
+            return @"FAILED";
+            break;
+        case NamiPurchaseStateCancelled:
+            return @"CANCELLED";
+            break;
+        case NamiPurchaseStatePurchasedAndValidated:
+            return @"PURCHASEDANDVALIDATED";
+            break;
+        case NamiPurchaseStateUnknown:
+            return @"UNKNOWN";
+            break;
+        default:
+            return @"UNKNOWN";
+            break;
     }
+}
 
-    [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs}];
-  }
+- (void)sendEventPurchasedWithState:(NamiPurchaseState)purchaseState error:(NSError *)error {
+    if (hasNamiEmitterListeners) {
+        NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
+        NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
+        for (NamiPurchase *purchase in purchases) {
+            [productIDs addObject:purchase.skuID];
+        }
+        
+        NSString *convertedState = [self purchaseStateToString:purchaseState];
+        
+        [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs,
+                                                           @"purchaseState": convertedState,
+                                                           @"errorDescription": [error localizedDescription] }];
+    }
 }
 
 - (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC

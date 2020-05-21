@@ -53,7 +53,7 @@ RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
     completion(@[[NSNumber numberWithBool:canRaise]]);
 }
 
-RCT_EXPORT_METHOD(presentNamiPaywall:skuIDs:(NSArray *)skuIDs metapaywallDefinition:(NSDictionary *)paywallDict)
+RCT_EXPORT_METHOD(presentNamiPaywall:(NSArray *)skuIDs metapaywallDefinition:(NSDictionary *)paywallDict)
 {
     NSString *paywallDeveloperID = paywallDict[@"developerPaywallID"];
     if ( paywallDeveloperID != nil ) {
