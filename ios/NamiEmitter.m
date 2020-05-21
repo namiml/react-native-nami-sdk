@@ -141,7 +141,7 @@ bool hasNamiEmitterListeners;
         
         NSString *convertedState = [self purchaseStateToString:purchaseState];
         
-        [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs,
+        [self sendEventWithName:@"PurchasesChanged" body:@{@"skuIDs": productIDs,
                                                            @"purchaseState": convertedState,
                                                            @"errorDescription": [error localizedDescription] }];
     }
