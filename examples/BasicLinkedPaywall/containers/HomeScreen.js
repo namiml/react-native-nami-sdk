@@ -38,7 +38,7 @@ const HomeScreen = (props) => {
 
   const onSessionConnect = (event) => {
 	  console.log("ExampleApp: Products changed: ", event);
-    setProducts(event.products)
+    setProducts(event.skuIDs)
   }
 
   const onPaywallShouldRaise = (event) => {
