@@ -31,9 +31,14 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         currentActivity?.let {
             NamiPurchaseManager.buySKU(it, skuPlatformID) {
 
-                // Currently not sure how to check if purchase worked?  Just return false.
                 val resultArray: WritableArray = WritableNativeArray()
-                resultArray.pushBoolean(false)
+                if (NamiPurchaseManager.isSKUIDPurchased(skuPlatformID)) {
+                    resultArray.pushBoolean(true)
+                    Log.i("NamiBridge", "Puchase complegte, result is PURCHASED.")
+                } else {
+                    Log.i("NamiBridge", "Puchase complegte, product not purchased.")
+                    resultArray.pushBoolean(false)
+                }
                 resultsCallback.invoke(resultArray)
             }
         }
