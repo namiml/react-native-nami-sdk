@@ -9,6 +9,7 @@ import com.namiml.paywall.NamiSKU
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 
 //+ (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiMetaProduct *)product {
@@ -54,6 +55,9 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     val marketingContentMap = Arguments.createMap()
     marketingContentMap.putString("title", paywallData.title ?: "")
     marketingContentMap.putString("body", paywallData.body ?: "")
+    val extraDataMap = hashMapOf<String, Any>() //paywallData.extraData
+    val convertedMap =  Arguments.makeNativeMap(extraDataMap)
+    marketingContentMap.putMap("extra_data", convertedMap)
     paywallMap.putMap("marketing_content", marketingContentMap)
 
     paywallMap.putString("id", paywallData.id ?: "")

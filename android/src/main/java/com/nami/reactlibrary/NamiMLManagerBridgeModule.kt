@@ -56,6 +56,15 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactCo
     fun coreActionWithLabel(label: String) {
         var coreContentLabels = ArrayList<String>()
         coreContentLabels.add(label)
-        NamiMLManager.coreAction()
+        NamiMLManager.coreAction(coreContentLabels)
+    }
+
+    @ReactMethod
+    fun coreActionWithLabels(labels: ReadableArray) {
+        // Major Kotlin Evil Alert
+        val convertedLabels: List<String>? = (labels.toArrayList() as? Array<*>)?.filterIsInstance<String>()
+        convertedLabels?.let {
+            NamiMLManager.coreAction(convertedLabels)
+        }
     }
 }

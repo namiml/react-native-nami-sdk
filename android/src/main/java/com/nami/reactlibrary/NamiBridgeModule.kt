@@ -43,11 +43,15 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
 
         // React native will crash if you request a key from a map that does not exist, so always check key first
         val logLevelString = if (configDict.hasKey("logLevel")) configDict.getString("logLevel") else ""
-        if (logLevelString == "DEBUG") {
-            // Will have to figure out how to get this from a react app later... may include that in the call.
-            builder.logLevel(NamiLogLevel.DEBUG)
+        if (logLevelString == "INFO") {
+            builder.logLevel(NamiLogLevel.INFO)
+        } else if (logLevelString == "WARN") {
+            builder.logLevel(NamiLogLevel.WARN)
         } else if (logLevelString == "ERROR") {
             builder.logLevel(NamiLogLevel.ERROR)
+        } else {
+            // Any other parameters, just turn on full debugging so they can see everything.
+            builder.logLevel(NamiLogLevel.DEBUG)
         }
 
 
@@ -71,7 +75,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
     @ReactMethod
     fun setExternalIdentifier(externalIdentifier: String, externalIDType: String) {
 
-        Log.i("NamiBridge", "setting external identifier $externalIdentifier of type $externalIDType");
+        Log.i("NamiBridge", "Setting external identifier $externalIdentifier of type $externalIDType");
 
         val useType: NamiExternalIdentifierType
         if (externalIDType == "sha256") {
@@ -85,20 +89,21 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
 
     @ReactMethod
     fun getExternalIdentifier(successCallback: Callback) {
-        val canRaiseResult: WritableArray = WritableNativeArray()
+        val externalIdentifierResult: WritableArray = WritableNativeArray()
 
         val externalIdentifier = Nami.getExternalIdentifier()
         externalIdentifier?.let {
-            canRaiseResult.pushString(externalIdentifier)
+            externalIdentifierResult.pushString(externalIdentifier)
         }
 
         Log.i("NamiBridge", "getting external identifier, found $externalIdentifier");
 
-        successCallback.invoke(canRaiseResult)
+        successCallback.invoke(externalIdentifierResult)
     }
 
     @ReactMethod
     fun clearExternalIdentifier() {
+        Log.i("NamiBridge", "Clearing external identifier.");
         Nami.clearExternalIdentifier()
     }
 
