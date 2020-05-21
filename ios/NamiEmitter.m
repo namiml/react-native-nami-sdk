@@ -118,10 +118,7 @@ bool hasNamiEmitterListeners;
             break;
         case NamiPurchaseStateCancelled:
             return @"CANCELLED";
-            break;
-        case NamiPurchaseStatePurchasedAndValidated:
-            return @"PURCHASEDANDVALIDATED";
-            break;
+            break;       
         case NamiPurchaseStateUnknown:
             return @"UNKNOWN";
             break;
