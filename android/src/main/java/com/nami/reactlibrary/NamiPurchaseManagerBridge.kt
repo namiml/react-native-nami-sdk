@@ -55,7 +55,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         map.putString("purchaseState", convertedState)
 
 
-        Log.i("NamiBridge", "Emitting purchase with state " + convertedState + " for IDs " + productIDs)
+        Log.i("NamiBridge", "Emitting purchase with state " + convertedState)
         try {
             reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("PurchasesChanged", map)
