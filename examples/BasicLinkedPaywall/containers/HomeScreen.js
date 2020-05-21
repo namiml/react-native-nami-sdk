@@ -77,7 +77,8 @@ const HomeScreen = (props) => {
 	    "appPlatformID-google": "a95cef52-35e0-4794-8755-577492c2d5d1",
 	    "appPlatformID-apple": "54635e21-87ed-4ed6-9119-9abb493bc9b0",
 	    "logLevel": "DEBUG",
-	    "developmentMode": true
+	    "developmentMode": true,
+	    "bypassStore" : true
     };
 
     NativeModules.NamiBridge.configure(configDict);
