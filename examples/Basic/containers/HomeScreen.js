@@ -27,8 +27,11 @@ const HomeScreen = (props) => {
   }
 
   const onSessionConnect = (event) => {
-	  console.log("ExampleApp: Products changed: ", event);
-    setProducts(event.products)
+    console.log("ExampleApp: Products changed: ", event);
+    if (event.purchaseState == "PURCHASED") {
+	console.log("Detected purchase, setting SKU IDs")
+    setProducts(event.skuIDs)
+	}
   }
 
   const onPaywallShouldRaise = (event) => {
@@ -81,13 +84,13 @@ const HomeScreen = (props) => {
     console.log("ExampleApp: HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
 
     eventEmitter.addListener('SignInActivate', onSignInActivated);
-    NativeModules.NamiPurchaseManagerBridge.bypassStore(true);
 
     var configDict = {
 	'appPlatformID-apple': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
 	'appPlatformID-google': '3d062066-9d3c-430e-935d-855e2c56dd8e',
 	"logLevel": "DEBUG",
-	"developmentMode": true
+	"developmentMode": true,
+	"bypassStore": true
     };
     
     NativeModules.NamiBridge.configure(configDict);
