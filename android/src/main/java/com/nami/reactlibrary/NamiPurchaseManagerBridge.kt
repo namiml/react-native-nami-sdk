@@ -15,54 +15,9 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
     }
 
     override fun initialize() {
-        // TODO: Register for purchase callbacks
-        NamiPurchaseManager.registerPurchasesChangedHandler { list, namiPurchaseState, s ->
-            emitPurchaseMade(list, namiPurchaseState, s)
-        }
     }
 
-    public fun emitPurchaseMade(purchases: List<NamiPurchase>, purchaseState: NamiPurchaseState, errorString: String? ) {
-//   NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
-//        NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-//        for (NamiPurchase *purchase in purchases) {
-//            [productIDs addObject:purchase.skuID];
-//        }
-//
-//        NSString *convertedState = [self purchaseStateToString:purchaseState];
-//
-//        [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs,
-//                                                           @"purchaseState": convertedState,
-//                                                           @"errorDescription": [error localizedDescription] }];
-        val map = Arguments.createMap()
-        errorString?.let {
-            map.putString("errorDescription", errorString)
-        }
-        val productIDs = Arguments.createArray()
-        for (purchase in purchases) {
-            val skuID = purchase.skuId
-            productIDs.pushString(skuID)
-        }
-        map.putArray("skuIDs", productIDs)
 
-        val convertedState: String
-        if (purchaseState == NamiPurchaseState.PURCHASED) {
-            convertedState = "PURCHASED"
-        } else if (purchaseState == NamiPurchaseState.FAILED) {
-            convertedState = "FAILED"
-        } else {
-            convertedState = "UNKNOWN"
-        }
-        map.putString("purchaseState", convertedState)
-
-
-        Log.i("NamiBridge", "Emitting purchase with state " + convertedState)
-        try {
-            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("PurchasesChanged", map)
-        } catch (e: Exception) {
-            Log.e("NamiBridge", "Caught Exception: " + e.message)
-        }
-    }
 
     @ReactMethod
     fun clearBypassStorePurchases() {
