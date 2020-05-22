@@ -26,14 +26,56 @@ RCT_EXTERN_METHOD(enterCoreContentWithLabel:(NSString)label)
     [NamiMLManager enterCoreContentWithLabel:label];
 }
 
+RCT_EXTERN_METHOD(enterCoreContentWithLabels:(NSArray) label)
+- (void)enterCoreContentWithLabels: (NSArray *)labels {
+    NSMutableArray <NSString *>*sendLabels = [NSMutableArray array];
+    for (NSObject *labelItem in labels) {
+        if ([labelItem isKindOfClass:[NSString class]]) {
+            [sendLabels addObject:(NSString *)labelItem];
+        } else if ([labelItem respondsToSelector:@selector(stringValue)]) {
+            [sendLabels addObject:(NSString *)[labelItem performSelector:@selector(stringValue)]];
+        }
+    }
+    [NamiMLManager enterCoreContentWithLabels: sendLabels];
+}
+
 RCT_EXTERN_METHOD(exitCoreContentWithLabel:(NSString)label)
 - (void)exitCoreContentWithLabel: (NSString *)label {
     [NamiMLManager exitCoreContentWithLabel:label];
 }
 
+RCT_EXTERN_METHOD(exitCoreContentWithLabels:(NSArray) label)
+- (void)exitCoreContentWithLabels: (NSArray *)labels {
+    NSMutableArray <NSString *>*sendLabels = [NSMutableArray array];
+    for (NSObject *labelItem in labels) {
+        if ([labelItem isKindOfClass:[NSString class]]) {
+            [sendLabels addObject:(NSString *)labelItem];
+        } else if ([labelItem respondsToSelector:@selector(stringValue)]) {
+            [sendLabels addObject:(NSString *)[labelItem performSelector:@selector(stringValue)]];
+        }
+    }
+    [NamiMLManager exitCoreContentWithLabels: sendLabels];
+}
+
 RCT_EXTERN_METHOD(coreActionWithLabel:(NSString)label)
 - (void)coreActionWithLabel: (NSString *)label {
     [NamiMLManager coreActionWithLabel:label];
+}
+
+RCT_EXTERN_METHOD(coreActionWithLabels:(NSArray) label)
+- (void)coreActionWithLabels: (NSArray *)labels {
+    NSMutableArray <NSString *>*sendLabels = [NSMutableArray array];
+    for (NSObject *labelItem in labels) {
+        if ([labelItem isKindOfClass:[NSString class]]) {
+            [sendLabels addObject:(NSString *)labelItem];
+        } else if ([labelItem respondsToSelector:@selector(stringValue)]) {
+            [sendLabels addObject:(NSString *)[labelItem performSelector:@selector(stringValue)]];
+        }
+    }
+    // TODO: Add core action with labels to Nami SDK
+    for (NSString *label in sendLabels) {
+        [NamiMLManager coreActionWithLabel:label];
+    }
 }
 
 @end

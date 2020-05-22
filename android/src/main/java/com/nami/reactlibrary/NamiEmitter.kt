@@ -6,6 +6,9 @@ import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.NamiPaywallManager
 import com.namiml.api.model.NamiPaywall
+import com.namiml.billing.NamiPurchase
+import com.namiml.billing.NamiPurchaseManager
+import com.namiml.billing.NamiPurchaseState
 import com.namiml.paywall.NamiSKU
 import java.lang.ref.WeakReference
 import java.util.*
@@ -59,10 +62,57 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             var sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(context, paywallData, sendProducts, developerPaywallId)
         }
+
+        NamiPurchaseManager.registerPurchasesChangedHandler { list, namiPurchaseState, s ->
+            emitPurchaseMade(list, namiPurchaseState, s)
+        }
 //
 //        [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
 //            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
 //        }];
+    }
+
+    public fun emitPurchaseMade(purchases: List<NamiPurchase>, purchaseState: NamiPurchaseState, errorString: String? ) {
+//   NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
+//        NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
+//        for (NamiPurchase *purchase in purchases) {
+//            [productIDs addObject:purchase.skuID];
+//        }
+//
+//        NSString *convertedState = [self purchaseStateToString:purchaseState];
+//
+//        [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs,
+//                                                           @"purchaseState": convertedState,
+//                                                           @"errorDescription": [error localizedDescription] }];
+        val map = Arguments.createMap()
+        errorString?.let {
+            map.putString("errorDescription", errorString)
+        }
+        val productIDs = Arguments.createArray()
+        for (purchase in purchases) {
+            val skuID = purchase.skuId
+            productIDs.pushString(skuID)
+        }
+        map.putArray("skuIDs", productIDs)
+
+        val convertedState: String
+        if (purchaseState == NamiPurchaseState.PURCHASED) {
+            convertedState = "PURCHASED"
+        } else if (purchaseState == NamiPurchaseState.FAILED) {
+            convertedState = "FAILED"
+        } else {
+            convertedState = "UNKNOWN"
+        }
+        map.putString("purchaseState", convertedState)
+
+
+        Log.i("NamiBridge", "Emitting purchase with state " + convertedState)
+        try {
+            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("PurchasesChanged", map)
+        } catch (e: Exception) {
+            Log.e("NamiBridge", "Caught Exception: " + e.message)
+        }
     }
 
     fun emitPaywallRaise(activity: android.content.Context, paywallData: NamiPaywall, productDicts: List<NamiSKU>, paywallDeveloperID: String?) {

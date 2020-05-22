@@ -23,6 +23,8 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         val isActive = NamiEntitlementManager.isEntitlementActive(entitlementRefID)
         var resultMap: WritableMap = WritableNativeMap()
         resultMap.putBoolean("active", isActive)
+
+        Log.i("NamiBridge", "Checking for $entitlementRefID entitlement active, result was $isActive")
         resultsCallback.invoke(resultMap)
     }
 
@@ -76,7 +78,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
     @ReactMethod
     fun clearAllEntitlements() {
-//        NamiEntitlementManager.clearAllEntitlements()
+        NamiEntitlementManager.clearAllEntitlements()
     }
 
     fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
@@ -109,7 +111,8 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                     }
                 }
 
-                val setter = NamiEntitlementSetter(referenceID, purchasedSKUid, expires, platform)
+                //referenceId: kotlin.String, purchasedSKUid: kotlin.String?, expires: java.util.Date?, platform: com.namiml.entitlement.NamiPlatformType
+                val setter = NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires )
                 return setter
             }
         }
@@ -138,21 +141,6 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val isActive: Boolean = entitlement.isActive() ?: false
         resultMap.putBoolean("isActive", isActive)
-
-        val platformStr: String = when (entitlement.platform) {
-            NamiPlatformType.OTHER -> "other"
-
-            NamiPlatformType.ANDROID -> "android"
-
-            NamiPlatformType.APPLE -> "apple"
-
-            NamiPlatformType.ROKU -> "roku"
-
-            NamiPlatformType.WEB -> "web"
-
-            NamiPlatformType.UNKNOWN -> "unknown"
-        }
-        resultMap.putString("platformStr", platformStr)
 
         val activePurchasesArray: WritableArray = WritableNativeArray()
         val purchases = entitlement.activePurchases

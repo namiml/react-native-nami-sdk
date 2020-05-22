@@ -9,14 +9,19 @@ import com.namiml.NamiPaywallManager
 
 class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
+    private var blockRaisePaywall: Boolean = false
 
     fun NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext?) {
-
+        NamiPaywallManager.registerApplicationAutoRaisePaywallBlocker {
+            Log.i("NamiBridge", "Nami flag for blocking paywall raise is " + blockRaisePaywall.toString());
+            blockRaisePaywall
+        }
     }
 
     override fun getName(): String {
         return "NamiPaywallManagerBridge"
     }
+
 
     @ReactMethod
     fun raisePaywall() {
@@ -48,6 +53,29 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
         canRaiseResult.pushBoolean(NamiPaywallManager.canRaisePaywall())
 
         successCallback.invoke(canRaiseResult)
+    }
+
+    @ReactMethod
+    fun blockRaisePaywall(blockRaise: Boolean) {
+        blockRaisePaywall = blockRaise
+    }
+
+
+    @ReactMethod
+    fun presentNamiPaywall(skuIDs: ReadableArray, metapaywallDefinition:ReadableMap) {
+        // TODO: Android SDK needs presentNamiPaywall function.
+    }
+
+    @ReactMethod
+    fun fetchCustomMetadataForDeveloperID(paywallDeveloperID: String, successCallback: Callback) {
+        val sendDict = WritableNativeMap()
+        //TODO: Android SDK needs fetchCustomMetadataForDeveloperID
+        successCallback(sendDict)
+    }
+
+    @ReactMethod
+    fun paywallImpression(developerPaywallID: String) {
+        // TODO: Android SDK paywall impression call.
     }
 
 }

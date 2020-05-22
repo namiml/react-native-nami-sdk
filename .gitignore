@@ -42,3 +42,4 @@ buck-out/
 \.buckd/
 *.keystore
 IDEWorkspaceChecks.plist
+Podfile.lock

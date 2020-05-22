@@ -28,11 +28,15 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
         NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformID:appID];
         
         NSString *logLevelString = configDict[@"logLevel"];
-        if ([logLevelString isEqualToString:@"DEBUG"]) {
-            // Will have to figure out how to get this from a react app later... may include that in the call.
-            config.logLevel = NamiLogLevelDebug;
-        } else if ([logLevelString isEqualToString:@"ERROR" ]) {
+        if ([logLevelString isEqualToString:@"ERROR" ]) {
             config.logLevel = NamiLogLevelError;
+        } else if ([logLevelString isEqualToString:@"INFO" ]) {
+            config.logLevel = NamiLogLevelInfo;
+        } else if ([logLevelString isEqualToString:@"WARNING" ]) {
+            config.logLevel = NamiLogLevelWarn;
+        } else {
+            // If they messed up the params, just set logging to full.
+            config.logLevel = NamiLogLevelDebug;
         }
         
         NSObject *bypassString = configDict[@"bypassStore"];
@@ -82,6 +86,8 @@ RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier  type:(N
     } else {
         useType = NamiExternalIdentifierTypeUuid;
     }
+    
+    NSLog(@"NamiBridge: Setting external identifier %@ of type %@", externalIdentifier, type);
 
     [Nami setExternalIdentifierWithExternalIdentifier:externalIdentifier type:useType];
 }
@@ -98,6 +104,7 @@ RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
 }
 
 RCT_EXPORT_METHOD(clearExternalIdentifier) {
+    NSLog(@"NamiBridge: Clearing external identifier.");
     [Nami clearExternalIdentifier];
 }
 
