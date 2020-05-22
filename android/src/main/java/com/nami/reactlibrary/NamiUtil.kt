@@ -100,7 +100,7 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier ?: "")
     val expires = purchase.expires
     expires?.let {
-        purchaseMap.putString("expires", javascriptDateFromKJavaDate(expires))
+        purchaseMap.putString("subscriptionExpirationDate", javascriptDateFromKJavaDate(expires))
     }
     purchaseMap.putBoolean("fromNami", purchase.fromNami)
 
