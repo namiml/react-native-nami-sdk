@@ -52,8 +52,6 @@ const HomeScreen = (props) => {
 		   (purchases) => {
 		       console.log("ExampleApp: Purchases found ", purchases);
 
-		       // Goal: "Subscribed to Wondery+ Annual Plan.  Your next payment of $34.99 will be billed on S\ep. 19, 2020."   
-
 		       if(purchases && purchases.length) {
 				   var options = {
 				       month: 'long',
@@ -62,8 +60,8 @@ const HomeScreen = (props) => {
 				   };
 
 			   let formatPurchases = purchases.map((purchase, index) => {
-				   return `Subscribed to ${purchase.metaProduct.localizedTitle}. Your next payment of ${purchase.metaProduct.localizedMultipliedPrice} will be billed on ${new Date(purchase.subscriptionExpirationDate).toLocaleDateString('en-US', options)}`
-			       }) 
+				   return `Subscribed to ${purchase.localizedTitle}. Your next payment of ${purchase.localizedMultipliedPrice} will be billed on ${new Date(purchase.subscriptionExpirationDate).toLocaleDateString('en-US', options)}`
+			       })
 			   console.log(formatPurchases)
 		       }
 		   }
@@ -92,7 +90,7 @@ const HomeScreen = (props) => {
 	"developmentMode": true,
 	"bypassStore": true
     };
-    
+
     NativeModules.NamiBridge.configure(configDict);
   }, []);
 
