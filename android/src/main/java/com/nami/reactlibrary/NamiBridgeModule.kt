@@ -53,7 +53,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
             // Any other parameters, just turn on full debugging so they can see everything.
             builder.logLevel(NamiLogLevel.DEBUG)
         }
-        Log.i("NamiBridge", "Nami Configuration log level passed in is is $logLevelString");
+        Log.i("NamiBridge", "Nami Configuration log level passed in is $logLevelString");
 
 
         val developmentMode = if (configDict.hasKey("developmentMode")) configDict.getBoolean("developmentMode") else false
