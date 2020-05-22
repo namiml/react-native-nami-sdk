@@ -34,9 +34,9 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
                 val resultArray: WritableArray = WritableNativeArray()
                 if (NamiPurchaseManager.isSKUIDPurchased(skuPlatformID)) {
                     resultArray.pushBoolean(true)
-                    Log.i("NamiBridge", "Puchase complegte, result is PURCHASED.")
+                    Log.i("NamiBridge", "Puchase complete, result is PURCHASED.")
                 } else {
-                    Log.i("NamiBridge", "Puchase complegte, product not purchased.")
+                    Log.i("NamiBridge", "Puchase complete, product not purchased.")
                     resultArray.pushBoolean(false)
                 }
                 resultsCallback.invoke(resultArray)
