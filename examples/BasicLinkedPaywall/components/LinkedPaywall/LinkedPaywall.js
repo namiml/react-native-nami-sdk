@@ -1,6 +1,7 @@
 import React from 'react';
-import { Modal, Text, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules, Alert } from 'react-native';
+import { Modal, Text, Button, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules, Alert } from 'react-native';
 import theme from '../../theme';
+
 
 const LinkedPaywall = (props) => {
   const { open, setOpen, data } = props;
@@ -11,6 +12,30 @@ const LinkedPaywall = (props) => {
   const restore = () => {
       NativeModules.NamiPurchaseManagerBridge.restorePurchases( (result) => {
     	   console.log("ExampleApp: Nami restorePurchases results was ", result);	      
+	   if (result.success) {
+	       if (NativeModules.NamiPurchaseManagerBridge.purchases.count > 0) {
+	       Alert.alert(
+			   'Restore Complete',
+			   'Found your subscription!',
+			   [{text: 'OK', onPress: () => setOpen(!open)}],
+			   {cancelable: false},
+			   );
+                } else {
+		   Alert.alert(
+			       'Restore Complete',
+			       'No active subscriptions found.',
+			       [{text: 'OK', onPress: () => setOpen(open)}],
+			       {cancelable: false},
+			       );
+	       }
+	   } else {
+	       Alert.alert(
+			   'Restore Failed',
+			   'Restore failed to complete.',
+			   [{text: 'OK', onPress: () => setOpen(open)}],
+	  {cancelable: false},
+			   );
+	   }
 	  }  )
   }
 
@@ -70,12 +95,10 @@ const LinkedPaywall = (props) => {
                 </TouchableOpacity>
               )
             })}
-           <TouchableOpacity
-	  style={styles.restoreButton}
-	  onPress={() => restore()}
-                  underlayColor='#f00'>
-	  <Text style={styles.subscriptionText}>Restore</Text>
-                </TouchableOpacity>
+           <Button
+	     style={styles.restoreButton}
+	     onPress={() => restore()}
+	     underlayColor='#f00' title="Restore"/>          
           </View>
         </View>}
       </ImageBackground>
@@ -144,7 +167,7 @@ const styles = StyleSheet.create({
 	    marginTop: 10,
 	    paddingTop: 10,
 	    paddingBottom: 10,
-	    backgroundColor: theme.red,
+	    color: theme.red,
 	    borderRadius: 10,
 	    borderWidth: 1,
 	    borderColor: theme.white
