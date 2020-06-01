@@ -8,6 +8,12 @@ const LinkedPaywall = (props) => {
   const { background_image_url_phone } = data.paywallMetadata;
   const { skus } = data;
 
+  const restore = () => {
+      NativeModules.NamiPurchaseManagerBridge.restorePurchases( (result) => {
+    	   console.log("ExampleApp: Nami restorePurchases results was ", result);	      
+	  }  )
+  }
+
   const purchase = (skuIdentifier) => {
       NativeModules.NamiPurchaseManagerBridge.buySKU(skuIdentifier, "",
       (purchased) => {
@@ -64,6 +70,12 @@ const LinkedPaywall = (props) => {
                 </TouchableOpacity>
               )
             })}
+           <TouchableOpacity
+	  style={styles.restoreButton}
+	  onPress={() => restore()}
+                  underlayColor='#f00'>
+	  <Text style={styles.subscriptionText}>Restore</Text>
+                </TouchableOpacity>
           </View>
         </View>}
       </ImageBackground>
@@ -125,6 +137,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.white
   },
+
+  restoreButton: {
+	    marginRight: 40,
+	    marginLeft: 40,
+	    marginTop: 10,
+	    paddingTop: 10,
+	    paddingBottom: 10,
+	    backgroundColor: theme.red,
+	    borderRadius: 10,
+	    borderWidth: 1,
+	    borderColor: theme.white
+  },
+
   subscriptionText: {
     color: theme.white,
     textAlign: 'center',
