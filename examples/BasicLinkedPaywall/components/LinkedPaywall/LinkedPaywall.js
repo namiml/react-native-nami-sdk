@@ -13,7 +13,10 @@ const LinkedPaywall = (props) => {
       NativeModules.NamiPurchaseManagerBridge.restorePurchases( (result) => {
     	   console.log("ExampleApp: Nami restorePurchases results was ", result);	      
 	   if (result.success) {
-	       if (NativeModules.NamiPurchaseManagerBridge.purchases.count > 0) {
+               NativeModules.NamiPurchaseManagerBridge.purchases( (result) => {
+	       console.log("ExampleApp: Nami purchases are ", result);	      
+               console.log("Purchase count is ", result.length)
+	       if (result.length > 0) {
 	       Alert.alert(
 			   'Restore Complete',
 			   'Found your subscription!',
@@ -28,6 +31,7 @@ const LinkedPaywall = (props) => {
 			       {cancelable: false},
 			       );
 	       }
+		   } );
 	   } else {
 	       Alert.alert(
 			   'Restore Failed',
