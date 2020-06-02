@@ -1,12 +1,47 @@
 import React from 'react';
-import { Modal, Text, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules, Alert } from 'react-native';
+import { Modal, Text, Button, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules, Alert } from 'react-native';
 import theme from '../../theme';
+
 
 const LinkedPaywall = (props) => {
   const { open, setOpen, data } = props;
   const { title, body } = data.paywallMetadata.marketing_content;
   const { background_image_url_phone } = data.paywallMetadata;
   const { skus } = data;
+
+  const restore = () => {
+      NativeModules.NamiPurchaseManagerBridge.restorePurchases( (result) => {
+    	   console.log("ExampleApp: Nami restorePurchases results was ", result);	      
+	   if (result.success) {
+               NativeModules.NamiPurchaseManagerBridge.purchases( (result) => {
+	       console.log("ExampleApp: Nami purchases are ", result);	      
+               console.log("Purchase count is ", result.length)
+	       if (result.length > 0) {
+	       Alert.alert(
+			   'Restore Complete',
+			   'Found your subscription!',
+			   [{text: 'OK', onPress: () => setOpen(!open)}],
+			   {cancelable: false},
+			   );
+                } else {
+		   Alert.alert(
+			       'Restore Complete',
+			       'No active subscriptions found.',
+			       [{text: 'OK', onPress: () => setOpen(open)}],
+			       {cancelable: false},
+			       );
+	       }
+		   } );
+	   } else {
+	       Alert.alert(
+			   'Restore Failed',
+			   'Restore failed to complete.',
+			   [{text: 'OK', onPress: () => setOpen(open)}],
+	  {cancelable: false},
+			   );
+	   }
+	  }  )
+  }
 
   const purchase = (skuIdentifier) => {
       NativeModules.NamiPurchaseManagerBridge.buySKU(skuIdentifier, "",
@@ -64,6 +99,10 @@ const LinkedPaywall = (props) => {
                 </TouchableOpacity>
               )
             })}
+           <Button
+	     style={styles.restoreButton}
+	     onPress={() => restore()}
+	     underlayColor='#f00' title="Restore"/>          
           </View>
         </View>}
       </ImageBackground>
@@ -125,6 +164,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.white
   },
+
+  restoreButton: {
+	    marginRight: 40,
+	    marginLeft: 40,
+	    marginTop: 10,
+	    paddingTop: 10,
+	    paddingBottom: 10,
+	    color: theme.red,
+	    borderRadius: 10,
+	    borderWidth: 1,
+	    borderColor: theme.white
+  },
+
   subscriptionText: {
     color: theme.white,
     textAlign: 'center',

@@ -48,6 +48,23 @@ RCT_EXPORT_METHOD(isSKUPurchased:(nonnull NSString*)skuID completion:(RCTRespons
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
+RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
+{
+    NSLog(@"NamiBridge: Info: Calling RestorePurchases");
+    [NamiPurchaseManager restorePurchasesWithHandler:^(BOOL success, NSError * _Nullable error) {
+        NSString *errorDesc = [error localizedDescription];
+        NSDictionary *retDict;
+        if ([errorDesc length] > 0) {
+           retDict = @{@"success": [NSNumber numberWithBool:success], @"errorDescription": [error localizedDescription]};
+        } else {
+            retDict = @{@"success": [NSNumber numberWithBool:success]};
+        }
+        
+        NSLog(@"NamiBridge: Info: RestorePurchases Returned %@", retDict);
+        completion(@[retDict]);
+    }];
+}
+
 RCT_EXPORT_METHOD(anySKUPurchased:(nonnull NSArray*)skuIDs completion:(RCTResponseSenderBlock)completion)
 {
     BOOL active = false;

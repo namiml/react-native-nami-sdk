@@ -18,10 +18,8 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
     }
 
 
-
     @ReactMethod
     fun clearBypassStorePurchases() {
-        Log.e("NamiBridge", "Bypass store not yet implemented for Android.")
         NamiPurchaseManager.clearBypassStorePurchases()
     }
 
@@ -82,6 +80,17 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
 
         val resultArray: WritableArray = WritableNativeArray()
         resultArray.pushBoolean(isPurchased)
+        resultsCallback.invoke(resultArray)
+    }
+
+    @ReactMethod
+    fun restorePurchases(resultsCallback: Callback) {
+        Log.e("NamiBridge", "Restore Purchases called on Android platform, has no effect on Android.")
+
+        val resultMap: WritableNativeMap = WritableNativeMap()
+        resultMap.putBoolean("success", true)
+        val resultArray: WritableArray = WritableNativeArray()
+        resultArray.pushMap(resultMap)
         resultsCallback.invoke(resultArray)
     }
 
