@@ -10,37 +10,37 @@ const LinkedPaywall = (props) => {
   const { skus } = data;
 
   const restore = () => {
-      NativeModules.NamiPurchaseManagerBridge.restorePurchases( (result) => {
-    	   console.log("ExampleApp: Nami restorePurchases results was ", result);	      
-	   if (result.success) {
-               NativeModules.NamiPurchaseManagerBridge.purchases( (result) => {
-	       console.log("ExampleApp: Nami purchases are ", result);	      
-               console.log("Purchase count is ", result.length)
-	       if (result.length > 0) {
-	       Alert.alert(
-			   'Restore Complete',
-			   'Found your subscription!',
-			   [{text: 'OK', onPress: () => setOpen(!open)}],
-			   {cancelable: false},
-			   );
-                } else {
-		   Alert.alert(
-			       'Restore Complete',
-			       'No active subscriptions found.',
-			       [{text: 'OK', onPress: () => setOpen(open)}],
-			       {cancelable: false},
-			       );
-	       }
-		   } );
-	   } else {
-	       Alert.alert(
-			   'Restore Failed',
-			   'Restore failed to complete.',
-			   [{text: 'OK', onPress: () => setOpen(open)}],
-	  {cancelable: false},
-			   );
-	   }
-	  }  )
+    NativeModules.NamiPurchaseManagerBridge.restorePurchases( (result) => {
+      console.log("ExampleApp: Nami restorePurchases results was ", result);
+      if (result.success) {
+        NativeModules.NamiPurchaseManagerBridge.purchases( (result) => {
+          console.log("ExampleApp: Nami purchases are ", result);
+          console.log("Purchase count is ", result.length)
+          if (result.length > 0) {
+            Alert.alert(
+              'Restore Complete',
+              'Found your subscription!',
+              [{text: 'OK', onPress: () => setOpen(!open)}],
+              {cancelable: false},
+            );
+          } else {
+            Alert.alert(
+              'Restore Complete',
+              'No active subscriptions found.',
+              [{text: 'OK', onPress: () => setOpen(open)}],
+              {cancelable: false},
+            );
+          }
+        } );
+      } else {
+        Alert.alert(
+          'Restore Failed',
+          'Restore failed to complete.',
+          [{text: 'OK', onPress: () => setOpen(open)}],
+          {cancelable: false},
+        );
+      }
+    }  )
   }
 
   const purchase = (skuIdentifier) => {
@@ -48,14 +48,14 @@ const LinkedPaywall = (props) => {
       (purchased) => {
         if (purchased) {
           Alert.alert(
-            'Purchase Complete', 
+            'Purchase Complete',
             'Your Subscription was successfull!',
             [{text: 'OK', onPress: () => setOpen(!open)}],
             {cancelable: false},
           );
         } else {
           Alert.alert(
-            'Purchase Failed', 
+            'Purchase Failed',
             'Your Subscription fail!',
             [{text: 'OK', onPress: () => setOpen(!open)}],
             {cancelable: false},
@@ -64,7 +64,7 @@ const LinkedPaywall = (props) => {
       }
     );
   }
-  
+
   return (
     <Modal
       animationType="slide"
@@ -102,7 +102,7 @@ const LinkedPaywall = (props) => {
            <Button
 	     style={styles.restoreButton}
 	     onPress={() => restore()}
-	     underlayColor='#f00' title="Restore"/>          
+	     underlayColor='#f00' title="Restore"/>
           </View>
         </View>}
       </ImageBackground>
