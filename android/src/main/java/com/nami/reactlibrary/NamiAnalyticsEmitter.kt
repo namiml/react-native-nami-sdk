@@ -4,8 +4,6 @@ import android.util.Log
 import android.widget.Toast
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.NamiPaywallManager
-import com.namiml.api.model.NamiPaywall
 import com.namiml.paywall.NamiSKU
 import java.lang.ref.WeakReference
 import java.util.*
