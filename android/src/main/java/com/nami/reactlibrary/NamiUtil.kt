@@ -55,12 +55,12 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     val marketingContentMap = Arguments.createMap()
     marketingContentMap.putString("title", paywallData.title ?: "")
     marketingContentMap.putString("body", paywallData.body ?: "")
-    val extraDataMap = hashMapOf<String, Any>() //paywallData.extraData
+    val extraDataMap = paywallData.extraData
     val convertedMap =  Arguments.makeNativeMap(extraDataMap)
     marketingContentMap.putMap("extra_data", convertedMap)
     paywallMap.putMap("marketing_content", marketingContentMap)
 
-    paywallMap.putString("id", paywallData.id ?: "")
+    paywallMap.putString("id", paywallData.id)
     paywallMap.putString("background_image_url_phone", paywallData.backgroundImageUrlPhone ?: "")
     paywallMap.putString("background_image_url_tablet", paywallData.backgroundImageUrlTablet ?: "")
     paywallMap.putString("privacy_policy", paywallData.privacyPolicy ?: "")
