@@ -1,6 +1,8 @@
 package com.nami.reactlibrary
 
+import android.util.Log
 import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.namiml.paywall.NamiPaywall
@@ -55,11 +57,16 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     val marketingContentMap = Arguments.createMap()
     marketingContentMap.putString("title", paywallData.title ?: "")
     marketingContentMap.putString("body", paywallData.body ?: "")
+
     val extraDataMap = paywallData.extraData
-    val convertedMap =  Arguments.makeNativeMap(extraDataMap)
-    marketingContentMap.putMap("extra_data", convertedMap)
+    if (extraDataMap!= null) {
+        val convertedMap = convertNativeMapBecauseReact(extraDataMap)
+        marketingContentMap.putMap("extra_data", convertedMap)
+    }
+
     paywallMap.putMap("marketing_content", marketingContentMap)
 
+    Log.i("NamiBridge", "extraData items are " + extraDataMap)
     paywallMap.putString("id", paywallData.id)
     paywallMap.putString("background_image_url_phone", paywallData.backgroundImageUrlPhone ?: "")
     paywallMap.putString("background_image_url_tablet", paywallData.backgroundImageUrlTablet ?: "")
@@ -70,6 +77,54 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     paywallMap.putString("allow_closing", allowClosingStr)
 
     return paywallMap
+}
+
+fun convertNativeArrayBecauseReact(nativeList: List<*>): WritableArray {
+    val convertedArray = Arguments.createArray()
+    for (value in nativeList) {
+        if (value is String) {
+            convertedArray.pushString(value)
+        } else if (value is Int) {
+            convertedArray.pushInt(value)
+        } else if (value is Boolean) {
+            convertedArray.pushBoolean(value)
+        } else if (value is Double) {
+            convertedArray.pushDouble(value)
+        } else if (value is List<*>) {
+            val convertedArray = convertNativeArrayBecauseReact(value)
+            convertedArray.pushArray(convertedArray)
+        } else if (value is Map<*, *>) {
+            val convertedMap = convertNativeMapBecauseReact(value)
+            convertedArray.pushMap(convertedMap)
+        }
+    }
+    return convertedArray
+}
+
+
+// React hasa  method makeNativeMap that doesn't work, as per react standards.  Buuld our own primitive mapper to make up for react shortcomings.
+fun convertNativeMapBecauseReact(nativeMap: Map<*, *>): WritableMap {
+    val convertedMap = Arguments.createMap()
+    for ((key, value) in nativeMap) {
+        if (key is String) {
+            if (value is String) {
+                convertedMap.putString(key, value)
+            } else if (value is Int) {
+                convertedMap.putInt(key, value)
+            } else if (value is Boolean) {
+                convertedMap.putBoolean(key, value)
+            } else if (value is Double) {
+                convertedMap.putDouble(key, value)
+            } else if (value is List<*>) {
+                val convertedArray = convertNativeArrayBecauseReact(value)
+                convertedMap.putArray(key, convertedArray)
+            } else if (value is Map<*, *>) {
+                val convertedMap = convertNativeMapBecauseReact(value)
+                convertedMap.putMap(key, convertedMap)
+            }
+        }
+    }
+    return convertedMap
 }
 
 
@@ -105,7 +160,7 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     purchaseMap.putBoolean("fromNami", purchase.fromNami)
 
     // TODO: map kotlin dictionary into arbitrary map?
-    purchaseMap.putMap("platformMetadata",  WritableNativeMap())
+    purchaseMap.putMap("platformMetadata", WritableNativeMap())
 
     var purchasedSkuMap: WritableMap = WritableNativeMap()
     val purchasedSKU = purchase.purchasedSKU
@@ -124,3 +179,4 @@ fun javascriptDateFromKJavaDate(date: Date): String {
     df.setTimeZone(tz)
     return df.format(date)
 }
+
