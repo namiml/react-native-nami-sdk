@@ -68,9 +68,6 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
             builder.bypassStoreMode = true
         }
 
-        val builtConfig: NamiConfiguration = builder.build()
-        Log.i("NamiBridge", "Nami Configuration object is $builtConfig");
-
         val namiCommandsReact: ReadableArray? = if (configDict.hasKey("namiCommands")) configDict.getArray("namiCommands") else Arguments.createArray()
         val arraySize = namiCommandsReact?.size()
         if (namiCommandsReact != null && arraySize != null && arraySize > 0) {
@@ -84,6 +81,9 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
             Log.i("NamiBridge", "Nami Configuration command settings are $settingsList");
             builder.settingsList = settingsList
         }
+
+        val builtConfig: NamiConfiguration = builder.build()
+        Log.i("NamiBridge", "Nami Configuration object is $builtConfig");
 
         Nami.configure(builtConfig)
     }
