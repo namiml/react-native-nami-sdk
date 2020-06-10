@@ -80,7 +80,6 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
                 val command: String? = namiCommandsReact.getString(i)
                 if (command != null) {
                     if (command == "useStagingAPI" || command == "useStagingApi") {
-                        settingsList.add("setNonProductionUrl")
                         settingsList.add("useStagingApi")
                     } else {
                         settingsList.add(command)
