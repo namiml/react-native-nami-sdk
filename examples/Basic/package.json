@@ -18,7 +18,7 @@
     "react": "16.9.0",
     "react-native": "0.61.4",
     "react-native-gesture-handler": "^1.5.3",
-    "react-native-nami-sdk": "^0.1.41",
+    "react-native-nami-sdk": "^0.1.42",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.6.2",
     "react-native-screens": "^2.0.0-alpha.32",
