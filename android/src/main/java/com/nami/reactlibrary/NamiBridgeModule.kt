@@ -71,6 +71,25 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
         val builtConfig: NamiConfiguration = builder.build()
         Log.i("NamiBridge", "Nami Configuration object is $builtConfig");
 
+        val namiCommandsReact: ReadableArray? = if (configDict.hasKey("namiCommands")) configDict.getArray("bypassStore") else Arguments.createArray()
+        val arraySize = namiCommandsReact?.size()
+        if (namiCommandsReact != null && arraySize != null && arraySize > 0) {
+
+            val settingsList: MutableList<String> = mutableListOf<String>()
+            for (i in 0 until arraySize) {
+                val command: String? = namiCommandsReact.getString(i)
+                if (command != null) {
+                    if (command == "useStagingAPI" || command == "useStagingApi") {
+                        settingsList.add("setNonProductionUrl")
+                        settingsList.add("useStagingApi")
+                    } else {
+                        settingsList.add(command)
+                    }
+                }
+            }
+            builder.settingsList = settingsList
+        }
+
         Nami.configure(builtConfig)
     }
 
