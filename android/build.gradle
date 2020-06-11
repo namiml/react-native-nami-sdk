@@ -69,7 +69,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'com.nami:nami-sdk-android:0.0.8-beta.2'
+    implementation 'com.nami:nami-sdk-android:0.0.8-beta.6'
 
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }

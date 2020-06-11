@@ -69,6 +69,20 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
             }
         }
         
+        NSObject *namiCommandStrings = configDict[@"namiCommands"];
+        if ( namiCommandStrings != NULL ) {
+            NSLog(@"NamiCommand from dictionary is %@", configDict[@"namiCommands"]);
+            if ([namiCommandStrings isKindOfClass:[NSArray class]] ) {
+                NSMutableArray<NSString *> *finalCommands = [NSMutableArray arrayWithCapacity:4];
+                for (NSObject *commandObj in ((NSArray *)namiCommandStrings)){
+                    if ([commandObj isKindOfClass:[NSString class]]) {
+                        [finalCommands addObject:(NSString *)commandObj];
+                    }
+                }
+                config.namiCommands = finalCommands;
+            }
+        }
+        
         [Nami configureWithNamiConfig:config];
     }
 }

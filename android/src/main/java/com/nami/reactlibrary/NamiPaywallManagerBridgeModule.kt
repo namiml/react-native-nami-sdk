@@ -4,7 +4,7 @@ package com.nami.reactlibrary
 import android.app.Activity
 import android.util.Log
 import com.facebook.react.bridge.*
-import com.namiml.NamiPaywallManager
+import com.namiml.paywall.NamiPaywallManager
 
 
 class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
