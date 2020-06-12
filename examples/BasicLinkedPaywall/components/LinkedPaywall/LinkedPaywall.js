@@ -46,6 +46,7 @@ const LinkedPaywall = (props) => {
   const purchase = (skuIdentifier) => {
       NativeModules.NamiPurchaseManagerBridge.buySKU(skuIdentifier, "",
       (purchased) => {
+      console.log("ExampleApp: Nami purchase results was", purchased);	      
         if (purchased) {
           Alert.alert(
             'Purchase Complete',
