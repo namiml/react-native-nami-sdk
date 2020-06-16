@@ -172,10 +172,14 @@ bool hasNamiEmitterListeners;
     for (NamiSKU *sku in products) {
       [skuDicts addObject:[NamiBridgeUtil skuToSKUDict:sku]];
     }
-
-      [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
+        
+        NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
+        // This part is really meant to be internally facing, scrub from dictionary
+        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        
+        [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
-                                                            @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
+                                                            @"paywallMetadata": paywallMeta }];
   }
 }
 
