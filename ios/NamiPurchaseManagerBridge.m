@@ -42,7 +42,7 @@ RCT_EXPORT_METHOD(purchases:(RCTResponseSenderBlock)completion)
     completion(@[convertedPurchaseDicts]);
 }
 
-RCT_EXPORT_METHOD(isSKUPurchased:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(isSKUIDPurchased:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
 {
     BOOL active = [NamiPurchaseManager isSKUIDPurchased:skuID];
     completion(@[[NSNumber numberWithBool:active]]);
@@ -65,7 +65,7 @@ RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
     }];
 }
 
-RCT_EXPORT_METHOD(anySKUPurchased:(nonnull NSArray*)skuIDs completion:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(anySKUIDPurchased:(nonnull NSArray*)skuIDs completion:(RCTResponseSenderBlock)completion)
 {
     BOOL active = false;
     for (NamiPurchase *purchase in [NamiPurchaseManager allPurchases]) {
