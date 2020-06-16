@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
+import java.time.*
 
 //+ (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiMetaProduct *)product {
 //    NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
@@ -59,7 +60,7 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     marketingContentMap.putString("body", paywallData.body ?: "")
 
     val extraDataMap = paywallData.extraData
-    if (extraDataMap!= null) {
+    if (extraDataMap != null) {
         val convertedMap = convertNativeMapBecauseReact(extraDataMap)
         marketingContentMap.putMap("extra_data", convertedMap)
     }
@@ -164,10 +165,19 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     purchaseMap.putString("localizedDescription", purchase.localizedDescription ?: "")
     purchaseMap.putString("source", purchase.source ?: "")
     purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier ?: "")
-    val expires = purchase.expires
-    expires?.let {
-        purchaseMap.putString("subscriptionExpirationDate", javascriptDateFromKJavaDate(expires))
+    purchaseMap.putString("skuIdentifier", purchase.skuId ?: "")
+//    val initiatedTimestamp = purchase.purchaseInitiatedTimestamp
+//    val dt = Instant.ofEpochSecond(initiatedTimestamp)
+//            .atZone(ZoneId.systemDefault())
+//            .toLocalDateTime()
+//    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp ?: "")
+    purchaseMap.putString("purchaseSource", purchase.purchaseSource ?: "")
+    val expiresDate = purchase.expires
+    if (expiresDate != null) {
+        val expiresString = javascriptDateFromKJavaDate(expiresDate)
+        purchaseMap.putString("subscriptionExpirationDate", expiresString)
     }
+
     purchaseMap.putBoolean("fromNami", purchase.fromNami)
 
     // TODO: map kotlin dictionary into arbitrary map?
