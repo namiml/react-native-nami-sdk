@@ -177,12 +177,12 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         if (entitlement.purchasedSKUs.count() > 0) {
             val lastPurchaseSKU = entitlement.purchasedSKUs.last()
-            lastPurchaseSKU.let { resultMap.putMap("purchasedSKU", skuToSkuDict(lastPurchaseSKU)) }
+            lastPurchaseSKU.let { resultMap.putMap("latestPurchasedSKU", skuToSkuDict(lastPurchaseSKU)) }
         }
 
         if (entitlement.activePurchases.count() > 0) {
             val lastPurchase = entitlement.activePurchases.last()
-            lastPurchase.let { resultMap.putMap("activePurchase", purchaseToPurchaseDict(lastPurchase)) }
+            lastPurchase.let { resultMap.putMap("latestPurchase", purchaseToPurchaseDict(lastPurchase)) }
         }
         return resultMap
     }
