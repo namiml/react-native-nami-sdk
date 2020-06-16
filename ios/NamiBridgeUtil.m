@@ -71,8 +71,9 @@
     NSMutableDictionary<NSString *,id> *entitlementDict = [NSMutableDictionary new];
     NSLog(@"Converting enttilement %@", entitlement);
     entitlementDict[@"referenceID"] = [entitlement referenceID];
-    entitlementDict[@"namiID"] = [entitlement namiID];
-    entitlementDict[@"desc"] = [entitlement desc];
+    entitlementDict[@"namiID"] = [entitlement namiID] ? [entitlement namiID] : @"";
+    entitlementDict[@"desc"] = [entitlement desc] ? [entitlement desc] : @"";
+    entitlementDict[@"name"] = [entitlement name] ? [entitlement name] : @"";
     entitlementDict[@"isActive"] = @([[entitlement activePurchases] count] > 0);
     
     if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceID] length] == 0) {
