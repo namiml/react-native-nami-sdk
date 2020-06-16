@@ -41,9 +41,24 @@
             if (subscriptionPeriod != NULL) {
                 NSUInteger numberOfUnits = subscriptionPeriod.numberOfUnits;
                 SKProductPeriodUnit periodUnit = subscriptionPeriod.unit;
+                NSString *convertedUnit = @"";
+                switch (periodUnit) {
+                    case SKProductPeriodUnitDay:
+                        convertedUnit = @"day";
+                        break;
+                    case SKProductPeriodUnitWeek:
+                        convertedUnit = @"week";
+                        break;
+                    case SKProductPeriodUnitMonth:
+                        convertedUnit = @"month";
+                        break;
+                    case SKProductPeriodUnitYear:
+                        convertedUnit = @"year";
+                        break;
+                }
 
                 productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lu", (unsigned long)numberOfUnits];
-                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%u", (unsigned int)periodUnit];
+                productDict[@"periodUnit"] = convertedUnit;
             }
         }
 

@@ -78,7 +78,6 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     paywallMap.putString("cta_type", paywallData.type ?: "")
 //    paywallMap.putString("developer_paywall_id", paywallData.developerPaywallId ?: "")
 
-
     val allowClosing = paywallData.allowClosing
     paywallMap.putBoolean("allow_closing", allowClosing)
 
@@ -153,7 +152,18 @@ fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
     productDict.putString("priceCountry", namiSKU.priceCountry)
     productDict.putString("priceCurrency", namiSKU.priceCurrency)
     productDict.putString("numberOfUnits", namiSKU.numberOfUnits.toString())
-    productDict.putString("periodUnit", namiSKU.periodUnit.toString())
+    val periodUnit = namiSKU.periodUnit
+    var convertedPeriod: String = ""
+    if (periodUnit <= 1) {
+        convertedPeriod = "day"
+    } else if (periodUnit <= 7) {
+        convertedPeriod = "week"
+    } else if (periodUnit <= 31) {
+        convertedPeriod = "month"
+    } else if (periodUnit <= 365) {
+        convertedPeriod = "year"
+    }
+    productDict.putString("periodUnit", convertedPeriod)
 
     return productDict
 }
