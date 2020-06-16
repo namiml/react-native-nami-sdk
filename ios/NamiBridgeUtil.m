@@ -72,7 +72,7 @@
     NSLog(@"Converting enttilement %@", entitlement);
     entitlementDict[@"referenceID"] = [entitlement referenceID];
     entitlementDict[@"namiID"] = [entitlement namiID];
-    entitlementDict[@"description"] = [entitlement description];
+    entitlementDict[@"desc"] = [entitlement desc];
     entitlementDict[@"isActive"] = @([[entitlement activePurchases] count] > 0);
     
     if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceID] length] == 0) {

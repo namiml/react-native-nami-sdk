@@ -137,7 +137,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         resultMap.putString("namiID", namiID)
 
         val description: String = entitlement.desc ?: ""
-        resultMap.putString("description", description)
+        resultMap.putString("desc", description)
 
         val isActive: Boolean = entitlement.isActive() ?: false
         resultMap.putBoolean("isActive", isActive)
