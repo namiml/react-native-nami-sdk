@@ -178,7 +178,6 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
         purchaseMap.putString("subscriptionExpirationDate", expiresString)
     }
 
-    purchaseMap.putBoolean("fromNami", purchase.fromNami)
 
     // TODO: map kotlin dictionary into arbitrary map?
     purchaseMap.putMap("platformMetadata", WritableNativeMap())
