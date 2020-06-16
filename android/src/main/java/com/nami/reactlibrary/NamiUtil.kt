@@ -73,8 +73,19 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     paywallMap.putString("privacy_policy", paywallData.privacyPolicy ?: "")
     paywallMap.putString("purchase_terms", paywallData.purchaseTerms ?: "")
     paywallMap.putString("tos_link", paywallData.tosLink ?: "")
-    val allowClosingStr = if (paywallData.allowClosing) "true" else "false"
-    paywallMap.putString("allow_closing", allowClosingStr)
+    paywallMap.putString("name", paywallData.name ?: "")
+    paywallMap.putString("cta_type", paywallData.type ?: "")
+//    paywallMap.putString("developer_paywall_id", paywallData.developerPaywallId ?: "")
+
+
+    val allowClosing = paywallData.allowClosing
+    paywallMap.putBoolean("allow_closing", allowClosing)
+
+    val restoreControl = paywallData.restoreControl
+    paywallMap.putBoolean("restore_control", restoreControl)
+
+    val signInControl = paywallData.signInControl
+    paywallMap.putBoolean("sign_in_control", signInControl)
 
     return paywallMap
 }
