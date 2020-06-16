@@ -160,8 +160,12 @@ bool hasNamiEmitterListeners;
                       paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata {
   if (hasNamiEmitterListeners) {
       // Pass along paywall ID and paywall metadata for use in sign-in provider.
+      NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
+      // This part is really meant to be internally facing, scrub from dictionary
+      [paywallMeta removeObjectForKey:@"formatted_skus"];
+      [paywallMeta removeObjectForKey:@"skus"];
       [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
-                                                        @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
+                                                        @"paywallMetadata": paywallMeta }];
   }
 }
 
@@ -178,6 +182,7 @@ bool hasNamiEmitterListeners;
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
         // This part is really meant to be internally facing, scrub from dictionary
         [paywallMeta removeObjectForKey:@"formatted_skus"];
+        [paywallMeta removeObjectForKey:@"skus"];
         
         [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
