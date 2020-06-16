@@ -124,7 +124,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     fun entitlementDictFromEntitlemment(entitlement: NamiEntitlement): WritableMap? {
         var resultMap: WritableMap = WritableNativeMap()
         val referenceID: String = entitlement.referenceId ?: ""
-        resultMap.putString("referenceId", referenceID)
+        resultMap.putString("referenceID", referenceID)
 
         Log.i("NamiBridge", "Processing entitlement into Javascript Map with referenceID $referenceID")
 
