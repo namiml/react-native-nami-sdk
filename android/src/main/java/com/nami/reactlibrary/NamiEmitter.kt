@@ -88,12 +88,13 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         errorString?.let {
             map.putString("errorDescription", errorString)
         }
-        val productIDs = Arguments.createArray()
+
+        var resultArray: WritableArray = WritableNativeArray()
         for (purchase in purchases) {
-            val skuID = purchase.skuId
-            productIDs.pushString(skuID)
+            val purchaseDict = purchaseToPurchaseDict(purchase)
+            resultArray.pushMap(purchaseDict)
         }
-        map.putArray("skuIDs", productIDs)
+        map.putArray("purchases", resultArray)
 
         val convertedState: String
         if (purchaseState == NamiPurchaseState.PURCHASED) {

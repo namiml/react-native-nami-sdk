@@ -32,9 +32,9 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
         hasNamiEmitterListeners = NO;
         
         // Tell Nami to listen for purchases and we'll forward them on to listeners
-        [NamiPurchaseManager registerWithPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
+        [NamiPurchaseManager registerWithPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull purchases, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
             if ( purchaseState == NamiPurchaseStatePurchased ) {
-                [self sendEventPurchasedWithState:purchaseState error:error];
+                [self sendEventPurchaseMadeWithPurchases:purchases withState:purchaseState error:error];
             }
         }];
         
@@ -128,22 +128,24 @@ bool hasNamiEmitterListeners;
     }
 }
 
-- (void)sendEventPurchasedWithState:(NamiPurchaseState)purchaseState error:(NSError *)error {
+- (void)sendEventPurchaseMadeWithPurchases:(NSArray<NamiPurchase *>*)purchases withState:(NamiPurchaseState)purchaseState error:(NSError *)error {
     if (hasNamiEmitterListeners) {
-        NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
-        NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-        for (NamiPurchase *purchase in purchases) {
-            if (purchase.skuID != nil) {
-                [productIDs addObject:purchase.skuID];
-            }
-        }
+        
         
         NSString *convertedState = [self purchaseStateToString:purchaseState];
+        
+        NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
+        for ( NamiPurchase *purchaseRecord in purchases ) {
+            if ( purchaseRecord.skuID != nil ) {
+                NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
+                [convertedPurchaseDicts addObject:purchaseDict];
+            }
+        }
         
         NSString *localizedErrorDescription = [error localizedDescription];
         
         NSMutableDictionary *sendDict = [NSMutableDictionary dictionary];
-        sendDict[@"skuIDs"] =  productIDs;
+        sendDict[@"purchases"] =  convertedPurchaseDicts;
         sendDict[@"purchaseState"] = convertedState;
         if (localizedErrorDescription != nil) {
            sendDict[@"errorDescription"] = localizedErrorDescription;
