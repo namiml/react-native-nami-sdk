@@ -163,7 +163,7 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     val purchaseMap = WritableNativeMap()
 
     purchaseMap.putString("localizedDescription", purchase.localizedDescription ?: "")
-    purchaseMap.putString("source", purchase.source ?: "")
+    purchaseMap.putString("purchaseSource", purchase.source ?: "")
     purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier ?: "")
     purchaseMap.putString("skuIdentifier", purchase.skuId ?: "")
 //    val initiatedTimestamp = purchase.purchaseInitiatedTimestamp

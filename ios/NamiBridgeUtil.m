@@ -62,7 +62,23 @@
          purchaseDict[@"subscriptionExpirationDate"] = [self javascriptDateFromNSDate:subscriptionExpirationDate];
      }
      
-     purchaseDict[@"purchaseSource"] =  [[NSString alloc] initWithFormat:@"%d", (int)purchase.purchaseSource];
+     NSString *convertedSourceString = @"unknown";
+     switch (purchase.purchaseSource) {
+          case 0:
+             convertedSourceString = @"external";
+             break;
+         case 1:
+             convertedSourceString = @"nami_rules";
+             break;
+         case 2:
+             convertedSourceString = @"user";
+             break;
+         default:
+             break;
+     }
+     purchaseDict[@"purchaseSource"] =  convertedSourceString;
+     
+//     NamiSKU *purchaseSku = [purchase ]
      
      return purchaseDict;
  }
