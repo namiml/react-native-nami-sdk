@@ -21,7 +21,7 @@ import analytics from '@react-native-firebase/analytics';
 const HomeScreen = (props) => {
 
   const {navigate} = props.navigation;
-  const [products, setProducts] = useState([])
+  const [purchases, setPurchases] = useState([])
   const { NamiEmitter } = NativeModules;
   const { NamiAnalyticsEmitter } = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
@@ -32,8 +32,8 @@ const HomeScreen = (props) => {
   }
 
   const onSessionConnect = (event) => {
-    console.log("ExampleApp: Products changed: ", event);
-    setProducts(event.products)
+    console.log("ExampleApp: Purchases changed: ", event);
+    setPurchases(event.purchases)
   }
 
   const addAnalyticEvent = async (analyticsItems, actionType) => {
@@ -161,11 +161,11 @@ const HomeScreen = (props) => {
               </Text>
             </View>
             <View style={styles.sectionContainer}>
-              { products.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
+              { purchases.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionMiddle}>
-	             Subscription is: { products.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
+	             Subscription is: { purchases.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
 			        </Text>
             </View>
           </View>
