@@ -163,7 +163,17 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     val purchaseMap = WritableNativeMap()
 
     purchaseMap.putString("localizedDescription", purchase.localizedDescription ?: "")
-    purchaseMap.putString("purchaseSource", purchase.source ?: "")
+
+    val purchaseSource = purchase.source ?: ""
+//            nami_triggered or user_initiated
+    var adjustedSource = "unknown"
+    if (purchaseSource == "nami_triggered") {
+        adjustedSource = "nami_rules"
+    } else if (purchaseSource == "user_initiated") {
+        adjustedSource = "user"
+    }
+    purchaseMap.putString("purchaseSource", adjustedSource)
+
     purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier ?: "")
     purchaseMap.putString("skuIdentifier", purchase.skuId ?: "")
 //    val initiatedTimestamp = purchase.purchaseInitiatedTimestamp
