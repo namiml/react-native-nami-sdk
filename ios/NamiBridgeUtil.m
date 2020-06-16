@@ -145,12 +145,12 @@
     
     NamiPurchase *lastPurchase = [[entitlement activePurchases] lastObject];
     if (lastPurchase != NULL) {
-        entitlementDict[@"activePurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
+        entitlementDict[@"latestPurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
     }
     
     NamiSKU *lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
     if (lastPurchasedSKU != NULL) {
-        entitlementDict[@"purchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
+        entitlementDict[@"lastPurchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
     }
    
     return entitlementDict;
