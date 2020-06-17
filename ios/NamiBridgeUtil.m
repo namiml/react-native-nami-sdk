@@ -70,7 +70,7 @@
      
      purchaseDict[@"skuIdentifier"] = purchase.skuID;
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
-     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
+//     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
      
      NSDate *subscriptionExpirationDate = purchase.exipres;
      if (subscriptionExpirationDate != nil) {
