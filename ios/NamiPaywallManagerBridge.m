@@ -72,9 +72,15 @@ RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPayw
         for (NamiSKU *product in products) {
           [productDicts addObject:[NamiBridgeUtil skuToSKUDict:product]];
         }
+
+        NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
+             // This part is really meant to be internally facing, scrub from dictionary
+             [paywallMeta removeObjectForKey:@"formatted_skus"];
+             [paywallMeta removeObjectForKey:@"skus"];
+        
         NSArray *wrapperArray = @[@{ @"products": productDicts,
                                                                 @"developerPaywallID": developerPaywallID,
-                                                                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
+                                                                @"paywallMetadata": paywallMeta }];
         completion(wrapperArray);
     }];
 }

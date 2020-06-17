@@ -4,11 +4,13 @@ package com.nami.reactlibrary
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.namiml.Nami
+import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
 import com.namiml.entitlement.NamiEntitlementSetter
 import com.namiml.entitlement.NamiPlatformType
+import com.namiml.paywall.NamiSKU
 import java.util.*
 
 class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -112,7 +114,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                 }
 
                 //referenceId: kotlin.String, purchasedSKUid: kotlin.String?, expires: java.util.Date?, platform: com.namiml.entitlement.NamiPlatformType
-                val setter = NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires )
+                val setter = NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires)
                 return setter
             }
         }
@@ -124,7 +126,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     fun entitlementDictFromEntitlemment(entitlement: NamiEntitlement): WritableMap? {
         var resultMap: WritableMap = WritableNativeMap()
         val referenceID: String = entitlement.referenceId ?: ""
-        resultMap.putString("referenceId", referenceID)
+        resultMap.putString("referenceID", referenceID)
 
         Log.i("NamiBridge", "Processing entitlement into Javascript Map with referenceID $referenceID")
 
@@ -137,10 +139,10 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         resultMap.putString("namiID", namiID)
 
         val description: String = entitlement.desc ?: ""
-        resultMap.putString("description", description)
+        resultMap.putString("desc", description)
 
-        val isActive: Boolean = entitlement.isActive() ?: false
-        resultMap.putBoolean("isActive", isActive)
+        val name: String = entitlement.name ?: ""
+        resultMap.putString("name", name)
 
         val activePurchasesArray: WritableArray = WritableNativeArray()
         val purchases = entitlement.activePurchases
@@ -172,15 +174,34 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         // For react, provide the most recent active purchase and sku from the arrays
 
-        if (entitlement.purchasedSKUs.count() > 0) {
-            val lastPurchaseSKU = entitlement.purchasedSKUs.last()
-            lastPurchaseSKU.let { resultMap.putMap("purchasedSKU", skuToSkuDict(lastPurchaseSKU)) }
+        var lastPurchase: NamiPurchase? = null
+        if (entitlement.activePurchases.count() > 0) {
+            for (purchase in entitlement.activePurchases) {
+                if (lastPurchase == null || lastPurchase.purchaseInitiatedTimestamp < purchase.purchaseInitiatedTimestamp) {
+                    lastPurchase = purchase
+                }
+            }
+//            lastPurchase?.let { resultMap.putMap("latestPurchase", purchaseToPurchaseDict(lastPurchase)) }
         }
 
-        if (entitlement.activePurchases.count() > 0) {
-            val lastPurchase = entitlement.activePurchases.last()
-            lastPurchase.let { resultMap.putMap("activePurchase", purchaseToPurchaseDict(lastPurchase)) }
+        var lastPurchasedSKU: NamiSKU? = lastPurchase?.purchasedSKU
+
+        if (lastPurchasedSKU == null) {
+            val lastPurcahsedSkuID = lastPurchase?.skuId
+            if (lastPurcahsedSkuID != null ) {
+                for (sku in entitlement.purchasedSKUs) {
+                    if (sku.product == lastPurcahsedSkuID) {
+                        lastPurchasedSKU = sku
+                    }
+                }
+            }
         }
+        if (lastPurchasedSKU == null && entitlement.purchasedSKUs.count() > 0) {
+            lastPurchasedSKU = entitlement.purchasedSKUs.last()
+        }
+//        lastPurchasedSKU?.let { resultMap.putMap("lastPurchasedSKU", skuToSkuDict(lastPurchasedSKU)) }
+
+
         return resultMap
     }
 

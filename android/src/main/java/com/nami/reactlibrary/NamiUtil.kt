@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
+import java.time.*
 
 //+ (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiMetaProduct *)product {
 //    NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
@@ -59,7 +60,7 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     marketingContentMap.putString("body", paywallData.body ?: "")
 
     val extraDataMap = paywallData.extraData
-    if (extraDataMap!= null) {
+    if (extraDataMap != null) {
         val convertedMap = convertNativeMapBecauseReact(extraDataMap)
         marketingContentMap.putMap("extra_data", convertedMap)
     }
@@ -73,8 +74,18 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     paywallMap.putString("privacy_policy", paywallData.privacyPolicy ?: "")
     paywallMap.putString("purchase_terms", paywallData.purchaseTerms ?: "")
     paywallMap.putString("tos_link", paywallData.tosLink ?: "")
-    val allowClosingStr = if (paywallData.allowClosing) "true" else "false"
-    paywallMap.putString("allow_closing", allowClosingStr)
+    paywallMap.putString("name", paywallData.name ?: "")
+    paywallMap.putString("cta_type", paywallData.type ?: "")
+//    paywallMap.putString("developer_paywall_id", paywallData.developerPaywallId ?: "")
+
+    val allowClosing = paywallData.allowClosing
+    paywallMap.putBoolean("allow_closing", allowClosing)
+
+    val restoreControl = paywallData.restoreControl
+    paywallMap.putBoolean("restore_control", restoreControl)
+
+    val signInControl = paywallData.signInControl
+    paywallMap.putBoolean("sign_in_control", signInControl)
 
     return paywallMap
 }
@@ -141,7 +152,10 @@ fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
     productDict.putString("priceCountry", namiSKU.priceCountry)
     productDict.putString("priceCurrency", namiSKU.priceCurrency)
     productDict.putString("numberOfUnits", namiSKU.numberOfUnits.toString())
-    productDict.putString("periodUnit", namiSKU.periodUnit.toString())
+    val periodUnit = namiSKU.subscriptionIntervalLabel
+    if (periodUnit != null) {
+        productDict.putString("periodUnit", periodUnit)
+    }
 
     return productDict
 }
@@ -150,14 +164,32 @@ fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
 fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     val purchaseMap = WritableNativeMap()
 
-    purchaseMap.putString("localizedDescription", purchase.localizedDescription ?: "")
-    purchaseMap.putString("source", purchase.source ?: "")
-    purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier ?: "")
-    val expires = purchase.expires
-    expires?.let {
-        purchaseMap.putString("subscriptionExpirationDate", javascriptDateFromKJavaDate(expires))
+//    purchaseMap.putString("localizedDescription", purchase.localizedDescription ?: "")
+
+    val purchaseSource = purchase.source ?: ""
+//            nami_triggered or user_initiated
+    var adjustedSource = "unknown"
+    if (purchaseSource == "nami_triggered") {
+        adjustedSource = "nami_rules"
+    } else if (purchaseSource == "user_initiated") {
+        adjustedSource = "user"
     }
-    purchaseMap.putBoolean("fromNami", purchase.fromNami)
+    purchaseMap.putString("purchaseSource", adjustedSource)
+
+    purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier ?: "")
+    purchaseMap.putString("skuIdentifier", purchase.skuId ?: "")
+//    val initiatedTimestamp = purchase.purchaseInitiatedTimestamp
+//    val dt = Instant.ofEpochSecond(initiatedTimestamp)
+//            .atZone(ZoneId.systemDefault())
+//            .toLocalDateTime()
+//    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp ?: "")
+    purchaseMap.putString("purchaseSource", purchase.purchaseSource ?: "")
+    val expiresDate = purchase.expires
+    if (expiresDate != null) {
+        val expiresString = javascriptDateFromKJavaDate(expiresDate)
+        purchaseMap.putString("subscriptionExpirationDate", expiresString)
+    }
+
 
     // TODO: map kotlin dictionary into arbitrary map?
     purchaseMap.putMap("platformMetadata", WritableNativeMap())
@@ -167,7 +199,7 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     purchasedSKU?.let {
         purchasedSkuMap = skuToSkuDict(purchasedSKU)
     }
-    purchaseMap.putMap("purchasedSku", purchasedSkuMap)
+//    purchaseMap.putMap("purchasedSku", purchasedSkuMap)
 
     return purchaseMap
 }

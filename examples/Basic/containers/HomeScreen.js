@@ -18,7 +18,7 @@ import Header from '../components/Header/Header';
 const HomeScreen = (props) => {
 
   const {navigate} = props.navigation;
-  const [products, setProducts] = useState([])
+  const [purchases, setPurchases] = useState([])
   const { NamiEmitter } = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
 
@@ -27,10 +27,10 @@ const HomeScreen = (props) => {
   }
 
   const onSessionConnect = (event) => {
-    console.log("ExampleApp: Products changed: ", event);
+    console.log("ExampleApp: Purchases changed: ", event);
     if (event.purchaseState == "PURCHASED") {
 	console.log("Detected purchase, setting SKU IDs")
-    setProducts(event.skuIDs)
+    setPurchases(event.purchases)
 	}
   }
 
@@ -134,11 +134,11 @@ const HomeScreen = (props) => {
               </Text>
             </View>
             <View style={styles.sectionContainer}>
-              { products.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
+              { purchases.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionMiddle}>
-	             Subscription is: { products.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
+	             Subscription is: { purchases.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
 			        </Text>
             </View>
           </View>

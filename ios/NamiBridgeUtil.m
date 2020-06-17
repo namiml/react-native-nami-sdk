@@ -41,9 +41,24 @@
             if (subscriptionPeriod != NULL) {
                 NSUInteger numberOfUnits = subscriptionPeriod.numberOfUnits;
                 SKProductPeriodUnit periodUnit = subscriptionPeriod.unit;
+                NSString *convertedUnit = @"";
+                switch (periodUnit) {
+                    case SKProductPeriodUnitDay:
+                        convertedUnit = @"day";
+                        break;
+                    case SKProductPeriodUnitWeek:
+                        convertedUnit = @"week";
+                        break;
+                    case SKProductPeriodUnitMonth:
+                        convertedUnit = @"month";
+                        break;
+                    case SKProductPeriodUnitYear:
+                        convertedUnit = @"year";
+                        break;
+                }
 
                 productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lu", (unsigned long)numberOfUnits];
-                productDict[@"periodUnit"] = [NSString stringWithFormat:@"%u", (unsigned int)periodUnit];
+                productDict[@"periodUnit"] = convertedUnit;
             }
         }
 
@@ -55,25 +70,41 @@
      
      purchaseDict[@"skuIdentifier"] = purchase.skuID;
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
-     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
+//     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
      
      NSDate *subscriptionExpirationDate = purchase.exipres;
      if (subscriptionExpirationDate != nil) {
          purchaseDict[@"subscriptionExpirationDate"] = [self javascriptDateFromNSDate:subscriptionExpirationDate];
      }
      
-     purchaseDict[@"purchaseSource"] =  [[NSString alloc] initWithFormat:@"%d", (int)purchase.purchaseSource];
+     NSString *convertedSourceString = @"UNKNOWN";
+     switch (purchase.purchaseSource) {
+          case 0:
+             convertedSourceString = @"EXTERNAL";
+             break;
+         case 1:
+             convertedSourceString = @"NAMI_RULES";
+             break;
+         case 2:
+             convertedSourceString = @"USER";
+             break;
+         default:
+             break;
+     }
+     purchaseDict[@"purchaseSource"] =  convertedSourceString;
+     
+//     NamiSKU *purchaseSku = [purchase ]
      
      return purchaseDict;
  }
 
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
     NSMutableDictionary<NSString *,id> *entitlementDict = [NSMutableDictionary new];
-    NSLog(@"Converting enttilement %@", entitlement);
+    NSLog(@"Converting entitlement %@", entitlement);
     entitlementDict[@"referenceID"] = [entitlement referenceID];
-    entitlementDict[@"namiID"] = [entitlement namiID];
-    entitlementDict[@"description"] = [entitlement description];
-    entitlementDict[@"isActive"] = @([[entitlement activePurchases] count] > 0);
+    entitlementDict[@"namiID"] = [entitlement namiID] ? [entitlement namiID] : @"";
+    entitlementDict[@"desc"] = [entitlement desc] ? [entitlement desc] : @"";
+    entitlementDict[@"name"] = [entitlement name] ? [entitlement name] : @"";
     
     if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceID] length] == 0) {
         NSLog(@"NamiBridge: Bad entitlement in system, empty referenceID.");
@@ -111,14 +142,33 @@
     }
     entitlementDict[@"relatedSKUs"] = convertedRelatedSKUs;
     
-    NamiPurchase *lastPurchase = [[entitlement activePurchases] lastObject];
+    NamiPurchase *lastPurchase;
+    for (NamiPurchase *purchase in [entitlement activePurchases]) {
+        if (lastPurchase == NULL || ([lastPurchase purchaseInitiatedTimestamp] < [purchase purchaseInitiatedTimestamp])) {
+            lastPurchase = purchase;
+        }
+    }
     if (lastPurchase != NULL) {
-        entitlementDict[@"activePurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
+//        entitlementDict[@"latestPurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
     }
     
-    NamiSKU *lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
+    NSString *lastPurchaseSKUID = [lastPurchase skuID];
+    
+    NamiSKU *lastPurchasedSKU;
+    if (lastPurchaseSKUID != NULL ) {
+        for (NamiSKU *sku in [entitlement purchasedSKUs]) {
+            if ( [[sku platformID] isEqualToString:lastPurchaseSKUID] ) {
+                lastPurchasedSKU = sku;
+            }
+        }
+    }
+    
     if (lastPurchasedSKU != NULL) {
-        entitlementDict[@"purchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
+        lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
+    }
+
+    if (lastPurchasedSKU != NULL) {
+//        entitlementDict[@"lastPurchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
     }
    
     return entitlementDict;

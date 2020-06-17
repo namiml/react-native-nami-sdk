@@ -72,7 +72,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //        }];
     }
 
-    public fun emitPurchaseMade(purchases: List<NamiPurchase>, purchaseState: NamiPurchaseState, errorString: String? ) {
+    public fun emitPurchaseMade(purchases: List<NamiPurchase>, purchaseState: NamiPurchaseState, errorString: String?) {
 //   NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
 //        NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
 //        for (NamiPurchase *purchase in purchases) {
@@ -88,12 +88,13 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         errorString?.let {
             map.putString("errorDescription", errorString)
         }
-        val productIDs = Arguments.createArray()
+
+        var resultArray: WritableArray = WritableNativeArray()
         for (purchase in purchases) {
-            val skuID = purchase.skuId
-            productIDs.pushString(skuID)
+            val purchaseDict = purchaseToPurchaseDict(purchase)
+            resultArray.pushMap(purchaseDict)
         }
-        map.putArray("skuIDs", productIDs)
+        map.putArray("purchases", resultArray)
 
         val convertedState: String
         if (purchaseState == NamiPurchaseState.PURCHASED) {
@@ -133,6 +134,9 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 
         // Populate paywall metadata map
         val paywallMap: WritableMap = paywallToPaywallDict(paywallData)
+        if (paywallDeveloperID != null && paywallDeveloperID.length > 0) {
+            paywallMap.putString("developer_paywall_id", paywallDeveloperID)
+        }
         map.putMap("paywallMetadata", paywallMap)
 
         // Populate SKU details
