@@ -152,18 +152,10 @@ fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
     productDict.putString("priceCountry", namiSKU.priceCountry)
     productDict.putString("priceCurrency", namiSKU.priceCurrency)
     productDict.putString("numberOfUnits", namiSKU.numberOfUnits.toString())
-    val periodUnit = namiSKU.periodUnit
-    var convertedPeriod: String = ""
-    if (periodUnit <= 1) {
-        convertedPeriod = "day"
-    } else if (periodUnit <= 7) {
-        convertedPeriod = "week"
-    } else if (periodUnit <= 31) {
-        convertedPeriod = "month"
-    } else if (periodUnit <= 365) {
-        convertedPeriod = "year"
+    val periodUnit = namiSKU.subscriptionIntervalLabel
+    if (periodUnit != null) {
+        productDict.putString("periodUnit", periodUnit)
     }
-    productDict.putString("periodUnit", convertedPeriod)
 
     return productDict
 }
