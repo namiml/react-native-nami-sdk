@@ -4,11 +4,13 @@ package com.nami.reactlibrary
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.namiml.Nami
+import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
 import com.namiml.entitlement.NamiEntitlementSetter
 import com.namiml.entitlement.NamiPlatformType
+import com.namiml.paywall.NamiSKU
 import java.util.*
 
 class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -112,7 +114,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                 }
 
                 //referenceId: kotlin.String, purchasedSKUid: kotlin.String?, expires: java.util.Date?, platform: com.namiml.entitlement.NamiPlatformType
-                val setter = NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires )
+                val setter = NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires)
                 return setter
             }
         }
@@ -175,15 +177,34 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         // For react, provide the most recent active purchase and sku from the arrays
 
-        if (entitlement.purchasedSKUs.count() > 0) {
-            val lastPurchaseSKU = entitlement.purchasedSKUs.last()
-            lastPurchaseSKU.let { resultMap.putMap("latestPurchasedSKU", skuToSkuDict(lastPurchaseSKU)) }
+        var lastPurchase: NamiPurchase? = null
+        if (entitlement.activePurchases.count() > 0) {
+            for (purchase in entitlement.activePurchases) {
+                if (lastPurchase == null || lastPurchase.purchaseInitiatedTimestamp < purchase.purchaseInitiatedTimestamp) {
+                    lastPurchase = purchase
+                }
+            }
+            lastPurchase?.let { resultMap.putMap("latestPurchase", purchaseToPurchaseDict(lastPurchase)) }
         }
 
-        if (entitlement.activePurchases.count() > 0) {
-            val lastPurchase = entitlement.activePurchases.last()
-            lastPurchase.let { resultMap.putMap("latestPurchase", purchaseToPurchaseDict(lastPurchase)) }
+        var lastPurchasedSKU: NamiSKU? = lastPurchase?.purchasedSKU
+
+        if (lastPurchasedSKU == null) {
+            val lastPurcahsedSkuID = lastPurchase?.skuId
+            if (lastPurcahsedSkuID != null ) {
+                for (sku in entitlement.purchasedSKUs) {
+                    if (sku.product == lastPurcahsedSkuID) {
+                        lastPurchasedSKU = sku
+                    }
+                }
+            }
         }
+        if (lastPurchasedSKU == null) {
+            lastPurchasedSKU = entitlement.purchasedSKUs.last()
+        }
+        lastPurchasedSKU?.let { resultMap.putMap("latestPurchasedSKU", skuToSkuDict(lastPurchasedSKU)) }
+
+
         return resultMap
     }
 

@@ -143,12 +143,31 @@
     }
     entitlementDict[@"relatedSKUs"] = convertedRelatedSKUs;
     
-    NamiPurchase *lastPurchase = [[entitlement activePurchases] lastObject];
+    NamiPurchase *lastPurchase;
+    for (NamiPurchase *purchase in [entitlement activePurchases]) {
+        if (lastPurchase == NULL || ([lastPurchase purchaseInitiatedTimestamp] < [purchase purchaseInitiatedTimestamp])) {
+            lastPurchase = purchase;
+        }
+    }
     if (lastPurchase != NULL) {
         entitlementDict[@"latestPurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
     }
     
-    NamiSKU *lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
+    NSString *lastPurchaseSKUID = [lastPurchase skuID];
+    
+    NamiSKU *lastPurchasedSKU;
+    if (lastPurchaseSKUID != NULL ) {
+        for (NamiSKU *sku in [entitlement purchasedSKUs]) {
+            if ( [[sku platformID] isEqualToString:lastPurchaseSKUID] ) {
+                lastPurchasedSKU = sku;
+            }
+        }
+    }
+    
+    if (lastPurchasedSKU != NULL) {
+        lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
+    }
+
     if (lastPurchasedSKU != NULL) {
         entitlementDict[@"lastPurchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
     }
