@@ -135,7 +135,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         // Populate paywall metadata map
         val paywallMap: WritableMap = paywallToPaywallDict(paywallData)
         if (paywallDeveloperID != null && paywallDeveloperID.length > 0) {
-            paywallMap.putString("paywallDeveloperID", paywallDeveloperID)
+            paywallMap.putString("developer_paywall_id", paywallDeveloperID)
         }
         map.putMap("paywallMetadata", paywallMap)
 
