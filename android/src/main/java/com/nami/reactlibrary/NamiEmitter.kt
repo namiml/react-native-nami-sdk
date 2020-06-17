@@ -72,7 +72,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //        }];
     }
 
-    public fun emitPurchaseMade(purchases: List<NamiPurchase>, purchaseState: NamiPurchaseState, errorString: String? ) {
+    public fun emitPurchaseMade(purchases: List<NamiPurchase>, purchaseState: NamiPurchaseState, errorString: String?) {
 //   NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
 //        NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
 //        for (NamiPurchase *purchase in purchases) {
@@ -134,6 +134,9 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 
         // Populate paywall metadata map
         val paywallMap: WritableMap = paywallToPaywallDict(paywallData)
+        if (paywallDeveloperID != null && paywallDeveloperID.length > 0) {
+            paywallMap.putString("paywallDeveloperID", paywallDeveloperID)
+        }
         map.putMap("paywallMetadata", paywallMap)
 
         // Populate SKU details
