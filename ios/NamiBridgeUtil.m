@@ -77,16 +77,16 @@
          purchaseDict[@"subscriptionExpirationDate"] = [self javascriptDateFromNSDate:subscriptionExpirationDate];
      }
      
-     NSString *convertedSourceString = @"unknown";
+     NSString *convertedSourceString = @"UNKNOWN";
      switch (purchase.purchaseSource) {
           case 0:
-             convertedSourceString = @"external";
+             convertedSourceString = @"EXTERNAL";
              break;
          case 1:
-             convertedSourceString = @"nami_rules";
+             convertedSourceString = @"NAMI_RULES";
              break;
          case 2:
-             convertedSourceString = @"user";
+             convertedSourceString = @"USER";
              break;
          default:
              break;
@@ -149,7 +149,7 @@
         }
     }
     if (lastPurchase != NULL) {
-        entitlementDict[@"latestPurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
+//        entitlementDict[@"latestPurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
     }
     
     NSString *lastPurchaseSKUID = [lastPurchase skuID];
@@ -168,7 +168,7 @@
     }
 
     if (lastPurchasedSKU != NULL) {
-        entitlementDict[@"lastPurchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
+//        entitlementDict[@"lastPurchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
     }
    
     return entitlementDict;

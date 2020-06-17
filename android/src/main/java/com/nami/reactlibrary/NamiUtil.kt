@@ -164,7 +164,7 @@ fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
 fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     val purchaseMap = WritableNativeMap()
 
-    purchaseMap.putString("localizedDescription", purchase.localizedDescription ?: "")
+//    purchaseMap.putString("localizedDescription", purchase.localizedDescription ?: "")
 
     val purchaseSource = purchase.source ?: ""
 //            nami_triggered or user_initiated

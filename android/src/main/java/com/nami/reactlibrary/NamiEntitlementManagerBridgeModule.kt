@@ -181,7 +181,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                     lastPurchase = purchase
                 }
             }
-            lastPurchase?.let { resultMap.putMap("latestPurchase", purchaseToPurchaseDict(lastPurchase)) }
+//            lastPurchase?.let { resultMap.putMap("latestPurchase", purchaseToPurchaseDict(lastPurchase)) }
         }
 
         var lastPurchasedSKU: NamiSKU? = lastPurchase?.purchasedSKU
@@ -199,7 +199,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         if (lastPurchasedSKU == null && entitlement.purchasedSKUs.count() > 0) {
             lastPurchasedSKU = entitlement.purchasedSKUs.last()
         }
-        lastPurchasedSKU?.let { resultMap.putMap("lastPurchasedSKU", skuToSkuDict(lastPurchasedSKU)) }
+//        lastPurchasedSKU?.let { resultMap.putMap("lastPurchasedSKU", skuToSkuDict(lastPurchasedSKU)) }
 
 
         return resultMap
