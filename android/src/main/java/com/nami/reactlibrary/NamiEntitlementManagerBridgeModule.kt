@@ -199,7 +199,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         if (lastPurchasedSKU == null && entitlement.purchasedSKUs.count() > 0) {
             lastPurchasedSKU = entitlement.purchasedSKUs.last()
         }
-        lastPurchasedSKU?.let { resultMap.putMap("latestPurchasedSKU", skuToSkuDict(lastPurchasedSKU)) }
+        lastPurchasedSKU?.let { resultMap.putMap("lastPurchasedSKU", skuToSkuDict(lastPurchasedSKU)) }
 
 
         return resultMap
