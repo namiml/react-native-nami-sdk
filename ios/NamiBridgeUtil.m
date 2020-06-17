@@ -100,7 +100,7 @@
 
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
     NSMutableDictionary<NSString *,id> *entitlementDict = [NSMutableDictionary new];
-    NSLog(@"Converting enttilement %@", entitlement);
+    NSLog(@"Converting entitlement %@", entitlement);
     entitlementDict[@"referenceID"] = [entitlement referenceID];
     entitlementDict[@"namiID"] = [entitlement namiID] ? [entitlement namiID] : @"";
     entitlementDict[@"desc"] = [entitlement desc] ? [entitlement desc] : @"";
