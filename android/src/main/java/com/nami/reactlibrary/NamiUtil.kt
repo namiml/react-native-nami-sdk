@@ -199,7 +199,7 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     purchasedSKU?.let {
         purchasedSkuMap = skuToSkuDict(purchasedSKU)
     }
-    purchaseMap.putMap("purchasedSku", purchasedSkuMap)
+//    purchaseMap.putMap("purchasedSku", purchasedSkuMap)
 
     return purchaseMap
 }
