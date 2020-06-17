@@ -72,7 +72,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         for (x in 0 until skuIDs.size()) {
             if (skuIDs.getType(x) == ReadableType.String) {
                 val skuID = skuIDs.getString(x)
-                if (skuID != null && skuID.count() > 0) {
+                if (skuID != null && skuID.length > 0) {
                     checkArray.add(skuID)
                 }
             }
