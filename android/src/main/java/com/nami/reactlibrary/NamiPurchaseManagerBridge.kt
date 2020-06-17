@@ -68,18 +68,19 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
 
     @ReactMethod
     fun anySKUIDPurchased(skuIDs: ReadableArray, resultsCallback: Callback) {
-        var isPurchased = false
-        //TODO : expose Android Active Purchases
-        for (purchase in NamiPurchaseManager.allPurchases()) {
-            purchase.skuId?.let {
-                if (NamiPurchaseManager.isSKUIDPurchased(it)) {
-                    isPurchased = true
+        val checkArray: MutableList<String> = mutableListOf<String>()
+        for (x in 0 until skuIDs.size()) {
+            if (skuIDs.getType(x) == ReadableType.String) {
+                val skuID = skuIDs.getString(x)
+                if (skuID != null && skuID.count() > 0) {
+                    checkArray.add(skuID)
                 }
             }
         }
 
+        val anyPurchased = NamiPurchaseManager.anySKUIDPurchased(checkArray)
         val resultArray: WritableArray = WritableNativeArray()
-        resultArray.pushBoolean(isPurchased)
+        resultArray.pushBoolean(anyPurchased)
         resultsCallback.invoke(resultArray)
     }
 
