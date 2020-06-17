@@ -144,9 +144,6 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         val name: String = entitlement.name ?: ""
         resultMap.putString("name", name)
 
-        val isActive: Boolean = entitlement.isActive() ?: false
-        resultMap.putBoolean("isActive", isActive)
-
         val activePurchasesArray: WritableArray = WritableNativeArray()
         val purchases = entitlement.activePurchases
         purchases.let {
