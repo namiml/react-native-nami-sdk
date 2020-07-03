@@ -33,9 +33,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
         
         // Tell Nami to listen for purchases and we'll forward them on to listeners
         [NamiPurchaseManager registerWithPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull purchases, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
-            if ( purchaseState == NamiPurchaseStatePurchased ) {
-                [self sendEventPurchaseMadeWithPurchases:purchases withState:purchaseState error:error];
-            }
+            [self sendEventPurchaseMadeWithPurchases:purchases withState:purchaseState error:error];
         }];
         
         [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
