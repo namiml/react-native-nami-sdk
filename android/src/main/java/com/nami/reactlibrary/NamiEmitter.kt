@@ -101,6 +101,8 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             convertedState = "PURCHASED"
         } else if (purchaseState == NamiPurchaseState.FAILED) {
             convertedState = "FAILED"
+        } else if (purchaseState == NamiPurchaseState.CANCELLED) {
+            convertedState = "CANCELLED"
         } else {
             convertedState = "UNKNOWN"
         }
