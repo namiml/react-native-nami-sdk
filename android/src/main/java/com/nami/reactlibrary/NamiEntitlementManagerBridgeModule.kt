@@ -94,7 +94,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                     purchasedSKUid = entitlementSetterMap.getString("purchasedSKUid")
                 }
 
-                var platform: NamiPlatformType = NamiPlatformType.UNKNOWN
+                var platform: NamiPlatformType = NamiPlatformType.OTHER
                 if (entitlementSetterMap.hasKey("platform")) {
                     platform = when (entitlementSetterMap.getString("platform")) {
                         "other" -> NamiPlatformType.OTHER
@@ -107,9 +107,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
                         "web" -> NamiPlatformType.WEB
 
-                        "unknown" -> NamiPlatformType.UNKNOWN
-
-                        else -> NamiPlatformType.UNKNOWN
+                        else -> NamiPlatformType.OTHER
                     }
                 }
 
