@@ -12,6 +12,7 @@
 		EB1C9AFB23BE9C5700CAD548 /* NamiPurchaseManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */; };
 		EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */; };
 		EB1C9AFD23BE9C5700CAD548 /* NamiEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */; };
+		EB75992124F031E900430D98 /* NamiCustomerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EB75992024F031E900430D98 /* NamiCustomerManager.m */; };
 		EB7B50CE243E314900EBA6B7 /* NamiEntitlementManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB7B50CD243E314900EBA6B7 /* NamiEntitlementManagerBridge.m */; };
 		EBC59E5D23C5514B008A123A /* Nami.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5C23C5514B008A123A /* Nami.m */; };
 		EBC59E6023C7E2EC008A123A /* NamiAnalyticsEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */; };
@@ -41,6 +42,7 @@
 		EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiPurchaseManagerBridge.m; sourceTree = "<group>"; };
 		EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiPaywallManagerBridge.m; sourceTree = "<group>"; };
 		EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiEmitter.m; sourceTree = "<group>"; };
+		EB75992024F031E900430D98 /* NamiCustomerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiCustomerManager.m; sourceTree = "<group>"; };
 		EB7B50CD243E314900EBA6B7 /* NamiEntitlementManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiEntitlementManagerBridge.m; sourceTree = "<group>"; };
 		EBC59E5C23C5514B008A123A /* Nami.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Nami.m; sourceTree = "<group>"; };
 		EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiAnalyticsEmitter.m; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */,
 				EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */,
 				EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */,
+				EB75992024F031E900430D98 /* NamiCustomerManager.m */,
 				EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */,
 				EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */,
 				EB7B50CD243E314900EBA6B7 /* NamiEntitlementManagerBridge.m */,
@@ -195,6 +198,7 @@
 				EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerBridge.m in Sources */,
 				EBC59E6323C7F634008A123A /* NamiBridgeUtil.m in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNNami.m in Sources */,
+				EB75992124F031E900430D98 /* NamiCustomerManager.m in Sources */,
 				EB7B50CE243E314900EBA6B7 /* NamiEntitlementManagerBridge.m in Sources */,
 				EBEEAC10243C29C800E01389 /* NamiMLManagerBridge.m in Sources */,
 				EB1C9AFD23BE9C5700CAD548 /* NamiEmitter.m in Sources */,
@@ -241,7 +245,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -278,7 +282,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
