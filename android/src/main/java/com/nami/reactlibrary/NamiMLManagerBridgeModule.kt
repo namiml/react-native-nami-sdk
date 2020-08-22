@@ -1,10 +1,7 @@
 package com.nami.reactlibrary
 
 
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.*
 import com.namiml.ml.NamiMLManager
 
 
@@ -19,10 +16,26 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactCo
         return "NamiMLManagerBridge"
     }
 
+    fun convertToArrayList( readableArray: ReadableArray ) : List<String>? {
+
+        val finalArray = mutableListOf<String>()
+        for (i in 0..readableArray.size()) {
+            if (readableArray.getType(i) == ReadableType.String) {
+                val item = readableArray.getString(i)
+                finalArray.add(item)
+            }
+        }
+        if (finalArray.size > 0) {
+            return finalArray
+        } else {
+            return null
+        }
+    }
+
     @ReactMethod
     fun enterCoreContentWithLabels(labels: ReadableArray) {
         // Major Kotlin Evil Alert
-        val convertedLabels: List<String>? = (labels.toArrayList() as? Array<*>)?.filterIsInstance<String>()
+        val convertedLabels: List<String>? = convertToArrayList(labels)
         convertedLabels?.let {
             NamiMLManager.enterCoreContent(it)
         }
@@ -39,7 +52,8 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun exitCoreContentWithLabels(labels: ReadableArray) {
         // Major Kotlin Evil Alert
-        val convertedLabels: List<String>? = (labels.toArrayList() as? Array<*>)?.filterIsInstance<String>()
+
+        val convertedLabels: List<String>? = convertToArrayList(labels)
         convertedLabels?.let {
             NamiMLManager.exitCoreContent(it)
         }
@@ -62,7 +76,7 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun coreActionWithLabels(labels: ReadableArray) {
         // Major Kotlin Evil Alert
-        val convertedLabels: List<String>? = (labels.toArrayList() as? Array<*>)?.filterIsInstance<String>()
+        val convertedLabels: List<String>? = convertToArrayList(labels)
         convertedLabels?.let {
             NamiMLManager.coreAction(convertedLabels)
         }
