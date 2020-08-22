@@ -7,7 +7,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.billing.NamiPurchaseState
-import com.namiml.billing.NamiCustomerManager
+import com.namiml.customer.NamiCustomerManager
 
 class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -22,10 +22,10 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) : R
     fun currentCustomerJourneyState(resultsCallback: Callback) {
         val journeyState = NamiCustomerManager.currentCustomerJourneyState()
 
-        val formerSubscriber = journeyState.formerSubscriber ?: false
-        val inGracePeriod = journeyState.inGracePeriod ?: false
-        val inTrialPeriod = journeyState.inTrialPeriod ?: false
-        val inIntroOfferPeriod = journeyState.inIntroOfferPeriod ?: false
+        val formerSubscriber = journeyState?.formerSubscriber ?: false
+        val inGracePeriod = journeyState?.inGracePeriod ?: false
+        val inTrialPeriod = journeyState?.inTrialPeriod ?: false
+        val inIntroOfferPeriod = journeyState?.inIntroOfferPeriod ?: false
 
         val journeyDict = WritableNativeMap()
         journeyDict.putBoolean("formerSubscriber", formerSubscriber)
