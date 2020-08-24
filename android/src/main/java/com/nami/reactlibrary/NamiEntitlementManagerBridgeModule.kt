@@ -188,7 +188,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
             val lastPurcahsedSkuID = lastPurchase?.skuId
             if (lastPurcahsedSkuID != null ) {
                 for (sku in entitlement.purchasedSKUs) {
-                    if (sku.product == lastPurcahsedSkuID) {
+                    if (sku.skuId == lastPurcahsedSkuID) {
                         lastPurchasedSKU = sku
                     }
                 }
