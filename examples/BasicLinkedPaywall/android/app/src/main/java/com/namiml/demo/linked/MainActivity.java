@@ -1,4 +1,4 @@
-package com.basiclinkedpaywall;
+package com.namiml.demo.linked;
 
 import com.facebook.react.ReactActivity;
 

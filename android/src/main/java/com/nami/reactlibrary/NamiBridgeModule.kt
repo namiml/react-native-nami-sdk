@@ -65,7 +65,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
         val bypassStoreMode = if (configDict.hasKey("bypassStore")) configDict.getBoolean("bypassStore") else false
         Log.i("NamiBridge", "Nami Configuration bypassStoreMode is $bypassStoreMode");
         if (bypassStoreMode) {
-            builder.bypassStoreMode = true
+            builder.bypassStore = true
         }
 
         val namiCommandsReact: ReadableArray? = if (configDict.hasKey("namiCommands")) configDict.getArray("namiCommands") else Arguments.createArray()

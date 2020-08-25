@@ -142,7 +142,7 @@ fun convertNativeMapBecauseReact(nativeMap: Map<*, *>): WritableMap {
 fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
     val productDict = Arguments.createMap()
 
-    productDict.putString("skuIdentifier", namiSKU.product)
+    productDict.putString("skuIdentifier", namiSKU.skuId)
     productDict.putString("localizedTitle", namiSKU.skuName)
     productDict.putString("localizedDescription", namiSKU.localizedDescription)
     productDict.putString("localizedPrice", namiSKU.localizedPrice)
