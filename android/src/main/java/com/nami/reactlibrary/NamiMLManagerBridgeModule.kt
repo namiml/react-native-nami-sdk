@@ -7,22 +7,18 @@ import com.namiml.ml.NamiMLManager
 
 class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
-
-    fun NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext?) {
-
-    }
-
     override fun getName(): String {
         return "NamiMLManagerBridge"
     }
 
-    fun convertToArrayList( readableArray: ReadableArray ) : List<String>? {
+    private fun convertToArrayList(readableArray: ReadableArray): List<String>? {
 
         val finalArray = mutableListOf<String>()
         for (i in 0..readableArray.size()) {
             if (readableArray.getType(i) == ReadableType.String) {
-                val item = readableArray.getString(i)
-                finalArray.add(item)
+                readableArray.getString(i)?.let { item ->
+                    finalArray.add(item)
+                }
             }
         }
         if (finalArray.size > 0) {
@@ -61,14 +57,14 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactCo
 
     @ReactMethod
     fun exitCoreContentWithLabel(label: String) {
-        var coreContentLabels = ArrayList<String>()
+        val coreContentLabels = ArrayList<String>()
         coreContentLabels.add(label)
         NamiMLManager.exitCoreContent(coreContentLabels)
     }
 
     @ReactMethod
     fun coreActionWithLabel(label: String) {
-        var coreContentLabels = ArrayList<String>()
+        val coreContentLabels = ArrayList<String>()
         coreContentLabels.add(label)
         NamiMLManager.coreAction(coreContentLabels)
     }
