@@ -36,6 +36,10 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
             [self sendEventPurchaseMadeWithPurchases:purchases withState:purchaseState error:error];
         }];
         
+        [NamiEntitlementManager registerChangeHandlerWithEntitlementsChangedHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
+            [self sendEventEntitlementsChnagedithEntitlemnets:entitlements];
+        }];
+        
         [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
             [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
         }];
@@ -120,6 +124,24 @@ bool hasNamiEmitterListeners;
         default:
             return @"UNKNOWN";
             break;
+    }
+}
+
+- (void)sendEventEntitlementsChnagedithEntitlemnets:(NSArray<NamiEntitlement *>*)entitlements {
+    if (hasNamiEmitterListeners) {
+        
+        NSMutableArray *convertedEntitlementDicts = [NSMutableArray new];
+        for ( NamiEntitlement *entitlementRecord in entitlements ) {
+            if ( entitlementRecord.referenceID != nil ) {
+                NSDictionary *entitlementDict = [NamiBridgeUtil entitlementToEntitlementDict:entitlementRecord];
+                [convertedEntitlementDicts addObject:entitlementDict];
+            }
+        }
+        
+        NSMutableDictionary *sendDict = [NSMutableDictionary dictionary];
+        sendDict[@"entitlements"] =  convertedEntitlementDicts;
+        
+        [self sendEventWithName:@"EntitlementsChanged" body:sendDict];
     }
 }
 
