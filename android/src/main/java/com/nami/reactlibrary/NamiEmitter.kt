@@ -8,6 +8,7 @@ import com.namiml.paywall.NamiPaywallManager
 import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.billing.NamiPurchaseState
+import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiSKU
 import java.lang.ref.WeakReference
@@ -18,7 +19,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //        Log.e("ReactNative", "In Emitter Initialize(reactContext)")
 //        NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
 //
-//            Log.e("ReactNativeAndroidDridge", "products from regsiterApplicationPaywallProvider callback are " + products)
+//            Log.e("ReactNativeAndroidBridge", "products from regsiterApplicationPaywallProvider callback are " + products)
 //
 //            val productList: List<NamiSKU> =  products ?: ArrayList<NamiSKU>()
 //            emitPaywallRaise(context, paywallData, productList, developerPaywallId)
@@ -71,6 +72,28 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
 //        }];
     }
+
+
+    public fun emitEntitlementsChanged(entitlements: List<NamiEntitlement>) {
+        val map = Arguments.createMap()
+
+
+        var resultArray: WritableArray = WritableNativeArray()
+        for (entitlement in entitlements) {
+            val entitlementDict = entitlementDictFromEntitlement(entitlement)
+            resultArray.pushMap(entitlementDict)
+        }
+        map.putArray("entitlements", resultArray)
+
+        Log.i("NamiBridge", "Emitting entitlements changed")
+        try {
+            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("EntitlementsChanged", map)
+        } catch (e: Exception) {
+            Log.e("NamiBridge", "Caught Exception: " + e.message)
+        }
+    }
+
 
     public fun emitPurchaseMade(purchases: List<NamiPurchase>, purchaseState: NamiPurchaseState, errorString: String?) {
 //   NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
