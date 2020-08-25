@@ -2,10 +2,25 @@ package com.nami.reactlibrary
 
 
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.namiml.paywall.NamiPaywallManager
 
+
+/**
+ * An empty implementation of [ActivityEventListener]
+ */
+class BaseActivityEventListener : ActivityEventListener {
+
+    @Deprecated("use {@link #onActivityResult(Activity, int, int, Intent)} instead.")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    }
+
+    fun onActivityResult(activity: Activity?, requestCode: Int, resultCode: Int, data: Intent?) {}
+
+    fun onNewIntent(intent: Intent?) {}
+}
 
 class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -16,10 +31,22 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
             Log.i("NamiBridge", "Nami flag for blocking paywall raise is " + blockRaisePaywall.toString());
             blockRaisePaywall
         }
+
+        reactContext.addActivityEventListener(mActivityEventListener);
     }
 
     override fun getName(): String {
         return "NamiPaywallManagerBridge"
+    }
+
+    private val mActivityEventListener: ActivityEventListener = object : BaseActivityEventListener() {
+
+        override fun onActivityResult(activity: Activity?, requestCode: Int, resultCode: Int, intent: Intent?) {
+            Log.d("NamiBridge", "Nami Activity result listener activated, code is " + requestCode);
+            if (NamiPaywallManager.didUserCloseBlockingNamiPaywall(requestCode, resultCode)) {
+                Log.i("NamiBridge", "User closed blocking paywall, sending event.  Activity was." + activity.toString());
+            }
+        }
     }
 
 
