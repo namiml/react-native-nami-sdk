@@ -139,7 +139,7 @@ bool hasNamiEmitterListeners;
         }
         
         NSMutableDictionary *sendDict = [NSMutableDictionary dictionary];
-        sendDict[@"entitlements"] =  convertedEntitlementDicts;
+        sendDict[@"activeEntitlements"] =  convertedEntitlementDicts;
         
         [self sendEventWithName:@"EntitlementsChanged" body:sendDict];
     }
