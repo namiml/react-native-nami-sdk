@@ -72,12 +72,6 @@ bool hasNamiAanlyticsEmitterListeners;
           case NamiAnalyticsActionTypePaywallRaise:
               actionName = @"paywall_raise";
               break;
-          case NamiAnalyticsActionTypePaywallClosed:
-              actionName = @"paywall_closed";
-              break;
-          case NamiAnalyticsActionTypePaywallRaiseBlocked:
-              actionName = @"paywall_raise_blocked";
-              break;
           case NamiAnalyticsActionTypePurchaseActivity:
               actionName = @"purchase_activity";
               break;
