@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywallManager
 
 class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), ActivityEventListener {
@@ -27,6 +29,18 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
         if (NamiPaywallManager.didUserCloseBlockingNamiPaywall(requestCode, resultCode)) {
             Log.i("NamiBridge", "User closed blocking paywall, sending event.  " +
                     "Activity was." + activity.toString())
+            emitBockedPaywallClosed()
+        }
+    }
+
+    fun emitBockedPaywallClosed() {
+        val map = Arguments.createMap()
+        map.putBoolean("blockingPaywallClosed", true)
+        try {
+            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("BlockingPaywallClosed", map)
+        } catch (e: Exception) {
+            Log.e("NamiBridge", "Caught Exception: " + e.message)
         }
     }
 
