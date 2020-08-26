@@ -3,6 +3,7 @@ package com.nami.reactlibrary
 
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.Nami
 import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
@@ -10,10 +11,35 @@ import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
 import com.namiml.entitlement.NamiEntitlementSetter
 import com.namiml.entitlement.NamiPlatformType
+import com.namiml.paywall.NamiPaywallManager
 import com.namiml.paywall.NamiSKU
 import java.util.*
 
 class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+
+    init {
+        NamiEntitlementManager.registerEntitlementChangeListener {
+            emitEntitlementsChanged(NamiEntitlementManager.activeEntitlements())
+        }
+    }
+
+    private fun emitEntitlementsChanged(activeEntitlements: List<NamiEntitlement>) {
+        val map: WritableMap = WritableNativeMap()
+
+        val resultArray: WritableArray = WritableNativeArray()
+        for (entitlement in activeEntitlements) {
+            val entitlementDict = entitlementDictFromEntitlement(entitlement)
+            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+        }
+
+        map.putArray("activeEntitlements", resultArray)
+        try {
+            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("EntitlementsChanged", map)
+        } catch (e: Exception) {
+            Log.e("NamiBridge", "Caught Exception: " + e.message)
+        }
+    }
 
     override fun getName(): String {
         return "NamiEntitlementManagerBridge"
