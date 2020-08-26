@@ -48,6 +48,10 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
             [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
         }];
         
+        [NamiPaywallManager registerWithApplicationBlockingPaywallClosedHandler:^{
+            [self sendBlockingPaywallClosed];
+        }];
+        
     }
     return self;
 }
@@ -172,6 +176,7 @@ bool hasNamiEmitterListeners;
     }
 }
 
+
 - (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC
                        forPaywall:(NSString * _Nonnull) developerPaywallID
                       paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata {
@@ -205,6 +210,17 @@ bool hasNamiEmitterListeners;
                                                             @"developerPaywallID": developerPaywallID,
                                                             @"paywallMetadata": paywallMeta }];
   }
+}
+
+- (void) sendBlockingPaywallClosed {
+    // Let system know a blocking paywall has been closed, in case they want to react specfiically.
+    if (hasNamiEmitterListeners) {
+        NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionary];
+        // This part is really meant to be internally facing, scrub from dictionary
+        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        
+        [self sendEventWithName:@"BlockingPaywallClosed" body:@{ @"blockingPaywallClosed": @(true)}];
+    }
 }
 
 @end
