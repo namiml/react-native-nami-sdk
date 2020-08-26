@@ -19,7 +19,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
     init {
         NamiEntitlementManager.registerEntitlementChangeListener {
-            emitEntitlementsChanged(NamiEntitlementManager.activeEntitlements())
+            emitEntitlementsChanged(it)
         }
     }
 
