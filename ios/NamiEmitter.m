@@ -76,7 +76,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate" ];
+    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"BlockingPaywallClosed" ];
 }
 
 - (NSDictionary<NSString *, NSObject *> *)constantsToExport {
