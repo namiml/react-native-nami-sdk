@@ -37,7 +37,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
         }];
         
         [NamiEntitlementManager registerChangeHandlerWithEntitlementsChangedHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
-            [self sendEventEntitlementsChnagedithEntitlemnets:entitlements];
+            [self sendEventEntitlementsChangedWithEntitlements:entitlements];
         }];
         
         [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
@@ -131,7 +131,7 @@ bool hasNamiEmitterListeners;
     }
 }
 
-- (void)sendEventEntitlementsChnagedithEntitlemnets:(NSArray<NamiEntitlement *>*)entitlements {
+- (void)sendEventEntitlementsChangedWithEntitlements:(NSArray<NamiEntitlement *>*)entitlements {
     if (hasNamiEmitterListeners) {
         
         NSMutableArray *convertedEntitlementDicts = [NSMutableArray new];
