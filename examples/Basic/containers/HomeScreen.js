@@ -84,11 +84,11 @@ const HomeScreen = (props) => {
     eventEmitter.addListener('SignInActivate', onSignInActivated);
 
     var configDict = {
-	'appPlatformID-apple': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
-	'appPlatformID-google': '3d062066-9d3c-430e-935d-855e2c56dd8e',
-	"logLevel": "DEBUG",
-	"developmentMode": true,
-	"bypassStore": true
+      "appPlatformID-apple": "002e2c49-7f66-4d22-a05c-1dc9f2b7f2af",
+      "appPlatformID-google": "3d062066-9d3c-430e-935d-855e2c56dd8e",
+      "logLevel": "DEBUG",
+      "developmentMode": true,
+      "bypassStore": true
     };
 
     NativeModules.NamiBridge.configure(configDict);
