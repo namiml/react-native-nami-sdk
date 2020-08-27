@@ -213,7 +213,7 @@ bool hasNamiEmitterListeners;
 }
 
 - (void) sendBlockingPaywallClosed {
-    // Let system know a blocking paywall has been closed, in case they want to react specfiically.
+    // Let system know a blocking paywall has been closed, in case they want to react specifically.
     if (hasNamiEmitterListeners) {
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionary];
         // This part is really meant to be internally facing, scrub from dictionary
