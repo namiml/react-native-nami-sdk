@@ -43,3 +43,4 @@ buck-out/
 *.keystore
 IDEWorkspaceChecks.plist
 Podfile.lock
+report.20200826.145124.91571.0.001.json
