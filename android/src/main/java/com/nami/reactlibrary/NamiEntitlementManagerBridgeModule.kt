@@ -3,6 +3,7 @@ package com.nami.reactlibrary
 
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.Nami
 import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
@@ -10,10 +11,35 @@ import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
 import com.namiml.entitlement.NamiEntitlementSetter
 import com.namiml.entitlement.NamiPlatformType
+import com.namiml.paywall.NamiPaywallManager
 import com.namiml.paywall.NamiSKU
 import java.util.*
 
 class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+
+    init {
+        NamiEntitlementManager.registerEntitlementChangeListener {
+            emitEntitlementsChanged(it)
+        }
+    }
+
+    private fun emitEntitlementsChanged(activeEntitlements: List<NamiEntitlement>) {
+        val map: WritableMap = WritableNativeMap()
+
+        val resultArray: WritableArray = WritableNativeArray()
+        for (entitlement in activeEntitlements) {
+            val entitlementDict = entitlementDictFromEntitlement(entitlement)
+            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+        }
+
+        map.putArray("activeEntitlements", resultArray)
+        try {
+            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("EntitlementsChanged", map)
+        } catch (e: Exception) {
+            Log.e("NamiBridge", "Caught Exception: " + e.message)
+        }
+    }
 
     override fun getName(): String {
         return "NamiEntitlementManagerBridge"
@@ -37,7 +63,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in nativeEntitlements) {
-            val entitlementDict = entitlementDictFromEntitlemment(entitlement)
+            val entitlementDict = entitlementDictFromEntitlement(entitlement)
             entitlementDict?.let { resultArray.pushMap(entitlementDict) }
         }
         resultsCallback.invoke(resultArray)
@@ -52,7 +78,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in nativeEntitlements) {
-            val entitlementDict = entitlementDictFromEntitlemment(entitlement)
+            val entitlementDict = entitlementDictFromEntitlement(entitlement)
             entitlementDict?.let { resultArray.pushMap(entitlementDict) }
         }
         resultsCallback.invoke(resultArray)
@@ -121,86 +147,6 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         return null
     }
 
-    fun entitlementDictFromEntitlemment(entitlement: NamiEntitlement): WritableMap? {
-        var resultMap: WritableMap = WritableNativeMap()
-        val referenceID: String = entitlement.referenceId ?: ""
-        resultMap.putString("referenceID", referenceID)
 
-        Log.i("NamiBridge", "Processing entitlement into Javascript Map with referenceID $referenceID")
-
-        if (referenceID.isEmpty()) {
-            // Without a reference ID, do not use this object
-            return null
-        }
-
-        val namiID: String = entitlement.namiId ?: ""
-        resultMap.putString("namiID", namiID)
-
-        val description: String = entitlement.desc ?: ""
-        resultMap.putString("desc", description)
-
-        val name: String = entitlement.name ?: ""
-        resultMap.putString("name", name)
-
-        val activePurchasesArray: WritableArray = WritableNativeArray()
-        val purchases = entitlement.activePurchases
-        purchases.let {
-            for (purchase in purchases) {
-                val purchaseMap = purchaseToPurchaseDict(purchase)
-                activePurchasesArray.pushMap(purchaseMap)
-            }
-        }
-        resultMap.putArray("activePurchases", activePurchasesArray)
-
-
-        val purchasedSKUsArray: WritableArray = WritableNativeArray()
-        val purchasedSKUs = entitlement.purchasedSKUs
-        for (sku in purchasedSKUs) {
-            val skuMap = skuToSkuDict(sku)
-            purchasedSKUsArray.pushMap(skuMap)
-        }
-        resultMap.putArray("purchasedSKUs", purchasedSKUsArray)
-
-
-        val relatedSKUsArray: WritableArray = WritableNativeArray()
-        val relatedSKUs = entitlement.relatedSKUs
-        for (sku in relatedSKUs) {
-            val skuMap = skuToSkuDict(sku)
-            relatedSKUsArray.pushMap(skuMap)
-        }
-        resultMap.putArray("relatedSKUs", relatedSKUsArray)
-
-        // For react, provide the most recent active purchase and sku from the arrays
-
-        var lastPurchase: NamiPurchase? = null
-        if (entitlement.activePurchases.count() > 0) {
-            for (purchase in entitlement.activePurchases) {
-                if (lastPurchase == null || lastPurchase.purchaseInitiatedTimestamp < purchase.purchaseInitiatedTimestamp) {
-                    lastPurchase = purchase
-                }
-            }
-//            lastPurchase?.let { resultMap.putMap("latestPurchase", purchaseToPurchaseDict(lastPurchase)) }
-        }
-
-        var lastPurchasedSKU: NamiSKU? = lastPurchase?.purchasedSKU
-
-        if (lastPurchasedSKU == null) {
-            val lastPurcahsedSkuID = lastPurchase?.skuId
-            if (lastPurcahsedSkuID != null ) {
-                for (sku in entitlement.purchasedSKUs) {
-                    if (sku.skuId == lastPurcahsedSkuID) {
-                        lastPurchasedSKU = sku
-                    }
-                }
-            }
-        }
-        if (lastPurchasedSKU == null && entitlement.purchasedSKUs.count() > 0) {
-            lastPurchasedSKU = entitlement.purchasedSKUs.last()
-        }
-//        lastPurchasedSKU?.let { resultMap.putMap("lastPurchasedSKU", skuToSkuDict(lastPurchasedSKU)) }
-
-
-        return resultMap
-    }
 
 }

@@ -1,45 +1,70 @@
 package com.nami.reactlibrary
 
-
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywallManager
 
-
-class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), ActivityEventListener {
 
     private var blockRaisePaywall: Boolean = false
 
-    fun NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext?) {
+    init {
         NamiPaywallManager.registerApplicationAutoRaisePaywallBlocker {
-            Log.i("NamiBridge", "Nami flag for blocking paywall raise is " + blockRaisePaywall.toString());
+            Log.i("NamiBridge", "Nami flag for blocking paywall raise is $blockRaisePaywall");
             blockRaisePaywall
         }
+        reactContext.addActivityEventListener(this);
     }
 
     override fun getName(): String {
         return "NamiPaywallManagerBridge"
     }
 
+    override fun onActivityResult(activity: Activity?, requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("NamiBridge", "Nami Activity result listener activated, code is $requestCode")
+        if (NamiPaywallManager.didUserCloseBlockingNamiPaywall(requestCode, resultCode)) {
+            Log.i("NamiBridge", "User closed blocking paywall, sending event.  " +
+                    "Activity was." + activity.toString())
+            emitBockedPaywallClosed()
+        }
+    }
+
+    fun emitBockedPaywallClosed() {
+        val map = Arguments.createMap()
+        map.putBoolean("blockingPaywallClosed", true)
+        try {
+            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("BlockingPaywallClosed", map)
+        } catch (e: Exception) {
+            Log.e("NamiBridge", "Caught Exception: " + e.message)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        // do nothing
+    }
 
     @ReactMethod
     fun raisePaywall() {
-//        [[NamiPaywallManager shared] raisePaywallFromVC:nil];
+//        [[NamiPaywallManager shared] raisePaywallFromVC:nil]
 
         val activity: Activity? = currentActivity
-        Log.i("NamiBridge", "Nami Activity to raise paywall is " + activity.toString());
+        Log.i("NamiBridge", "Nami Activity to raise paywall is " + activity.toString())
 
         if (NamiPaywallManager.canRaisePaywall()) {
-            Log.d("NamiBridge", "About to raise Paywall ");
+            Log.d("NamiBridge", "About to raise Paywall ")
             if (activity != null) {
-                Log.i("NamiBridge", "Raising Paywall: ");
+                Log.i("NamiBridge", "Raising Paywall: ")
                 NamiPaywallManager.raisePaywall(activity)
             } else {
-                Log.w("NamiBridge", "Activity from react getCurrentActivity was null.");
+                Log.w("NamiBridge", "Activity from react getCurrentActivity was null.")
             }
         } else {
-            Log.w("NamiBridge", "Paywall not raised, SDK says paywall cannot be raised at this time.");
+            Log.w("NamiBridge", "Paywall not raised, SDK says paywall cannot be raised at this time.")
         }
     }
 
@@ -49,7 +74,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
 //        completion(@[[NSNumber numberWithBool:canRaise]]);
 
 
-        var canRaiseResult: WritableArray = WritableNativeArray()
+        val canRaiseResult: WritableArray = WritableNativeArray()
         canRaiseResult.pushBoolean(NamiPaywallManager.canRaisePaywall())
 
         successCallback.invoke(canRaiseResult)

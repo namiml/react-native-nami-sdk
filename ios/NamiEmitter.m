@@ -36,12 +36,20 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
             [self sendEventPurchaseMadeWithPurchases:purchases withState:purchaseState error:error];
         }];
         
+        [NamiEntitlementManager registerChangeHandlerWithEntitlementsChangedHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
+            [self sendEventEntitlementsChangedWithEntitlements:entitlements];
+        }];
+        
         [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
             [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
         }];
         
         [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
             [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
+        }];
+        
+        [NamiPaywallManager registerWithApplicationBlockingPaywallClosedHandler:^{
+            [self sendBlockingPaywallClosed];
         }];
         
     }
@@ -68,7 +76,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate" ];
+    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed" ];
 }
 
 - (NSDictionary<NSString *, NSObject *> *)constantsToExport {
@@ -123,6 +131,24 @@ bool hasNamiEmitterListeners;
     }
 }
 
+- (void)sendEventEntitlementsChangedWithEntitlements:(NSArray<NamiEntitlement *>*)entitlements {
+    if (hasNamiEmitterListeners) {
+        
+        NSMutableArray *convertedEntitlementDicts = [NSMutableArray new];
+        for ( NamiEntitlement *entitlementRecord in entitlements ) {
+            if ( entitlementRecord.referenceID != nil ) {
+                NSDictionary *entitlementDict = [NamiBridgeUtil entitlementToEntitlementDict:entitlementRecord];
+                [convertedEntitlementDicts addObject:entitlementDict];
+            }
+        }
+        
+        NSMutableDictionary *sendDict = [NSMutableDictionary dictionary];
+        sendDict[@"activeEntitlements"] =  convertedEntitlementDicts;
+        
+        [self sendEventWithName:@"EntitlementsChanged" body:sendDict];
+    }
+}
+
 - (void)sendEventPurchaseMadeWithPurchases:(NSArray<NamiPurchase *>*)purchases withState:(NamiPurchaseState)purchaseState error:(NSError *)error {
     if (hasNamiEmitterListeners) {
         
@@ -149,6 +175,7 @@ bool hasNamiEmitterListeners;
         [self sendEventWithName:@"PurchasesChanged" body:sendDict];
     }
 }
+
 
 - (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC
                        forPaywall:(NSString * _Nonnull) developerPaywallID
@@ -183,6 +210,17 @@ bool hasNamiEmitterListeners;
                                                             @"developerPaywallID": developerPaywallID,
                                                             @"paywallMetadata": paywallMeta }];
   }
+}
+
+- (void) sendBlockingPaywallClosed {
+    // Let system know a blocking paywall has been closed, in case they want to react specifically.
+    if (hasNamiEmitterListeners) {
+        NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionary];
+        // This part is really meant to be internally facing, scrub from dictionary
+        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        
+        [self sendEventWithName:@"BlockingPaywallClosed" body:@{ @"blockingPaywallClosed": @(true)}];
+    }
 }
 
 @end
