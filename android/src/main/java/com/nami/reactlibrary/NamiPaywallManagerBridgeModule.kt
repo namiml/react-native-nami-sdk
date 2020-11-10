@@ -77,7 +77,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
         var resultMap: WritableMap = WritableNativeMap()
         resultMap.putBoolean("result", canRaiseResult)
 
-        successCallback.invoke(resultMap)
+        successCallback.invoke(canRaiseResult)
     }
 
     @ReactMethod

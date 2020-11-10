@@ -53,7 +53,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
         resultMap.putBoolean("result", isActive)
 
         Log.i("NamiBridge", "Checking for $entitlementRefID entitlement active, result was $isActive")
-        resultsCallback.invoke(resultMap)
+        resultsCallback.invoke(isActive)
     }
 
     @ReactMethod

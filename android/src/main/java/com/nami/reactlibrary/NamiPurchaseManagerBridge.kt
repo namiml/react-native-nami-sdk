@@ -64,7 +64,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         var resultMap: WritableMap = WritableNativeMap()
         resultMap.putBoolean("result", isPurchased)
 
-        resultsCallback.invoke(resultMap)
+        resultsCallback.invoke(isPurchased)
     }
 
     @ReactMethod
@@ -82,8 +82,8 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         val anyPurchased = NamiPurchaseManager.anySKUIDPurchased(checkArray)
         var resultMap: WritableMap = WritableNativeMap()
         resultMap.putBoolean("result", anyPurchased)
-        
-        resultsCallback.invoke(resultMap)
+
+        resultsCallback.invoke(anyPurchased)
     }
 
     @ReactMethod
