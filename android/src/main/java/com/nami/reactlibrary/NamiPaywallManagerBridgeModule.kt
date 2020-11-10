@@ -73,9 +73,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
 //        BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
 //        completion(@[[NSNumber numberWithBool:canRaise]]);
 
-
-        val canRaiseResult: WritableArray = WritableNativeArray()
-        canRaiseResult.pushBoolean(NamiPaywallManager.canRaisePaywall())
+        val canRaiseResult = NamiPaywallManager.canRaisePaywall()
 
         successCallback.invoke(canRaiseResult)
     }

@@ -47,13 +47,10 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
     @ReactMethod
     fun isEntitlementActive(entitlementRefID: String, resultsCallback: Callback) {
-
         val isActive = NamiEntitlementManager.isEntitlementActive(entitlementRefID)
-        var resultMap: WritableMap = WritableNativeMap()
-        resultMap.putBoolean("active", isActive)
 
         Log.i("NamiBridge", "Checking for $entitlementRefID entitlement active, result was $isActive")
-        resultsCallback.invoke(resultMap)
+        resultsCallback.invoke(isActive)
     }
 
     @ReactMethod

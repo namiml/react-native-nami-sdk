@@ -61,9 +61,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
     fun isSKUIDPurchased(skuID: String, resultsCallback: Callback) {
         val isPurchased = NamiPurchaseManager.isSKUIDPurchased(skuID)
 
-        val resultArray: WritableArray = WritableNativeArray()
-        resultArray.pushBoolean(isPurchased)
-        resultsCallback.invoke(resultArray)
+        resultsCallback.invoke(isPurchased)
     }
 
     @ReactMethod
@@ -79,9 +77,8 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         }
 
         val anyPurchased = NamiPurchaseManager.anySKUIDPurchased(checkArray)
-        val resultArray: WritableArray = WritableNativeArray()
-        resultArray.pushBoolean(anyPurchased)
-        resultsCallback.invoke(resultArray)
+        
+        resultsCallback.invoke(anyPurchased)
     }
 
     @ReactMethod
