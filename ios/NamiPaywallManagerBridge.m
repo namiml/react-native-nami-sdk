@@ -50,7 +50,7 @@ RCT_EXPORT_METHOD(blockPaywallRaise:(BOOL)blockRaise)
 RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
 {
     BOOL canRaise = [NamiPaywallManager canRaisePaywall];
-    completion(@[[NSNumber numberWithBool:canRaise]]);
+    completion(@[@{ @"result" : [NSNumber numberWithBool:canRaise] }]);
 }
 
 RCT_EXPORT_METHOD(presentNamiPaywall:(NSArray *)skuIDs metapaywallDefinition:(NSDictionary *)paywallDict)
