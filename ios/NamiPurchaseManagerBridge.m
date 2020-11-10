@@ -45,7 +45,7 @@ RCT_EXPORT_METHOD(purchases:(RCTResponseSenderBlock)completion)
 RCT_EXPORT_METHOD(isSKUIDPurchased:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
 {
     BOOL active = [NamiPurchaseManager isSKUIDPurchased:skuID];
-    completion(@[@{@"result":[NSNumber numberWithBool:active]}]);
+    completion(@[[NSNumber numberWithBool:active]]);
 }
 
 RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
@@ -75,7 +75,7 @@ RCT_EXPORT_METHOD(anySKUIDPurchased:(nonnull NSArray*)skuIDs completion:(RCTResp
         }
     }
 
-    completion(@[@{@"result":[NSNumber numberWithBool:active]}]);
+    completion(@[[NSNumber numberWithBool:active]]);
 }
 
 /// This method does the purchase work, and can optionally be fed a paywall metadata object to pass along to the purchase flow.

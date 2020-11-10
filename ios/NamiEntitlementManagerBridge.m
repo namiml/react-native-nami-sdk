@@ -27,7 +27,7 @@ RCT_EXPORT_METHOD(isEntitlementActive:(nonnull NSString*)entitlementRefID comple
 {
     BOOL active = [NamiEntitlementManager isEntitlementActive:entitlementRefID];
     NSLog(@"Checking for %@ entitlement active, result was %@", entitlementRefID, [NSNumber numberWithBool:active] );
-    completion(@[@{@"result": [NSNumber numberWithBool:active]}]);
+    completion(@[[NSNumber numberWithBool:active]]);
 }
 
 
