@@ -21,6 +21,8 @@
 
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement;
 
++ (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(NamiPaywallStyling *)styling;
+
 @end
 
 #endif /* NamiBridgeUtil_h */

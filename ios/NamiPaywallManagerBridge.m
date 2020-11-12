@@ -85,6 +85,18 @@ RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPayw
     }];
 }
 
+RCT_EXPORT_METHOD(styleForPaywallID:(NSString *)developerPaywallID completion:(RCTResponseSenderBlock)completion)
+{
+    NamiPaywallStyling *styling = [NamiPaywallManager styleForPaywallID:developerPaywallID];
+    if (styling == nil) {
+        completion(@[]);
+    } else {
+        NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:styling];
+        completion(@[paywallStylingDict]);
+    }
+    
+}
+
 
 RCT_EXPORT_METHOD(paywallImpression:(NSString *)developerPaywallID)
 {
