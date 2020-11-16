@@ -210,8 +210,8 @@
         stylingDict[@"skuButtonColor"] = styling.skuButtonColor;
         stylingDict[@"skuButtonTextColor"] = styling.skuButtonTextColor;
         
-        stylingDict[@"featuredSkuButtonColor"] = styling.featuredSkuButtonColor;
-        stylingDict[@"featuredSkuButtonTextColor"] = styling.featuredSkuButtonTextColor;
+        stylingDict[@"featuredSkusButtonColor"] = styling.featuredSkusButtonColor;
+        stylingDict[@"featuredSkusButtonTextColor"] = styling.featuredSkusButtonTextColor;
         
         stylingDict[@"signinButtonFontSize"] = @(styling.signinButtonFontSize);
         stylingDict[@"signinButtonTextColor"] = styling.signinButtonTextColor;
