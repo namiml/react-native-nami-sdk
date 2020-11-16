@@ -72,7 +72,7 @@
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
 //     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
      
-     NSDate *subscriptionExpirationDate = purchase.exipres;
+     NSDate *subscriptionExpirationDate = purchase.expires;
      if (subscriptionExpirationDate != nil) {
          purchaseDict[@"subscriptionExpirationDate"] = [self javascriptDateFromNSDate:subscriptionExpirationDate];
      }
@@ -204,11 +204,14 @@
         stylingDict[@"closeButtonShadowRadius"] = @(styling.closeButtonShadowRadius);
         
         stylingDict[@"bottomOverlayColor"] = styling.bottomOverlayColor;
-        stylingDict[@"bottomOverlayColorAlpha"] = @(styling.bottomOverlayColorAlpha);
         stylingDict[@"bottomOverlayCornerRadius"] = @(styling.bottomOverlayCornerRadius);
+        stylingDict[@"useBottomOverlay"] = @(styling.useBottomOverlay);
         
         stylingDict[@"skuButtonColor"] = styling.skuButtonColor;
         stylingDict[@"skuButtonTextColor"] = styling.skuButtonTextColor;
+        
+        stylingDict[@"featuredSkuButtonColor"] = styling.featuredSkuButtonColor;
+        stylingDict[@"featuredSkuButtonTextColor"] = styling.featuredSkuButtonTextColor;
         
         stylingDict[@"signinButtonFontSize"] = @(styling.signinButtonFontSize);
         stylingDict[@"signinButtonTextColor"] = styling.signinButtonTextColor;
@@ -221,8 +224,11 @@
         stylingDict[@"restoreButtonShadowRadius"] = @(styling.restoreButtonShadowRadius);
         
         stylingDict[@"purchaseTermsFontSize"] = @(styling.purchaseTermsFontSize);
-        
         stylingDict[@"purchaseTermsTextColor"] = styling.purchaseTermsTextColor;
+        stylingDict[@"purchaseTermsShadowColor"] = styling.purchaseTermsShadowColor;
+        stylingDict[@"purchaseTermsShadowRadius"] = @(styling.purchaseTermsShadowRadius);
+        
+
         stylingDict[@"termsLinkColor"] = styling.termsLinkColor;
     }
     
