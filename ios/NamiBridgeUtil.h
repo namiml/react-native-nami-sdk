@@ -21,7 +21,7 @@
 
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement;
 
-+ (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(NamiPaywallStyling *)styling;
++ (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling;
 
 @end
 

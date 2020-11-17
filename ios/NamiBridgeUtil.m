@@ -183,7 +183,7 @@
     return [NSISO8601DateFormatter stringFromDate:purchaseTimestamp timeZone:UTC formatOptions:options];
 }
 
-+ (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(NamiPaywallStyling *)styling {
++ (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling {
     NSMutableDictionary<NSString *,id> *stylingDict = [NSMutableDictionary new];
     if (styling != nil) {        
         stylingDict[@"backgroundColor"] = styling.backgroundColor;
