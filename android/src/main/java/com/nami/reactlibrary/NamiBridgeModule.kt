@@ -103,18 +103,12 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
         } else {
             Arguments.createArray()
         }
-        val arraySize = namiCommandsReact?.size()
-        if (namiCommandsReact != null && arraySize != null && arraySize > 0) {
-            val settingsList: MutableList<String> = mutableListOf()
-            for (i in 0 until arraySize) {
-                val command: String? = namiCommandsReact.getString(i)
-                if (command != null) {
-                    settingsList.add(command)
-                }
-            }
-            Log.i(LOG_TAG, "Nami Configuration command settings are $settingsList")
-            builder.settingsList = settingsList
+        val settingsList = mutableListOf("extendedClientInfo:react-native:0.3.0")
+        namiCommandsReact?.toArrayList()?.filterIsInstance<String>()?.let { commandsFromReact ->
+            settingsList.addAll(commandsFromReact)
         }
+        Log.i(LOG_TAG, "Nami Configuration command settings are $settingsList")
+        builder.settingsList = settingsList
 
         val builtConfig: NamiConfiguration = builder.build()
         Log.i(LOG_TAG, "Nami Configuration object is $builtConfig")
