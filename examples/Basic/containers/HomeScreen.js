@@ -18,7 +18,7 @@ import Header from '../components/Header/Header';
 const HomeScreen = (props) => {
 
   const {navigate} = props.navigation;
-  const [products, setProducts] = useState([])
+  const [purchases, setPurchases] = useState([])
   const { NamiEmitter } = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
 
@@ -27,29 +27,30 @@ const HomeScreen = (props) => {
   }
 
   const onSessionConnect = (event) => {
-	  console.log("Products changed: ", event);
-    setProducts(event.products)
+    console.log("ExampleApp: Purchases changed: ", event);
+    if (event.purchaseState == "PURCHASED") {
+	console.log("Detected purchase, setting SKU IDs")
+    setPurchases(event.purchases)
+	}
   }
 
   const onPaywallShouldRaise = (event) => {
     // Add code to present your custom paywall here
-	  console.log("Data for paywall raise ", event);
+    console.log("ExampleApp: Data for paywall raise ", event);
   }
 
   const onSignInActivated = (event) => {
     // Add code to present UI for sign-in
-    console.log("Data for sign-in ", event);
+    console.log("ExampleApp: Data for sign-in ", event);
   }
 
   const activateAbout = () => {
-    console.log('Triggering core action');
-    NativeModules.NamiBridge.coreActionWithLabel("About");
+    console.log('ExampleApp: Triggering core action');
+    NativeModules.NamiMLManagerBridge.coreActionWithLabel("About");
 
-    NativeModules.NamiStoreKitHelperBridge.allPurchasedProducts(
+    NativeModules.NamiPurchaseManagerBridge.purchases(
 		   (purchases) => {
-		       console.log("purchases found ", purchases);
-
-		       // Goal: "Subscribed to Wondery+ Annual Plan.  Your next payment of $34.99 will be billed on S\ep. 19, 2020."   
+		       console.log("ExampleApp: Purchases found ", purchases);
 
 		       if(purchases && purchases.length) {
 				   var options = {
@@ -59,8 +60,8 @@ const HomeScreen = (props) => {
 				   };
 
 			   let formatPurchases = purchases.map((purchase, index) => {
-				   return `Subscribed to ${purchase.metaProduct.localizedTitle}. Your next payment of ${purchase.metaProduct.localizedMultipliedPrice} will be billed on ${new Date(purchase.subscriptionExpirationDate).toLocaleDateString('en-US', options)}`
-			       }) 
+				   return `Subscribed to ${purchase.localizedTitle}. Your next payment of ${purchase.localizedMultipliedPrice} will be billed on ${new Date(purchase.subscriptionExpirationDate).toLocaleDateString('en-US', options)}`
+			       })
 			   console.log(formatPurchases)
 		       }
 		   }
@@ -73,23 +74,24 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
 
-    console.log('Nami Bridge is');
+    console.log('ExampleApp: Nami Bridge is');
     console.log(NativeModules.NamiBridge);
 
     eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
-    console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
+    console.log("ExampleApp: HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
 
     eventEmitter.addListener('SignInActivate', onSignInActivated);
 
+    var configDict = {
+      "appPlatformID-apple": "002e2c49-7f66-4d22-a05c-1dc9f2b7f2af",
+      "appPlatformID-google": "3d062066-9d3c-430e-935d-855e2c56dd8e",
+      "logLevel": "DEBUG",
+      "developmentMode": true,
+      "bypassStore": true
+    };
 
-
-
-    //    NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
-    NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
-    //    NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
-    NativeModules.NamiBridge.configureWithAppID("2dc699a5-43c6-4e3a-9166-957e1640741b");
-
+    NativeModules.NamiBridge.configure(configDict);
   }, []);
 
   return (
@@ -132,11 +134,11 @@ const HomeScreen = (props) => {
               </Text>
             </View>
             <View style={styles.sectionContainer}>
-              { products.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
+              { purchases.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionMiddle}>
-	             Subscription is: { products.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
+	             Subscription is: { purchases.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
 			        </Text>
             </View>
           </View>

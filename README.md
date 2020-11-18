@@ -6,17 +6,34 @@ Nami is the smartest way to sell subscriptions.  Our SDK is built for the subscr
 
 The Nami SDK takes care of platform specific implementation details to offer in-app purchases so you can focus on building your core app experience.
 
-**Note we only currently support iOS.  Android coming soon!**
+**Android support in React Native is in pre-release.  Contact [support@namiml.com](mailto:support@namiml.com) to join the beta.**
 
-## Getting started with React Native and iOS
+## Getting started with React Native and Nami
 
-Our bridge code is available as an NPM package.  To get started, simply install the package and if necessary add a yarn script for building the iOS app.
+### Build the Bridge Locally
 
-1. `npm install react-native-nami-sdk --save` or `yarn add react-native-nami-sdk`
-2. Ensure your **package.json** file has a script similar to `"ios-setup": "cd ios && pod install"`
-3. Build the project with either NPM or yarn: `npm run ios-setup` or `yarn run ios-setup`
-4. Run your app in the iOS simulator: `npm run ios` or `yarn run ios`
+```
+yarn pack
+```
 
-Examples of how to use the Nami SDK can be found in the [examples directory](https://github.com/namiml/react-native-nami-sdk/tree/master/examples) of the github repository.
+This will generate a file `react-native-nami-sdk-vx.x.x.tgz` with the current version number of the bridge.   You can add this to a project by
+
+```
+yarn add file:react-native-nami-sdk-vx.x.x.tgz
+```
+
+### Installing from NPM
+
+The bridge is also available as a package on NPM.  You can install it via yarn or npm
+
+```
+npm install react-native-nami-sdk --save
+```
+
+```
+yarn add react-native-nami-sdk
+```
+
+Example apps showing how to use the bridge are available in this repository in the [examples directory](https://github.com/namiml/react-native-nami-sdk/tree/master/examples), including instructions on how to build the apps.
 
 More information on configuring and using the SDK is available in our docs at [https://docs.namiml.com](https://docs.namiml.com).

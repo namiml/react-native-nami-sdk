@@ -2,41 +2,32 @@
 
 The app shows how to use the analytics callbacks in our React-Native bridge for the Nami SDK.  This example designed to work with Google Analytics, but can be generalized to any third-party analytics service.
 
-## Mac OS Setup
-1. Install homebrew `https://brew.sh/`.
-2. Add the packages for `node`, `yarn`, and `watchman`. and `cocoapods` install in your machine
-```
-`brew install node`
-`brew install watchman`
-`brew install yarn`
-```
-3. Install CocoaPods -> `sudo gem install cocoapods`
-4. Clone the project -> `git clone https://github.com/namiml/react-native-nami-sdk.git`.
-5. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/Analytics`.
-6. Install Dependencies -> `yarn install`.
-7. Setup ios -> `yarn run ios-setup`.
-8. Run app in IOS Xcode -> `yarn run ios`
+## Setup MAC OS
 
-If you encounter any errors, trying running a clean build of the project with `yar run ios-setup-clean`.
+1. Install homebrew `https://brew.sh/`.
+2. Install the packages for `node`, `yarn`, and `watchman`.
+```
+brew install node
+brew install watchman
+brew install yarn
+```
+3. Clone the project -> `git clone https://github.com/namiml/react-native-nami-sdk.git`.
+4. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/BasicLinkedPaywall`.
+5. Install Dependencies -> `yarn install`.
+
+**iOS Setup**
+
+1. Install CocoaPods -> `sudo gem install cocoapods`
+2. `cd ios && pod update`
+3. Either run `yarn run ios` or `open BasicLinkedPaywall.xcworkspace` and build and run in Xcode.
+
+**Android Setup**
+
+1. Requires Android Studio and an emulator to be installed.
+2. Open the the file `android/build.gradle` in Android Studio.
+3. Allow gradle to sync and build the project.
+4. Return to the terminal and run `yarn run android`.
 
 ## Add your Google Analytics config file to the project
 
 In order for this app to send data to your Firebase / Google Analytics project, you need to download and add a configuration file from Google.  Instructions for how to setup Google Analytics are available in [our docs here](https://docs.namiml.com/docs/google-analytics).
-
-## Run tests
-
-You can run tests by running: `yarn test`.
-
-## Debugging in Mac OS
-
-If port 8081 is already in use, run the following to find what is running on port 8081.
-
-```
-sudo lsof -i :8081
-```
-
-You can terminate the process via
-
-```
-kill -9 <PID>
-```

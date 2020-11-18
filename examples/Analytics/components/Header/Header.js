@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     overflow: 'visible',
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     marginTop: 20,
     marginBottom: 20
   },

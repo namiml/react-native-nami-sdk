@@ -1,14 +1,16 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "0.1.27",
+  "version": "0.2.1",
   "description": "React Native Module for Nami - The Smartest Way to Sell Subscriptions.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "android": "react-native run-android",
+    "android-clean": "cd android && rm -rf .gradle && rm -rf .idea && rm -rf android.iml && rm -rf local.properties",
     "ios": "react-native run-ios",
     "ios-setup": "cd ios && pod install",
     "ios-clean": "cd ios && rm -rf Pods && rm -rf build",
+    "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build  && pod update && pod install",
     "start": "react-native start"
   },
   "keywords": [
@@ -20,7 +22,11 @@
     "storekit",
     "subscriptions"
   ],
-  "author": "Nami ML, Inc.",
+  "author": {
+    "username": "namiml",
+    "name": "Nami ML, Inc.",
+    "email": "francisco.pena@namiml.com"
+  },
   "contributors": [
     {
       "name": "Francisco Pena",
@@ -32,21 +38,13 @@
     }
   ],
   "license": "SEE LICENSE FILE",
-  "dependencies": {
-    "@react-native-community/cli-platform-android": "^2.9.0",
-    "@react-native-community/masked-view": "^0.1.5",
-    "expo-cli": "^3.11.3",
-    "react": ">= 16.9.0",
-    "react-native": ">= 0.61.4"
-  },
   "peerDependencies": {
-    "react": ">= 16.9.0",
-    "react-native": ">= 0.61.4",
-    "@react-native-community/cli-platform-android": "^2.9.0",
-    "@react-native-community/masked-view": "^0.1.5"
+    "react": "^16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x"
   },
   "devDependencies": {
-    "standard": "^8.6.0"
+    "react": "^16.9.0",
+    "react-native": "^0.61.5"
   },
   "repository": {
     "type": "git",

@@ -1,26 +1,62 @@
 import React from 'react';
-import { Modal, Text, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules, Alert } from 'react-native';
+import { Modal, Text, Button, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules, Alert } from 'react-native';
 import theme from '../../theme';
+
 
 const LinkedPaywall = (props) => {
   const { open, setOpen, data } = props;
   const { title, body } = data.paywallMetadata.marketing_content;
   const { background_image_url_phone } = data.paywallMetadata;
-  const { products } = data;
+  const { skus } = data;
 
-  const purchase = (productIdentifier) => {
-    NativeModules.NamiStoreKitHelperBridge.buyProduct(productIdentifier,
+  const restore = () => {
+    NativeModules.NamiPurchaseManagerBridge.restorePurchases( (result) => {
+      console.log("ExampleApp: Nami restorePurchases results was ", result);
+      if (result.success) {
+        NativeModules.NamiPurchaseManagerBridge.purchases( (result) => {
+          console.log("ExampleApp: Nami purchases are ", result);
+          console.log("Purchase count is ", result.length)
+          if (result.length > 0) {
+            Alert.alert(
+              'Restore Complete',
+              'Found your subscription!',
+              [{text: 'OK', onPress: () => setOpen(!open)}],
+              {cancelable: false},
+            );
+          } else {
+            Alert.alert(
+              'Restore Complete',
+              'No active subscriptions found.',
+              [{text: 'OK', onPress: () => setOpen(open)}],
+              {cancelable: false},
+            );
+          }
+        } );
+      } else {
+        Alert.alert(
+          'Restore Failed',
+          'Restore failed to complete.',
+          [{text: 'OK', onPress: () => setOpen(open)}],
+          {cancelable: false},
+        );
+      }
+    }  )
+  }
+
+  const purchase = (skuIdentifier) => {
+      NativeModules.NamiPurchaseManagerBridge.buySKU(skuIdentifier, "",
       (purchased) => {
+      console.log("ExampleApp: Nami purchase results was", purchased);	      
         if (purchased) {
           Alert.alert(
-            'Purchase Complete', 
+            'Purchase Complete',
             'Your Subscription was successfull!',
             [{text: 'OK', onPress: () => setOpen(!open)}],
             {cancelable: false},
           );
         } else {
           Alert.alert(
-            'Purchase Failed', 
+            'Purchase Failed',
             'Your Subscription fail!',
             [{text: 'OK', onPress: () => setOpen(!open)}],
             {cancelable: false},
@@ -29,7 +65,7 @@ const LinkedPaywall = (props) => {
       }
     );
   }
-  
+
   return (
     <Modal
       animationType="slide"
@@ -51,21 +87,25 @@ const LinkedPaywall = (props) => {
           <Text style={styles.sectionTitle}>{title}</Text>
           <Text style={styles.sectionDescription}>{body}</Text>
         </View>
-        <View style={styles.subscriptions}>
+        { skus && !!skus.length && <View style={styles.subscriptions}>
           <View style={styles.sectionContainer}>
-            {products.map((product, index) => {
+            {skus.map((sku, index) => {
               return (
                 <TouchableOpacity
                   key={index}
                   style={styles.subscriptionButton}
-                  onPress={() => purchase(product.productIdentifier)}
+                  onPress={() => purchase(sku.skuIdentifier)}
                   underlayColor='#fff'>
-                  <Text style={styles.subscriptionText}>{product.localizedTitle} - {product.localizedPrice}</Text>
+                  <Text style={styles.subscriptionText}>{sku.localizedTitle} - {sku.localizedPrice}</Text>
                 </TouchableOpacity>
               )
             })}
+           <Button
+	     style={styles.restoreButton}
+	     onPress={() => restore()}
+	     underlayColor='#f00' title="Restore"/>
           </View>
-        </View>
+        </View>}
       </ImageBackground>
     </Modal>
   );
@@ -80,7 +120,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 340,
-    borderRadius: 20
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20
   },
   sectionContainer: {
     marginTop: 32,
@@ -109,7 +150,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 10
   },
   close: {
-    color: 'black',
+    color: theme.white,
     textAlign: 'right'
   },
 
@@ -124,6 +165,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.white
   },
+
+  restoreButton: {
+	    marginRight: 40,
+	    marginLeft: 40,
+	    marginTop: 10,
+	    paddingTop: 10,
+	    paddingBottom: 10,
+	    color: theme.red,
+	    borderRadius: 10,
+	    borderWidth: 1,
+	    borderColor: theme.white
+  },
+
   subscriptionText: {
     color: theme.white,
     textAlign: 'center',

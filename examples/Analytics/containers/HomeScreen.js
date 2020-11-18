@@ -21,7 +21,7 @@ import analytics from '@react-native-firebase/analytics';
 const HomeScreen = (props) => {
 
   const {navigate} = props.navigation;
-  const [products, setProducts] = useState([])
+  const [purchases, setPurchases] = useState([])
   const { NamiEmitter } = NativeModules;
   const { NamiAnalyticsEmitter } = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
@@ -32,8 +32,8 @@ const HomeScreen = (props) => {
   }
 
   const onSessionConnect = (event) => {
-	  console.log("Products changed: ", event);
-    setProducts(event.products)
+    console.log("ExampleApp: Purchases changed: ", event);
+    setPurchases(event.purchases)
   }
 
   const addAnalyticEvent = async (analyticsItems, actionType) => {
@@ -94,7 +94,7 @@ const HomeScreen = (props) => {
   }
 
   const onNamiAnalyticsReceived = (event) => {
-    console.log("Analytics Dictionary ", event);
+    console.log("ExampleApp: Analytics Dictionary was ", event);
     const { analyticsItems, actionType} = event;
     addAnalyticEvent(analyticsItems, actionType)
   }
@@ -103,12 +103,18 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
 
-    console.log('Starting Nami.')
-    console.log(firebase)
+    console.log('ExampleApp: Starting Nami.')
+    console.log('ExampleApp: firebase is ', firebase)
 
-    NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
-    NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
-    NativeModules.NamiBridge.configureWithAppID("002e2c49-7f66-4d22-a05c-1dc9f2b7f2af");
+    NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
+    NativeModules.NamiPurchaseManagerBridge.bypassStore(true);
+
+    var configDict = {
+	'appPlatformID-apple': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
+	'appPlatformID-google': '3d062066-9d3c-430e-935d-855e2c56dd8e',
+        "logLevel": "DEBUG"
+    };
+    NativeModules.NamiBridge.configure(configDict);
 
     eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     analyticsEmitter.addListener('NamiAnalyticsSent', onNamiAnalyticsReceived);
@@ -155,11 +161,11 @@ const HomeScreen = (props) => {
               </Text>
             </View>
             <View style={styles.sectionContainer}>
-              { products.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
+              { purchases.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionMiddle}>
-	             Subscription is: { products.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
+	             Subscription is: { purchases.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
 			        </Text>
             </View>
           </View>

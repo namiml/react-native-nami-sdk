@@ -19,27 +19,34 @@ import LinkedPaywall from '../components/LinkedPaywall/LinkedPaywall';
 const HomeScreen = (props) => {
 
   const {navigate} = props.navigation;
-  const [products, setProducts] = useState([])
+  const [purchases, setPurchases] = useState([])
   const [ open, setOpen ] =  useState(false);
   const [data, setData] = useState(null);
-
 
   const { NamiEmitter } = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
 
   const subscribeAction = () => {
-      NativeModules.NamiPaywallManagerBridge.raisePaywall();
-    
+    NativeModules.NamiPaywallManagerBridge.canRaisePaywall( (result) => {
+    	   console.log("ExampleApp: Nami canRaisePaywall ", result);
+    	}
+    );
+
+    console.log("ExampleApp: Asking Nami to raise paywall.");
+    NativeModules.NamiPaywallManagerBridge.raisePaywall();
   }
 
   const onSessionConnect = (event) => {
-	  console.log("Products changed: ", event);
-    setProducts(event.products)
+      console.log("ExampleApp: purchases changed: ", event);
+      if (event.purchaseState == "PURCHASED") {
+          console.log("Detected PURCHASED state, updating purchases")
+          setPurchases(event.purchases)
+      }
   }
 
   const onPaywallShouldRaise = (event) => {
     // Add code to present your custom paywall here
-    console.log("Data for paywall raise ", event);
+    console.log("ExampleApp: Data for paywall raise ", event);
     setData(event);
     setOpen(!open);
   }
@@ -50,27 +57,36 @@ const HomeScreen = (props) => {
   }
 
   const activateAbout = () => {
-    console.log('Triggering core action');
-    NativeModules.NamiBridge.coreActionWithLabel("About");
+    console.log('ExampleApp: Triggering core action');
+    NativeModules.NamiMLManagerBridge.coreActionWithLabel("About");
     navigate('About') ;
   }
 
 
   useEffect(() => {
 
-    console.log('Nami Bridge is');
-    console.log(NativeModules.NamiBridge);
+    console.log('ExampleApp: Nami Bridge is');
+    console.log(NativeModules.NamiBridge, 'NamiBridge');
+    console.log(NativeModules.NamiPaywallManagerBridge, 'NamiPaywallManagerBridge');
+    console.log(NativeModules.NamiMLManagerBridge, 'NamiMLManagerBridge');
 
     eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
-    console.log("HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
 
-    eventEmitter.addListener('SignInActivate', onSignInActivated);
+    var configDict = {
+	    "appPlatformID-google": "a95cef52-35e0-4794-8755-577492c2d5d1",
+	    "appPlatformID-apple": "54635e21-87ed-4ed6-9119-9abb493bc9b0",
+	    "logLevel": "DEBUG",
+	    "developmentMode": false,
+	    "bypassStore" : false
+    };
 
+    NativeModules.NamiBridge.configure(configDict);
 
-    NativeModules.NamiStoreKitHelperBridge.clearBypassStoreKitPurchases();
-    NativeModules.NamiStoreKitHelperBridge.bypassStoreKit(true);
-    NativeModules.NamiBridge.configureWithAppID("eea3721d-a13f-4a94-872a-3c2b795953da");
+    NativeModules.NamiPaywallManagerBridge.canRaisePaywall( (result) => {
+    		       console.log("ExampleApp: Nami canRaisePaywall ", result);
+    	}
+    );
 
   }, []);
 
@@ -114,11 +130,11 @@ const HomeScreen = (props) => {
               </Text>
             </View>
             <View style={styles.sectionContainer}>
-              { products.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
+              { purchases.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionMiddle}>
-	             Subscription is: { products.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
+	             Subscription is: { purchases.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
 			        </Text>
             </View>
           </View>

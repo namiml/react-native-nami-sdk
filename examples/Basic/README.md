@@ -2,36 +2,27 @@
 The folder contains a simple example app that shows how to use the React-Native bridge with the Nami SDK.
 
 ## Setup MAC OS
+
 1. Install homebrew `https://brew.sh/`.
-2. Add the packages for `node`, `yarn`, and `watchman`. and `cocoapods` install in your machine
+2. Install the packages for `node`, `yarn`, and `watchman`.
 ```
-`brew install node`
-`brew install watchman`
-`brew install yarn`
+brew install node
+brew install watchman
+brew install yarn
 ```
-3. Install CocoaPods -> `sudo gem install cocoapods`
-4. Clone the project -> `git clone https://github.com/namiml/react-native-nami-sdk.git`.
-5. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/Basic`.
-6. Install Dependencies -> `yarn install`.
-7. Setup ios -> `yarn run ios-setup`.
-8. Run app in IOS Xcode -> `yarn run ios`
+3. Clone the project -> `git clone https://github.com/namiml/react-native-nami-sdk.git`.
+4. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/Basic`.
+5. Install Dependencies -> `yarn install`.
 
-If you encounter any errors, trying running a clean build of the project with `yar run ios-setup-clean`.
+**iOS Setup**
 
-## Run tests
+1. Install CocoaPods -> `sudo gem install cocoapods`
+2. `cd ios && pod update`
+3. Either run `yarn run ios` or `open Basic.xcworkspace` and build in Xcode.
 
-You can run tests by running: `yarn test`
+**Android Setup**
 
-## Debugging in Mac OS
-
-If you receive an error about port 8081 already being in use, run the following command to find what is running on port 8081.
-
-```
-`sudo lsof -i :8081`
-```
-
-You can terminate the running process via
-
-```
-`kill -9 <PID>`
-```
+1. Requires Android Studio and an emulator to be installed.
+2. Open the the file `android/build.gradle` in Android Studio.
+3. Allow gradle to sync and build the project.
+4. Return to the terminal and run `yarn run android`.

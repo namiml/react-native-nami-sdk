@@ -16,11 +16,11 @@ import Header from '../components/Header/Header';
 const AboutScreen = (props) => {
 
   useEffect(() => {
-    console.log('Entering about screen.');
+    console.log('Example App: Entering about screen.');
     NativeModules.NamiBridge.enterCoreContentWithLabel("AboutScreen");
 
     return () => {
-      console.log('Exiting about screen.');
+      console.log('ExampleApp: Exiting about screen.');
       NativeModules.NamiBridge.exitCoreContentWithLabel("AboutScreen");
     };
   }, [props.navigation]);

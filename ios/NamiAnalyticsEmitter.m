@@ -26,16 +26,14 @@
 
 - (instancetype)init
 {
-  self = [super init];
-  if (self) {
-    hasNamiAanlyticsEmitterListeners = NO;
-
-      [NamiAnalyticsSupport registerAnalyticsHandlerWithHandler: ^(NamiAnalyticsActionType actionType , NSDictionary<NSString *,id> * _Nonnull anaytlicsDict) {
-          [self sendAnalyticsEventForAction:actionType anayticsItems:anaytlicsDict];
-      }];
-
-    // Tell Nami to listen for purchases and we'll forward them on to listeners
-  }
+    self = [super init];
+    if (self) {
+        hasNamiAanlyticsEmitterListeners = NO;
+        
+        [NamiAnalyticsSupport registerAnalyticsHandlerWithHandler: ^(NamiAnalyticsActionType actionType , NSDictionary<NSString *,id> * _Nonnull anaytlicsDict) {
+            [self sendAnalyticsEventForAction:actionType anayticsItems:anaytlicsDict];
+        }];
+    }
 
   return self;
 }
@@ -74,12 +72,6 @@ bool hasNamiAanlyticsEmitterListeners;
           case NamiAnalyticsActionTypePaywallRaise:
               actionName = @"paywall_raise";
               break;
-          case NamiAnalyticsActionTypePaywallClosed:
-              actionName = @"paywall_closed";
-              break;
-          case NamiAnalyticsActionTypePaywallRaiseBlocked:
-              actionName = @"paywall_raise_blocked";
-              break;
           case NamiAnalyticsActionTypePurchaseActivity:
               actionName = @"purchase_activity";
               break;
@@ -91,9 +83,9 @@ bool hasNamiAanlyticsEmitterListeners;
 
 
 - (NSDictionary *) productDictIfProductPresentInAnalyticsItems:(NSDictionary *)anayticsItems forKey:(NSString *)key {
-    NamiMetaProduct *product = (NamiMetaProduct *)anayticsItems[key];
-    if (product != NULL && [product isKindOfClass:[NamiMetaProduct class]] ) {
-        return [NamiBridgeUtil productToProductDict:product];
+    NamiSKU *product = (NamiSKU *)anayticsItems[key];
+    if (product != NULL && [product isKindOfClass:[NamiSKU class]] ) {
+        return [NamiBridgeUtil skuToSKUDict:product];
     } else {
         return NULL;
     }
@@ -107,8 +99,8 @@ bool hasNamiAanlyticsEmitterListeners;
     id rawProducts = anayticsItems[@"paywallProducts"];
     if ([rawProducts isKindOfClass:[NSArray class]]) {
         NSMutableArray<NSDictionary *> *productsSanitized = [NSMutableArray new];
-        for (NamiMetaProduct *product in (NSArray *)rawProducts) {
-            [productsSanitized addObject:[NamiBridgeUtil productToProductDict:product]];
+        for (NamiSKU *product in (NSArray *)rawProducts) {
+            [productsSanitized addObject:[NamiBridgeUtil skuToSKUDict:product]];
         }
         sanitizedDictionary[@"paywallProducts"] = productsSanitized;
     }

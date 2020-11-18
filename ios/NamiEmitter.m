@@ -27,41 +27,48 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 
 - (instancetype)init
 {
-  self = [super init];
-  if (self) {
-    hasNamiEmitterListeners = NO;
-
-    // Tell Nami to listen for purchases and we'll forward them on to listeners
-    [[NamiStoreKitHelper shared] registerWithPurchasesChangedHandler:^(NSArray<NamiMetaPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
-      [self sendEventPurchased];
-    }];
-
-      [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
-          [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
-      }];
-
-      [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
-          [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
-      }];
-
-  }
-
-  return self;
+    self = [super init];
+    if (self) {
+        hasNamiEmitterListeners = NO;
+        
+        // Tell Nami to listen for purchases and we'll forward them on to listeners
+        [NamiPurchaseManager registerWithPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull purchases, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
+            [self sendEventPurchaseMadeWithPurchases:purchases withState:purchaseState error:error];
+        }];
+        
+        [NamiEntitlementManager registerChangeHandlerWithEntitlementsChangedHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
+            [self sendEventEntitlementsChangedWithEntitlements:entitlements];
+        }];
+        
+        [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
+            [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
+        }];
+        
+        [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
+            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
+        }];
+        
+        [NamiPaywallManager registerWithApplicationBlockingPaywallClosedHandler:^{
+            [self sendBlockingPaywallClosed];
+        }];
+        
+    }
+    return self;
 }
 
 - (void) getPurchasedProducts : (RCTResponseSenderBlock) callback  {
-  NSArray *allProducts = [self allPurchasedProducts];
-  callback(allProducts);
+    NSArray *allProducts = [self allPurchasedProducts];
+    callback(allProducts);
 }
 
 - (NSArray<NSString *> *)allPurchasedProducts {
-  NSArray<NamiMetaPurchase *> *purchases = NamiStoreKitHelper.shared.allPurchasedProducts;
-  NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-  for (NamiMetaProduct *purchase in purchases) {
-    [productIDs addObject:purchase.productIdentifier];
-  }
-
-  return productIDs;
+    NSArray<NamiPurchase *> *purchases = NamiPurchaseManager.allPurchases;
+    NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
+    for (NamiPurchase *purchase in purchases) {
+        [productIDs addObject:purchase.skuID];
+    }
+    
+    return productIDs;
 }
 
 + (BOOL)requiresMainQueueSetup {
@@ -69,11 +76,11 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate" ];
+    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed" ];
 }
 
 - (NSDictionary<NSString *, NSObject *> *)constantsToExport {
-  return @{@"initialPurchasedProducts" : [self allPurchasedProducts]};
+    return @{@"initialPurchasedProducts" : [self allPurchasedProducts]};
 }
 
 bool hasNamiEmitterListeners;
@@ -88,42 +95,132 @@ bool hasNamiEmitterListeners;
     hasNamiEmitterListeners = NO;
 }
 
-- (void)sendEventPurchased {
-  if (hasNamiEmitterListeners) {
-    NSArray<NamiMetaPurchase *> *purchases = NamiStoreKitHelper.shared.allPurchasedProducts;
-    NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-    for (NamiMetaProduct *purchase in purchases) {
-      [productIDs addObject:purchase.productIdentifier];
+-(NSString *)purchaseStateToString:(NamiPurchaseState)purchaseState {
+    switch (purchaseState) {
+  
+        case NamiPurchaseStatePending:
+            return @"PENDING";
+            break;
+        case NamiPurchaseStatePurchased:
+            return @"PURCHASED";
+            break;
+        case NamiPurchaseStateConsumed:
+            return @"CONSUMED";
+            break;
+        case NamiPurchaseStateResubscribed:
+            return @"RESUBSCRIBED";
+            break;
+        case NamiPurchaseStateUnsubscribed:
+            return @"UNSUBSCRIBED";
+            break;       
+        case NamiPurchaseStateDeferred:
+            return @"DEFERRED";
+            break;
+        case NamiPurchaseStateFailed:
+            return @"FAILED";
+            break;
+        case NamiPurchaseStateCancelled:
+            return @"CANCELLED";
+            break;       
+        case NamiPurchaseStateUnknown:
+            return @"UNKNOWN";
+            break;
+        default:
+            return @"UNKNOWN";
+            break;
     }
-
-    [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs}];
-  }
 }
+
+- (void)sendEventEntitlementsChangedWithEntitlements:(NSArray<NamiEntitlement *>*)entitlements {
+    if (hasNamiEmitterListeners) {
+        
+        NSMutableArray *convertedEntitlementDicts = [NSMutableArray new];
+        for ( NamiEntitlement *entitlementRecord in entitlements ) {
+            if ( entitlementRecord.referenceID != nil ) {
+                NSDictionary *entitlementDict = [NamiBridgeUtil entitlementToEntitlementDict:entitlementRecord];
+                [convertedEntitlementDicts addObject:entitlementDict];
+            }
+        }
+        
+        NSMutableDictionary *sendDict = [NSMutableDictionary dictionary];
+        sendDict[@"activeEntitlements"] =  convertedEntitlementDicts;
+        
+        [self sendEventWithName:@"EntitlementsChanged" body:sendDict];
+    }
+}
+
+- (void)sendEventPurchaseMadeWithPurchases:(NSArray<NamiPurchase *>*)purchases withState:(NamiPurchaseState)purchaseState error:(NSError *)error {
+    if (hasNamiEmitterListeners) {
+        
+        
+        NSString *convertedState = [self purchaseStateToString:purchaseState];
+        
+        NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
+        for ( NamiPurchase *purchaseRecord in purchases ) {
+            if ( purchaseRecord.skuID != nil ) {
+                NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
+                [convertedPurchaseDicts addObject:purchaseDict];
+            }
+        }
+        
+        NSString *localizedErrorDescription = [error localizedDescription];
+        
+        NSMutableDictionary *sendDict = [NSMutableDictionary dictionary];
+        sendDict[@"purchases"] =  convertedPurchaseDicts;
+        sendDict[@"purchaseState"] = convertedState;
+        if (localizedErrorDescription != nil) {
+           sendDict[@"errorDescription"] = localizedErrorDescription;
+        }
+        
+        [self sendEventWithName:@"PurchasesChanged" body:sendDict];
+    }
+}
+
 
 - (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC
                        forPaywall:(NSString * _Nonnull) developerPaywallID
-                      paywallMetadata:(NamiMetaPaywall * _Nonnull) paywallMetadata {
+                      paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata {
   if (hasNamiEmitterListeners) {
       // Pass along paywall ID and paywall metadata for use in sign-in provider.
+      NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
+      // This part is really meant to be internally facing, scrub from dictionary
+      [paywallMeta removeObjectForKey:@"formatted_skus"];
+      [paywallMeta removeObjectForKey:@"skus"];
       [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
-                                                        @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
+                                                        @"paywallMetadata": paywallMeta }];
   }
 }
 
 - (void)sendPaywallActivatedFromVC:(UIViewController * _Nullable) fromVC
                         forPaywall:(NSString * _Nonnull) developerPaywallID
-                      withProducts:(NSArray<NamiMetaProduct *> * _Nullable) products
-                       paywallMetadata:(NamiMetaPaywall * _Nonnull) paywallMetadata  {
+                      withProducts:(NSArray<NamiSKU *> * _Nullable) products
+                       paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata  {
     if (hasNamiEmitterListeners) {
-    NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
-    for (NamiMetaProduct *product in products) {
-      [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];
+    NSMutableArray<NSDictionary<NSString *,NSString *> *> *skuDicts = [NSMutableArray new];
+    for (NamiSKU *sku in products) {
+      [skuDicts addObject:[NamiBridgeUtil skuToSKUDict:sku]];
     }
-
-      [self sendEventWithName:@"AppPaywallActivate" body:@{ @"products": productDicts,
+        
+        NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
+        // This part is really meant to be internally facing, scrub from dictionary
+        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        [paywallMeta removeObjectForKey:@"skus"];
+        
+        [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
-                                                            @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
+                                                            @"paywallMetadata": paywallMeta }];
   }
+}
+
+- (void) sendBlockingPaywallClosed {
+    // Let system know a blocking paywall has been closed, in case they want to react specifically.
+    if (hasNamiEmitterListeners) {
+        NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionary];
+        // This part is really meant to be internally facing, scrub from dictionary
+        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        
+        [self sendEventWithName:@"BlockingPaywallClosed" body:@{ @"blockingPaywallClosed": @(true)}];
+    }
 }
 
 @end
