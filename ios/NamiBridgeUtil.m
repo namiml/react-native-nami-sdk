@@ -205,7 +205,6 @@
         
         stylingDict[@"bottomOverlayColor"] = styling.bottomOverlayColor;
         stylingDict[@"bottomOverlayCornerRadius"] = @(styling.bottomOverlayCornerRadius);
-        stylingDict[@"useBottomOverlay"] = @(styling.useBottomOverlay);
         
         stylingDict[@"skuButtonColor"] = styling.skuButtonColor;
         stylingDict[@"skuButtonTextColor"] = styling.skuButtonTextColor;
