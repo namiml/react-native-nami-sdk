@@ -186,6 +186,9 @@ bool hasNamiEmitterListeners;
       // This part is really meant to be internally facing, scrub from dictionary
       [paywallMeta removeObjectForKey:@"formatted_skus"];
       [paywallMeta removeObjectForKey:@"skus"];
+      NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
+      paywallMeta[@"styleData"] = paywallStylingDict;
+      
       [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
                                                         @"paywallMetadata": paywallMeta }];
   }
@@ -205,6 +208,8 @@ bool hasNamiEmitterListeners;
         // This part is really meant to be internally facing, scrub from dictionary
         [paywallMeta removeObjectForKey:@"formatted_skus"];
         [paywallMeta removeObjectForKey:@"skus"];
+        NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
+        paywallMeta[@"styleData"] = paywallStylingDict;
         
         [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,

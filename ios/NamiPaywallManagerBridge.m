@@ -74,9 +74,12 @@ RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPayw
         }
 
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
-             // This part is really meant to be internally facing, scrub from dictionary
-             [paywallMeta removeObjectForKey:@"formatted_skus"];
-             [paywallMeta removeObjectForKey:@"skus"];
+        // This part is really meant to be internally facing, scrub from dictionary
+        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        [paywallMeta removeObjectForKey:@"skus"];
+        NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
+        paywallMeta[@"styleData"] = paywallStylingDict;
+        
         
         NSArray *wrapperArray = @[@{ @"products": productDicts,
                                                                 @"developerPaywallID": developerPaywallID,

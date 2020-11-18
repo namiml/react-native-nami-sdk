@@ -69,19 +69,24 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
             }
         }
         
-        NSObject *namiCommandStrings = configDict[@"namiCommands"];
-        if ( namiCommandStrings != NULL ) {
+        // Start commands with header iformation for Nami to let them know this is a React client.
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:0.3.0"]];
+        
+        // Add additional namiCommands app may have sent in.
+        NSObject *appCommandStrings = configDict[@"namiCommands"];
+        if ( appCommandStrings != NULL ) {
             NSLog(@"NamiCommand from dictionary is %@", configDict[@"namiCommands"]);
-            if ([namiCommandStrings isKindOfClass:[NSArray class]] ) {
-                NSMutableArray<NSString *> *finalCommands = [NSMutableArray arrayWithCapacity:4];
-                for (NSObject *commandObj in ((NSArray *)namiCommandStrings)){
+            if ([appCommandStrings isKindOfClass:[NSArray class]] ) {
+                for (NSObject *commandObj in ((NSArray *)appCommandStrings)){
                     if ([commandObj isKindOfClass:[NSString class]]) {
-                        [finalCommands addObject:(NSString *)commandObj];
+                        [namiCommandStrings addObject:(NSString *)commandObj];
                     }
                 }
-                config.namiCommands = finalCommands;
             }
         }
+        
+        config.namiCommands = namiCommandStrings;
+
         
         [Nami configureWithNamiConfig:config];
     }
