@@ -1,14 +1,9 @@
 package com.nami.reactlibrary
 
-import android.util.Log
-import android.widget.Toast
-import com.facebook.react.bridge.*
-import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.paywall.NamiSKU
-import java.lang.ref.WeakReference
-import java.util.*
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
 
-class NamiAnalyitcsEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiAnalyticsEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 //    fun NamiEmitter(reactContext: ReactApplicationContext?) {
 //        Log.e("ReactNative", "In Emitter Initialize(reactContext)")
 //        NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->

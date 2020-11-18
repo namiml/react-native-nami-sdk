@@ -1,12 +1,8 @@
 package com.nami.reactlibrary
 
-
 import android.util.Log
 import com.facebook.react.bridge.*
-import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
-import com.namiml.billing.NamiPurchaseState
 
 class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -14,15 +10,10 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         return "NamiPurchaseManagerBridge"
     }
 
-    override fun initialize() {
-    }
-
-
     @ReactMethod
     fun clearBypassStorePurchases() {
         NamiPurchaseManager.clearBypassStorePurchases()
     }
-
 
     @ReactMethod
     fun buySKU(skuPlatformID: String, developerPaywallID: String, resultsCallback: Callback) {
@@ -32,9 +23,9 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
                 val resultArray: WritableArray = WritableNativeArray()
                 if (NamiPurchaseManager.isSKUIDPurchased(skuPlatformID)) {
                     resultArray.pushBoolean(true)
-                    Log.i("NamiBridge", "Purchase complete, result is PURCHASED.")
+                    Log.i(LOG_TAG, "Purchase complete, result is PURCHASED.")
                 } else {
-                    Log.i("NamiBridge", "Purchase complete, product not purchased.")
+                    Log.i(LOG_TAG, "Purchase complete, product not purchased.")
                     resultArray.pushBoolean(false)
                 }
                 resultsCallback.invoke(resultArray)
@@ -47,7 +38,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         val purchases = NamiPurchaseManager.allPurchases()
 
         // Pass back empty array until we can get purchases from the SDK
-        var resultArray: WritableArray = WritableNativeArray()
+        val resultArray: WritableArray = WritableNativeArray()
 
         for (purchase in purchases) {
             val purchaseDict = purchaseToPurchaseDict(purchase)
@@ -66,29 +57,31 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
 
     @ReactMethod
     fun anySKUIDPurchased(skuIDs: ReadableArray, resultsCallback: Callback) {
-        val checkArray: MutableList<String> = mutableListOf<String>()
+        val checkArray: MutableList<String> = mutableListOf()
         for (x in 0 until skuIDs.size()) {
             if (skuIDs.getType(x) == ReadableType.String) {
                 val skuID = skuIDs.getString(x)
-                if (skuID != null && skuID.length > 0) {
+                if (skuID != null && skuID.isNotEmpty()) {
                     checkArray.add(skuID)
                 }
             }
         }
 
         val anyPurchased = NamiPurchaseManager.anySKUIDPurchased(checkArray)
-        
+
         resultsCallback.invoke(anyPurchased)
     }
 
     @ReactMethod
     fun restorePurchases(resultsCallback: Callback) {
-        Log.e("NamiBridge", "Restore Purchases called on Android platform, has no effect on Android.")
+        Log.e(LOG_TAG, "Restore Purchases called on Android platform, has no effect on Android.")
 
-        val resultMap: WritableNativeMap = WritableNativeMap()
-        resultMap.putBoolean("success", true)
-        val resultArray: WritableArray = WritableNativeArray()
-        resultArray.pushMap(resultMap)
+        val resultMap = WritableNativeMap().apply {
+            putBoolean("success", true)
+        }
+        val resultArray: WritableArray = WritableNativeArray().apply {
+            pushMap(resultMap)
+        }
         resultsCallback.invoke(resultArray)
     }
 

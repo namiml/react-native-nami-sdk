@@ -4,14 +4,13 @@ import android.util.Log
 import android.widget.Toast
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.paywall.NamiPaywallManager
 import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.billing.NamiPurchaseState
 import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywall
+import com.namiml.paywall.NamiPaywallManager
 import com.namiml.paywall.NamiSKU
-import java.lang.ref.WeakReference
 import java.util.*
 
 class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -35,7 +34,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     }
 
     override fun getName(): String {
-        return "NamiEmitter"
+        return NamiEmitter::class.java.simpleName
     }
 
     override fun canOverrideExistingModule(): Boolean {
@@ -53,18 +52,18 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //        [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
 //            [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
 //        }];
-        NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallID ->
+        NamiPaywallManager.registerSignInListener { context, paywallData, developerPaywallID ->
             Toast.makeText(context, "Sign in clicked", Toast.LENGTH_SHORT).show()
         }
-        Log.i("NamiBridge", "In Emitter Initialize()")
-        NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-            Log.i("NamiBridge", "Products from registerApplicationPaywallProvider callback are " + products)
+        Log.i(LOG_TAG, "In Emitter Initialize()")
+        NamiPaywallManager.registerPaywallRaiseListener { context, paywallData, products, developerPaywallId ->
+            Log.i(LOG_TAG, "Products from registerApplicationPaywallProvider callback are $products")
 
-            var sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
+            val sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(context, paywallData, sendProducts, developerPaywallId)
         }
 
-        NamiPurchaseManager.registerPurchasesChangedHandler { list, namiPurchaseState, s ->
+        NamiPurchaseManager.registerPurchasesChangedListener { list, namiPurchaseState, s ->
             emitPurchaseMade(list, namiPurchaseState, s)
         }
 //
@@ -78,19 +77,20 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         val map = Arguments.createMap()
 
 
-        var resultArray: WritableArray = WritableNativeArray()
+        val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in entitlements) {
             val entitlementDict = entitlementDictFromEntitlement(entitlement)
             resultArray.pushMap(entitlementDict)
         }
         map.putArray("entitlements", resultArray)
 
-        Log.i("NamiBridge", "Emitting entitlements changed")
+        Log.i(LOG_TAG, "Emitting entitlements changed")
         try {
-            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("EntitlementsChanged", map)
         } catch (e: Exception) {
-            Log.e("NamiBridge", "Caught Exception: " + e.message)
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
@@ -112,32 +112,37 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             map.putString("errorDescription", errorString)
         }
 
-        var resultArray: WritableArray = WritableNativeArray()
+        val resultArray: WritableArray = WritableNativeArray()
         for (purchase in purchases) {
             val purchaseDict = purchaseToPurchaseDict(purchase)
             resultArray.pushMap(purchaseDict)
         }
         map.putArray("purchases", resultArray)
 
-        val convertedState: String
-        if (purchaseState == NamiPurchaseState.PURCHASED) {
-            convertedState = "PURCHASED"
-        } else if (purchaseState == NamiPurchaseState.FAILED) {
-            convertedState = "FAILED"
-        } else if (purchaseState == NamiPurchaseState.CANCELLED) {
-            convertedState = "CANCELLED"
-        } else {
-            convertedState = "UNKNOWN"
+        val convertedState: String = when (purchaseState) {
+            NamiPurchaseState.PURCHASED -> {
+                "PURCHASED"
+            }
+            NamiPurchaseState.FAILED -> {
+                "FAILED"
+            }
+            NamiPurchaseState.CANCELLED -> {
+                "CANCELLED"
+            }
+            else -> {
+                "UNKNOWN"
+            }
         }
         map.putString("purchaseState", convertedState)
 
 
-        Log.i("NamiBridge", "Emitting purchase with state " + convertedState)
+        Log.i(LOG_TAG, "Emitting purchase with state $convertedState")
         try {
-            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("PurchasesChanged", map)
         } catch (e: Exception) {
-            Log.e("NamiBridge", "Caught Exception: " + e.message)
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
@@ -153,13 +158,14 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
 //        }
 
-        Log.i("NamiBridge", "Emitting paywall raise signal for developerID" + paywallDeveloperID);
-        val map = Arguments.createMap()
-        map.putString("developerPaywallID", paywallDeveloperID)
+        Log.i(LOG_TAG, "Emitting paywall raise signal for developerID$paywallDeveloperID");
+        val map = Arguments.createMap().apply {
+            putString("developerPaywallID", paywallDeveloperID)
+        }
 
         // Populate paywall metadata map
         val paywallMap: WritableMap = paywallToPaywallDict(paywallData)
-        if (paywallDeveloperID != null && paywallDeveloperID.length > 0) {
+        if (paywallDeveloperID != null && paywallDeveloperID.isNotEmpty()) {
             paywallMap.putString("developer_paywall_id", paywallDeveloperID)
         }
         map.putMap("paywallMetadata", paywallMap)
@@ -175,10 +181,11 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         map.putArray("skus", skusArray)
 
         try {
-            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("AppPaywallActivate", map)
         } catch (e: Exception) {
-            Log.e("NamiBridge", "Caught Exception: " + e.message)
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
@@ -188,14 +195,16 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //            [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
 //                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
 //        }
-        val map = Arguments.createMap()
-        map.putString("developerPaywallID", paywallDeveloperID)
-        map.putString("paywallMetadata", "Need TO Map NamiPaywall Object")
+        val map = Arguments.createMap().apply {
+            putString("developerPaywallID", paywallDeveloperID)
+            putString("paywallMetadata", "Need TO Map NamiPaywall Object")
+        }
         try {
-            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("SignInActivate", map)
         } catch (e: Exception) {
-            Log.e("NamiBridge", "Caught Exception: " + e.message)
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
@@ -209,14 +218,16 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //
 //            [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs}];
 //        }
-        val map = Arguments.createMap()
-        map.putString("key1", "Value1")
-        map.putString("key1", "Value1")
+        val map = Arguments.createMap().apply {
+            putString("key1", "Value1")
+            putString("key1", "Value1")
+        }
         try {
-            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("customEventName", map)
         } catch (e: Exception) {
-            Log.e("NamiBridge", "Caught Exception: " + e.message)
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 }

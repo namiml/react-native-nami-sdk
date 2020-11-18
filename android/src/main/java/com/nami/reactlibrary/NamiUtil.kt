@@ -2,16 +2,16 @@ package com.nami.reactlibrary
 
 import android.util.Log
 import com.facebook.react.bridge.*
-import com.namiml.paywall.NamiPaywall
 import com.namiml.billing.NamiPurchase
 import com.namiml.entitlement.NamiEntitlement
+import com.namiml.paywall.NamiPaywall
+import com.namiml.paywall.NamiPurchaseSource
 import com.namiml.paywall.NamiSKU
+import com.namiml.util.extensions.getFormattedPrice
+import com.namiml.util.extensions.getSubscriptionPeriodEnum
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
-
-import java.time.*
 
 //+ (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiMetaProduct *)product {
 //    NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
@@ -50,12 +50,12 @@ import java.time.*
 fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
 
     val paywallMap: WritableMap = Arguments.createMap()
-    paywallMap.putString("title", paywallData.title ?: "")
-    paywallMap.putString("body", paywallData.body ?: "")
+    paywallMap.putString("title", paywallData.title.orEmpty())
+    paywallMap.putString("body", paywallData.body.orEmpty())
 
     val marketingContentMap = Arguments.createMap()
-    marketingContentMap.putString("title", paywallData.title ?: "")
-    marketingContentMap.putString("body", paywallData.body ?: "")
+    marketingContentMap.putString("title", paywallData.title.orEmpty())
+    marketingContentMap.putString("body", paywallData.body.orEmpty())
 
     val extraDataMap = paywallData.extraData
     if (extraDataMap != null) {
@@ -65,16 +65,16 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
 
     paywallMap.putMap("marketing_content", marketingContentMap)
 
-    Log.i("NamiBridge", "extraData items are " + extraDataMap)
+    Log.i(LOG_TAG, "extraData items are $extraDataMap")
     paywallMap.putString("id", paywallData.id)
-    paywallMap.putString("background_image_url_phone", paywallData.backgroundImageUrlPhone ?: "")
-    paywallMap.putString("background_image_url_tablet", paywallData.backgroundImageUrlTablet ?: "")
-    paywallMap.putString("privacy_policy", paywallData.privacyPolicy ?: "")
-    paywallMap.putString("purchase_terms", paywallData.purchaseTerms ?: "")
-    paywallMap.putString("tos_link", paywallData.tosLink ?: "")
-    paywallMap.putString("name", paywallData.name ?: "")
-    paywallMap.putString("cta_type", paywallData.type ?: "")
-//    paywallMap.putString("developer_paywall_id", paywallData.developerPaywallId ?: "")
+    paywallMap.putString("background_image_url_phone", paywallData.backgroundImageUrlPhone.orEmpty())
+    paywallMap.putString("background_image_url_tablet", paywallData.backgroundImageUrlTablet.orEmpty())
+    paywallMap.putString("privacy_policy", paywallData.privacyPolicy.orEmpty())
+    paywallMap.putString("purchase_terms", paywallData.purchaseTerms.orEmpty())
+    paywallMap.putString("tos_link", paywallData.tosLink.orEmpty())
+    paywallMap.putString("name", paywallData.name.orEmpty())
+    paywallMap.putString("cta_type", paywallData.type)
+//    paywallMap.putString("developer_paywall_id", paywallData.developerPaywallId.orEmpty())
 
     val allowClosing = paywallData.allowClosing
     paywallMap.putBoolean("allow_closing", allowClosing)
@@ -141,18 +141,18 @@ fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
     val productDict = Arguments.createMap()
 
     productDict.putString("skuIdentifier", namiSKU.skuId)
-    productDict.putString("localizedTitle", namiSKU.skuName)
-    productDict.putString("localizedDescription", namiSKU.localizedDescription)
-    productDict.putString("localizedPrice", namiSKU.localizedPrice)
-    productDict.putString("localizedMultipliedPrice", namiSKU.localizedMultipliedPrice)
-    productDict.putString("price", namiSKU.price.toBigDecimal().toPlainString())
-    productDict.putString("priceLanguage", namiSKU.priceLanguage)
-    productDict.putString("priceCountry", namiSKU.priceCountry)
-    productDict.putString("priceCurrency", namiSKU.priceCurrency)
-    productDict.putString("numberOfUnits", namiSKU.numberOfUnits.toString())
-    val periodUnit = namiSKU.subscriptionIntervalLabel
-    if (periodUnit != null) {
-        productDict.putString("periodUnit", periodUnit)
+    productDict.putString("localizedTitle", namiSKU.skuDetails.title)
+    productDict.putString("localizedDescription", namiSKU.skuDetails.description)
+    productDict.putString("localizedPrice", namiSKU.skuDetails.price)
+    productDict.putString("localizedMultipliedPrice", namiSKU.skuDetails.price)
+    productDict.putString("price", namiSKU.skuDetails.getFormattedPrice().toString())
+    productDict.putString("priceLanguage", Locale.getDefault().language)
+    productDict.putString("priceCountry", Locale.getDefault().country)
+    productDict.putString("priceCurrency", namiSKU.skuDetails.priceCurrencyCode)
+    productDict.putString("numberOfUnits", "1")
+    val subscriptionPeriod = namiSKU.skuDetails.getSubscriptionPeriodEnum()
+    if (subscriptionPeriod != null) {
+        productDict.putString("periodUnit", subscriptionPeriod.durationInDays.toString())
     }
 
     return productDict
@@ -162,26 +162,28 @@ fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
 fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     val purchaseMap = WritableNativeMap()
 
-//    purchaseMap.putString("localizedDescription", purchase.localizedDescription ?: "")
+//    purchaseMap.putString("localizedDescription", purchase.localizedDescription.orEmpty())
 
-    val purchaseSource = purchase.source ?: ""
-//            nami_triggered or user_initiated
-    var adjustedSource = "unknown"
-    if (purchaseSource == "nami_triggered") {
-        adjustedSource = "nami_rules"
-    } else if (purchaseSource == "user_initiated") {
-        adjustedSource = "user"
+    val purchaseSource = when (purchase.purchaseSource) {
+        NamiPurchaseSource.NAMI_PAYWALL -> {
+            "nami_rules"
+        }
+        NamiPurchaseSource.APPLICATION -> {
+            "user"
+        }
+        else -> {
+            "unknown"
+        }
     }
-    purchaseMap.putString("purchaseSource", adjustedSource)
+    purchaseMap.putString("purchaseSource", purchaseSource)
 
-    purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier ?: "")
-    purchaseMap.putString("skuIdentifier", purchase.skuId ?: "")
+    purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier.orEmpty())
+    purchaseMap.putString("skuIdentifier", purchase.skuId.orEmpty())
 //    val initiatedTimestamp = purchase.purchaseInitiatedTimestamp
 //    val dt = Instant.ofEpochSecond(initiatedTimestamp)
 //            .atZone(ZoneId.systemDefault())
 //            .toLocalDateTime()
-//    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp ?: "")
-    purchaseMap.putString("purchaseSource", purchase.purchaseSource ?: "")
+//    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp.orEmpty())
     val expiresDate = purchase.expires
     if (expiresDate != null) {
         val expiresString = javascriptDateFromKJavaDate(expiresDate)
@@ -192,36 +194,31 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     // TODO: map kotlin dictionary into arbitrary map?
     purchaseMap.putMap("platformMetadata", WritableNativeMap())
 
-    var purchasedSkuMap: WritableMap = WritableNativeMap()
-    val purchasedSKU = purchase.purchasedSKU
-    purchasedSKU?.let {
-        purchasedSkuMap = skuToSkuDict(purchasedSKU)
-    }
+//    var purchasedSkuMap: WritableMap = WritableNativeMap()
+//    val purchasedSKU = purchase.purchasedSKU
+//    purchasedSKU?.let {
+//        purchasedSkuMap = skuToSkuDict(purchasedSKU)
+//    }
 //    purchaseMap.putMap("purchasedSku", purchasedSkuMap)
 
     return purchaseMap
 }
 
 fun entitlementDictFromEntitlement(entitlement: NamiEntitlement): WritableMap? {
-    var resultMap: WritableMap = WritableNativeMap()
-    val referenceID: String = entitlement.referenceId ?: ""
+    val resultMap: WritableMap = WritableNativeMap()
+    val referenceID: String = entitlement.referenceId
     resultMap.putString("referenceID", referenceID)
 
-    Log.i("NamiBridge", "Processing entitlement into Javascript Map with referenceID $referenceID")
+    Log.i(LOG_TAG, "Processing entitlement into Javascript Map with referenceID $referenceID")
 
     if (referenceID.isEmpty()) {
         // Without a reference ID, do not use this object
         return null
     }
 
-    val namiID: String = entitlement.namiId ?: ""
-    resultMap.putString("namiID", namiID)
-
-    val description: String = entitlement.desc ?: ""
-    resultMap.putString("desc", description)
-
-    val name: String = entitlement.name ?: ""
-    resultMap.putString("name", name)
+    resultMap.putString("namiID", entitlement.namiId.orEmpty())
+    resultMap.putString("desc", entitlement.desc.orEmpty())
+    resultMap.putString("name", entitlement.name.orEmpty())
 
     val activePurchasesArray: WritableArray = WritableNativeArray()
     val purchases = entitlement.activePurchases
@@ -263,21 +260,21 @@ fun entitlementDictFromEntitlement(entitlement: NamiEntitlement): WritableMap? {
 //            lastPurchase?.let { resultMap.putMap("latestPurchase", purchaseToPurchaseDict(lastPurchase)) }
     }
 
-    var lastPurchasedSKU: NamiSKU? = lastPurchase?.purchasedSKU
-
-    if (lastPurchasedSKU == null) {
-        val lastPurcahsedSkuID = lastPurchase?.skuId
-        if (lastPurcahsedSkuID != null ) {
-            for (sku in entitlement.purchasedSKUs) {
-                if (sku.skuId == lastPurcahsedSkuID) {
-                    lastPurchasedSKU = sku
-                }
-            }
-        }
-    }
-    if (lastPurchasedSKU == null && entitlement.purchasedSKUs.count() > 0) {
-        lastPurchasedSKU = entitlement.purchasedSKUs.last()
-    }
+//    var lastPurchasedSKU: NamiSKU? = lastPurchase?.purchasedSKU
+//
+//    if (lastPurchasedSKU == null) {
+//        val lastPurcahsedSkuID = lastPurchase?.skuId
+//        if (lastPurcahsedSkuID != null ) {
+//            for (sku in entitlement.purchasedSKUs) {
+//                if (sku.skuId == lastPurcahsedSkuID) {
+//                    lastPurchasedSKU = sku
+//                }
+//            }
+//        }
+//    }
+//    if (lastPurchasedSKU == null && entitlement.purchasedSKUs.count() > 0) {
+//        lastPurchasedSKU = entitlement.purchasedSKUs.last()
+//    }
 //        lastPurchasedSKU?.let { resultMap.putMap("lastPurchasedSKU", skuToSkuDict(lastPurchasedSKU)) }
 
 
@@ -287,9 +284,9 @@ fun entitlementDictFromEntitlement(entitlement: NamiEntitlement): WritableMap? {
 
 // Convert Java Date to ISO860 UTC date to pass to Javascript
 fun javascriptDateFromKJavaDate(date: Date): String {
-    val tz = TimeZone.getTimeZone("UTC")
-    val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'")
-    df.setTimeZone(tz)
+    val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()).apply {
+        setTimeZone(TimeZone.getTimeZone("UTC"))
+    }
     return df.format(date)
 }
 

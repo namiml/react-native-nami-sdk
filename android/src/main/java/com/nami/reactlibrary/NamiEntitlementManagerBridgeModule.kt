@@ -4,15 +4,10 @@ package com.nami.reactlibrary
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.Nami
-import com.namiml.billing.NamiPurchase
-import com.namiml.billing.NamiPurchaseManager
 import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
 import com.namiml.entitlement.NamiEntitlementSetter
 import com.namiml.entitlement.NamiPlatformType
-import com.namiml.paywall.NamiPaywallManager
-import com.namiml.paywall.NamiSKU
 import java.util.*
 
 class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -34,10 +29,11 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         map.putArray("activeEntitlements", resultArray)
         try {
-            reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("EntitlementsChanged", map)
         } catch (e: Exception) {
-            Log.e("NamiBridge", "Caught Exception: " + e.message)
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
@@ -49,7 +45,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     fun isEntitlementActive(entitlementRefID: String, resultsCallback: Callback) {
         val isActive = NamiEntitlementManager.isEntitlementActive(entitlementRefID)
 
-        Log.i("NamiBridge", "Checking for $entitlementRefID entitlement active, result was $isActive")
+        Log.i(LOG_TAG, "Checking for $entitlementRefID entitlement active, result was $isActive")
         resultsCallback.invoke(isActive)
     }
 
@@ -71,7 +67,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val nativeEntitlements = NamiEntitlementManager.getEntitlements()
 
-        Log.i("NamiBridge", "getEntitlements result is $nativeEntitlements")
+        Log.i(LOG_TAG, "getEntitlements result is $nativeEntitlements")
 
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in nativeEntitlements) {
@@ -95,7 +91,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                     entitlementsToSet.add(entitlementSetter)
                 }
             }
-            index = index + 1
+            index += 1
         }
 
         NamiEntitlementManager.setEntitlements(entitlementsToSet)
@@ -108,9 +104,9 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
     fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
         if (entitlementSetterMap.hasKey("referenceID")) {
-            val referenceID = entitlementSetterMap.getString("referenceID") ?: ""
+            val referenceID = entitlementSetterMap.getString("referenceID").orEmpty()
             if (referenceID.isNotEmpty()) {
-                var expires: Date? = null
+                val expires: Date? = null
 
                 var purchasedSKUid: String? = null
                 if (entitlementSetterMap.hasKey("purchasedSKUID")) {
@@ -135,15 +131,13 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                 }
 
                 //referenceId: kotlin.String, purchasedSKUid: kotlin.String?, expires: java.util.Date?, platform: com.namiml.entitlement.NamiPlatformType
-                val setter = NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires)
-                return setter
+                return NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires)
             }
         }
-        Log.e("NamiBridge", "Attempted to set entitlement with no referenceID " + entitlementSetterMap);
+        Log.e(LOG_TAG, "Attempted to set entitlement with no referenceID $entitlementSetterMap");
 
         return null
     }
-
 
 
 }
