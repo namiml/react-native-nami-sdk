@@ -7,6 +7,7 @@ import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiPurchaseSource
 import com.namiml.paywall.NamiSKU
+import com.namiml.paywall.PaywallStyleData
 import com.namiml.util.extensions.getFormattedPrice
 import com.namiml.util.extensions.getSubscriptionPeriodEnum
 import java.text.DateFormat
@@ -86,6 +87,55 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     paywallMap.putBoolean("sign_in_control", signInControl)
 
     return paywallMap
+}
+
+fun paywallStylingToPaywallStylingDict(styling: PaywallStyleData): WritableMap {
+
+    val styleMap: WritableMap = Arguments.createMap()
+        styleMap.putString("backgroundColor", styling.backgroundColor)
+
+        styleMap.putDouble("bodyFontSize", styling.bodyFontSize.toDouble())
+        styleMap.putString("bodyTextColor", styling.bodyTextColor)
+        styleMap.putString("bodyShadowColor", styling.bodyShadowColor)
+        styleMap.putDouble("bodyShadowRadius", styling.bodyShadowRadius.toDouble())
+
+        styleMap.putDouble("titleFontSize", styling.titleFontSize.toDouble())
+        styleMap.putString("titleTextColor", styling.titleTextColor)
+        styleMap.putString("titleShadowColor", styling.titleShadowColor)
+        styleMap.putDouble("titleShadowRadius", styling.titleShadowRadius.toDouble())
+
+        styleMap.putDouble("closeButtonFontSize", styling.closeButtonFontSize.toDouble())
+        styleMap.putString("closeButtonTextColor", styling.closeButtonTextColor)
+        styleMap.putString("closeButtonShadowColor", styling.closeButtonShadowColor)
+        styleMap.putDouble("closeButtonShadowRadius", styling.closeButtonShadowRadius.toDouble())
+
+        styleMap.putString("bottomOverlayColor", styling.bottomOverlayColor)
+        styleMap.putDouble("bottomOverlayCornerRadius", styling.bottomOverlayCornerRadius.toDouble())
+
+        styleMap.putString("skuButtonColor", styling.skuButtonColor)
+        styleMap.putString("skuButtonTextColor", styling.skuButtonTextColor)
+
+        styleMap.putString("featuredSkusButtonColor", styling.featuredSkuButtonColor)
+        styleMap.putString("featuredSkusButtonTextColor", styling.featuredSkuButtonTextColor)
+
+        styleMap.putDouble("signinButtonFontSize", styling.signInButtonFontSize.toDouble())
+        styleMap.putString("signinButtonTextColor", styling.signInButtonTextColor)
+        styleMap.putString("signinButtonShadowColor", styling.signInButtonShadowColor)
+        styleMap.putDouble("signinButtonShadowRadius", styling.signInButtonShadowRadius.toDouble())
+
+        styleMap.putDouble("restoreButtonFontSize", styling.restoreButtonFontSize.toDouble())
+        styleMap.putString("restoreButtonTextColor", styling.restoreButtonTextColor)
+        styleMap.putString("restoreButtonShadowColor", styling.restoreButtonShadowColor)
+        styleMap.putDouble("restoreButtonShadowRadius", styling.restoreButtonShadowRadius.toDouble())
+
+        styleMap.putDouble("purchaseTermsFontSize", styling.purchaseTermsFontSize.toDouble())
+        styleMap.putString("purchaseTermsTextColor", styling.purchaseTermsTextColor)
+        styleMap.putString("purchaseTermsShadowColor", styling.purchaseTermsShadowColor)
+        styleMap.putDouble("purchaseTermsShadowRadius", styling.purchaseTermsShadowRadius.toDouble())
+
+        styleMap.putString("termsLinkColor", styling.termsLinkColor)
+
+    return styleMap
 }
 
 fun convertNativeArrayBecauseReact(nativeList: List<*>): WritableArray {
