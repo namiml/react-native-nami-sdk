@@ -163,7 +163,6 @@
 				76C40F3C3041437BDF401B0A /* Pods-BasicLinkedPaywallTests.debug.xcconfig */,
 				256EE725DFF20914F4C7CA5E /* Pods-BasicLinkedPaywallTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
