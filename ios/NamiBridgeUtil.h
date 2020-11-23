@@ -23,6 +23,8 @@
 
 + (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling;
 
++ (NSString *)hexStringForColor:(UIColor *)color;
+
 @end
 
 #endif /* NamiBridgeUtil_h */

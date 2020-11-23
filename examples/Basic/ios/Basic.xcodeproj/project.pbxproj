@@ -65,6 +65,7 @@
 		9A0150E59657A8986FBBFD39 /* libPods-Basic-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Basic-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CA1D0851C6859DE9CE5D940 /* Pods-Basic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Basic.debug.xcconfig"; path = "Target Support Files/Pods-Basic/Pods-Basic.debug.xcconfig"; sourceTree = "<group>"; };
 		D1ACA00C1B531058A504779D /* Pods-Basic-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Basic-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Basic-tvOSTests/Pods-Basic-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		EBE98930256C26E9000784EB /* TestProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestProducts.storekit; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -132,6 +133,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				EBE98930256C26E9000784EB /* TestProducts.storekit */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
