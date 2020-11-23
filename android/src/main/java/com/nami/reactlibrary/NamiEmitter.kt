@@ -180,6 +180,12 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 
         map.putArray("skus", skusArray)
 
+        val paywallStyleData = paywallData.styleData
+        if (paywallDeveloperID != null) {
+            val paywallStyleDict = paywallStyleData?.let { paywallStylingToPaywallStylingDict(it) }
+            map.putMap("styleData", paywallStyleDict)
+        }
+
         try {
             reactApplicationContext
                     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
