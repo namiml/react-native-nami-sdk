@@ -64,7 +64,7 @@
 		90A7477276AEFF5E134BCEE6 /* Pods-BasicLinkedPaywall-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicLinkedPaywall-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BasicLinkedPaywall-tvOSTests/Pods-BasicLinkedPaywall-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9223CC09852E47B2F621C799 /* Pods-BasicLinkedPaywall-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicLinkedPaywall-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BasicLinkedPaywall-tvOSTests/Pods-BasicLinkedPaywall-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		C1A59209F0292000E4CB0366 /* libPods-BasicLinkedPaywall-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BasicLinkedPaywall-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EBE9895E256C2723000784EB /* TestProducts.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestProducts.storekit; sourceTree = "<group>"; };
+		EBE9895E256C2723000784EB /* BasicLinkedPaywall.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = BasicLinkedPaywall.storekit; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F6BE80EB3D2396790B43C0C3 /* libPods-BasicLinkedPaywall.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BasicLinkedPaywall.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,7 +133,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				EBE9895E256C2723000784EB /* TestProducts.storekit */,
+				EBE9895E256C2723000784EB /* BasicLinkedPaywall.storekit */,
 			);
 			name = BasicLinkedPaywall;
 			sourceTree = "<group>";

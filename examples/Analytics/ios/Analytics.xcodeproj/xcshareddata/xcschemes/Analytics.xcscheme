@@ -98,7 +98,7 @@
          </BuildableReference>
       </BuildableProductRunnable>
       <StoreKitConfigurationFileReference
-         identifier = "../TestProducts.storekit">
+         identifier = "../Analytics.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
