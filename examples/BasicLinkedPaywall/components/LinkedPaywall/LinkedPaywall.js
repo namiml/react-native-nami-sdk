@@ -1,22 +1,31 @@
 import React from 'react';
-import { Modal, Text, Button, View, StyleSheet, ImageBackground, TouchableOpacity, NativeModules, Alert } from 'react-native';
+import {
+  Modal,
+  Text,
+  Button,
+  View,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+  NativeModules,
+  Alert,
+} from 'react-native';
 import theme from '../../theme';
 
-
 const LinkedPaywall = (props) => {
-  const { open, setOpen, data } = props;
-  const { title, body } = data.paywallMetadata.marketing_content;
-  const { background_image_url_phone } = data.paywallMetadata;
-  const { skus } = data;
+  const {open, setOpen, data} = props;
+  const {title, body} = data.paywallMetadata.marketing_content;
+  const {background_image_url_phone} = data.paywallMetadata;
+  const {skus} = data;
 
   const restore = () => {
-    NativeModules.NamiPurchaseManagerBridge.restorePurchases( (result) => {
-      console.log("ExampleApp: Nami restorePurchases results was ", result);
+    NativeModules.NamiPurchaseManagerBridge.restorePurchases((result) => {
+      console.log('ExampleApp: Nami restorePurchases results was ', result);
       if (result.success) {
-        NativeModules.NamiPurchaseManagerBridge.purchases( (result) => {
-          console.log("ExampleApp: Nami purchases are ", result);
-          console.log("Purchase count is ", result.length)
-          if (result.length > 0) {
+        NativeModules.NamiPurchaseManagerBridge.purchases((resultInside) => {
+          console.log('ExampleApp: Nami purchases are ', resultInside);
+          console.log('Purchase count is ', resultInside.length);
+          if (resultInside.length > 0) {
             Alert.alert(
               'Restore Complete',
               'Found your subscription!',
@@ -31,7 +40,7 @@ const LinkedPaywall = (props) => {
               {cancelable: false},
             );
           }
-        } );
+        });
       } else {
         Alert.alert(
           'Restore Failed',
@@ -40,13 +49,15 @@ const LinkedPaywall = (props) => {
           {cancelable: false},
         );
       }
-    }  )
-  }
+    });
+  };
 
   const purchase = (skuIdentifier) => {
-      NativeModules.NamiPurchaseManagerBridge.buySKU(skuIdentifier, "",
+    NativeModules.NamiPurchaseManagerBridge.buySKU(
+      skuIdentifier,
+      '',
       (purchased) => {
-      console.log("ExampleApp: Nami purchase results was", purchased);	      
+        console.log('ExampleApp: Nami purchase results was', purchased);
         if (purchased) {
           Alert.alert(
             'Purchase Complete',
@@ -62,24 +73,24 @@ const LinkedPaywall = (props) => {
             {cancelable: false},
           );
         }
-      }
+      },
     );
-  }
+  };
 
   return (
     <Modal
       animationType="slide"
       transparent={false}
       visible={open}
-      presentationStyle='formSheet'
+      presentationStyle="formSheet"
       onRequestClose={() => {
         Alert.alert('LinkedPaywall has been closed.');
       }}>
-      <ImageBackground source={{ uri: background_image_url_phone }} style={{ width: '100%', height: '100%' }}>
+      <ImageBackground
+        source={{uri: background_image_url_phone}}
+        style={{width: '100%', height: '100%'}}>
         <View style={styles.sectionContainer}>
-          <TouchableOpacity
-            onPress={() => setOpen(!open)}
-            underlayColor='#fff'>
+          <TouchableOpacity onPress={() => setOpen(!open)} underlayColor="#fff">
             <Text style={styles.close}>Close</Text>
           </TouchableOpacity>
         </View>
@@ -87,32 +98,37 @@ const LinkedPaywall = (props) => {
           <Text style={styles.sectionTitle}>{title}</Text>
           <Text style={styles.sectionDescription}>{body}</Text>
         </View>
-        { skus && !!skus.length && <View style={styles.subscriptions}>
-          <View style={styles.sectionContainer}>
-            {skus.map((sku, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.subscriptionButton}
-                  onPress={() => purchase(sku.skuIdentifier)}
-                  underlayColor='#fff'>
-                  <Text style={styles.subscriptionText}>{sku.localizedTitle} - {sku.localizedPrice}</Text>
-                </TouchableOpacity>
-              )
-            })}
-           <Button
-	     style={styles.restoreButton}
-	     onPress={() => restore()}
-	     underlayColor='#f00' title="Restore"/>
+        {skus && !!skus.length && (
+          <View style={styles.subscriptions}>
+            <View style={styles.sectionContainer}>
+              {skus.map((sku, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.subscriptionButton}
+                    onPress={() => purchase(sku.skuIdentifier)}
+                    underlayColor="#fff">
+                    <Text style={styles.subscriptionText}>
+                      {sku.localizedTitle} - {sku.localizedPrice}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+              <Button
+                style={styles.restoreButton}
+                onPress={() => restore()}
+                underlayColor="#f00"
+                title="Restore"
+              />
+            </View>
           </View>
-        </View>}
+        )}
       </ImageBackground>
     </Modal>
   );
-}
+};
 
 const styles = StyleSheet.create({
-
   subscriptions: {
     backgroundColor: theme.white,
     position: 'absolute',
@@ -121,12 +137,12 @@ const styles = StyleSheet.create({
     right: 0,
     height: 340,
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
+    borderTopRightRadius: 20,
   },
   sectionContainer: {
     marginTop: 32,
     marginBottom: 32,
-    paddingHorizontal: 24
+    paddingHorizontal: 24,
   },
   sectionTitle: {
     fontSize: 34,
@@ -135,8 +151,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 30,
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10,
   },
 
   sectionDescription: {
@@ -146,12 +162,12 @@ const styles = StyleSheet.create({
     color: theme.white,
     textAlign: 'center',
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10,
   },
   close: {
     color: theme.white,
-    textAlign: 'right'
+    textAlign: 'right',
   },
 
   subscriptionButton: {
@@ -163,19 +179,19 @@ const styles = StyleSheet.create({
     backgroundColor: theme.black,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: theme.white
+    borderColor: theme.white,
   },
 
   restoreButton: {
-	    marginRight: 40,
-	    marginLeft: 40,
-	    marginTop: 10,
-	    paddingTop: 10,
-	    paddingBottom: 10,
-	    color: theme.red,
-	    borderRadius: 10,
-	    borderWidth: 1,
-	    borderColor: theme.white
+    marginRight: 40,
+    marginLeft: 40,
+    marginTop: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    color: theme.red,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: theme.white,
   },
 
   subscriptionText: {
@@ -183,8 +199,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingLeft: 10,
     paddingRight: 10,
-    fontWeight: '600'
-  }
+    fontWeight: '600',
+  },
 });
 
 export default LinkedPaywall;
