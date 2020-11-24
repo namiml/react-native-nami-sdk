@@ -46,8 +46,15 @@ const App = () => {
     );
     console.log(NativeModules.NamiMLManagerBridge, 'NamiMLManagerBridge');
 
-    eventEmitter.addListener('PurchasesChanged', onSessionConnect);
-    eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
+    let PurchasedSubscription = eventEmitter.addListener(
+      'PurchasesChanged',
+      onSessionConnect,
+    );
+
+    let PaywallShouldRaiseSubscription = eventEmitter.addListener(
+      'AppPaywallActivate',
+      onPaywallShouldRaise,
+    );
 
     var configDict = {
       'appPlatformID-google': 'a95cef52-35e0-4794-8755-577492c2d5d1',
@@ -62,6 +69,10 @@ const App = () => {
     NativeModules.NamiPaywallManagerBridge.canRaisePaywall((result) => {
       console.log('ExampleApp: Nami canRaisePaywall ', result);
     });
+    return () => {
+      PurchasedSubscription.remove();
+      PaywallShouldRaiseSubscription.remove();
+    };
   }, []);
 
   return <AppNavigation />;
