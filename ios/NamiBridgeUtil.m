@@ -186,45 +186,45 @@
 + (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling {
     NSMutableDictionary<NSString *,id> *stylingDict = [NSMutableDictionary new];
     if (styling != nil) {        
-        stylingDict[@"backgroundColor"] = styling.backgroundColor;
+        stylingDict[@"backgroundColor"] = [NamiBridgeUtil hexStringForColor: styling.backgroundColor];
         
         stylingDict[@"bodyFontSize"] = @(styling.bodyFontSize);
-        stylingDict[@"bodyTextColor"] = styling.bodyTextColor;
-        stylingDict[@"bodyShadowColor"] = styling.bodyShadowColor;
+        stylingDict[@"bodyTextColor"] = [NamiBridgeUtil hexStringForColor: styling.bodyTextColor];
+        stylingDict[@"bodyShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.bodyShadowColor];
         stylingDict[@"bodyShadowRadius"] = @(styling.bodyShadowRadius);
         
         stylingDict[@"titleFontSize"] = @(styling.titleFontSize);
-        stylingDict[@"titleTextColor"] = styling.titleTextColor;
-        stylingDict[@"titleShadowColor"] = styling.titleShadowColor;
+        stylingDict[@"titleTextColor"] = [NamiBridgeUtil hexStringForColor: styling.titleTextColor];
+        stylingDict[@"titleShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.titleShadowColor];
         stylingDict[@"titleShadowRadius"] = @(styling.titleShadowRadius);
         
         stylingDict[@"closeButtonFontSize"] = @(styling.closeButtonFontSize);
-        stylingDict[@"closeButtonTextColor"] = styling.closeButtonTextColor;
-        stylingDict[@"closeButtonShadowColor"] = styling.closeButtonShadowColor;
+        stylingDict[@"closeButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.closeButtonTextColor];
+        stylingDict[@"closeButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.closeButtonShadowColor];
         stylingDict[@"closeButtonShadowRadius"] = @(styling.closeButtonShadowRadius);
         
-        stylingDict[@"bottomOverlayColor"] = styling.bottomOverlayColor;
+        stylingDict[@"bottomOverlayColor"] = [NamiBridgeUtil hexStringForColor: styling.bottomOverlayColor];
         stylingDict[@"bottomOverlayCornerRadius"] = @(styling.bottomOverlayCornerRadius);
         
-        stylingDict[@"skuButtonColor"] = styling.skuButtonColor;
-        stylingDict[@"skuButtonTextColor"] = styling.skuButtonTextColor;
+        stylingDict[@"skuButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonColor];
+        stylingDict[@"skuButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonTextColor];
         
-        stylingDict[@"featuredSkusButtonColor"] = styling.featuredSkusButtonColor;
-        stylingDict[@"featuredSkusButtonTextColor"] = styling.featuredSkusButtonTextColor;
+        stylingDict[@"featuredSkusButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonColor];
+        stylingDict[@"featuredSkusButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonTextColor];
         
         stylingDict[@"signinButtonFontSize"] = @(styling.signinButtonFontSize);
-        stylingDict[@"signinButtonTextColor"] = styling.signinButtonTextColor;
-        stylingDict[@"signinButtonShadowColor"] = styling.signinButtonShadowColor;
+        stylingDict[@"signinButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.signinButtonTextColor];
+        stylingDict[@"signinButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.signinButtonShadowColor];
         stylingDict[@"signinButtonShadowRadius"] = @(styling.signinButtonShadowRadius);
         
         stylingDict[@"restoreButtonFontSize"] = @(styling.restoreButtonFontSize);
-        stylingDict[@"restoreButtonTextColor"] = styling.restoreButtonTextColor;
-        stylingDict[@"restoreButtonShadowColor"] = styling.restoreButtonShadowColor;
+        stylingDict[@"restoreButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.restoreButtonTextColor];
+        stylingDict[@"restoreButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.restoreButtonShadowColor];
         stylingDict[@"restoreButtonShadowRadius"] = @(styling.restoreButtonShadowRadius);
         
         stylingDict[@"purchaseTermsFontSize"] = @(styling.purchaseTermsFontSize);
-        stylingDict[@"purchaseTermsTextColor"] = styling.purchaseTermsTextColor;
-        stylingDict[@"purchaseTermsShadowColor"] = styling.purchaseTermsShadowColor;
+        stylingDict[@"purchaseTermsTextColor"] = [NamiBridgeUtil hexStringForColor: styling.purchaseTermsTextColor];
+        stylingDict[@"purchaseTermsShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.purchaseTermsShadowColor];
         stylingDict[@"purchaseTermsShadowRadius"] = @(styling.purchaseTermsShadowRadius);
         
 
@@ -234,5 +234,14 @@
     return stylingDict;
 }
 
++ (NSString *)hexStringForColor:(UIColor *)color {
+    CGFloat r;
+    CGFloat g;
+    CGFloat b;
+    CGFloat a;
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    NSString *hexString=[NSString stringWithFormat:@"#%02X%02X%02X", (int)(r * 255), (int)(g * 255), (int)(b * 255)];
+    return hexString;
+}
 
 @end
