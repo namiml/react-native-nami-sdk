@@ -15,9 +15,16 @@ import Header from '../components/Header/Header';
 
 const AboutScreen = (props) => {
 
+
+
   useEffect(() => {
     console.log('ExampleApp: Entering About Screen.');
     NativeModules.NamiMLManagerBridge.enterCoreContentWithLabel("AboutScreen");
+
+    NativeModules.NamiEntitlementManagerBridge.isEntitlementActive("default_entitlement", (active) => {
+      console.log("active", active);
+    });
+
 
     return () => {
       console.log('ExampleApp: Exiting About Screen.');

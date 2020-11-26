@@ -52,13 +52,13 @@ const App = () => {
     console.log(NativeModules.NamiMLManagerBridge, 'NamiMLManagerBridge');
 
     if (
-      eventEmitter._subscriber._subscriptionsForType.PurchasesChanged === null
+      eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
     ) {
       eventEmitter.addListener('PurchasesChanged', onPurchasesChanged);
     }
 
     if (
-      eventEmitter._subscriber._subscriptionsForType.AppPaywallActivate === null
+      eventEmitter._subscriber._subscriptionsForType.AppPaywallActivate == null
     ) {
       eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
     }
