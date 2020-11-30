@@ -20,15 +20,15 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         currentActivity?.let {
             NamiPurchaseManager.buySKU(it, skuPlatformID) {
 
-                val resultArray: WritableArray = WritableNativeArray()
+                val result: Boolean
                 if (NamiPurchaseManager.isSKUIDPurchased(skuPlatformID)) {
-                    resultArray.pushBoolean(true)
+                    result = true
                     Log.i(LOG_TAG, "Purchase complete, result is PURCHASED.")
                 } else {
+                    result = false
                     Log.i(LOG_TAG, "Purchase complete, product not purchased.")
-                    resultArray.pushBoolean(false)
                 }
-                resultsCallback.invoke(resultArray)
+                resultsCallback.invoke(result)
             }
         }
     }
