@@ -36,15 +36,15 @@ const App = () => {
       case 'paywall_raise':
         if (analyticsItems) {
           if (
-            analyticsItems.paywallProducts &&
-            analyticsItems.paywallProducts.length
+            analyticsItems.paywallSKUs &&
+            analyticsItems.paywallSKUs.length
           ) {
-            let products = analyticsItems.paywallProducts
-              .map((product, index) => {
-                return product.productIdentifier;
+            let skus = analyticsItems.paywallSKUs
+              .map((sku, index) => {
+                return sku.skuIdentifier;
               })
               .join(', ');
-            googleData.paywallProducts = products;
+            googleData.paywallSkus = skus;
           }
 
           if (analyticsItems.paywallName) {
@@ -81,15 +81,15 @@ const App = () => {
       case 'purchase_activity':
         let purchaseData = {};
         if (analyticsItems.purchasedSKU) {
-          purchaseData.purchaseProduct =
-            analyticsItems.purchasedProduct_NamiMetaProduct.productIdentifier;
-          if (product.product.priceLocale.regionCode) {
+          purchaseData.purchaseSKU =
+            analyticsItems.purchasedSKU.skuIdentifier;
+          if (analyticsItems.purchasedSKULocale) {
             purchaseData.purchaseLocale =
-              product.product.priceLocale.regionCode;
+              analyticsItems.purchasedSKULocale;
           }
         }
-        if (analyticsItems.purchasedProductPrice) {
-          purchaseData.purchasePrice = `${analyticsItems.purchasedProductPrice}`;
+        if (analyticsItems.purchasedSKUPrice) {
+          purchaseData.purchasePrice = `${analyticsItems.purchasedSKUPrice}`;
         }
         await analytics().logEvent('Purchase', purchaseData);
         break;
