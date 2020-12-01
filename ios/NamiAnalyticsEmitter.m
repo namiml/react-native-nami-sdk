@@ -82,7 +82,7 @@ bool hasNamiAanlyticsEmitterListeners;
 }
 
 
-- (NSDictionary *) productDictIfProductPresentInAnalyticsItems:(NSDictionary *)anayticsItems forKey:(NSString *)key {
+- (NSDictionary *) skuDictIfSKUPresentInAnalyticsItems:(NSDictionary *)anayticsItems forKey:(NSString *)key {
     NamiSKU *product = (NamiSKU *)anayticsItems[key];
     if (product != NULL && [product isKindOfClass:[NamiSKU class]] ) {
         return [NamiBridgeUtil skuToSKUDict:product];
@@ -96,27 +96,27 @@ bool hasNamiAanlyticsEmitterListeners;
 - (NSDictionary <NSString *, id> *) sanitizeAnalyticsItems:(NSDictionary *)anayticsItems {
     NSMutableDictionary<NSString *, id> *sanitizedDictionary = [NSMutableDictionary dictionaryWithDictionary:anayticsItems];
 
-    id rawProducts = anayticsItems[@"paywallProducts"];
+    id rawProducts = anayticsItems[@"paywallSKUs"];
     if ([rawProducts isKindOfClass:[NSArray class]]) {
         NSMutableArray<NSDictionary *> *productsSanitized = [NSMutableArray new];
         for (NamiSKU *product in (NSArray *)rawProducts) {
             [productsSanitized addObject:[NamiBridgeUtil skuToSKUDict:product]];
         }
-        sanitizedDictionary[@"paywallProducts"] = productsSanitized;
+        sanitizedDictionary[@"paywallSKUs"] = productsSanitized;
     }
 
 
-    NSDate *purchseTimestamp = (NSDate *)(anayticsItems[@"purchasedProductPurchaseTimestamp"]);
-    if (purchseTimestamp != NULL && [purchseTimestamp isKindOfClass:[NSDate class]])
+    NSDate *purchaseTimestamp = (NSDate *)(anayticsItems[@"purchasedSKUPurchaseTimestamp"]);
+    if (purchaseTimestamp != NULL && [purchaseTimestamp isKindOfClass:[NSDate class]])
     {
-        sanitizedDictionary[@"purchasedProductPurchaseTimestamp"] = [NamiBridgeUtil javascriptDateFromNSDate:purchseTimestamp];
+        sanitizedDictionary[@"purchaseTimestamp"] = [NamiBridgeUtil javascriptDateFromNSDate:purchaseTimestamp];
     }
 
-    NSDictionary *purchasedProductDict = [self productDictIfProductPresentInAnalyticsItems:anayticsItems forKey:@"purchasedProduct"];
+    NSDictionary *purchasedProductDict = [self skuDictIfSKUPresentInAnalyticsItems:anayticsItems forKey:@"purchasedSKU"];
     if ( purchasedProductDict != NULL ) {
-        sanitizedDictionary[@"purchasedProduct"] = purchasedProductDict;
-        sanitizedDictionary[@"purchasedProductPrice"] = purchasedProductDict[@"price"];
-        sanitizedDictionary[@"purchasedProductLocale"] = purchasedProductDict[@"priceLocale"];
+        sanitizedDictionary[@"purchasedSKU"] = purchasedProductDict;
+        sanitizedDictionary[@"purchasedSKUPrice"] = purchasedProductDict[@"price"];
+        sanitizedDictionary[@"purchasedSKULocale"] = purchasedProductDict[@"priceLocale"];
     }
 
     NSNumber *activityType = anayticsItems[@"purchaseActivityType"];
