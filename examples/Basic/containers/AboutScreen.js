@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,7 +6,7 @@ import {
   View,
   Text,
   StatusBar,
-  NativeModules
+  NativeModules,
 } from 'react-native';
 
 import theme from '../theme';
@@ -14,14 +14,13 @@ import theme from '../theme';
 import Header from '../components/Header/Header';
 
 const AboutScreen = (props) => {
-
   useEffect(() => {
     console.log('ExampleApp: Entering About Screen.');
-    NativeModules.NamiMLManagerBridge.enterCoreContentWithLabel("AboutScreen");
+    NativeModules.NamiMLManagerBridge.enterCoreContentWithLabel('AboutScreen');
 
     return () => {
       console.log('ExampleApp: Exiting About Screen.');
-      NativeModules.NamiMLManagerBridge.exitCoreContentWithLabel("AboutScreen");
+      NativeModules.NamiMLManagerBridge.exitCoreContentWithLabel('AboutScreen');
     };
   }, [props.navigation]);
 
@@ -40,15 +39,19 @@ const AboutScreen = (props) => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}> <Text style={styles.sectionTitle}>Introduction</Text></Text>
+              <Text style={styles.sectionTitle}>
+                {' '}
+                <Text style={styles.sectionTitle}>Introduction</Text>
+              </Text>
               <Text style={styles.sectionDescription}>
-                This application demonstrates common calls used in a Nami enabled application.
+                This application demonstrates common calls used in a Nami
+                enabled application.
               </Text>
             </View>
           </View>
         </ScrollView>
       </SafeAreaView>
-      </>
+    </>
   );
 };
 
@@ -95,11 +98,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   success: {
-    color: 'green'
+    color: 'green',
   },
   danger: {
-    color: 'red'
-  }
+    color: 'red',
+  },
 });
 
 export default AboutScreen;

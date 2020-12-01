@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,92 +7,48 @@ import {
   Text,
   StatusBar,
   Button,
-  NativeEventEmitter,
-  NativeModules
+  NativeModules,
 } from 'react-native';
-
+import {usePurchasesContext} from '../hooks/usePurchases';
 import theme from '../theme';
 
 import Header from '../components/Header/Header';
 
 const HomeScreen = (props) => {
-
   const {navigate} = props.navigation;
-  const [purchases, setPurchases] = useState([])
-  const { NamiEmitter } = NativeModules;
-  const eventEmitter = new NativeEventEmitter(NamiEmitter);
+  const {purchases} = usePurchasesContext();
 
   const subscribeAction = () => {
-      NativeModules.NamiPaywallManagerBridge.raisePaywall();
-  }
-
-  const onSessionConnect = (event) => {
-    console.log("ExampleApp: Purchases changed: ", event);
-    if (event.purchaseState == "PURCHASED") {
-	console.log("Detected purchase, setting SKU IDs")
-    setPurchases(event.purchases)
-	}
-  }
-
-  const onPaywallShouldRaise = (event) => {
-    // Add code to present your custom paywall here
-    console.log("ExampleApp: Data for paywall raise ", event);
-  }
-
-  const onSignInActivated = (event) => {
-    // Add code to present UI for sign-in
-    console.log("ExampleApp: Data for sign-in ", event);
-  }
+    NativeModules.NamiPaywallManagerBridge.raisePaywall();
+  };
 
   const activateAbout = () => {
     console.log('ExampleApp: Triggering core action');
-    NativeModules.NamiMLManagerBridge.coreActionWithLabel("About");
+    NativeModules.NamiMLManagerBridge.coreActionWithLabel('About');
+    NativeModules.NamiPurchaseManagerBridge.purchases((purchasesInside) => {
+      console.log('ExampleApp: Purchases found ', purchasesInside);
 
-    NativeModules.NamiPurchaseManagerBridge.purchases(
-		   (purchases) => {
-		       console.log("ExampleApp: Purchases found ", purchases);
+      if (purchasesInside && purchasesInside.length) {
+        var options = {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        };
 
-		       if(purchases && purchases.length) {
-				   var options = {
-				       month: 'long',
-				       day: 'numeric',
-				       year: 'numeric'
-				   };
-
-			   let formatPurchases = purchases.map((purchase, index) => {
-				   return `Subscribed to ${purchase.localizedTitle}. Your next payment of ${purchase.localizedMultipliedPrice} will be billed on ${new Date(purchase.subscriptionExpirationDate).toLocaleDateString('en-US', options)}`
-			       })
-			   console.log(formatPurchases)
-		       }
-		   }
-                );
-
-
-    navigate('About') ;
-  }
-
-
-  useEffect(() => {
-
-    console.log('ExampleApp: Nami Bridge is');
-    console.log(NativeModules.NamiBridge);
-
-    eventEmitter.addListener('PurchasesChanged', onSessionConnect);
-    eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
-    console.log("ExampleApp: HavePaywallManager", NativeModules.NamiPaywallManagerBridge)
-
-    eventEmitter.addListener('SignInActivate', onSignInActivated);
-
-    var configDict = {
-      "appPlatformID-apple": "002e2c49-7f66-4d22-a05c-1dc9f2b7f2af",
-      "appPlatformID-google": "3d062066-9d3c-430e-935d-855e2c56dd8e",
-      "logLevel": "DEBUG",
-      "developmentMode": true,
-      "bypassStore": true
-    };
-
-    NativeModules.NamiBridge.configure(configDict);
-  }, []);
+        let formatPurchases = purchasesInside.map((purchase, index) => {
+          return `Subscribed to ${
+            purchase.localizedTitle
+          }. Your next payment of ${
+            purchase.localizedMultipliedPrice
+          } will be billed on ${new Date(
+            purchase.subscriptionExpirationDate,
+          ).toLocaleDateString('en-US', options)}`;
+        });
+        console.log(formatPurchases);
+      }
+    });
+    navigate('About');
+  };
 
   return (
     <>
@@ -109,42 +65,59 @@ const HomeScreen = (props) => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-            <Button title="Go to About" onPress={() => activateAbout()}/>
+              <Button title="Go to About" onPress={() => activateAbout()} />
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Introduction</Text>
               <Text style={styles.sectionDescription}>
-                This application demonstrates common calls used in a Nami enabled application.
+                This application demonstrates common calls used in a Nami
+                enabled application.
               </Text>
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Instructions</Text>
               <Text style={styles.sectionDescription}>
-                if you suspend and resume this app three times in the simulator, an example paywall will be raised - or you can use the <Text style={styles.highlight}>Subscribe</Text> button below to raise the same paywall.
+                if you suspend and resume this app three times in the simulator,
+                an example paywall will be raised - or you can use the{' '}
+                <Text style={styles.highlight}>Subscribe</Text> button below to
+                raise the same paywall.
               </Text>
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Important info</Text>
               <Text style={styles.sectionDescription}>
-                Any Purchase will be remembered while the application is <Text style={styles.highlight}>Active</Text>, <Text style={styles.highlight}>Suspended</Text>, <Text style={styles.highlight}>Resume</Text>,
-                but cleared when the application is launched.
+                Any Purchase will be remembered while the application is{' '}
+                <Text style={styles.highlight}>Active</Text>,{' '}
+                <Text style={styles.highlight}>Suspended</Text>,{' '}
+                <Text style={styles.highlight}>Resume</Text>, but cleared when
+                the application is launched.
               </Text>
               <Text style={styles.sectionDescription}>
-                Examine the application source code for more details on calls used to respond and monitor purchases.
+                Examine the application source code for more details on calls
+                used to respond and monitor purchases.
               </Text>
             </View>
             <View style={styles.sectionContainer}>
-              { purchases.length === 0 ? <Button title="Subscribe" onPress={subscribeAction}/>  : <Button title="Change Subscription" onPress={subscribeAction} />}
+              {purchases.length === 0 ? (
+                <Button title="Subscribe" onPress={subscribeAction} />
+              ) : (
+                <Button title="Change Subscription" onPress={subscribeAction} />
+              )}
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionMiddle}>
-	             Subscription is: { purchases.length === 0  ?  <Text style={styles.danger}>Inactive</Text>   : <Text style={styles.success}>Active</Text>}
-			        </Text>
+                Subscription is:{' '}
+                {purchases.length === 0 ? (
+                  <Text style={styles.danger}>Inactive</Text>
+                ) : (
+                  <Text style={styles.success}>Active</Text>
+                )}
+              </Text>
             </View>
           </View>
         </ScrollView>
       </SafeAreaView>
-      </>
+    </>
   );
 };
 
@@ -191,11 +164,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   success: {
-    color: 'green'
+    color: 'green',
   },
   danger: {
-    color: 'red'
-  }
+    color: 'red',
+  },
 });
 
 export default HomeScreen;
