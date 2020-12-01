@@ -32,9 +32,12 @@ const App = () => {
 
   const onEntitlementsChanged = (event) => {
     // Add code to check for entitlements activating or deactivating features
-    console.log("ExampleApp: Data for entitlements changed ", event.activeEntitlements);
-  }
-  
+    console.log(
+      'ExampleApp: Data for entitlements changed ',
+      event.activeEntitlements,
+    );
+  };
+
   const onPaywallShouldRaise = (event) => {
     // Add code to present your custom paywall here
     console.log('ExampleApp: Data for paywall raise ', event);
@@ -50,6 +53,7 @@ const App = () => {
       'NamiPaywallManagerBridge',
     );
     console.log(NativeModules.NamiMLManagerBridge, 'NamiMLManagerBridge');
+    NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
 
     if (
       eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
