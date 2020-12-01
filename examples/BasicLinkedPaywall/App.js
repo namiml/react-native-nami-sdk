@@ -22,7 +22,7 @@ const App = () => {
   const {NamiEmitter} = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
 
-  const onSessionConnect = (event) => {
+  const onPurchasesChanged = (event) => {
     console.log('ExampleApp: purchases changed: ', event);
     if (event.purchaseState === 'PURCHASED') {
       console.log('Detected PURCHASED state, updating purchases');
@@ -30,6 +30,11 @@ const App = () => {
     }
   };
 
+  const onEntitlementsChanged = (event) => {
+    // Add code to check for entitlements activating or deactivating features
+    console.log("ExampleApp: Data for entitlements changed ", event.activeEntitlements);
+  }
+  
   const onPaywallShouldRaise = (event) => {
     // Add code to present your custom paywall here
     console.log('ExampleApp: Data for paywall raise ', event);
@@ -47,15 +52,21 @@ const App = () => {
     console.log(NativeModules.NamiMLManagerBridge, 'NamiMLManagerBridge');
 
     if (
-      eventEmitter._subscriber._subscriptionsForType.PurchasesChanged === null
+      eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
     ) {
-      eventEmitter.addListener('PurchasesChanged', onSessionConnect);
+      eventEmitter.addListener('PurchasesChanged', onPurchasesChanged);
     }
 
     if (
-      eventEmitter._subscriber._subscriptionsForType.AppPaywallActivate === null
+      eventEmitter._subscriber._subscriptionsForType.AppPaywallActivate == null
     ) {
       eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
+    }
+
+    if (
+      eventEmitter._subscriber._subscriptionsForType.EntitlementsChanged == null
+    ) {
+      eventEmitter.addListener('EntitlementsChanged', onEntitlementsChanged);
     }
 
     var configDict = {
