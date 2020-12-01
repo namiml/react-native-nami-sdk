@@ -41,20 +41,18 @@ const App = () => {
     console.log(NativeModules.NamiBridge);
 
     if (
-      eventEmitter._subscriber._subscriptionsForType.PurchasesChanged === null
+      eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
     ) {
       eventEmitter.addListener('PurchasesChanged', onSessionConnect);
     }
 
     if (
-      eventEmitter._subscriber._subscriptionsForType.AppPaywallActivate === null
+      eventEmitter._subscriber._subscriptionsForType.AppPaywallActivate == null
     ) {
       eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
     }
 
-    if (
-      eventEmitter._subscriber._subscriptionsForType.SignInActivate === null
-    ) {
+    if (eventEmitter._subscriber._subscriptionsForType.SignInActivate == null) {
       eventEmitter.addListener('SignInActivate', onSignInActivated);
     }
 
