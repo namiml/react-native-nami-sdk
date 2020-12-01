@@ -22,7 +22,7 @@ const App = () => {
   const {NamiAnalyticsEmitter} = NativeModules;
   const analyticsEmitter = new NativeEventEmitter(NamiAnalyticsEmitter);
 
-  const onSessionConnect = (event) => {
+  const onPurchasesChanged = (event) => {
     console.log('ExampleApp: Purchases changed: ', event);
     if (event.purchaseState == 'PURCHASED') {
       console.log('Detected purchase, setting SKU IDs');
@@ -30,7 +30,7 @@ const App = () => {
     }
   };
 
-  const addAnalyticEvent = async (analyticsItems, actionType) => {
+  const addAnalyticsEvent = async (analyticsItems, actionType) => {
     let googleData = {};
     switch (actionType) {
       case 'paywall_raise':
@@ -78,13 +78,9 @@ const App = () => {
           await analytics().logEvent('PaywallView', googleData);
         }
         break;
-      case 'paywall_closed':
-        break;
-      case 'paywall_raise_blocked':
-        break;
       case 'purchase_activity':
         let purchaseData = {};
-        if (analyticsItems.purchasedProduct_NamiMetaProduct) {
+        if (analyticsItems.purchasedSKU) {
           purchaseData.purchaseProduct =
             analyticsItems.purchasedProduct_NamiMetaProduct.productIdentifier;
           if (product.product.priceLocale.regionCode) {
@@ -104,7 +100,7 @@ const App = () => {
   const onNamiAnalyticsReceived = (event) => {
     console.log('ExampleApp: Analytics Dictionary was ', event);
     const {analyticsItems, actionType} = event;
-    addAnalyticEvent(analyticsItems, actionType);
+    addAnalyticsEvent(analyticsItems, actionType);
   };
 
   useEffect(() => {
@@ -116,7 +112,7 @@ const App = () => {
     if (
       eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
     ) {
-      eventEmitter.addListener('PurchasesChanged', onSessionConnect);
+      eventEmitter.addListener('PurchasesChanged', onPurchasesChanged);
     }
 
     if (

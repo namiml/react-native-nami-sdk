@@ -18,17 +18,12 @@ const App = () => {
   const {NamiEmitter} = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
 
-  const onSessionConnect = (event) => {
+  const onPurchasesChanged = (event) => {
     console.log('ExampleApp: Purchases changed: ', event);
     if (event.purchaseState == 'PURCHASED') {
       console.log('Detected purchase, setting SKU IDs');
       setPurchases(event.purchases);
     }
-  };
-
-  const onPaywallShouldRaise = (event) => {
-    // Add code to present your custom paywall here
-    console.log('ExampleApp: Data for paywall raise ', event);
   };
 
   const onSignInActivated = (event) => {
@@ -44,13 +39,7 @@ const App = () => {
     if (
       eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
     ) {
-      eventEmitter.addListener('PurchasesChanged', onSessionConnect);
-    }
-
-    if (
-      eventEmitter._subscriber._subscriptionsForType.AppPaywallActivate == null
-    ) {
-      eventEmitter.addListener('AppPaywallActivate', onPaywallShouldRaise);
+      eventEmitter.addListener('PurchasesChanged', onPurchasesChanged);
     }
 
     if (eventEmitter._subscriber._subscriptionsForType.SignInActivate == null) {
