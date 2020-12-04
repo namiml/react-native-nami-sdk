@@ -107,7 +107,6 @@ const App = () => {
     console.log('ExampleApp: Nami Bridge is');
     console.log(NativeModules.NamiBridge);
     console.log('ExampleApp: firebase is ', firebase);
-    NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
 
     if (
       eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
@@ -139,6 +138,7 @@ const App = () => {
     };
 
     NativeModules.NamiBridge.configure(configDict);
+    NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
   }, []);
 
   return <AppNavigation />;
