@@ -11,6 +11,7 @@ import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiPaywallManager
 import com.namiml.paywall.NamiSKU
+import java.lang.ref.WeakReference
 import java.util.*
 
 class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -54,6 +55,8 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //        }];
         NamiPaywallManager.registerSignInListener { context, paywallData, developerPaywallID ->
             Toast.makeText(context, "Sign in clicked", Toast.LENGTH_SHORT).show()
+
+            emitSignInActivated(paywallData, developerPaywallID)
         }
         Log.i(LOG_TAG, "In Emitter Initialize()")
         NamiPaywallManager.registerPaywallRaiseListener { context, paywallData, products, developerPaywallId ->
@@ -195,7 +198,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         }
     }
 
-    public fun emitSignInActivated(activity: java.lang.ref.WeakReference<android.app.Activity>, paywallData: NamiPaywall, paywallDeveloperID: String?) {
+    public fun emitSignInActivated(paywallData: NamiPaywall, paywallDeveloperID: String?) {
 //        if (hasNamiEmitterListeners) {
 //            // Pass along paywall ID and paywall metadata for use in sign-in provider.
 //            [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
