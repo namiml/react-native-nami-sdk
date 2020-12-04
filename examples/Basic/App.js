@@ -34,7 +34,6 @@ const App = () => {
   useEffect(() => {
     console.log('ExampleApp: Nami Bridge is');
     console.log(NativeModules.NamiBridge);
-    NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
 
     if (
       eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
@@ -60,6 +59,7 @@ const App = () => {
     };
 
     NativeModules.NamiBridge.configure(configDict);
+    NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
   }, []);
 
   return <AppNavigation />;

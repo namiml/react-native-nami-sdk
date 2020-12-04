@@ -53,7 +53,6 @@ const App = () => {
       'NamiPaywallManagerBridge',
     );
     console.log(NativeModules.NamiMLManagerBridge, 'NamiMLManagerBridge');
-    NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
 
     if (
       eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
@@ -82,7 +81,7 @@ const App = () => {
     };
 
     NativeModules.NamiBridge.configure(configDict);
-
+    NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
     NativeModules.NamiPaywallManagerBridge.canRaisePaywall((result) => {
       console.log('ExampleApp: Nami canRaisePaywall ', result);
     });
