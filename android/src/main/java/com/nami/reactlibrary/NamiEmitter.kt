@@ -1,7 +1,6 @@
 package com.nami.reactlibrary
 
 import android.util.Log
-import android.widget.Toast
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.billing.NamiPurchase
@@ -11,7 +10,6 @@ import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiPaywallManager
 import com.namiml.paywall.NamiSKU
-import java.lang.ref.WeakReference
 import java.util.*
 
 class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -54,11 +52,13 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 //            [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
 //        }];
         NamiPaywallManager.registerSignInListener { context, paywallData, developerPaywallID ->
-            Toast.makeText(context, "Sign in clicked", Toast.LENGTH_SHORT).show()
+            Log.i(LOG_TAG, "Sign in clicked with developerPaywallID $developerPaywallID")
 
             emitSignInActivated(paywallData, developerPaywallID)
         }
+
         Log.i(LOG_TAG, "In Emitter Initialize()")
+
         NamiPaywallManager.registerPaywallRaiseListener { context, paywallData, products, developerPaywallId ->
             Log.i(LOG_TAG, "Products from registerApplicationPaywallProvider callback are $products")
 
