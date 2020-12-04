@@ -14,40 +14,6 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-//+ (NSDictionary<NSString *,NSString *> *) productToProductDict:(NamiMetaProduct *)product {
-//    NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
-//
-//    productDict[@"productIdentifier"] = product.productIdentifier;
-//
-//    SKProduct *productInt = product.product;
-//    productDict[@"localizedTitle"] = productInt.localizedTitle;
-//    productDict[@"localizedDescription"] = productInt.localizedDescription;
-//    productDict[@"localizedPrice"] = productInt.localizedPrice;
-//    productDict[@"localizedMultipliedPrice"] = productInt.localizedMultipliedPrice;
-//    productDict[@"price"] = productInt.price.stringValue;
-//    productDict[@"priceLanguage"] = productInt.priceLocale.languageCode;
-//    productDict[@"priceCountry"] = productInt.priceLocale.countryCode;
-//    productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
-//
-//    if (@available(iOS 12.0, *)) {
-//        productDict[@"subscriptionGroupIdentifier"] = [NSString stringWithString:productInt.subscriptionGroupIdentifier];
-//    }
-//
-//    if (@available(iOS 11.2, *)) {
-//        SKProductSubscriptionPeriod *subscriptionPeriod = productInt.subscriptionPeriod;
-//
-//        if (subscriptionPeriod != NULL) {
-//            NSUInteger numberOfUnits = subscriptionPeriod.numberOfUnits;
-//            SKProductPeriodUnit periodUnit = subscriptionPeriod.unit;
-//
-//            productDict[@"numberOfUnits"] = [NSString stringWithFormat:@"%lu", (unsigned long)numberOfUnits];
-//            productDict[@"periodUnit"] = [NSString stringWithFormat:@"%lu", (unsigned long)periodUnit];
-//        }
-//    }
-//
-//    return productDict;
-//}
-
 fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
 
     val paywallMap: WritableMap = Arguments.createMap()
@@ -75,7 +41,7 @@ fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
     paywallMap.putString("tos_link", paywallData.tosLink.orEmpty())
     paywallMap.putString("name", paywallData.name.orEmpty())
     paywallMap.putString("cta_type", paywallData.type)
-//    paywallMap.putString("developer_paywall_id", paywallData.developerPaywallId.orEmpty())
+    paywallMap.putString("developer_paywall_id", paywallData.developerPaywallId.orEmpty())
 
     val allowClosing = paywallData.allowClosing
     paywallMap.putBoolean("allow_closing", allowClosing)
@@ -161,7 +127,7 @@ fun convertNativeArrayBecauseReact(nativeList: List<*>): WritableArray {
 }
 
 
-// React hasa  method makeNativeMap that doesn't work, as per react standards.  Buuld our own primitive mapper to make up for react shortcomings.
+// React has a method makeNativeMap that doesn't work, as per react standards.  Build our own primitive mapper to make up for react shortcomings.
 fun convertNativeMapBecauseReact(nativeMap: Map<*, *>): WritableMap {
     val convertedMap = Arguments.createMap()
     for ((key, value) in nativeMap) {
@@ -212,8 +178,6 @@ fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
 fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     val purchaseMap = WritableNativeMap()
 
-//    purchaseMap.putString("localizedDescription", purchase.localizedDescription.orEmpty())
-
     val purchaseSource = when (purchase.purchaseSource) {
         NamiPurchaseSource.NAMI_PAYWALL -> {
             "nami_rules"
@@ -229,27 +193,23 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
 
     purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier.orEmpty())
     purchaseMap.putString("skuIdentifier", purchase.skuId.orEmpty())
-//    val initiatedTimestamp = purchase.purchaseInitiatedTimestamp
-//    val dt = Instant.ofEpochSecond(initiatedTimestamp)
-//            .atZone(ZoneId.systemDefault())
-//            .toLocalDateTime()
-//    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp.orEmpty())
+
     val expiresDate = purchase.expires
     if (expiresDate != null) {
         val expiresString = javascriptDateFromKJavaDate(expiresDate)
         purchaseMap.putString("subscriptionExpirationDate", expiresString)
     }
 
+    // Removed, not sure why, should add back in when possible
+    //    val initiatedTimestamp = purchase.purchaseInitiatedTimestamp
+    //    val dt = Instant.ofEpochSecond(initiatedTimestamp)
+    //            .atZone(ZoneId.systemDefault())
+    //            .toLocalDateTime()
+    //    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp ?: "")
+
 
     // TODO: map kotlin dictionary into arbitrary map?
     purchaseMap.putMap("platformMetadata", WritableNativeMap())
-
-//    var purchasedSkuMap: WritableMap = WritableNativeMap()
-//    val purchasedSKU = purchase.purchasedSKU
-//    purchasedSKU?.let {
-//        purchasedSkuMap = skuToSkuDict(purchasedSKU)
-//    }
-//    purchaseMap.putMap("purchasedSku", purchasedSkuMap)
 
     return purchaseMap
 }
@@ -307,26 +267,7 @@ fun entitlementDictFromEntitlement(entitlement: NamiEntitlement): WritableMap? {
                 lastPurchase = purchase
             }
         }
-//            lastPurchase?.let { resultMap.putMap("latestPurchase", purchaseToPurchaseDict(lastPurchase)) }
     }
-
-//    var lastPurchasedSKU: NamiSKU? = lastPurchase?.purchasedSKU
-//
-//    if (lastPurchasedSKU == null) {
-//        val lastPurcahsedSkuID = lastPurchase?.skuId
-//        if (lastPurcahsedSkuID != null ) {
-//            for (sku in entitlement.purchasedSKUs) {
-//                if (sku.skuId == lastPurcahsedSkuID) {
-//                    lastPurchasedSKU = sku
-//                }
-//            }
-//        }
-//    }
-//    if (lastPurchasedSKU == null && entitlement.purchasedSKUs.count() > 0) {
-//        lastPurchasedSKU = entitlement.purchasedSKUs.last()
-//    }
-//        lastPurchasedSKU?.let { resultMap.putMap("lastPurchasedSKU", skuToSkuDict(lastPurchasedSKU)) }
-
 
     return resultMap
 }
