@@ -70,7 +70,9 @@
      
      purchaseDict[@"skuIdentifier"] = purchase.skuID;
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
-//     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
+
+     // Removed, not sure why, should add back in when possible.
+     //     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
      
      NSDate *subscriptionExpirationDate = purchase.expires;
      if (subscriptionExpirationDate != nil) {

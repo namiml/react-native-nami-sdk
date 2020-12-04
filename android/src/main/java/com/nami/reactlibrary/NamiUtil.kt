@@ -200,6 +200,13 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
         purchaseMap.putString("subscriptionExpirationDate", expiresString)
     }
 
+    // Removed, not sure why, should add back in when possible
+    //    val initiatedTimestamp = purchase.purchaseInitiatedTimestamp
+    //    val dt = Instant.ofEpochSecond(initiatedTimestamp)
+    //            .atZone(ZoneId.systemDefault())
+    //            .toLocalDateTime()
+    //    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp ?: "")
+
 
     // TODO: map kotlin dictionary into arbitrary map?
     purchaseMap.putMap("platformMetadata", WritableNativeMap())
