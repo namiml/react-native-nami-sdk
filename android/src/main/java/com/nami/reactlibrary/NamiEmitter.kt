@@ -13,21 +13,6 @@ import com.namiml.paywall.NamiSKU
 import java.util.*
 
 class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-//    fun NamiEmitter(reactContext: ReactApplicationContext?) {
-//        Log.e("ReactNative", "In Emitter Initialize(reactContext)")
-//        NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
-//
-//            Log.e("ReactNativeAndroidBridge", "products from regsiterApplicationPaywallProvider callback are " + products)
-//
-//            val productList: List<NamiSKU> =  products ?: ArrayList<NamiSKU>()
-//            emitPaywallRaise(context, paywallData, productList, developerPaywallId)
-//        }
-//        NamiPaywallManager.registerApplicationSignInProvider { context, paywallData, developerPaywallId ->
-//            currentActivity?.let {
-//                emitSignInActivated(WeakReference(it), paywallData, developerPaywallId)
-//            }
-//        }
-//    }
 
     override fun onCatalystInstanceDestroy() {
     }
@@ -41,16 +26,6 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     }
 
     override fun initialize() {
-//        hasNamiEmitterListeners = NO;
-//
-//        // Tell Nami to listen for purchases and we'll forward them on to listeners
-//        [[NamiStoreKitHelper shared] registerWithPurchasesChangedHandler:^(NSArray<NamiMetaPurchase *> * _Nonnull products, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
-//            [self sendEventPurchased];
-//        }];
-//
-//        [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
-//            [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
-//        }];
         NamiPaywallManager.registerSignInListener { context, paywallData, developerPaywallID ->
             Log.i(LOG_TAG, "Sign in clicked with developerPaywallID $developerPaywallID")
 
@@ -63,16 +38,12 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
             Log.i(LOG_TAG, "Products from registerApplicationPaywallProvider callback are $products")
 
             val sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
-            emitPaywallRaise(context, paywallData, sendProducts, developerPaywallId)
+            emitPaywallRaise(paywallData, sendProducts, developerPaywallId)
         }
 
         NamiPurchaseManager.registerPurchasesChangedListener { list, namiPurchaseState, s ->
             emitPurchaseMade(list, namiPurchaseState, s)
         }
-//
-//        [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiMetaProduct *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiMetaPaywall * _Nonnull paywallMetadata) {
-//            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
-//        }];
     }
 
 
@@ -99,17 +70,6 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 
 
     public fun emitPurchaseMade(purchases: List<NamiPurchase>, purchaseState: NamiPurchaseState, errorString: String?) {
-//   NSArray<NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
-//        NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-//        for (NamiPurchase *purchase in purchases) {
-//            [productIDs addObject:purchase.skuID];
-//        }
-//
-//        NSString *convertedState = [self purchaseStateToString:purchaseState];
-//
-//        [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs,
-//                                                           @"purchaseState": convertedState,
-//                                                           @"errorDescription": [error localizedDescription] }];
         val map = Arguments.createMap()
         errorString?.let {
             map.putString("errorDescription", errorString)
@@ -149,17 +109,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         }
     }
 
-    fun emitPaywallRaise(activity: android.content.Context, paywallData: NamiPaywall, productDicts: List<NamiSKU>, paywallDeveloperID: String?) {
-//        if (hasNamiEmitterListeners) {
-//            NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
-//            for (NamiMetaProduct *product in products) {
-//                [productDicts addObject:[NamiBridgeUtil productToProductDict:product]];
-//            }
-//
-//            [self sendEventWithName:@"AppPaywallActivate" body:@{ @"products": productDicts,
-//                @"developerPaywallID": developerPaywallID,
-//                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
-//        }
+    fun emitPaywallRaise(paywallData: NamiPaywall, productDicts: List<NamiSKU>, paywallDeveloperID: String?) {
 
         Log.i(LOG_TAG, "Emitting paywall raise signal for developerID$paywallDeveloperID");
         val map = Arguments.createMap().apply {
@@ -199,11 +149,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     }
 
     public fun emitSignInActivated(paywallData: NamiPaywall, paywallDeveloperID: String?) {
-//        if (hasNamiEmitterListeners) {
-//            // Pass along paywall ID and paywall metadata for use in sign-in provider.
-//            [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID,
-//                @"paywallMetadata": paywallMetadata.namiPaywallInfoDict, }];
-//        }
+
         val map = Arguments.createMap().apply {
             putString("developerPaywallID", paywallDeveloperID)
             putString("paywallMetadata", "Need TO Map NamiPaywall Object")
@@ -218,15 +164,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     }
 
     public fun emitPurchaseMade(paywallDeveloperID: String) {
-//        if (hasNamiEmitterListeners) {
-//            NSArray<NamiMetaPurchase *> *purchases = NamiStoreKitHelper.shared.allPurchasedProducts;
-//            NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
-//            for (NamiMetaProduct *purchase in purchases) {
-//                [productIDs addObject:purchase.productIdentifier];
-//            }
-//
-//            [self sendEventWithName:@"PurchasesChanged" body:@{@"products": productIDs}];
-//        }
+
         val map = Arguments.createMap().apply {
             putString("key1", "Value1")
             putString("key1", "Value1")
