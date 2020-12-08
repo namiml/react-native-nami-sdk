@@ -70,9 +70,11 @@
      
      purchaseDict[@"skuIdentifier"] = purchase.skuID;
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
-//     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
+
+     // Removed, not sure why, should add back in when possible.
+     //     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
      
-     NSDate *subscriptionExpirationDate = purchase.exipres;
+     NSDate *subscriptionExpirationDate = purchase.expires;
      if (subscriptionExpirationDate != nil) {
          purchaseDict[@"subscriptionExpirationDate"] = [self javascriptDateFromNSDate:subscriptionExpirationDate];
      }
@@ -183,5 +185,65 @@
     return [NSISO8601DateFormatter stringFromDate:purchaseTimestamp timeZone:UTC formatOptions:options];
 }
 
++ (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling {
+    NSMutableDictionary<NSString *,id> *stylingDict = [NSMutableDictionary new];
+    if (styling != nil) {        
+        stylingDict[@"backgroundColor"] = [NamiBridgeUtil hexStringForColor: styling.backgroundColor];
+        
+        stylingDict[@"bodyFontSize"] = @(styling.bodyFontSize);
+        stylingDict[@"bodyTextColor"] = [NamiBridgeUtil hexStringForColor: styling.bodyTextColor];
+        stylingDict[@"bodyShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.bodyShadowColor];
+        stylingDict[@"bodyShadowRadius"] = @(styling.bodyShadowRadius);
+        
+        stylingDict[@"titleFontSize"] = @(styling.titleFontSize);
+        stylingDict[@"titleTextColor"] = [NamiBridgeUtil hexStringForColor: styling.titleTextColor];
+        stylingDict[@"titleShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.titleShadowColor];
+        stylingDict[@"titleShadowRadius"] = @(styling.titleShadowRadius);
+        
+        stylingDict[@"closeButtonFontSize"] = @(styling.closeButtonFontSize);
+        stylingDict[@"closeButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.closeButtonTextColor];
+        stylingDict[@"closeButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.closeButtonShadowColor];
+        stylingDict[@"closeButtonShadowRadius"] = @(styling.closeButtonShadowRadius);
+        
+        stylingDict[@"bottomOverlayColor"] = [NamiBridgeUtil hexStringForColor: styling.bottomOverlayColor];
+        stylingDict[@"bottomOverlayCornerRadius"] = @(styling.bottomOverlayCornerRadius);
+        
+        stylingDict[@"skuButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonColor];
+        stylingDict[@"skuButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonTextColor];
+        
+        stylingDict[@"featuredSkusButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonColor];
+        stylingDict[@"featuredSkusButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonTextColor];
+        
+        stylingDict[@"signinButtonFontSize"] = @(styling.signinButtonFontSize);
+        stylingDict[@"signinButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.signinButtonTextColor];
+        stylingDict[@"signinButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.signinButtonShadowColor];
+        stylingDict[@"signinButtonShadowRadius"] = @(styling.signinButtonShadowRadius);
+        
+        stylingDict[@"restoreButtonFontSize"] = @(styling.restoreButtonFontSize);
+        stylingDict[@"restoreButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.restoreButtonTextColor];
+        stylingDict[@"restoreButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.restoreButtonShadowColor];
+        stylingDict[@"restoreButtonShadowRadius"] = @(styling.restoreButtonShadowRadius);
+        
+        stylingDict[@"purchaseTermsFontSize"] = @(styling.purchaseTermsFontSize);
+        stylingDict[@"purchaseTermsTextColor"] = [NamiBridgeUtil hexStringForColor: styling.purchaseTermsTextColor];
+        stylingDict[@"purchaseTermsShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.purchaseTermsShadowColor];
+        stylingDict[@"purchaseTermsShadowRadius"] = @(styling.purchaseTermsShadowRadius);
+        
+
+        stylingDict[@"termsLinkColor"] = styling.termsLinkColor;
+    }
+    
+    return stylingDict;
+}
+
++ (NSString *)hexStringForColor:(UIColor *)color {
+    CGFloat r;
+    CGFloat g;
+    CGFloat b;
+    CGFloat a;
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    NSString *hexString=[NSString stringWithFormat:@"#%02X%02X%02X", (int)(r * 255), (int)(g * 255), (int)(b * 255)];
+    return hexString;
+}
 
 @end

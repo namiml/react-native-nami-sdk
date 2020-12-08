@@ -21,6 +21,10 @@
 
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement;
 
++ (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling;
+
++ (NSString *)hexStringForColor:(UIColor *)color;
+
 @end
 
 #endif /* NamiBridgeUtil_h */

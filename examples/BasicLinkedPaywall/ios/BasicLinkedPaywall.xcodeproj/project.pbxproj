@@ -64,6 +64,7 @@
 		90A7477276AEFF5E134BCEE6 /* Pods-BasicLinkedPaywall-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicLinkedPaywall-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BasicLinkedPaywall-tvOSTests/Pods-BasicLinkedPaywall-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9223CC09852E47B2F621C799 /* Pods-BasicLinkedPaywall-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicLinkedPaywall-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BasicLinkedPaywall-tvOSTests/Pods-BasicLinkedPaywall-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		C1A59209F0292000E4CB0366 /* libPods-BasicLinkedPaywall-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BasicLinkedPaywall-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBE9895E256C2723000784EB /* BasicLinkedPaywall.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = BasicLinkedPaywall.storekit; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F6BE80EB3D2396790B43C0C3 /* libPods-BasicLinkedPaywall.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BasicLinkedPaywall.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +133,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				EBE9895E256C2723000784EB /* BasicLinkedPaywall.storekit */,
 			);
 			name = BasicLinkedPaywall;
 			sourceTree = "<group>";
@@ -161,7 +163,6 @@
 				76C40F3C3041437BDF401B0A /* Pods-BasicLinkedPaywallTests.debug.xcconfig */,
 				256EE725DFF20914F4C7CA5E /* Pods-BasicLinkedPaywallTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -232,6 +233,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				45AFBEDF8E55E090BC2738D0 /* [CP] Embed Pods Frameworks */,
+				1EC45459B9AD6716235B5718 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -396,6 +398,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1EC45459B9AD6716235B5718 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BasicLinkedPaywall/Pods-BasicLinkedPaywall-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BasicLinkedPaywall/Pods-BasicLinkedPaywall-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
