@@ -152,7 +152,6 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 
         val map = Arguments.createMap().apply {
             putString("developerPaywallID", paywallDeveloperID)
-            putString("paywallMetadata", "Need TO Map NamiPaywall Object")
         }
         try {
             reactApplicationContext
