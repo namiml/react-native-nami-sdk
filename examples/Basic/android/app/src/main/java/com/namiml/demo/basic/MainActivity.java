@@ -1,4 +1,4 @@
-package com.basic;
+package com.namiml.demo.basic;
 
 import com.facebook.react.ReactActivity;
 
