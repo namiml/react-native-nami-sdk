@@ -6,8 +6,6 @@ Nami is the smartest way to sell subscriptions.  Our SDK is built for the subscr
 
 The Nami SDK takes care of platform specific implementation details to offer in-app purchases so you can focus on building your core app experience.
 
-**Android support in React Native is in pre-release.  Contact [support@namiml.com](mailto:support@namiml.com) to join the beta.**
-
 ## Getting started with React Native and Nami
 
 ### Build the Bridge Locally
