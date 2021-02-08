@@ -23,8 +23,9 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in activeEntitlements) {
-            val entitlementDict = entitlementDictFromEntitlement(entitlement)
-            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+            entitlement.toEntitlementDict()?.let { entitlementDict ->
+                resultArray.pushMap(entitlementDict)
+            }
         }
 
         map.putArray("activeEntitlements", resultArray)
@@ -56,8 +57,9 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in nativeEntitlements) {
-            val entitlementDict = entitlementDictFromEntitlement(entitlement)
-            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+            entitlement.toEntitlementDict()?.let { entitlementDict ->
+                resultArray.pushMap(entitlementDict)
+            }
         }
         resultsCallback.invoke(resultArray)
     }
@@ -71,8 +73,9 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in nativeEntitlements) {
-            val entitlementDict = entitlementDictFromEntitlement(entitlement)
-            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+            entitlement.toEntitlementDict()?.let { entitlementDict ->
+                resultArray.pushMap(entitlementDict)
+            }
         }
         resultsCallback.invoke(resultArray)
     }

@@ -41,8 +41,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         val resultArray: WritableArray = WritableNativeArray()
 
         for (purchase in purchases) {
-            val purchaseDict = purchaseToPurchaseDict(purchase)
-            resultArray.pushMap(purchaseDict)
+            resultArray.pushMap(purchase.toPurchaseDict())
         }
 
         resultsCallback.invoke(resultArray)

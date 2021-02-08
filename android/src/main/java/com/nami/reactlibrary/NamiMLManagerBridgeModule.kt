@@ -21,8 +21,7 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactCo
     fun enterCoreContentWithLabel(label: String) {
         NamiMLManager.enterCoreContent(label)
     }
-
-
+    
     @ReactMethod
     fun exitCoreContentWithLabels(labels: ReadableArray) {
         NamiMLManager.exitCoreContent(labels.toArrayList().filterIsInstance<String>())
@@ -36,10 +35,5 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun coreActionWithLabel(label: String) {
         NamiMLManager.coreAction(label)
-    }
-
-    @ReactMethod
-    fun coreActionWithLabels(labels: ReadableArray) {
-        NamiMLManager.coreAction(labels.toArrayList().filterIsInstance<String>())
     }
 }

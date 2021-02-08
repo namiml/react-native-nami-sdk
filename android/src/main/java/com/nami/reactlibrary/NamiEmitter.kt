@@ -50,11 +50,9 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
     public fun emitEntitlementsChanged(entitlements: List<NamiEntitlement>) {
         val map = Arguments.createMap()
 
-
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in entitlements) {
-            val entitlementDict = entitlementDictFromEntitlement(entitlement)
-            resultArray.pushMap(entitlementDict)
+            resultArray.pushMap(entitlement.toEntitlementDict())
         }
         map.putArray("entitlements", resultArray)
 
@@ -77,8 +75,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 
         val resultArray: WritableArray = WritableNativeArray()
         for (purchase in purchases) {
-            val purchaseDict = purchaseToPurchaseDict(purchase)
-            resultArray.pushMap(purchaseDict)
+            resultArray.pushMap(purchase.toPurchaseDict())
         }
         map.putArray("purchases", resultArray)
 
@@ -109,7 +106,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         }
     }
 
-    fun emitPaywallRaise(paywallData: NamiPaywall, productDicts: List<NamiSKU>, paywallDeveloperID: String?) {
+    fun emitPaywallRaise(namiPaywall: NamiPaywall, productDicts: List<NamiSKU>, paywallDeveloperID: String?) {
 
         Log.i(LOG_TAG, "Emitting paywall raise signal for developerID$paywallDeveloperID");
         val map = Arguments.createMap().apply {
@@ -117,26 +114,21 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         }
 
         // Populate paywall metadata map
-        val paywallMap: WritableMap = paywallToPaywallDict(paywallData)
-        if (paywallDeveloperID != null && paywallDeveloperID.isNotEmpty()) {
-            paywallMap.putString("developer_paywall_id", paywallDeveloperID)
-        }
+        val paywallMap: WritableMap = namiPaywall.toNamiPaywallDict()
         map.putMap("paywallMetadata", paywallMap)
 
         // Populate SKU details
         val skusArray: WritableArray = Arguments.createArray()
 
         for (sku in productDicts) {
-            val skuMap = skuToSkuDict(sku)
-            skusArray.pushMap(skuMap)
+            skusArray.pushMap(sku.toSkuDict())
         }
 
         map.putArray("skus", skusArray)
 
-        val paywallStyleData = paywallData.styleData
-        if (paywallDeveloperID != null) {
-            val paywallStyleDict = paywallStyleData?.let { paywallStylingToPaywallStylingDict(it) }
-            map.putMap("styleData", paywallStyleDict)
+        val paywallStyleData = namiPaywall.styleData
+        if (paywallStyleData != null) {
+            map.putMap("styleData", paywallStyleData.toPaywallStylingDict())
         }
 
         try {

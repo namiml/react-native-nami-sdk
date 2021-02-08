@@ -5,7 +5,6 @@ import android.content.Intent
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywallManager
 
 class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), ActivityEventListener {
@@ -52,16 +51,26 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
 
     @ReactMethod
     fun raisePaywall() {
-//        [[NamiPaywallManager shared] raisePaywallFromVC:nil]
+        raisePaywall(currentActivity, null)
+    }
 
-        val activity: Activity? = currentActivity
-        Log.i(LOG_TAG, "Nami Activity to raise paywall is " + activity.toString())
+    @ReactMethod
+    fun raisePaywallByDeveloperPaywallId(developerPaywallID: String) {
+        raisePaywall(currentActivity, developerPaywallID)
+    }
 
+    private fun raisePaywall(activity: Activity?, developerPaywallID: String?) {
         if (NamiPaywallManager.canRaisePaywall()) {
             Log.d(LOG_TAG, "About to raise Paywall ")
             if (activity != null) {
-                Log.i(LOG_TAG, "Raising Paywall: ")
-                NamiPaywallManager.raisePaywall(activity)
+                Log.i(LOG_TAG, "Nami Activity to raise paywall is $activity")
+                if (developerPaywallID == null) {
+                    Log.i(LOG_TAG, "Raising Paywall: ")
+                    NamiPaywallManager.raisePaywall(activity)
+                } else {
+                    Log.i(LOG_TAG, "Raising Paywall by Id: $developerPaywallID")
+                    NamiPaywallManager.raisePaywall(developerPaywallID, activity)
+                }
             } else {
                 Log.w(LOG_TAG, "Activity from react getCurrentActivity was null.")
             }
@@ -87,7 +96,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
 
 
     @ReactMethod
-    fun presentNamiPaywall(skuIDs: ReadableArray, metapaywallDefinition:ReadableMap) {
+    fun presentNamiPaywall(skuIDs: ReadableArray, metapaywallDefinition: ReadableMap) {
         // TODO: Android SDK needs presentNamiPaywall function.
     }
 
