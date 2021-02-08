@@ -1,10 +1,19 @@
 package com.nami.reactlibrary
 
 import android.util.Log
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableType
+import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.WritableNativeArray
+import com.facebook.react.bridge.WritableNativeMap
 import com.namiml.billing.NamiPurchaseManager
 
-class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
         return "NamiPurchaseManagerBridge"
@@ -78,10 +87,6 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         val resultMap = WritableNativeMap().apply {
             putBoolean("success", true)
         }
-        val resultArray: WritableArray = WritableNativeArray().apply {
-            pushMap(resultMap)
-        }
-        resultsCallback.invoke(resultArray)
+        resultsCallback.invoke(resultMap)
     }
-
 }

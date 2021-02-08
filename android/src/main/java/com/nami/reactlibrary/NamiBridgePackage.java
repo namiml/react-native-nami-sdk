@@ -1,18 +1,18 @@
 package com.nami.reactlibrary;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import com.facebook.react.ReactPackage;
+import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.react.uimanager.ViewManager;
-import com.facebook.react.bridge.JavaScriptModule;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class NamiBridgePackage implements ReactPackage {
     @NotNull
@@ -41,7 +41,7 @@ public class NamiBridgePackage implements ReactPackage {
     }
 
     protected List<ReactPackage> getPackages() {
-        return Arrays.<ReactPackage>asList(
+        return Arrays.asList(
                 new MainReactPackage(),
                 new NamiBridgePackage()
         );

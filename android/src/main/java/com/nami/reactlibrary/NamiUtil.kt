@@ -1,7 +1,11 @@
 package com.nami.reactlibrary
 
 import android.util.Log
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.bridge.WritableNativeArray
+import com.facebook.react.bridge.WritableNativeMap
 import com.namiml.api.model.FormattedSku
 import com.namiml.billing.NamiPurchase
 import com.namiml.entitlement.NamiEntitlement
@@ -9,11 +13,14 @@ import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiPurchaseSource
 import com.namiml.paywall.NamiSKU
 import com.namiml.paywall.PaywallStyleData
+import com.namiml.paywall.SubscriptionPeriod
 import com.namiml.util.extensions.getFormattedPrice
 import com.namiml.util.extensions.getSubscriptionPeriodEnum
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 fun FormattedSku.toFormattedSkuDict(): WritableMap {
     val map: WritableMap = Arguments.createMap()
@@ -64,6 +71,11 @@ fun NamiPaywall.toNamiPaywallDict(): WritableMap {
         formattedSkusArray.pushMap(formattedSku.toFormattedSkuDict())
     }
     paywallMap.putArray("formatted_skus", formattedSkusArray)
+
+    styleData?.let {
+        paywallMap.putMap("styleData", it.toPaywallStylingDict())
+    }
+
     // TODO uncomment and fix once Android has "use_bottom_overlay" available
     //paywallMap.putArray("use_bottom_overlay", formattedSkusArray)
 
@@ -146,7 +158,6 @@ fun List<*>.toWritableArray(): WritableArray {
     return convertedArray
 }
 
-
 // React has a method makeNativeMap that doesn't work, as per react standards.  Build our own primitive mapper to make up for react shortcomings.
 fun Map<*, *>.toWritableMap(): WritableMap {
     val convertedMap = Arguments.createMap()
@@ -177,7 +188,6 @@ fun Map<*, *>.toWritableMap(): WritableMap {
     return convertedMap
 }
 
-
 fun NamiSKU.toSkuDict(): WritableMap {
     val productDict = Arguments.createMap()
 
@@ -191,9 +201,31 @@ fun NamiSKU.toSkuDict(): WritableMap {
     productDict.putString("priceCountry", Locale.getDefault().country)
     productDict.putString("priceCurrency", skuDetails.priceCurrencyCode)
     productDict.putString("numberOfUnits", "1")
-    val subscriptionPeriod = skuDetails.getSubscriptionPeriodEnum()
+    val subscriptionPeriod = when (skuDetails.getSubscriptionPeriodEnum()) {
+        SubscriptionPeriod.MONTHLY -> {
+            "month"
+        }
+        SubscriptionPeriod.HALF_YEAR -> {
+            "half_year"
+        }
+        SubscriptionPeriod.DAY -> {
+            "day"
+        }
+        SubscriptionPeriod.WEEKLY -> {
+            "week"
+        }
+        SubscriptionPeriod.QUARTERLY -> {
+            "quarter"
+        }
+        SubscriptionPeriod.ANNUAL -> {
+            "year"
+        }
+        else -> {
+            null
+        }
+    }
     if (subscriptionPeriod != null) {
-        productDict.putString("periodUnit", subscriptionPeriod.durationInDays.toString())
+        productDict.putString("periodUnit", subscriptionPeriod)
     }
 
     return productDict
@@ -230,7 +262,6 @@ fun NamiPurchase.toPurchaseDict(): WritableMap {
     //            .toLocalDateTime()
     //    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp ?: "")
 
-
     // TODO: map kotlin dictionary into arbitrary map?
     purchaseMap.putMap("platformMetadata", WritableNativeMap())
 
@@ -258,13 +289,11 @@ fun NamiEntitlement.toEntitlementDict(): WritableMap? {
     }
     resultMap.putArray("activePurchases", activePurchasesArray)
 
-
     val purchasedSKUsArray: WritableArray = WritableNativeArray()
     for (sku in purchasedSKUs) {
         purchasedSKUsArray.pushMap(sku.toSkuDict())
     }
     resultMap.putArray("purchasedSKUs", purchasedSKUsArray)
-
 
     val relatedSKUsArray: WritableArray = WritableNativeArray()
     for (sku in relatedSKUs) {
@@ -286,11 +315,10 @@ fun NamiEntitlement.toEntitlementDict(): WritableMap? {
     return resultMap
 }
 
-
 // Convert Java Date to ISO860 UTC date to pass to Javascript
 fun Date.toJavascriptDate(): String {
     val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()).apply {
-        setTimeZone(TimeZone.getTimeZone("UTC"))
+        timeZone = TimeZone.getTimeZone("UTC")
     }
     return df.format(this)
 }

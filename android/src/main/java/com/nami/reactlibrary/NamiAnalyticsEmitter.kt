@@ -3,7 +3,8 @@ package com.nami.reactlibrary
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 
-class NamiAnalyticsEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiAnalyticsEmitter(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext) {
 //    fun NamiEmitter(reactContext: ReactApplicationContext?) {
 //        Log.e("ReactNative", "In Emitter Initialize(reactContext)")
 //        NamiPaywallManager.registerApplicationPaywallProvider { context, paywallData, products, developerPaywallId ->
@@ -36,10 +37,7 @@ class NamiAnalyticsEmitter(reactContext: ReactApplicationContext) : ReactContext
 //        [NamiAnalyticsSupport registerAnalyticsHandlerWithHandler: ^(NamiAnalyticsActionType actionType , NSDictionary<NSString *,id> * _Nonnull anaytlicsDict) {
 //            [self sendAnalyticsEventForAction:actionType anayticsItems:anaytlicsDict];
 //        }];
-
-
     }
-
 
 //    public fun emitSignInActivated(activity: java.lang.ref.WeakReference<android.app.Activity>, paywallData: NamiPaywall, paywallDeveloperID: String?) {
 ////        if (hasNamiEmitterListeners) {
@@ -57,7 +55,6 @@ class NamiAnalyticsEmitter(reactContext: ReactApplicationContext) : ReactContext
 //            Log.e("ReactNative", "Caught Exception: " + e.message)
 //        }
 //    }
-
 
     // Future work to convert this ObjC code:
 //
@@ -120,6 +117,5 @@ class NamiAnalyticsEmitter(reactContext: ReactApplicationContext) : ReactContext
 //
 //        return sanitizedDictionary;
 //    }
-
 
 }

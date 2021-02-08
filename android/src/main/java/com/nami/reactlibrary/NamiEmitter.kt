@@ -1,7 +1,12 @@
 package com.nami.reactlibrary
 
 import android.util.Log
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
@@ -10,9 +15,10 @@ import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiPaywallManager
 import com.namiml.paywall.NamiSKU
-import java.util.*
+import java.util.ArrayList
 
-class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiEmitter(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext) {
 
     override fun onCatalystInstanceDestroy() {
     }
@@ -35,7 +41,10 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         Log.i(LOG_TAG, "In Emitter Initialize()")
 
         NamiPaywallManager.registerPaywallRaiseListener { context, paywallData, products, developerPaywallId ->
-            Log.i(LOG_TAG, "Products from registerApplicationPaywallProvider callback are $products")
+            Log.i(
+                LOG_TAG,
+                "Products from registerApplicationPaywallProvider callback are $products"
+            )
 
             val sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
             emitPaywallRaise(paywallData, sendProducts, developerPaywallId)
@@ -46,8 +55,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         }
     }
 
-
-    public fun emitEntitlementsChanged(entitlements: List<NamiEntitlement>) {
+    fun emitEntitlementsChanged(entitlements: List<NamiEntitlement>) {
         val map = Arguments.createMap()
 
         val resultArray: WritableArray = WritableNativeArray()
@@ -59,15 +67,18 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         Log.i(LOG_TAG, "Emitting entitlements changed")
         try {
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("EntitlementsChanged", map)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("EntitlementsChanged", map)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
-
-    public fun emitPurchaseMade(purchases: List<NamiPurchase>, purchaseState: NamiPurchaseState, errorString: String?) {
+    fun emitPurchaseMade(
+        purchases: List<NamiPurchase>,
+        purchaseState: NamiPurchaseState,
+        errorString: String?
+    ) {
         val map = Arguments.createMap()
         errorString?.let {
             map.putString("errorDescription", errorString)
@@ -99,16 +110,20 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         Log.i(LOG_TAG, "Emitting purchase with state $convertedState")
         try {
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("PurchasesChanged", map)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("PurchasesChanged", map)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
-    fun emitPaywallRaise(namiPaywall: NamiPaywall, productDicts: List<NamiSKU>, paywallDeveloperID: String?) {
+    fun emitPaywallRaise(
+        namiPaywall: NamiPaywall,
+        productDicts: List<NamiSKU>,
+        paywallDeveloperID: String?
+    ) {
 
-        Log.i(LOG_TAG, "Emitting paywall raise signal for developerID$paywallDeveloperID");
+        Log.i(LOG_TAG, "Emitting paywall raise signal for developerID$paywallDeveloperID")
         val map = Arguments.createMap().apply {
             putString("developerPaywallID", paywallDeveloperID)
         }
@@ -126,35 +141,30 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
 
         map.putArray("skus", skusArray)
 
-        val paywallStyleData = namiPaywall.styleData
-        if (paywallStyleData != null) {
-            map.putMap("styleData", paywallStyleData.toPaywallStylingDict())
-        }
-
         try {
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("AppPaywallActivate", map)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("AppPaywallActivate", map)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
-    public fun emitSignInActivated(paywallData: NamiPaywall, paywallDeveloperID: String?) {
+    fun emitSignInActivated(paywallData: NamiPaywall, paywallDeveloperID: String?) {
 
         val map = Arguments.createMap().apply {
             putString("developerPaywallID", paywallDeveloperID)
         }
         try {
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("SignInActivate", map)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("SignInActivate", map)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
-    public fun emitPurchaseMade(paywallDeveloperID: String) {
+    fun emitPurchaseMade(paywallDeveloperID: String) {
 
         val map = Arguments.createMap().apply {
             putString("key1", "Value1")
@@ -162,8 +172,8 @@ class NamiEmitter(reactContext: ReactApplicationContext) : ReactContextBaseJavaM
         }
         try {
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("customEventName", map)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("customEventName", map)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }

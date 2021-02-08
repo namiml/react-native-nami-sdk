@@ -6,7 +6,8 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.namiml.ml.NamiMLManager
 
-class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
         return "NamiMLManagerBridge"
@@ -21,7 +22,7 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactCo
     fun enterCoreContentWithLabel(label: String) {
         NamiMLManager.enterCoreContent(label)
     }
-    
+
     @ReactMethod
     fun exitCoreContentWithLabels(labels: ReadableArray) {
         NamiMLManager.exitCoreContent(labels.toArrayList().filterIsInstance<String>())
