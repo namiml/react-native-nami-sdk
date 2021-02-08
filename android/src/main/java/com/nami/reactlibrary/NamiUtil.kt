@@ -76,8 +76,7 @@ fun NamiPaywall.toNamiPaywallDict(): WritableMap {
         paywallMap.putMap("styleData", it.toPaywallStylingDict())
     }
 
-    // TODO uncomment and fix once Android has "use_bottom_overlay" available
-    //paywallMap.putArray("use_bottom_overlay", formattedSkusArray)
+    paywallMap.putBoolean("use_bottom_overlay", useBottomOverlay)
 
     return paywallMap
 }
