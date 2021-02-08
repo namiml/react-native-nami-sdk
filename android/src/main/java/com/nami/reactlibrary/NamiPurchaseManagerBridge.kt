@@ -85,7 +85,8 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
         Log.e(LOG_TAG, "Restore Purchases called on Android platform, has no effect on Android.")
 
         val resultMap = WritableNativeMap().apply {
-            putBoolean("success", true)
+            putBoolean("success", false)
+            putString("error", "This feature is not available on Android platform!")
         }
         resultsCallback.invoke(resultMap)
     }
