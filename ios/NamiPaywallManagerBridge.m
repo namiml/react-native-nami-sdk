@@ -29,7 +29,7 @@
     self = [super init];
     if (self) {
         [self setBlockPaywallRaise:false];
-        [NamiPaywallManager registerApplicationAutoRaisePaywallBlocker:^BOOL{
+        [NamiPaywallManager registerAutoRaisePaywallBlocker:^BOOL{
             NSLog(@"Block paywall raise set to %d", [self blockPaywallRaise]);
             return ![self blockPaywallRaise];
         }];

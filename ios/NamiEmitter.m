@@ -32,23 +32,24 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
         hasNamiEmitterListeners = NO;
         
         // Tell Nami to listen for purchases and we'll forward them on to listeners
-        [NamiPurchaseManager registerWithPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull purchases, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
+        [NamiPurchaseManager registerPurchasesChangedHandler:^(NSArray<NamiPurchase *> * _Nonnull purchases, enum NamiPurchaseState purchaseState, NSError * _Nullable error) {
             [self sendEventPurchaseMadeWithPurchases:purchases withState:purchaseState error:error];
         }];
         
-        [NamiEntitlementManager registerChangeHandlerWithEntitlementsChangedHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
+        [NamiEntitlementManager registerEntitlementsChangedHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
             [self sendEventEntitlementsChangedWithEntitlements:entitlements];
         }];
+              
         
-        [NamiPaywallManager registerWithApplicationSignInProvider:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
+        [NamiPaywallManager registerSignInHandler:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
             [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
         }];
         
-        [NamiPaywallManager registerWithApplicationPaywallProvider:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
+        [NamiPaywallManager registerPaywallHandler:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
             [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
         }];
         
-        [NamiPaywallManager registerWithApplicationBlockingPaywallClosedHandler:^{
+        [NamiPaywallManager registerBlockingPaywallClosedHandler:^{
             [self sendBlockingPaywallClosed];
         }];
         
