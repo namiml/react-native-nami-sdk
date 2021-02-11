@@ -42,7 +42,7 @@ RCT_EXTERN_METHOD(raisePaywall)
   [NamiPaywallManager raisePaywallFromVC:nil];
 }
 
-RCT_EXPORT_METHOD(raisePaywallWithDeveloperPaywallID:(NSString * _Nonnull) developerPaywallID)
+RCT_EXPORT_METHOD(raisePaywallByDeveloperPaywallID:(NSString * _Nonnull) developerPaywallID)
 {
     [NamiPaywallManager raisePaywallWithDeveloperPaywallID:developerPaywallID fromVC:nil];
 }
