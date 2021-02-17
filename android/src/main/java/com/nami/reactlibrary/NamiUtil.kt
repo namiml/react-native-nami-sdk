@@ -1,184 +1,240 @@
 package com.nami.reactlibrary
 
 import android.util.Log
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.bridge.WritableNativeArray
+import com.facebook.react.bridge.WritableNativeMap
+import com.namiml.api.model.FormattedSku
 import com.namiml.billing.NamiPurchase
 import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiPurchaseSource
 import com.namiml.paywall.NamiSKU
 import com.namiml.paywall.PaywallStyleData
+import com.namiml.paywall.SubscriptionPeriod
 import com.namiml.util.extensions.getFormattedPrice
 import com.namiml.util.extensions.getSubscriptionPeriodEnum
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
-fun paywallToPaywallDict(paywallData: NamiPaywall): WritableMap {
+fun FormattedSku.toFormattedSkuDict(): WritableMap {
+    val map: WritableMap = Arguments.createMap()
+    map.putString("id", this.id)
+    map.putBoolean("featured", this.featured)
+    return map
+}
+
+fun NamiPaywall.toNamiPaywallDict(): WritableMap {
 
     val paywallMap: WritableMap = Arguments.createMap()
-    paywallMap.putString("title", paywallData.title.orEmpty())
-    paywallMap.putString("body", paywallData.body.orEmpty())
+    paywallMap.putString("title", title.orEmpty())
+    paywallMap.putString("body", body.orEmpty())
 
     val marketingContentMap = Arguments.createMap()
-    marketingContentMap.putString("title", paywallData.title.orEmpty())
-    marketingContentMap.putString("body", paywallData.body.orEmpty())
+    marketingContentMap.putString("title", title.orEmpty())
+    marketingContentMap.putString("body", body.orEmpty())
 
-    val extraDataMap = paywallData.extraData
+    val extraDataMap = extraData
     if (extraDataMap != null) {
-        val convertedMap = convertNativeMapBecauseReact(extraDataMap)
-        marketingContentMap.putMap("extra_data", convertedMap)
+        marketingContentMap.putMap("extra_data", extraDataMap.toWritableMap())
     }
 
     paywallMap.putMap("marketing_content", marketingContentMap)
 
     Log.i(LOG_TAG, "extraData items are $extraDataMap")
-    paywallMap.putString("id", paywallData.id)
-    paywallMap.putString("background_image_url_phone", paywallData.backgroundImageUrlPhone.orEmpty())
-    paywallMap.putString("background_image_url_tablet", paywallData.backgroundImageUrlTablet.orEmpty())
-    paywallMap.putString("privacy_policy", paywallData.privacyPolicy.orEmpty())
-    paywallMap.putString("purchase_terms", paywallData.purchaseTerms.orEmpty())
-    paywallMap.putString("tos_link", paywallData.tosLink.orEmpty())
-    paywallMap.putString("name", paywallData.name.orEmpty())
-    paywallMap.putString("cta_type", paywallData.type)
-    paywallMap.putString("developer_paywall_id", paywallData.developerPaywallId.orEmpty())
+    paywallMap.putString("id", id)
+    paywallMap.putString("background_image_url_phone", backgroundImageUrlPhone.orEmpty())
+    paywallMap.putString("background_image_url_tablet", backgroundImageUrlTablet.orEmpty())
+    paywallMap.putString("privacy_policy", privacyPolicy.orEmpty())
+    paywallMap.putString("purchase_terms", purchaseTerms.orEmpty())
+    paywallMap.putString("tos_link", tosLink.orEmpty())
+    paywallMap.putString("name", name.orEmpty())
+    paywallMap.putString("cta_type", type)
+    paywallMap.putString("developer_paywall_id", developerPaywallId.orEmpty())
 
-    val allowClosing = paywallData.allowClosing
+    val allowClosing = allowClosing
     paywallMap.putBoolean("allow_closing", allowClosing)
 
-    val restoreControl = paywallData.restoreControl
+    val restoreControl = restoreControl
     paywallMap.putBoolean("restore_control", restoreControl)
 
-    val signInControl = paywallData.signInControl
+    val signInControl = signInControl
     paywallMap.putBoolean("sign_in_control", signInControl)
+
+    val formattedSkusArray: WritableArray = Arguments.createArray()
+    for (formattedSku in formattedSkus) {
+        formattedSkusArray.pushMap(formattedSku.toFormattedSkuDict())
+    }
+    paywallMap.putArray("formatted_skus", formattedSkusArray)
+
+    styleData?.let {
+        paywallMap.putMap("styleData", it.toPaywallStylingDict())
+    }
+
+    paywallMap.putBoolean("use_bottom_overlay", useBottomOverlay)
 
     return paywallMap
 }
 
-fun paywallStylingToPaywallStylingDict(styling: PaywallStyleData): WritableMap {
+fun PaywallStyleData.toPaywallStylingDict(): WritableMap {
 
     val styleMap: WritableMap = Arguments.createMap()
-        styleMap.putString("backgroundColor", styling.backgroundColor)
+    styleMap.putString("backgroundColor", backgroundColor)
 
-        styleMap.putDouble("bodyFontSize", styling.bodyFontSize.toDouble())
-        styleMap.putString("bodyTextColor", styling.bodyTextColor)
-        styleMap.putString("bodyShadowColor", styling.bodyShadowColor)
-        styleMap.putDouble("bodyShadowRadius", styling.bodyShadowRadius.toDouble())
+    styleMap.putDouble("bodyFontSize", bodyFontSize.toDouble())
+    styleMap.putString("bodyTextColor", bodyTextColor)
+    styleMap.putString("bodyShadowColor", bodyShadowColor)
+    styleMap.putDouble("bodyShadowRadius", bodyShadowRadius.toDouble())
 
-        styleMap.putDouble("titleFontSize", styling.titleFontSize.toDouble())
-        styleMap.putString("titleTextColor", styling.titleTextColor)
-        styleMap.putString("titleShadowColor", styling.titleShadowColor)
-        styleMap.putDouble("titleShadowRadius", styling.titleShadowRadius.toDouble())
+    styleMap.putDouble("titleFontSize", titleFontSize.toDouble())
+    styleMap.putString("titleTextColor", titleTextColor)
+    styleMap.putString("titleShadowColor", titleShadowColor)
+    styleMap.putDouble("titleShadowRadius", titleShadowRadius.toDouble())
 
-        styleMap.putDouble("closeButtonFontSize", styling.closeButtonFontSize.toDouble())
-        styleMap.putString("closeButtonTextColor", styling.closeButtonTextColor)
-        styleMap.putString("closeButtonShadowColor", styling.closeButtonShadowColor)
-        styleMap.putDouble("closeButtonShadowRadius", styling.closeButtonShadowRadius.toDouble())
+    styleMap.putDouble("closeButtonFontSize", closeButtonFontSize.toDouble())
+    styleMap.putString("closeButtonTextColor", closeButtonTextColor)
+    styleMap.putString("closeButtonShadowColor", closeButtonShadowColor)
+    styleMap.putDouble("closeButtonShadowRadius", closeButtonShadowRadius.toDouble())
 
-        styleMap.putString("bottomOverlayColor", styling.bottomOverlayColor)
-        styleMap.putDouble("bottomOverlayCornerRadius", styling.bottomOverlayCornerRadius.toDouble())
+    styleMap.putString("bottomOverlayColor", bottomOverlayColor)
+    styleMap.putDouble("bottomOverlayCornerRadius", bottomOverlayCornerRadius.toDouble())
 
-        styleMap.putString("skuButtonColor", styling.skuButtonColor)
-        styleMap.putString("skuButtonTextColor", styling.skuButtonTextColor)
+    styleMap.putString("skuButtonColor", skuButtonColor)
+    styleMap.putString("skuButtonTextColor", skuButtonTextColor)
 
-        styleMap.putString("featuredSkusButtonColor", styling.featuredSkuButtonColor)
-        styleMap.putString("featuredSkusButtonTextColor", styling.featuredSkuButtonTextColor)
+    styleMap.putString("featuredSkusButtonColor", featuredSkuButtonColor)
+    styleMap.putString("featuredSkusButtonTextColor", featuredSkuButtonTextColor)
 
-        styleMap.putDouble("signinButtonFontSize", styling.signInButtonFontSize.toDouble())
-        styleMap.putString("signinButtonTextColor", styling.signInButtonTextColor)
-        styleMap.putString("signinButtonShadowColor", styling.signInButtonShadowColor)
-        styleMap.putDouble("signinButtonShadowRadius", styling.signInButtonShadowRadius.toDouble())
+    styleMap.putDouble("signinButtonFontSize", signInButtonFontSize.toDouble())
+    styleMap.putString("signinButtonTextColor", signInButtonTextColor)
+    styleMap.putString("signinButtonShadowColor", signInButtonShadowColor)
+    styleMap.putDouble("signinButtonShadowRadius", signInButtonShadowRadius.toDouble())
 
-        styleMap.putDouble("restoreButtonFontSize", styling.restoreButtonFontSize.toDouble())
-        styleMap.putString("restoreButtonTextColor", styling.restoreButtonTextColor)
-        styleMap.putString("restoreButtonShadowColor", styling.restoreButtonShadowColor)
-        styleMap.putDouble("restoreButtonShadowRadius", styling.restoreButtonShadowRadius.toDouble())
+    styleMap.putDouble("restoreButtonFontSize", restoreButtonFontSize.toDouble())
+    styleMap.putString("restoreButtonTextColor", restoreButtonTextColor)
+    styleMap.putString("restoreButtonShadowColor", restoreButtonShadowColor)
+    styleMap.putDouble("restoreButtonShadowRadius", restoreButtonShadowRadius.toDouble())
 
-        styleMap.putDouble("purchaseTermsFontSize", styling.purchaseTermsFontSize.toDouble())
-        styleMap.putString("purchaseTermsTextColor", styling.purchaseTermsTextColor)
-        styleMap.putString("purchaseTermsShadowColor", styling.purchaseTermsShadowColor)
-        styleMap.putDouble("purchaseTermsShadowRadius", styling.purchaseTermsShadowRadius.toDouble())
+    styleMap.putDouble("purchaseTermsFontSize", purchaseTermsFontSize.toDouble())
+    styleMap.putString("purchaseTermsTextColor", purchaseTermsTextColor)
+    styleMap.putString("purchaseTermsShadowColor", purchaseTermsShadowColor)
+    styleMap.putDouble("purchaseTermsShadowRadius", purchaseTermsShadowRadius.toDouble())
 
-        styleMap.putString("termsLinkColor", styling.termsLinkColor)
+    styleMap.putString("termsLinkColor", termsLinkColor)
 
     return styleMap
 }
 
-fun convertNativeArrayBecauseReact(nativeList: List<*>): WritableArray {
+fun List<*>.toWritableArray(): WritableArray {
     val convertedArray = Arguments.createArray()
-    for (value in nativeList) {
-        if (value is String) {
-            convertedArray.pushString(value)
-        } else if (value is Int) {
-            convertedArray.pushInt(value)
-        } else if (value is Boolean) {
-            convertedArray.pushBoolean(value)
-        } else if (value is Double) {
-            convertedArray.pushDouble(value)
-        } else if (value is List<*>) {
-            val convertedArray = convertNativeArrayBecauseReact(value)
-            convertedArray.pushArray(convertedArray)
-        } else if (value is Map<*, *>) {
-            val convertedMap = convertNativeMapBecauseReact(value)
-            convertedArray.pushMap(convertedMap)
+    for (value in this) {
+        when (value) {
+            is String -> {
+                convertedArray.pushString(value)
+            }
+            is Int -> {
+                convertedArray.pushInt(value)
+            }
+            is Boolean -> {
+                convertedArray.pushBoolean(value)
+            }
+            is Double -> {
+                convertedArray.pushDouble(value)
+            }
+            is List<*> -> {
+                convertedArray.pushArray(value.toWritableArray())
+            }
+            is Map<*, *> -> {
+                convertedArray.pushMap(value.toWritableMap())
+            }
         }
     }
     return convertedArray
 }
 
-
 // React has a method makeNativeMap that doesn't work, as per react standards.  Build our own primitive mapper to make up for react shortcomings.
-fun convertNativeMapBecauseReact(nativeMap: Map<*, *>): WritableMap {
+fun Map<*, *>.toWritableMap(): WritableMap {
     val convertedMap = Arguments.createMap()
-    for ((key, value) in nativeMap) {
+    for ((key, value) in this) {
         if (key is String) {
-            if (value is String) {
-                convertedMap.putString(key, value)
-            } else if (value is Int) {
-                convertedMap.putInt(key, value)
-            } else if (value is Boolean) {
-                convertedMap.putBoolean(key, value)
-            } else if (value is Double) {
-                convertedMap.putDouble(key, value)
-            } else if (value is List<*>) {
-                val convertedArray = convertNativeArrayBecauseReact(value)
-                convertedMap.putArray(key, convertedArray)
-            } else if (value is Map<*, *>) {
-                val convertedMap = convertNativeMapBecauseReact(value)
-                convertedMap.putMap(key, convertedMap)
+            when (value) {
+                is String -> {
+                    convertedMap.putString(key, value)
+                }
+                is Int -> {
+                    convertedMap.putInt(key, value)
+                }
+                is Boolean -> {
+                    convertedMap.putBoolean(key, value)
+                }
+                is Double -> {
+                    convertedMap.putDouble(key, value)
+                }
+                is List<*> -> {
+                    convertedMap.putArray(key, value.toWritableArray())
+                }
+                is Map<*, *> -> {
+                    convertedMap.putMap(key, value.toWritableMap())
+                }
             }
         }
     }
     return convertedMap
 }
 
-
-fun skuToSkuDict(namiSKU: NamiSKU): WritableMap {
+fun NamiSKU.toSkuDict(): WritableMap {
     val productDict = Arguments.createMap()
 
-    productDict.putString("skuIdentifier", namiSKU.skuId)
-    productDict.putString("localizedTitle", namiSKU.skuDetails.title)
-    productDict.putString("localizedDescription", namiSKU.skuDetails.description)
-    productDict.putString("localizedPrice", namiSKU.skuDetails.price)
-    productDict.putString("localizedMultipliedPrice", namiSKU.skuDetails.price)
-    productDict.putString("price", namiSKU.skuDetails.getFormattedPrice().toString())
+    productDict.putString("skuIdentifier", skuId)
+    productDict.putString("localizedTitle", skuDetails.title)
+    productDict.putString("localizedDescription", skuDetails.description)
+    productDict.putString("localizedPrice", skuDetails.price)
+    productDict.putString("localizedMultipliedPrice", skuDetails.price)
+    productDict.putString("price", skuDetails.getFormattedPrice().toString())
     productDict.putString("priceLanguage", Locale.getDefault().language)
     productDict.putString("priceCountry", Locale.getDefault().country)
-    productDict.putString("priceCurrency", namiSKU.skuDetails.priceCurrencyCode)
+    productDict.putString("priceCurrency", skuDetails.priceCurrencyCode)
     productDict.putString("numberOfUnits", "1")
-    val subscriptionPeriod = namiSKU.skuDetails.getSubscriptionPeriodEnum()
+    val subscriptionPeriod = when (skuDetails.getSubscriptionPeriodEnum()) {
+        SubscriptionPeriod.MONTHLY -> {
+            "month"
+        }
+        SubscriptionPeriod.HALF_YEAR -> {
+            "half_year"
+        }
+        SubscriptionPeriod.DAY -> {
+            "day"
+        }
+        SubscriptionPeriod.WEEKLY -> {
+            "week"
+        }
+        SubscriptionPeriod.QUARTERLY -> {
+            "quarter"
+        }
+        SubscriptionPeriod.ANNUAL -> {
+            "year"
+        }
+        else -> {
+            null
+        }
+    }
     if (subscriptionPeriod != null) {
-        productDict.putString("periodUnit", subscriptionPeriod.durationInDays.toString())
+        productDict.putString("periodUnit", subscriptionPeriod)
     }
 
     return productDict
 }
 
 // Really needs to be a NamiPurchase, when exists...
-fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
+fun NamiPurchase.toPurchaseDict(): WritableMap {
     val purchaseMap = WritableNativeMap()
 
-    val purchaseSource = when (purchase.purchaseSource) {
+    val purchaseSource = when (purchaseSource) {
         NamiPurchaseSource.NAMI_PAYWALL -> {
             "nami_rules"
         }
@@ -191,13 +247,11 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     }
     purchaseMap.putString("purchaseSource", purchaseSource)
 
-    purchaseMap.putString("transactionIdentifier", purchase.transactionIdentifier.orEmpty())
-    purchaseMap.putString("skuIdentifier", purchase.skuId.orEmpty())
+    purchaseMap.putString("transactionIdentifier", transactionIdentifier.orEmpty())
+    purchaseMap.putString("skuIdentifier", skuId)
 
-    val expiresDate = purchase.expires
-    if (expiresDate != null) {
-        val expiresString = javascriptDateFromKJavaDate(expiresDate)
-        purchaseMap.putString("subscriptionExpirationDate", expiresString)
+    expires?.let {
+        purchaseMap.putString("subscriptionExpirationDate", it.toJavascriptDate())
     }
 
     // Removed, not sure why, should add back in when possible
@@ -207,62 +261,50 @@ fun purchaseToPurchaseDict(purchase: NamiPurchase): WritableMap {
     //            .toLocalDateTime()
     //    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp ?: "")
 
-
     // TODO: map kotlin dictionary into arbitrary map?
     purchaseMap.putMap("platformMetadata", WritableNativeMap())
 
     return purchaseMap
 }
 
-fun entitlementDictFromEntitlement(entitlement: NamiEntitlement): WritableMap? {
+fun NamiEntitlement.toEntitlementDict(): WritableMap? {
     val resultMap: WritableMap = WritableNativeMap()
-    val referenceID: String = entitlement.referenceId
-    resultMap.putString("referenceID", referenceID)
+    resultMap.putString("referenceID", referenceId)
 
-    Log.i(LOG_TAG, "Processing entitlement into Javascript Map with referenceID $referenceID")
+    Log.i(LOG_TAG, "Processing entitlement into Javascript Map with referenceID $referenceId")
 
-    if (referenceID.isEmpty()) {
+    if (referenceId.isEmpty()) {
         // Without a reference ID, do not use this object
         return null
     }
 
-    resultMap.putString("namiID", entitlement.namiId.orEmpty())
-    resultMap.putString("desc", entitlement.desc.orEmpty())
-    resultMap.putString("name", entitlement.name.orEmpty())
+    resultMap.putString("namiID", namiId.orEmpty())
+    resultMap.putString("desc", desc.orEmpty())
+    resultMap.putString("name", name.orEmpty())
 
     val activePurchasesArray: WritableArray = WritableNativeArray()
-    val purchases = entitlement.activePurchases
-    purchases.let {
-        for (purchase in purchases) {
-            val purchaseMap = purchaseToPurchaseDict(purchase)
-            activePurchasesArray.pushMap(purchaseMap)
-        }
+    for (purchase in activePurchases) {
+        activePurchasesArray.pushMap(purchase.toPurchaseDict())
     }
     resultMap.putArray("activePurchases", activePurchasesArray)
 
-
     val purchasedSKUsArray: WritableArray = WritableNativeArray()
-    val purchasedSKUs = entitlement.purchasedSKUs
     for (sku in purchasedSKUs) {
-        val skuMap = skuToSkuDict(sku)
-        purchasedSKUsArray.pushMap(skuMap)
+        purchasedSKUsArray.pushMap(sku.toSkuDict())
     }
     resultMap.putArray("purchasedSKUs", purchasedSKUsArray)
 
-
     val relatedSKUsArray: WritableArray = WritableNativeArray()
-    val relatedSKUs = entitlement.relatedSKUs
     for (sku in relatedSKUs) {
-        val skuMap = skuToSkuDict(sku)
-        relatedSKUsArray.pushMap(skuMap)
+        relatedSKUsArray.pushMap(sku.toSkuDict())
     }
     resultMap.putArray("relatedSKUs", relatedSKUsArray)
 
     // For react, provide the most recent active purchase and sku from the arrays
 
     var lastPurchase: NamiPurchase? = null
-    if (entitlement.activePurchases.count() > 0) {
-        for (purchase in entitlement.activePurchases) {
+    if (activePurchases.count() > 0) {
+        for (purchase in activePurchases) {
             if (lastPurchase == null || lastPurchase.purchaseInitiatedTimestamp < purchase.purchaseInitiatedTimestamp) {
                 lastPurchase = purchase
             }
@@ -272,12 +314,11 @@ fun entitlementDictFromEntitlement(entitlement: NamiEntitlement): WritableMap? {
     return resultMap
 }
 
-
 // Convert Java Date to ISO860 UTC date to pass to Javascript
-fun javascriptDateFromKJavaDate(date: Date): String {
+fun Date.toJavascriptDate(): String {
     val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()).apply {
-        setTimeZone(TimeZone.getTimeZone("UTC"))
+        timeZone = TimeZone.getTimeZone("UTC")
     }
-    return df.format(date)
+    return df.format(this)
 }
 

@@ -1,10 +1,14 @@
 package com.nami.reactlibrary
 
-
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.WritableNativeMap
 import com.namiml.customer.NamiCustomerManager
 
-class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
         return "NamiCustomerManagerBridge"

@@ -1,10 +1,19 @@
 package com.nami.reactlibrary
 
 import android.util.Log
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableType
+import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.WritableNativeArray
+import com.facebook.react.bridge.WritableNativeMap
 import com.namiml.billing.NamiPurchaseManager
 
-class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
         return "NamiPurchaseManagerBridge"
@@ -41,8 +50,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
         val resultArray: WritableArray = WritableNativeArray()
 
         for (purchase in purchases) {
-            val purchaseDict = purchaseToPurchaseDict(purchase)
-            resultArray.pushMap(purchaseDict)
+            resultArray.pushMap(purchase.toPurchaseDict())
         }
 
         resultsCallback.invoke(resultArray)
@@ -74,15 +82,12 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) : R
 
     @ReactMethod
     fun restorePurchases(resultsCallback: Callback) {
-        Log.e(LOG_TAG, "Restore Purchases called on Android platform, has no effect on Android.")
+        Log.w(LOG_TAG, "Restore Purchases called on Android platform, has no effect on Android.")
 
         val resultMap = WritableNativeMap().apply {
-            putBoolean("success", true)
+            putBoolean("success", false)
+            putString("error", "Google Play does not provide an API method to restore purchases.  Deep link users to Play app subscriptions to restore purchases.")
         }
-        val resultArray: WritableArray = WritableNativeArray().apply {
-            pushMap(resultMap)
-        }
-        resultsCallback.invoke(resultArray)
+        resultsCallback.invoke(resultMap)
     }
-
 }
