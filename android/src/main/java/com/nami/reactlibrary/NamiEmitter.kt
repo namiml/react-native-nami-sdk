@@ -43,7 +43,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
         NamiPaywallManager.registerPaywallRaiseListener { context, paywallData, products, developerPaywallId ->
             Log.i(
                 LOG_TAG,
-                "Products from registerApplicationPaywallProvider callback are $products"
+                "Products from registerPaywallRaiseListener callback are $products"
             )
 
             val sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
