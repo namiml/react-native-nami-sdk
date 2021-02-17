@@ -111,11 +111,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun presentNamiPaywall(skuIDs: ReadableArray, metapaywallDefinition: ReadableMap) {
-        // TODO: Android SDK needs presentNamiPaywall function.
-    }
-
-    @ReactMethod
     fun fetchCustomMetadataForDeveloperID(paywallDeveloperID: String, successCallback: Callback) {
         val sendDict = WritableNativeMap()
         //TODO: Android SDK needs fetchCustomMetadataForDeveloperID
