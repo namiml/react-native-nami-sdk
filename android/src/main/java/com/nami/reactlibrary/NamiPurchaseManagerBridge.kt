@@ -82,11 +82,11 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun restorePurchases(resultsCallback: Callback) {
-        Log.e(LOG_TAG, "Restore Purchases called on Android platform, has no effect on Android.")
+        Log.w(LOG_TAG, "Restore Purchases called on Android platform, has no effect on Android.")
 
         val resultMap = WritableNativeMap().apply {
             putBoolean("success", false)
-            putString("error", "This feature is not available on Android platform!")
+            putString("error", "Google Play does not provide an API method to restore purchases.  Deep link users to Play app subscriptions to restore purchases.")
         }
         resultsCallback.invoke(resultMap)
     }
