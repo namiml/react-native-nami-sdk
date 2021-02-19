@@ -199,11 +199,17 @@ bool hasNamiEmitterListeners;
         
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
         // This part is really meant to be internally facing, scrub from dictionary
-        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        // [paywallMeta removeObjectForKey:@"formatted_skus"];
+        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"]
         [paywallMeta removeObjectForKey:@"skus"];
+
         NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
         paywallMeta[@"styleData"] = paywallStylingDict;
         
+        // remove keys that are inconsistent with android 
+        [paywallMeta removeObjectForKey:@"body"];
+        [paywallMeta removeObjectForKey:@"title"];
+
         [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
                                                             @"paywallMetadata": paywallMeta }];
