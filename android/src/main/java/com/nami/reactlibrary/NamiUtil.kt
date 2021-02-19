@@ -79,9 +79,6 @@ fun NamiPaywall.toNamiPaywallDict(): WritableMap {
 
     paywallMap.putBoolean("use_bottom_overlay", useBottomOverlay)
 
-    // remove key that in not available on iOS
-    paywallMap.remove("style")
-
     return paywallMap
 }
 

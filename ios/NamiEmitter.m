@@ -209,6 +209,7 @@ bool hasNamiEmitterListeners;
         // remove keys that are inconsistent with android 
         [paywallMeta removeObjectForKey:@"body"];
         [paywallMeta removeObjectForKey:@"title"];
+        [paywallMeta removeObjectForKey:@"style"]
 
         [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
