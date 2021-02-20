@@ -199,7 +199,8 @@ bool hasNamiEmitterListeners;
         
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
         // This part is really meant to be internally facing, scrub from dictionary
-        // [paywallMeta removeObjectForKey:@"formatted_skus"];
+        // [paywallMeta removeObjectForKey:@"formatted_skus"]; // this seems to have no effect
+        [paywallMeta setObject: [paywallMeta objectForKey:@"sku_ordered_metadata"] forKey:@"formatted_skus"];
         [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
         [paywallMeta removeObjectForKey:@"skus"];
 
