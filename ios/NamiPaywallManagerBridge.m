@@ -29,7 +29,7 @@
     self = [super init];
     if (self) {
         [self setBlockPaywallRaise:false];
-        [NamiPaywallManager registerAutoRaisePaywallBlocker:^BOOL{
+        [NamiPaywallManager registerAllowAutoRaisePaywallHandler:^BOOL{
             NSLog(@"Block paywall raise set to %d", [self blockPaywallRaise]);
             return ![self blockPaywallRaise];
         }];
@@ -87,8 +87,8 @@ RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPayw
         
         
         NSArray *wrapperArray = @[@{ @"products": productDicts,
-                                                                @"developerPaywallID": developerPaywallID,
-                                                                @"paywallMetadata": paywallMeta }];
+                                     @"developerPaywallID": developerPaywallID,
+                                     @"paywallMetadata": paywallMeta }];
         completion(wrapperArray);
     }];
 }

@@ -45,7 +45,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
             [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
         }];
         
-        [NamiPaywallManager registerPaywallHandler:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
+        [NamiPaywallManager registerPaywallRaiseHandler:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
             [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
         }];
         
@@ -200,7 +200,7 @@ bool hasNamiEmitterListeners;
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
         // This part is really meant to be internally facing, scrub from dictionary
         // [paywallMeta removeObjectForKey:@"formatted_skus"];
-        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"]
+        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
         [paywallMeta removeObjectForKey:@"skus"];
 
         NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
@@ -209,7 +209,7 @@ bool hasNamiEmitterListeners;
         // remove keys that are inconsistent with android 
         [paywallMeta removeObjectForKey:@"body"];
         [paywallMeta removeObjectForKey:@"title"];
-        [paywallMeta removeObjectForKey:@"style"]
+        [paywallMeta removeObjectForKey:@"style"];
 
         [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
