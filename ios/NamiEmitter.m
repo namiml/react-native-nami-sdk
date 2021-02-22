@@ -170,7 +170,7 @@ bool hasNamiEmitterListeners;
         sendDict[@"purchases"] =  convertedPurchaseDicts;
         sendDict[@"purchaseState"] = convertedState;
         if (localizedErrorDescription != nil) {
-           sendDict[@"errorDescription"] = localizedErrorDescription;
+           sendDict[@"error"] = localizedErrorDescription;
         }
         
         [self sendEventWithName:@"PurchasesChanged" body:sendDict];
