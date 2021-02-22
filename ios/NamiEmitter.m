@@ -199,8 +199,9 @@ bool hasNamiEmitterListeners;
         
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
         // This part is really meant to be internally facing, scrub from dictionary
-        // [paywallMeta removeObjectForKey:@"formatted_skus"]; // this seems to have no effect
-        [paywallMeta setObject: [paywallMeta objectForKey:@"sku_ordered_metadata"] forKey:@"formatted_skus"];
+        NSMutableDictionary *skuFormattingDict = [NSMutableDictionary dictionaryWithDictionary:[paywallMeta objectForKey:@"sku_ordered_metadata"]];
+        [skuFormattingDict removeObjectForKey:@"presentation_position"];
+        [paywallMeta setObject:skuFormattingDict  forKey:@"formatted_skus"];
         [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
         [paywallMeta removeObjectForKey:@"skus"];
 
@@ -222,8 +223,12 @@ bool hasNamiEmitterListeners;
     // Let system know a blocking paywall has been closed, in case they want to react specifically.
     if (hasNamiEmitterListeners) {
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionary];
-        // This part is really meant to be internally facing, scrub from dictionary
-        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        
+        NSMutableDictionary *skuFormattingDict = [NSMutableDictionary dictionaryWithDictionary:[paywallMeta objectForKey:@"sku_ordered_metadata"]];
+        [skuFormattingDict removeObjectForKey:@"presentation_position"];
+        [paywallMeta setObject:skuFormattingDict  forKey:@"formatted_skus"];
+        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
+        [paywallMeta removeObjectForKey:@"skus"];
         
         [self sendEventWithName:@"BlockingPaywallClosed" body:@{ @"blockingPaywallClosed": @(true)}];
     }
