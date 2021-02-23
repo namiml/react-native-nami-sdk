@@ -122,7 +122,10 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         val builtConfig: NamiConfiguration = builder.build()
         Log.i(LOG_TAG, "Nami Configuration object is $builtConfig")
 
-        Nami.configure(builtConfig)
+        currentActivity?.runOnUiThread {
+            // Configure must be called on main thread
+            Nami.configure(builtConfig)
+        }
     }
 
     @ReactMethod

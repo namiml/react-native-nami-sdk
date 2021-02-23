@@ -21,7 +21,9 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun clearBypassStorePurchases() {
-        NamiPurchaseManager.clearBypassStorePurchases()
+        currentActivity?.runOnUiThread {
+            NamiPurchaseManager.clearBypassStorePurchases()
+        }
     }
 
     @ReactMethod
@@ -86,7 +88,10 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
 
         val resultMap = WritableNativeMap().apply {
             putBoolean("success", false)
-            putString("error", "Google Play does not provide an API method to restore purchases.  Deep link users to Play app subscriptions to restore purchases.")
+            putString(
+                "error",
+                "Google Play does not provide an API method to restore purchases.  Deep link users to Play app subscriptions to restore purchases."
+            )
         }
         resultsCallback.invoke(resultMap)
     }
