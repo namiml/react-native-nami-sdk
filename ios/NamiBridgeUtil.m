@@ -100,6 +100,22 @@
      return purchaseDict;
  }
 
+
+// Strip out presention_position from all listed sku items in the sku_ordered_metadata array
++ (NSArray *)stripPresentationPositionFromOrderedMetadataForPaywallMetaDict: (NSDictionary *)paywallMeta {
+    NSArray *baseSkuArray = [paywallMeta objectForKey:@"sku_ordered_metadata"];
+    NSMutableArray *newOrderedMetadata = [NSMutableArray new];
+    
+    if ( [baseSkuArray isKindOfClass:[NSArray class]] ) {
+        for (NSDictionary *baseSkuDict in baseSkuArray) {
+            NSMutableDictionary *skuFormattingDict = [NSMutableDictionary dictionaryWithDictionary:baseSkuDict];
+            [skuFormattingDict removeObjectForKey:@"presentation_position"];
+            [newOrderedMetadata addObject:skuFormattingDict];
+        }
+    }
+    return newOrderedMetadata;
+}
+
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
     NSMutableDictionary<NSString *,id> *entitlementDict = [NSMutableDictionary new];
     NSLog(@"Converting entitlement %@", entitlement);
