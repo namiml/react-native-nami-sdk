@@ -32,8 +32,9 @@ fun FormattedSku.toFormattedSkuDict(): WritableMap {
 fun NamiPaywall.toNamiPaywallDict(): WritableMap {
 
     val paywallMap: WritableMap = Arguments.createMap()
-    paywallMap.putString("title", title.orEmpty())
-    paywallMap.putString("body", body.orEmpty())
+    // These don't seem to exist, inconsistent between Android and iOS, leave in marketing content
+    //paywallMap.putString("title", title.orEmpty())
+    //paywallMap.putString("body", body.orEmpty())
 
     val marketingContentMap = Arguments.createMap()
     marketingContentMap.putString("title", title.orEmpty())

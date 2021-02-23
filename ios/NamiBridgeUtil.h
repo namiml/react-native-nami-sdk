@@ -23,6 +23,8 @@
 
 + (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling;
 
++ (NSArray *)stripPresentationPositionFromOrderedMetadataForPaywallMetaDict: (NSDictionary *)paywallMeta;
+
 + (NSString *)hexStringForColor:(UIColor *)color;
 
 @end

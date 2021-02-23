@@ -29,7 +29,7 @@
     self = [super init];
     if (self) {
         [self setBlockPaywallRaise:false];
-        [NamiPaywallManager registerAutoRaisePaywallBlocker:^BOOL{
+        [NamiPaywallManager registerAllowAutoRaisePaywallHandler:^BOOL{
             NSLog(@"Block paywall raise set to %d", [self blockPaywallRaise]);
             return ![self blockPaywallRaise];
         }];
@@ -42,7 +42,7 @@ RCT_EXTERN_METHOD(raisePaywall)
   [NamiPaywallManager raisePaywallFromVC:nil];
 }
 
-RCT_EXPORT_METHOD(raisePaywallByDeveloperPaywallID:(NSString * _Nonnull) developerPaywallID)
+RCT_EXPORT_METHOD(raisePaywallByDeveloperPaywallId:(NSString * _Nonnull) developerPaywallID)
 {
     [NamiPaywallManager raisePaywallWithDeveloperPaywallID:developerPaywallID fromVC:nil];
 }
@@ -80,15 +80,23 @@ RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPayw
 
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
         // This part is really meant to be internally facing, scrub from dictionary
-        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        
+        NSDictionary *baseSkuDict = [paywallMeta objectForKey:@"sku_ordered_metadata"];
+        
+        // Strip out presention_position from all listed sku items
+        NSArray *cleanedOrderdMetadata = [NamiBridgeUtil stripPresentationPositionFromOrderedMetadataForPaywallMetaDict:paywallMeta];        
+        [paywallMeta setObject:cleanedOrderdMetadata  forKey:@"formatted_skus"];
+        
+        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
         [paywallMeta removeObjectForKey:@"skus"];
+
         NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
         paywallMeta[@"styleData"] = paywallStylingDict;
         
         
         NSArray *wrapperArray = @[@{ @"products": productDicts,
-                                                                @"developerPaywallID": developerPaywallID,
-                                                                @"paywallMetadata": paywallMeta }];
+                                     @"developerPaywallID": developerPaywallID,
+                                     @"paywallMetadata": paywallMeta }];
         completion(wrapperArray);
     }];
 }

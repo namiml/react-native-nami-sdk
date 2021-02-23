@@ -45,7 +45,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
             [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
         }];
         
-        [NamiPaywallManager registerPaywallHandler:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
+        [NamiPaywallManager registerPaywallRaiseHandler:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
             [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
         }];
         
@@ -170,7 +170,7 @@ bool hasNamiEmitterListeners;
         sendDict[@"purchases"] =  convertedPurchaseDicts;
         sendDict[@"purchaseState"] = convertedState;
         if (localizedErrorDescription != nil) {
-           sendDict[@"errorDescription"] = localizedErrorDescription;
+           sendDict[@"error"] = localizedErrorDescription;
         }
         
         [self sendEventWithName:@"PurchasesChanged" body:sendDict];
@@ -199,11 +199,22 @@ bool hasNamiEmitterListeners;
         
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
         // This part is really meant to be internally facing, scrub from dictionary
-        [paywallMeta removeObjectForKey:@"formatted_skus"];
+
+        // Strip out presention_position from all listed sku items
+        NSArray *cleanedOrderdMetadata = [NamiBridgeUtil stripPresentationPositionFromOrderedMetadataForPaywallMetaDict:paywallMeta];
+        [paywallMeta setObject:cleanedOrderdMetadata  forKey:@"formatted_skus"];
+
+        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
         [paywallMeta removeObjectForKey:@"skus"];
+
         NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
         paywallMeta[@"styleData"] = paywallStylingDict;
         
+        // remove keys that are inconsistent with android 
+        [paywallMeta removeObjectForKey:@"body"];
+        [paywallMeta removeObjectForKey:@"title"];
+        [paywallMeta removeObjectForKey:@"style"];
+
         [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
                                                             @"paywallMetadata": paywallMeta }];
@@ -214,8 +225,13 @@ bool hasNamiEmitterListeners;
     // Let system know a blocking paywall has been closed, in case they want to react specifically.
     if (hasNamiEmitterListeners) {
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionary];
-        // This part is really meant to be internally facing, scrub from dictionary
-        [paywallMeta removeObjectForKey:@"formatted_skus"];
+        
+        // Strip out presention_position from all listed sku items
+        NSArray *cleanedOrderdMetadata = [NamiBridgeUtil stripPresentationPositionFromOrderedMetadataForPaywallMetaDict:paywallMeta];
+        [paywallMeta setObject:cleanedOrderdMetadata  forKey:@"formatted_skus"];
+        
+        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
+        [paywallMeta removeObjectForKey:@"skus"];
         
         [self sendEventWithName:@"BlockingPaywallClosed" body:@{ @"blockingPaywallClosed": @(true)}];
     }

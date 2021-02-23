@@ -81,7 +81,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
     ) {
         val map = Arguments.createMap()
         errorString?.let {
-            map.putString("errorDescription", errorString)
+            map.putString("error", errorString)
         }
 
         val resultArray: WritableArray = WritableNativeArray()
