@@ -24,7 +24,7 @@ import java.util.TimeZone
 
 fun FormattedSku.toFormattedSkuDict(): WritableMap {
     val map: WritableMap = Arguments.createMap()
-    map.putString("id", this.id)
+    map.putString("sku_ref_id", this.skuId)
     map.putBoolean("featured", this.featured)
     return map
 }
