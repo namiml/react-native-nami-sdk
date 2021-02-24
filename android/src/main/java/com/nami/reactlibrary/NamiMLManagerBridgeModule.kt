@@ -15,26 +15,36 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun enterCoreContentWithLabels(labels: ReadableArray) {
-        NamiMLManager.enterCoreContent(labels.toArrayList().filterIsInstance<String>())
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.enterCoreContent(labels.toArrayList().filterIsInstance<String>())
+        }
     }
 
     @ReactMethod
     fun enterCoreContentWithLabel(label: String) {
-        NamiMLManager.enterCoreContent(label)
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.enterCoreContent(label)
+        }
     }
 
     @ReactMethod
     fun exitCoreContentWithLabels(labels: ReadableArray) {
-        NamiMLManager.exitCoreContent(labels.toArrayList().filterIsInstance<String>())
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.exitCoreContent(labels.toArrayList().filterIsInstance<String>())
+        }
     }
 
     @ReactMethod
     fun exitCoreContentWithLabel(label: String) {
-        NamiMLManager.exitCoreContent(label)
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.exitCoreContent(label)
+        }
     }
 
     @ReactMethod
     fun coreActionWithLabel(label: String) {
-        NamiMLManager.coreAction(label)
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.coreAction(label)
+        }
     }
 }

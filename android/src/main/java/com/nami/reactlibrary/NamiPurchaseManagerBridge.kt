@@ -21,65 +21,72 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun clearBypassStorePurchases() {
-        currentActivity?.runOnUiThread {
+        reactApplicationContext.runOnUiQueueThread {
             NamiPurchaseManager.clearBypassStorePurchases()
         }
     }
 
     @ReactMethod
     fun buySKU(skuPlatformID: String, developerPaywallID: String, resultsCallback: Callback) {
-        currentActivity?.let {
-            NamiPurchaseManager.buySKU(it, skuPlatformID) {
+        reactApplicationContext.runOnUiQueueThread {
+            currentActivity?.let {
+                NamiPurchaseManager.buySKU(it, skuPlatformID) {
 
-                val result: Boolean
-                if (NamiPurchaseManager.isSKUIDPurchased(skuPlatformID)) {
-                    result = true
-                    Log.i(LOG_TAG, "Purchase complete, result is PURCHASED.")
-                } else {
-                    result = false
-                    Log.i(LOG_TAG, "Purchase complete, product not purchased.")
+                    val result: Boolean
+                    if (NamiPurchaseManager.isSKUIDPurchased(skuPlatformID)) {
+                        result = true
+                        Log.i(LOG_TAG, "Purchase complete, result is PURCHASED.")
+                    } else {
+                        result = false
+                        Log.i(LOG_TAG, "Purchase complete, product not purchased.")
+                    }
+                    resultsCallback.invoke(result)
                 }
-                resultsCallback.invoke(result)
             }
         }
     }
 
     @ReactMethod
     fun purchases(resultsCallback: Callback) {
-        val purchases = NamiPurchaseManager.allPurchases()
+        reactApplicationContext.runOnUiQueueThread {
+            val purchases = NamiPurchaseManager.allPurchases()
 
-        // Pass back empty array until we can get purchases from the SDK
-        val resultArray: WritableArray = WritableNativeArray()
+            // Pass back empty array until we can get purchases from the SDK
+            val resultArray: WritableArray = WritableNativeArray()
 
-        for (purchase in purchases) {
-            resultArray.pushMap(purchase.toPurchaseDict())
+            for (purchase in purchases) {
+                resultArray.pushMap(purchase.toPurchaseDict())
+            }
+
+            resultsCallback.invoke(resultArray)
         }
-
-        resultsCallback.invoke(resultArray)
     }
 
     @ReactMethod
     fun isSKUIDPurchased(skuID: String, resultsCallback: Callback) {
-        val isPurchased = NamiPurchaseManager.isSKUIDPurchased(skuID)
-
-        resultsCallback.invoke(isPurchased)
+        reactApplicationContext.runOnUiQueueThread {
+            val isPurchased = NamiPurchaseManager.isSKUIDPurchased(skuID)
+            resultsCallback.invoke(isPurchased)
+        }
     }
 
     @ReactMethod
     fun anySKUIDPurchased(skuIDs: ReadableArray, resultsCallback: Callback) {
-        val checkArray: MutableList<String> = mutableListOf()
-        for (x in 0 until skuIDs.size()) {
-            if (skuIDs.getType(x) == ReadableType.String) {
-                val skuID = skuIDs.getString(x)
-                if (skuID != null && skuID.isNotEmpty()) {
-                    checkArray.add(skuID)
+        reactApplicationContext.runOnUiQueueThread {
+            val checkArray: MutableList<String> = mutableListOf()
+            for (x in 0 until skuIDs.size()) {
+                if (skuIDs.getType(x) == ReadableType.String) {
+                    val skuID = skuIDs.getString(x)
+                    if (skuID != null && skuID.isNotEmpty()) {
+                        checkArray.add(skuID)
+                    }
                 }
             }
+
+            val anyPurchased = NamiPurchaseManager.anySKUIDPurchased(checkArray)
+
+            resultsCallback.invoke(anyPurchased)
         }
-
-        val anyPurchased = NamiPurchaseManager.anySKUIDPurchased(checkArray)
-
-        resultsCallback.invoke(anyPurchased)
     }
 
     @ReactMethod

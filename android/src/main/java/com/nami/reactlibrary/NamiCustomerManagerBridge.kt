@@ -16,20 +16,22 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun currentCustomerJourneyState(resultsCallback: Callback) {
-        val journeyState = NamiCustomerManager.currentCustomerJourneyState()
+        reactApplicationContext.runOnUiQueueThread {
+            val journeyState = NamiCustomerManager.currentCustomerJourneyState()
 
-        val formerSubscriber = journeyState?.formerSubscriber ?: false
-        val inGracePeriod = journeyState?.inGracePeriod ?: false
-        val inTrialPeriod = journeyState?.inTrialPeriod ?: false
-        val inIntroOfferPeriod = journeyState?.inIntroOfferPeriod ?: false
+            val formerSubscriber = journeyState?.formerSubscriber ?: false
+            val inGracePeriod = journeyState?.inGracePeriod ?: false
+            val inTrialPeriod = journeyState?.inTrialPeriod ?: false
+            val inIntroOfferPeriod = journeyState?.inIntroOfferPeriod ?: false
 
-        val journeyDict = WritableNativeMap().apply {
-            putBoolean("formerSubscriber", formerSubscriber)
-            putBoolean("inGracePeriod", inGracePeriod)
-            putBoolean("inTrialPeriod", inTrialPeriod)
-            putBoolean("inIntroOfferPeriod", inIntroOfferPeriod)
+            val journeyDict = WritableNativeMap().apply {
+                putBoolean("formerSubscriber", formerSubscriber)
+                putBoolean("inGracePeriod", inGracePeriod)
+                putBoolean("inTrialPeriod", inTrialPeriod)
+                putBoolean("inIntroOfferPeriod", inIntroOfferPeriod)
+            }
+
+            resultsCallback.invoke(journeyDict)
         }
-
-        resultsCallback.invoke(journeyDict)
     }
 }
