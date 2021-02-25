@@ -9,8 +9,6 @@ import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableArray
-import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.paywall.NamiPaywallManager
@@ -67,12 +65,16 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun raisePaywall() {
-        raisePaywall(currentActivity, null)
+        reactApplicationContext.runOnUiQueueThread {
+            raisePaywall(currentActivity, null)
+        }
     }
 
     @ReactMethod
     fun raisePaywallByDeveloperPaywallId(developerPaywallID: String) {
-        raisePaywall(currentActivity, developerPaywallID)
+        reactApplicationContext.runOnUiQueueThread {
+            raisePaywall(currentActivity, developerPaywallID)
+        }
     }
 
     private fun raisePaywall(activity: Activity?, developerPaywallID: String?) {
@@ -100,9 +102,10 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 //        BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
 //        completion(@[[NSNumber numberWithBool:canRaise]]);
 
-        val canRaiseResult = NamiPaywallManager.canRaisePaywall()
-
-        successCallback.invoke(canRaiseResult)
+        reactApplicationContext.runOnUiQueueThread {
+            val canRaiseResult = NamiPaywallManager.canRaisePaywall()
+            successCallback.invoke(canRaiseResult)
+        }
     }
 
     @ReactMethod

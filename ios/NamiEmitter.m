@@ -233,7 +233,7 @@ bool hasNamiEmitterListeners;
         [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
         [paywallMeta removeObjectForKey:@"skus"];
         
-        [self sendEventWithName:@"BlockingPaywallClosed" body:@{ @"blockingPaywallClosed": @(true)}];
+        [self sendEventWithName:@"BlockingPaywallClosed" body:@{ @"blockingPaywallClosed": @true }];
     }
 }
 

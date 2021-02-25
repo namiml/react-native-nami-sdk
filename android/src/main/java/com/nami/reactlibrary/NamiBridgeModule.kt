@@ -122,7 +122,10 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         val builtConfig: NamiConfiguration = builder.build()
         Log.i(LOG_TAG, "Nami Configuration object is $builtConfig")
 
-        Nami.configure(builtConfig)
+        reactApplicationContext.runOnUiQueueThread {
+            // Configure must be called on main thread
+            Nami.configure(builtConfig)
+        }
     }
 
     @ReactMethod
@@ -136,24 +139,28 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             NamiExternalIdentifierType.UUID
         }
 
-        Nami.setExternalIdentifier(externalIdentifier, useType)
+        reactApplicationContext.runOnUiQueueThread {
+            Nami.setExternalIdentifier(externalIdentifier, useType)
+        }
     }
 
     @ReactMethod
     fun getExternalIdentifier(successCallback: Callback) {
-        val externalIdentifierResult: WritableArray = WritableNativeArray()
-
-        Nami.getExternalIdentifier()?.let { externalIdentifier ->
-            Log.i(LOG_TAG, "getting external identifier, found $externalIdentifier")
-            externalIdentifierResult.pushString(externalIdentifier)
+        reactApplicationContext.runOnUiQueueThread {
+            val externalIdentifierResult: WritableArray = WritableNativeArray()
+            Nami.getExternalIdentifier()?.let { externalIdentifier ->
+                Log.i(LOG_TAG, "getting external identifier, found $externalIdentifier")
+                externalIdentifierResult.pushString(externalIdentifier)
+            }
+            successCallback.invoke(externalIdentifierResult)
         }
-
-        successCallback.invoke(externalIdentifierResult)
     }
 
     @ReactMethod
     fun clearExternalIdentifier() {
         Log.i(LOG_TAG, "Clearing external identifier.")
-        Nami.clearExternalIdentifier()
+        reactApplicationContext.runOnUiQueueThread {
+            Nami.clearExternalIdentifier()
+        }
     }
 }

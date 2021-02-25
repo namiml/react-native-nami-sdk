@@ -54,40 +54,49 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
     @ReactMethod
     fun isEntitlementActive(entitlementRefID: String, resultsCallback: Callback) {
-        val isActive = NamiEntitlementManager.isEntitlementActive(entitlementRefID)
+        reactApplicationContext.runOnUiQueueThread {
+            val isActive = NamiEntitlementManager.isEntitlementActive(entitlementRefID)
 
-        Log.i(LOG_TAG, "Checking for $entitlementRefID entitlement active, result was $isActive")
-        resultsCallback.invoke(isActive)
+            Log.i(
+                LOG_TAG,
+                "Checking for $entitlementRefID entitlement active, result was $isActive"
+            )
+            resultsCallback.invoke(isActive)
+        }
     }
 
     @ReactMethod
     fun activeEntitlements(resultsCallback: Callback) {
 
-        val nativeEntitlements = NamiEntitlementManager.activeEntitlements()
+        reactApplicationContext.runOnUiQueueThread {
+            val nativeEntitlements = NamiEntitlementManager.activeEntitlements()
 
-        val resultArray: WritableArray = WritableNativeArray()
-        for (entitlement in nativeEntitlements) {
-            entitlement.toEntitlementDict()?.let { entitlementDict ->
-                resultArray.pushMap(entitlementDict)
+            val resultArray: WritableArray = WritableNativeArray()
+            for (entitlement in nativeEntitlements) {
+                entitlement.toEntitlementDict()?.let { entitlementDict ->
+                    resultArray.pushMap(entitlementDict)
+                }
             }
+            resultsCallback.invoke(resultArray)
         }
-        resultsCallback.invoke(resultArray)
     }
 
     @ReactMethod
     fun getEntitlements(resultsCallback: Callback) {
 
-        val nativeEntitlements = NamiEntitlementManager.getEntitlements()
+        reactApplicationContext.runOnUiQueueThread {
+            val nativeEntitlements = NamiEntitlementManager.getEntitlements()
 
-        Log.i(LOG_TAG, "getEntitlements result is $nativeEntitlements")
+            Log.i(LOG_TAG, "getEntitlements result is $nativeEntitlements")
 
-        val resultArray: WritableArray = WritableNativeArray()
-        for (entitlement in nativeEntitlements) {
-            entitlement.toEntitlementDict()?.let { entitlementDict ->
-                resultArray.pushMap(entitlementDict)
+            val resultArray: WritableArray = WritableNativeArray()
+            for (entitlement in nativeEntitlements) {
+                entitlement.toEntitlementDict()?.let { entitlementDict ->
+                    resultArray.pushMap(entitlementDict)
+                }
             }
+            resultsCallback.invoke(resultArray)
         }
-        resultsCallback.invoke(resultArray)
     }
 
     @ReactMethod
@@ -107,15 +116,19 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
             index += 1
         }
 
-        NamiEntitlementManager.setEntitlements(entitlementsToSet)
+        reactApplicationContext.runOnUiQueueThread {
+            NamiEntitlementManager.setEntitlements(entitlementsToSet)
+        }
     }
 
     @ReactMethod
     fun clearAllEntitlements() {
-        NamiEntitlementManager.clearAllEntitlements()
+        reactApplicationContext.runOnUiQueueThread {
+            NamiEntitlementManager.clearAllEntitlements()
+        }
     }
 
-    fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
+    private fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
         if (entitlementSetterMap.hasKey("referenceID")) {
             val referenceID = entitlementSetterMap.getString("referenceID").orEmpty()
             if (referenceID.isNotEmpty()) {
