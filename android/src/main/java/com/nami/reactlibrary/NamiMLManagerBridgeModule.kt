@@ -6,7 +6,8 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.namiml.ml.NamiMLManager
 
-class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
         return "NamiMLManagerBridge"
@@ -14,32 +15,36 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) : ReactCo
 
     @ReactMethod
     fun enterCoreContentWithLabels(labels: ReadableArray) {
-        NamiMLManager.enterCoreContent(labels.toArrayList().filterIsInstance<String>())
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.enterCoreContent(labels.toArrayList().filterIsInstance<String>())
+        }
     }
 
     @ReactMethod
     fun enterCoreContentWithLabel(label: String) {
-        NamiMLManager.enterCoreContent(label)
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.enterCoreContent(label)
+        }
     }
-
 
     @ReactMethod
     fun exitCoreContentWithLabels(labels: ReadableArray) {
-        NamiMLManager.exitCoreContent(labels.toArrayList().filterIsInstance<String>())
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.exitCoreContent(labels.toArrayList().filterIsInstance<String>())
+        }
     }
 
     @ReactMethod
     fun exitCoreContentWithLabel(label: String) {
-        NamiMLManager.exitCoreContent(label)
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.exitCoreContent(label)
+        }
     }
 
     @ReactMethod
     fun coreActionWithLabel(label: String) {
-        NamiMLManager.coreAction(label)
-    }
-
-    @ReactMethod
-    fun coreActionWithLabels(labels: ReadableArray) {
-        NamiMLManager.coreAction(labels.toArrayList().filterIsInstance<String>())
+        reactApplicationContext.runOnUiQueueThread {
+            NamiMLManager.coreAction(label)
+        }
     }
 }

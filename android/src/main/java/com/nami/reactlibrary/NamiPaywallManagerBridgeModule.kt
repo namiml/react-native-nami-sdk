@@ -3,18 +3,24 @@ package com.nami.reactlibrary
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.ActivityEventListener
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.entitlement.NamiEntitlement
 import com.namiml.paywall.NamiPaywallManager
 
-class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), ActivityEventListener {
+class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext), ActivityEventListener {
 
     private var blockRaisePaywall: Boolean = false
 
     init {
         NamiPaywallManager.registerApplicationAutoRaisePaywallBlocker {
-            Log.i(LOG_TAG, "Nami flag for blocking paywall raise is $blockRaisePaywall");
+            Log.i(LOG_TAG, "Nami flag for blocking paywall raise is $blockRaisePaywall")
             blockRaisePaywall
         }
         reactContext.addActivityEventListener(this)
@@ -24,11 +30,18 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
         return "NamiPaywallManagerBridge"
     }
 
-    override fun onActivityResult(activity: Activity?, requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        activity: Activity?,
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
         Log.d(LOG_TAG, "Nami Activity result listener activated, code is $requestCode")
         if (NamiPaywallManager.didUserCloseBlockingNamiPaywall(requestCode, resultCode)) {
-            Log.i(LOG_TAG, "User closed blocking paywall, sending event.  " +
-                    "Activity was." + activity.toString())
+            Log.i(
+                LOG_TAG, "User closed blocking paywall, sending event.  " +
+                    "Activity was." + activity.toString()
+            )
             emitBockedPaywallClosed()
         }
     }
@@ -39,8 +52,8 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
         }
         try {
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("BlockingPaywallClosed", map)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("BlockingPaywallClosed", map)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
@@ -52,16 +65,30 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
 
     @ReactMethod
     fun raisePaywall() {
-//        [[NamiPaywallManager shared] raisePaywallFromVC:nil]
+        reactApplicationContext.runOnUiQueueThread {
+            raisePaywall(currentActivity, null)
+        }
+    }
 
-        val activity: Activity? = currentActivity
-        Log.i(LOG_TAG, "Nami Activity to raise paywall is " + activity.toString())
+    @ReactMethod
+    fun raisePaywallByDeveloperPaywallId(developerPaywallID: String) {
+        reactApplicationContext.runOnUiQueueThread {
+            raisePaywall(currentActivity, developerPaywallID)
+        }
+    }
 
+    private fun raisePaywall(activity: Activity?, developerPaywallID: String?) {
         if (NamiPaywallManager.canRaisePaywall()) {
             Log.d(LOG_TAG, "About to raise Paywall ")
             if (activity != null) {
-                Log.i(LOG_TAG, "Raising Paywall: ")
-                NamiPaywallManager.raisePaywall(activity)
+                Log.i(LOG_TAG, "Nami Activity to raise paywall is $activity")
+                if (developerPaywallID == null) {
+                    Log.i(LOG_TAG, "Raising Paywall: ")
+                    NamiPaywallManager.raisePaywall(activity)
+                } else {
+                    Log.i(LOG_TAG, "Raising Paywall by Id: $developerPaywallID")
+                    NamiPaywallManager.raisePaywall(developerPaywallID, activity)
+                }
             } else {
                 Log.w(LOG_TAG, "Activity from react getCurrentActivity was null.")
             }
@@ -75,20 +102,15 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
 //        BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
 //        completion(@[[NSNumber numberWithBool:canRaise]]);
 
-        val canRaiseResult = NamiPaywallManager.canRaisePaywall()
-
-        successCallback.invoke(canRaiseResult)
+        reactApplicationContext.runOnUiQueueThread {
+            val canRaiseResult = NamiPaywallManager.canRaisePaywall()
+            successCallback.invoke(canRaiseResult)
+        }
     }
 
     @ReactMethod
     fun blockRaisePaywall(blockRaise: Boolean) {
         blockRaisePaywall = blockRaise
-    }
-
-
-    @ReactMethod
-    fun presentNamiPaywall(skuIDs: ReadableArray, metapaywallDefinition:ReadableMap) {
-        // TODO: Android SDK needs presentNamiPaywall function.
     }
 
     @ReactMethod
@@ -102,5 +124,4 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) : Re
     fun paywallImpression(developerPaywallID: String) {
         // TODO: Android SDK paywall impression call.
     }
-
 }

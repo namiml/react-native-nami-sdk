@@ -14,7 +14,7 @@
 + (NSDictionary<NSString *,NSString *> *) skuToSKUDict:(NamiSKU *)product;
 
 // Converts NamiMetaPurchase into javascript compatible dictionary
-+ (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiSKU *)purchase;
++ (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiPurchase *)purchase;
 
 // Converts NSDate into javascript convertable (UTC) string
 + (NSString *)javascriptDateFromNSDate:(NSDate *)purchseTimestamp;
@@ -22,6 +22,8 @@
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement;
 
 + (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling;
+
++ (NSArray *)stripPresentationPositionFromOrderedMetadataForPaywallMetaDict: (NSDictionary *)paywallMeta;
 
 + (NSString *)hexStringForColor:(UIColor *)color;
 

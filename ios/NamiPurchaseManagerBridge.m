@@ -55,7 +55,7 @@ RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
         NSString *errorDesc = [error localizedDescription];
         NSDictionary *retDict;
         if ([errorDesc length] > 0) {
-           retDict = @{@"success": [NSNumber numberWithBool:success], @"errorDescription": [error localizedDescription]};
+           retDict = @{@"success": [NSNumber numberWithBool:success], @"error": [error localizedDescription]};
         } else {
             retDict = @{@"success": [NSNumber numberWithBool:success]};
         }

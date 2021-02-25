@@ -1,16 +1,26 @@
 package com.nami.reactlibrary
 
-
 import android.util.Log
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.bridge.WritableNativeArray
+import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
 import com.namiml.entitlement.NamiEntitlementSetter
 import com.namiml.entitlement.NamiPlatformType
-import java.util.*
+import java.util.ArrayList
+import java.util.Date
 
-class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext) {
 
     init {
         NamiEntitlementManager.registerEntitlementChangeListener {
@@ -23,15 +33,16 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in activeEntitlements) {
-            val entitlementDict = entitlementDictFromEntitlement(entitlement)
-            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+            entitlement.toEntitlementDict()?.let { entitlementDict ->
+                resultArray.pushMap(entitlementDict)
+            }
         }
 
         map.putArray("activeEntitlements", resultArray)
         try {
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("EntitlementsChanged", map)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("EntitlementsChanged", map)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
@@ -43,38 +54,49 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
     @ReactMethod
     fun isEntitlementActive(entitlementRefID: String, resultsCallback: Callback) {
-        val isActive = NamiEntitlementManager.isEntitlementActive(entitlementRefID)
+        reactApplicationContext.runOnUiQueueThread {
+            val isActive = NamiEntitlementManager.isEntitlementActive(entitlementRefID)
 
-        Log.i(LOG_TAG, "Checking for $entitlementRefID entitlement active, result was $isActive")
-        resultsCallback.invoke(isActive)
+            Log.i(
+                LOG_TAG,
+                "Checking for $entitlementRefID entitlement active, result was $isActive"
+            )
+            resultsCallback.invoke(isActive)
+        }
     }
 
     @ReactMethod
     fun activeEntitlements(resultsCallback: Callback) {
 
-        val nativeEntitlements = NamiEntitlementManager.activeEntitlements()
+        reactApplicationContext.runOnUiQueueThread {
+            val nativeEntitlements = NamiEntitlementManager.activeEntitlements()
 
-        val resultArray: WritableArray = WritableNativeArray()
-        for (entitlement in nativeEntitlements) {
-            val entitlementDict = entitlementDictFromEntitlement(entitlement)
-            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+            val resultArray: WritableArray = WritableNativeArray()
+            for (entitlement in nativeEntitlements) {
+                entitlement.toEntitlementDict()?.let { entitlementDict ->
+                    resultArray.pushMap(entitlementDict)
+                }
+            }
+            resultsCallback.invoke(resultArray)
         }
-        resultsCallback.invoke(resultArray)
     }
 
     @ReactMethod
     fun getEntitlements(resultsCallback: Callback) {
 
-        val nativeEntitlements = NamiEntitlementManager.getEntitlements()
+        reactApplicationContext.runOnUiQueueThread {
+            val nativeEntitlements = NamiEntitlementManager.getEntitlements()
 
-        Log.i(LOG_TAG, "getEntitlements result is $nativeEntitlements")
+            Log.i(LOG_TAG, "getEntitlements result is $nativeEntitlements")
 
-        val resultArray: WritableArray = WritableNativeArray()
-        for (entitlement in nativeEntitlements) {
-            val entitlementDict = entitlementDictFromEntitlement(entitlement)
-            entitlementDict?.let { resultArray.pushMap(entitlementDict) }
+            val resultArray: WritableArray = WritableNativeArray()
+            for (entitlement in nativeEntitlements) {
+                entitlement.toEntitlementDict()?.let { entitlementDict ->
+                    resultArray.pushMap(entitlementDict)
+                }
+            }
+            resultsCallback.invoke(resultArray)
         }
-        resultsCallback.invoke(resultArray)
     }
 
     @ReactMethod
@@ -94,15 +116,19 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
             index += 1
         }
 
-        NamiEntitlementManager.setEntitlements(entitlementsToSet)
+        reactApplicationContext.runOnUiQueueThread {
+            NamiEntitlementManager.setEntitlements(entitlementsToSet)
+        }
     }
 
     @ReactMethod
     fun clearAllEntitlements() {
-        NamiEntitlementManager.clearAllEntitlements()
+        reactApplicationContext.runOnUiQueueThread {
+            NamiEntitlementManager.clearAllEntitlements()
+        }
     }
 
-    fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
+    private fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
         if (entitlementSetterMap.hasKey("referenceID")) {
             val referenceID = entitlementSetterMap.getString("referenceID").orEmpty()
             if (referenceID.isNotEmpty()) {
@@ -134,10 +160,8 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                 return NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires)
             }
         }
-        Log.e(LOG_TAG, "Attempted to set entitlement with no referenceID $entitlementSetterMap");
+        Log.e(LOG_TAG, "Attempted to set entitlement with no referenceID $entitlementSetterMap")
 
         return null
     }
-
-
 }
