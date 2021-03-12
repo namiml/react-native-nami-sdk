@@ -16,7 +16,7 @@
 #import "React/RCTViewManager.h"
 
 @interface NamiEmitter : RCTEventEmitter
-- (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success error:(NSError * _Nullable) error;
+- (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success developerPaywallID: (NSString * _Nullable) developerPaywallID error:(NSError * _Nullable) error;
 + (NamiEmitter *) reactInstance;
 @end
 
@@ -112,7 +112,7 @@ RCT_EXPORT_METHOD( preparePaywallForDisplay:(BOOL)backgroundImageRequired
     imageFetchTimeout:(double)imageFetchTimeout )
 {
     [NamiPaywallManager preparePaywallForDisplayWithBackgroundImageRequired:backgroundImageRequired imageFetchTimeout:imageFetchTimeout prepareHandler:^(BOOL success, NSError * _Nullable error) {
-        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success error:error];
+        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success developerPaywallID:nil error:error];
     }];
 }
 
@@ -121,7 +121,7 @@ RCT_EXPORT_METHOD(preparePaywallForDisplayByDeveloperPaywallId:(NSString *)devel
     imageFetchTimeout:(double)imageFetchTimeout )
 {
     [NamiPaywallManager preparePaywallForDisplayWithDeveloperPaywallID:developerPaywallID backgroundImageRequired:backgroundImageRequired imageFetchTimeout:imageFetchTimeout prepareHandler:^(BOOL success, NSError * _Nullable error) {
-        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success error:error];
+        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success developerPaywallID:developerPaywallID error:error];
     }];
 }
 

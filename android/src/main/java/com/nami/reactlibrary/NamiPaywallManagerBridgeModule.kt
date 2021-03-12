@@ -130,7 +130,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     fun preparePaywallForDisplay(backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         NamiPaywallManager.preparePaywallForDisplay(backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
-            emitPreparePaywallFinsihed(success, error)
+            emitPreparePaywallFinsihed(success, null, error)
         }
     }
 
@@ -139,13 +139,18 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     fun preparePaywallForDisplayByDeveloperPaywallId(developerPaywallID: String, backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         NamiPaywallManager.preparePaywallForDisplay(developerPaywallID, backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
-            emitPreparePaywallFinsihed(success, error)
+            emitPreparePaywallFinsihed(success, developerPaywallID, error)
         }
     }
 
-    fun emitPreparePaywallFinsihed(success: Boolean, error: com.namiml.paywall.PreparePaywallError?) {
+    fun emitPreparePaywallFinsihed(success: Boolean, developerPaywallID:String?, error: com.namiml.paywall.PreparePaywallError?) {
         val prepareContentMap = Arguments.createMap()
         prepareContentMap.putBoolean("success", success)
+
+        if ( developerPaywallID != null ) {
+            prepareContentMap.putString("developerPaywallID", developerPaywallID)
+        }
+
         if ( error != null ) {
             prepareContentMap.putInt("errorCode", error.ordinal)
             prepareContentMap.putString("errorMessage", error.toString())

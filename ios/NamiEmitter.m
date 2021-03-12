@@ -162,10 +162,17 @@ bool hasNamiEmitterListeners;
     }
 }
 
-- (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success error:(NSError * _Nullable) error {
+- (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success developerPaywallID: (NSString * _Nullable) developerPaywallID error:(NSError * _Nullable) error {
     if (hasNamiEmitterListeners) {
         
         NSMutableDictionary *sendDict = [NSMutableDictionary dictionaryWithDictionary: @{ @"success": @(success) }];
+        
+        if (developerPaywallID != nil) {
+            [sendDict addEntriesFromDictionary:@{
+                @"developerPaywallID": developerPaywallID
+            }];
+        }
+        
         if (error != nil) {
             [sendDict addEntriesFromDictionary:@{
                 @"errorCode": @(error.code),
