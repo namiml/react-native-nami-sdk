@@ -144,8 +144,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     fun emitPreparePaywallFinsihed(success: Boolean, error: com.namiml.paywall.PreparePaywallError?) {
-        val map = Arguments.createMap()
-
         val prepareContentMap = Arguments.createMap()
         prepareContentMap.putBoolean("success", success)
         if ( error != null ) {
@@ -158,7 +156,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             try {
                 reactApplicationContext
                         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                        .emit("PreparePaywallFinished", map)
+                        .emit("PreparePaywallFinished", prepareContentMap)
             } catch (e: Exception) {
                 Log.e(LOG_TAG, "Caught Exception: " + e.message)
             }
