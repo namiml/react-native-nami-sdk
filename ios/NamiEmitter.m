@@ -23,6 +23,8 @@ RCT_EXTERN_METHOD(allPurchasedProducts)
 RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 @end
 
+static NamiEmitter *namiEmitter;
+
 @implementation NamiEmitter : RCTEventEmitter
 
 - (instancetype)init
@@ -54,7 +56,12 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
         }];
         
     }
+    namiEmitter = self;
     return self;
+}
+
++ (NamiEmitter *) reactInstance {
+    return namiEmitter;
 }
 
 - (void) getPurchasedProducts : (RCTResponseSenderBlock) callback  {
@@ -77,7 +84,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed" ];
+    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed", @"PreparePaywallFinished" ];
 }
 
 - (NSDictionary<NSString *, NSObject *> *)constantsToExport {
@@ -147,6 +154,22 @@ bool hasNamiEmitterListeners;
         sendDict[@"activeEntitlements"] =  convertedEntitlementDicts;
         
         [self sendEventWithName:@"EntitlementsChanged" body:sendDict];
+    }
+}
+
+- (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success error:(NSError * _Nullable) error {
+    if (hasNamiEmitterListeners) {
+        
+        NSMutableDictionary *sendDict = [NSMutableDictionary dictionaryWithDictionary: @{ @"success": @(success) }];
+        if (error != nil) {
+            [sendDict addEntriesFromDictionary:@{
+                @"errorCode": @(error.code),
+                @"errorMessage": [error localizedDescription]
+                }
+            ];
+        }
+        
+        [self sendEventWithName:@"PreparePaywallFinished" body:sendDict];
     }
 }
 

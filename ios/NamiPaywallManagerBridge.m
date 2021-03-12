@@ -15,7 +15,10 @@
 
 #import "React/RCTViewManager.h"
 
-
+@interface NamiEmitter : RCTEventEmitter
+- (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success error:(NSError * _Nullable) error;
++ (NamiEmitter *) reactInstance;
+@end
 
 @interface NamiPaywallManagerBridge : NSObject <RCTBridgeModule>
 @property (atomic) BOOL blockPaywallRaise;
@@ -56,21 +59,6 @@ RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
 {
     BOOL canRaise = [NamiPaywallManager canRaisePaywall];
     completion(@[[NSNumber numberWithBool:canRaise]]);
-}
-
-RCT_EXPORT_METHOD(preparePaywallForDisplay:(RCTResponseSenderBlock)completion)
-{
-    [NamiPaywallManager preparePaywallForDisplayWithBackgroundImageRequired:false imageFetchTimeout:2.0 prepareHandler:^(BOOL success, NSError * _Nullable error) {
-        NSMutableDictionary *wrapperDict = [NSMutableDictionary dictionaryWithDictionary: @{ @"success": @(success) }];
-        if (error != nil) {
-            [wrapperDict addEntriesFromDictionary:@{
-                @"errorCode": @(error.code),
-                @"errorMessage": [error localizedDescription]
-            }
-             ];
-        }
-        completion(@[wrapperDict]);
-    }];
 }
 
 
@@ -120,93 +108,22 @@ RCT_EXPORT_METHOD(paywallImpression:(NSString *)developerPaywallID)
     [NamiPaywallManager paywallImpressionWithDeveloperID:developerPaywallID];
 }
 
-
-// Begin long block with many variants of the preparePaywallForDisplay method
-
-RCT_EXPORT_METHOD(preparePaywallForDisplay:(BOOL)backgroundImageRequired
-    completion:(RCTResponseSenderBlock)completion)
-{
-    [NamiPaywallManager preparePaywallForDisplayWithBackgroundImageRequired:backgroundImageRequired imageFetchTimeout:2.0 prepareHandler:^(BOOL success, NSError * _Nullable error) {
-        NSMutableDictionary *wrapperDict = [NSMutableDictionary dictionaryWithDictionary: @{ @"success": @(success) }];
-        if (error != nil) {
-            [wrapperDict addEntriesFromDictionary:@{
-                @"errorCode": @(error.code),
-                @"errorMessage": [error localizedDescription]
-            }
-             ];
-        }
-        completion(@[wrapperDict]);
-    }];
-}
-
-RCT_EXPORT_METHOD(preparePaywallForDisplay:(BOOL)backgroundImageRequired
-    imageFetchTimeout:(double)imageFetchTimeout
-    completion:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD( preparePaywallForDisplay:(BOOL)backgroundImageRequired
+    imageFetchTimeout:(double)imageFetchTimeout )
 {
     [NamiPaywallManager preparePaywallForDisplayWithBackgroundImageRequired:backgroundImageRequired imageFetchTimeout:imageFetchTimeout prepareHandler:^(BOOL success, NSError * _Nullable error) {
-        NSMutableDictionary *wrapperDict = [NSMutableDictionary dictionaryWithDictionary: @{ @"success": @(success) }];
-        if (error != nil) {
-            [wrapperDict addEntriesFromDictionary:@{
-                @"errorCode": @(error.code),
-                @"errorMessage": [error localizedDescription]
-            }
-             ];
-        }
-        completion(@[wrapperDict]);
-    }];
-}
-
-RCT_EXPORT_METHOD(preparePaywallForDisplayByDeveloperPaywallId:(NSString *)developerPaywallID
-    completion:(RCTResponseSenderBlock)completion)
-{
-    [NamiPaywallManager preparePaywallForDisplayWithDeveloperPaywallID:developerPaywallID backgroundImageRequired:false imageFetchTimeout:2.0 prepareHandler:^(BOOL success, NSError * _Nullable error) {
-        NSMutableDictionary *wrapperDict = [NSMutableDictionary dictionaryWithDictionary: @{ @"success": @(success) }];
-        if (error != nil) {
-            [wrapperDict addEntriesFromDictionary:@{
-                @"errorCode": @(error.code),
-                @"errorMessage": [error localizedDescription]
-            }
-             ];
-        }
-        completion(@[wrapperDict]);
+        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success error:error];
     }];
 }
 
 RCT_EXPORT_METHOD(preparePaywallForDisplayByDeveloperPaywallId:(NSString *)developerPaywallID
     backgroundImageRequired: (BOOL)backgroundImageRequired
-    completion:(RCTResponseSenderBlock)completion)
-{
-    [NamiPaywallManager preparePaywallForDisplayWithDeveloperPaywallID:developerPaywallID backgroundImageRequired:backgroundImageRequired imageFetchTimeout:2.0 prepareHandler:^(BOOL success, NSError * _Nullable error) {
-        NSMutableDictionary *wrapperDict = [NSMutableDictionary dictionaryWithDictionary: @{ @"success": @(success) }];
-        if (error != nil) {
-            [wrapperDict addEntriesFromDictionary:@{
-                @"errorCode": @(error.code),
-                @"errorMessage": [error localizedDescription]
-            }
-             ];
-        }
-        completion(@[wrapperDict]);
-    }];
-}
-
-RCT_EXPORT_METHOD(preparePaywallForDisplayByDeveloperPaywallId:(NSString *)developerPaywallID
-    backgroundImageRequired: (BOOL)backgroundImageRequired
-    imageFetchTimeout:(double)imageFetchTimeout
-    completion:(RCTResponseSenderBlock)completion)
+    imageFetchTimeout:(double)imageFetchTimeout )
 {
     [NamiPaywallManager preparePaywallForDisplayWithDeveloperPaywallID:developerPaywallID backgroundImageRequired:backgroundImageRequired imageFetchTimeout:imageFetchTimeout prepareHandler:^(BOOL success, NSError * _Nullable error) {
-        NSMutableDictionary *wrapperDict = [NSMutableDictionary dictionaryWithDictionary: @{ @"success": @(success) }];
-        if (error != nil) {
-            [wrapperDict addEntriesFromDictionary:@{
-                @"errorCode": @(error.code),
-                @"errorMessage": [error localizedDescription]
-            }
-             ];
-        }
-        completion(@[wrapperDict]);
+        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success error:error];
     }];
 }
-
 
 @end
 
