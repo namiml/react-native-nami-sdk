@@ -154,7 +154,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
 
         reactApplicationContext.runOnUiQueueThread {
-            Log.i(LOG_TAG, "Emitting preparePaywallForDisplay finished")
+            Log.i(LOG_TAG, "Emitting preparePaywallForDisplay finished with result " + success + "error: " + error.toString())
             try {
                 reactApplicationContext
                         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)

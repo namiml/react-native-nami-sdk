@@ -174,6 +174,7 @@ bool hasNamiEmitterListeners;
             ];
         }
         
+        NSLog(@"NamiBridge: Info: attempting to send result of preparePaywallForDisplay with result dictionary: %@", sendDict);
         [self sendEventWithName:@"PreparePaywallFinished" body:sendDict];
     }
 }
