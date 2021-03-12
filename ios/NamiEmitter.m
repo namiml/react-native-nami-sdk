@@ -60,6 +60,11 @@ static NamiEmitter *namiEmitter;
     return self;
 }
 
+- (void)dealloc {
+    namiEmitter = nil;
+}
+
+
 + (NamiEmitter *) reactInstance {
     return namiEmitter;
 }
