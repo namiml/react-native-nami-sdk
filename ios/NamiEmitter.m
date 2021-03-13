@@ -23,6 +23,8 @@ RCT_EXTERN_METHOD(allPurchasedProducts)
 RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 @end
 
+static NamiEmitter *namiEmitter;
+
 @implementation NamiEmitter : RCTEventEmitter
 
 - (instancetype)init
@@ -54,7 +56,17 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
         }];
         
     }
+    namiEmitter = self;
     return self;
+}
+
+- (void)dealloc {
+    namiEmitter = nil;
+}
+
+
++ (NamiEmitter *) reactInstance {
+    return namiEmitter;
 }
 
 - (void) getPurchasedProducts : (RCTResponseSenderBlock) callback  {
@@ -77,7 +89,7 @@ RCT_EXTERN_METHOD(getPurchasedProducts: (RCTResponseSenderBlock)callback)
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed" ];
+    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed", @"PreparePaywallFinished" ];
 }
 
 - (NSDictionary<NSString *, NSObject *> *)constantsToExport {
@@ -147,6 +159,30 @@ bool hasNamiEmitterListeners;
         sendDict[@"activeEntitlements"] =  convertedEntitlementDicts;
         
         [self sendEventWithName:@"EntitlementsChanged" body:sendDict];
+    }
+}
+
+- (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success developerPaywallID: (NSString * _Nullable) developerPaywallID error:(NSError * _Nullable) error {
+    if (hasNamiEmitterListeners) {
+        
+        NSMutableDictionary *sendDict = [NSMutableDictionary dictionaryWithDictionary: @{ @"success": @(success) }];
+        
+        if (developerPaywallID != nil) {
+            [sendDict addEntriesFromDictionary:@{
+                @"developerPaywallID": developerPaywallID
+            }];
+        }
+        
+        if (error != nil) {
+            [sendDict addEntriesFromDictionary:@{
+                @"errorCode": @(error.code),
+                @"errorMessage": [error localizedDescription]
+                }
+            ];
+        }
+        
+        NSLog(@"NamiBridge: Info: attempting to send result of preparePaywallForDisplay with result dictionary: %@", sendDict);
+        [self sendEventWithName:@"PreparePaywallFinished" body:sendDict];
     }
 }
 

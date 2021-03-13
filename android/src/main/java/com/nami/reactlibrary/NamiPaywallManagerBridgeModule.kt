@@ -99,9 +99,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun canRaisePaywall(successCallback: Callback) {
-//        BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
-//        completion(@[[NSNumber numberWithBool:canRaise]]);
-
         reactApplicationContext.runOnUiQueueThread {
             val canRaiseResult = NamiPaywallManager.canRaisePaywall()
             successCallback.invoke(canRaiseResult)
@@ -123,5 +120,50 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     @ReactMethod
     fun paywallImpression(developerPaywallID: String) {
         // TODO: Android SDK paywall impression call.
+    }
+
+
+    @ReactMethod
+    fun preparePaywallForDisplay(backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
+        val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
+        reactApplicationContext.runOnUiQueueThread {
+            NamiPaywallManager.preparePaywallForDisplay(backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
+                emitPreparePaywallFinished(success, null, error)
+            }
+        }
+    }
+
+
+    @ReactMethod
+    fun preparePaywallForDisplayByDeveloperPaywallId(developerPaywallID: String, backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
+        val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
+        reactApplicationContext.runOnUiQueueThread {
+            NamiPaywallManager.preparePaywallForDisplay(developerPaywallID, backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
+                emitPreparePaywallFinished(success, developerPaywallID, error)
+            }
+        }
+    }
+
+    fun emitPreparePaywallFinished(success: Boolean, developerPaywallID:String?, error: com.namiml.paywall.PreparePaywallError?) {
+        val prepareContentMap = Arguments.createMap()
+        prepareContentMap.putBoolean("success", success)
+
+        if ( developerPaywallID != null ) {
+            prepareContentMap.putString("developerPaywallID", developerPaywallID)
+        }
+
+        if ( error != null ) {
+            prepareContentMap.putInt("errorCode", error.ordinal)
+            prepareContentMap.putString("errorMessage", error.toString())
+        }
+
+        Log.i(LOG_TAG, "Emitting preparePaywallForDisplay finished with result " + success + "error: " + error.toString())
+        try {
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("PreparePaywallFinished", prepareContentMap)
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
+        }
     }
 }
