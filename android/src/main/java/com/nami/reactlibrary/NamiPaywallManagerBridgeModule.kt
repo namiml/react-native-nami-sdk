@@ -128,7 +128,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         reactApplicationContext.runOnUiQueueThread {
             NamiPaywallManager.preparePaywallForDisplay(backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
-                emitPreparePaywallFinsihed(success, null, error)
+                emitPreparePaywallFinished(success, null, error)
             }
         }
     }
@@ -139,7 +139,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         reactApplicationContext.runOnUiQueueThread {
             NamiPaywallManager.preparePaywallForDisplay(developerPaywallID, backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
-                emitPreparePaywallFinsihed(success, developerPaywallID, error)
+                emitPreparePaywallFinished(success, developerPaywallID, error)
             }
         }
     }
