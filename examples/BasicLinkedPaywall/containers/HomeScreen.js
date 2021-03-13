@@ -35,6 +35,7 @@ const HomeScreen = (props) => {
         console.log("error is " + results.errorMessage );
     }
     eventEmitter.removeListener('PreparePaywallFinished', onPreparePaywallFinished);
+  }
  
   const subscribeAction = () => {
     console.log('ExampleApp: Asking Nami to raise paywall.');
