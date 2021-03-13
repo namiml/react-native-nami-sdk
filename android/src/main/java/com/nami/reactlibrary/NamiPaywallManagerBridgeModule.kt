@@ -99,9 +99,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun canRaisePaywall(successCallback: Callback) {
-//        BOOL canRaise = [[NamiPaywallManager shared] canRaisePaywall];
-//        completion(@[[NSNumber numberWithBool:canRaise]]);
-
         reactApplicationContext.runOnUiQueueThread {
             val canRaiseResult = NamiPaywallManager.canRaisePaywall()
             successCallback.invoke(canRaiseResult)
@@ -129,8 +126,10 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     @ReactMethod
     fun preparePaywallForDisplay(backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
-        NamiPaywallManager.preparePaywallForDisplay(backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
-            emitPreparePaywallFinsihed(success, null, error)
+        reactApplicationContext.runOnUiQueueThread {
+            NamiPaywallManager.preparePaywallForDisplay(backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
+                emitPreparePaywallFinsihed(success, null, error)
+            }
         }
     }
 
@@ -138,12 +137,14 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     @ReactMethod
     fun preparePaywallForDisplayByDeveloperPaywallId(developerPaywallID: String, backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
-        NamiPaywallManager.preparePaywallForDisplay(developerPaywallID, backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
-            emitPreparePaywallFinsihed(success, developerPaywallID, error)
+        reactApplicationContext.runOnUiQueueThread {
+            NamiPaywallManager.preparePaywallForDisplay(developerPaywallID, backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
+                emitPreparePaywallFinsihed(success, developerPaywallID, error)
+            }
         }
     }
 
-    fun emitPreparePaywallFinsihed(success: Boolean, developerPaywallID:String?, error: com.namiml.paywall.PreparePaywallError?) {
+    fun emitPreparePaywallFinished(success: Boolean, developerPaywallID:String?, error: com.namiml.paywall.PreparePaywallError?) {
         val prepareContentMap = Arguments.createMap()
         prepareContentMap.putBoolean("success", success)
 
@@ -156,15 +157,13 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             prepareContentMap.putString("errorMessage", error.toString())
         }
 
-        reactApplicationContext.runOnUiQueueThread {
-            Log.i(LOG_TAG, "Emitting preparePaywallForDisplay finished with result " + success + "error: " + error.toString())
-            try {
-                reactApplicationContext
-                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                        .emit("PreparePaywallFinished", prepareContentMap)
-            } catch (e: Exception) {
-                Log.e(LOG_TAG, "Caught Exception: " + e.message)
-            }
+        Log.i(LOG_TAG, "Emitting preparePaywallForDisplay finished with result " + success + "error: " + error.toString())
+        try {
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("PreparePaywallFinished", prepareContentMap)
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 }
