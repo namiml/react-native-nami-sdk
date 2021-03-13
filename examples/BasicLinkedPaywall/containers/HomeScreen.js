@@ -8,6 +8,7 @@ import {
   StatusBar,
   Button,
   NativeModules,
+  NativeEventEmitter
 } from 'react-native';
 import theme from '../theme';
 import Header from '../components/Header/Header';
@@ -23,13 +24,23 @@ const HomeScreen = (props) => {
   const {purchases} = usePurchasesContext();
   const {data} = useDataContext();
 
+  const {NamiEmitter} = NativeModules;
+  const eventEmitter = new NativeEventEmitter(NamiEmitter);
+ 
+  const onPreparePaywallFinished = (result) => {
+    if (result.success == true) {
+      console.log('prepare paywall success')
+        NativeModules.NamiPaywallManagerBridge.raisePaywall();
+    } else {
+        console.log("error is " + results.errorMessage );
+    }
+    eventEmitter.removeListener('PreparePaywallFinished', onPreparePaywallFinished);
+  }
+ 
   const subscribeAction = () => {
-    NativeModules.NamiPaywallManagerBridge.canRaisePaywall((result) => {
-      console.log('ExampleApp: Nami canRaisePaywall ', result);
-    });
-
     console.log('ExampleApp: Asking Nami to raise paywall.');
-    NativeModules.NamiPaywallManagerBridge.raisePaywall();
+    eventEmitter.addListener('PreparePaywallFinished', onPreparePaywallFinished);
+    NativeModules.NamiPaywallManagerBridge.preparePaywallForDisplay(true, 2);
   };
 
   const activateAbout = () => {

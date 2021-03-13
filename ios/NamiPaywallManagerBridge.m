@@ -15,7 +15,10 @@
 
 #import "React/RCTViewManager.h"
 
-
+@interface NamiEmitter : RCTEventEmitter
+- (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success developerPaywallID: (NSString * _Nullable) developerPaywallID error:(NSError * _Nullable) error;
++ (NamiEmitter *) reactInstance;
+@end
 
 @interface NamiPaywallManagerBridge : NSObject <RCTBridgeModule>
 @property (atomic) BOOL blockPaywallRaise;
@@ -57,6 +60,7 @@ RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
     BOOL canRaise = [NamiPaywallManager canRaisePaywall];
     completion(@[[NSNumber numberWithBool:canRaise]]);
 }
+
 
 RCT_EXPORT_METHOD(presentNamiPaywall:(NSArray *)skuIDs metapaywallDefinition:(NSDictionary *)paywallDict)
 {
@@ -104,6 +108,22 @@ RCT_EXPORT_METHOD(paywallImpression:(NSString *)developerPaywallID)
     [NamiPaywallManager paywallImpressionWithDeveloperID:developerPaywallID];
 }
 
+RCT_EXPORT_METHOD( preparePaywallForDisplay:(BOOL)backgroundImageRequired
+    imageFetchTimeout:(double)imageFetchTimeout )
+{
+    [NamiPaywallManager preparePaywallForDisplayWithBackgroundImageRequired:backgroundImageRequired imageFetchTimeout:imageFetchTimeout prepareHandler:^(BOOL success, NSError * _Nullable error) {
+        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success developerPaywallID:nil error:error];
+    }];
+}
+
+RCT_EXPORT_METHOD(preparePaywallForDisplayByDeveloperPaywallId:(NSString *)developerPaywallID
+    backgroundImageRequired: (BOOL)backgroundImageRequired
+    imageFetchTimeout:(double)imageFetchTimeout )
+{
+    [NamiPaywallManager preparePaywallForDisplayWithDeveloperPaywallID:developerPaywallID backgroundImageRequired:backgroundImageRequired imageFetchTimeout:imageFetchTimeout prepareHandler:^(BOOL success, NSError * _Nullable error) {
+        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success developerPaywallID:developerPaywallID error:error];
+    }];
+}
 
 @end
 
