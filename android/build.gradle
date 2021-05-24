@@ -70,7 +70,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "com.namiml:sdk-android:1.1.1"
+    implementation "com.namiml:sdk-android:1.2.0"
 
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }
