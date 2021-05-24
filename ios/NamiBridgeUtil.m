@@ -30,8 +30,8 @@
         productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
         
         // Add smart text processed values for sku buttons to sku dictionary
-        productDict[@"displayText"] = [sku namiDisplayText];
-        productDict[@"subDisplayText"] = [sku namiSubDisplayText];
+        productDict[@"namiDisplayText"] = [sku namiDisplayText];
+        productDict[@"namiSubDisplayText"] = [sku namiSubDisplayText];
 
         if (@available(iOS 12.0, *)) {
             if (productInt != nil && productInt.subscriptionGroupIdentifier != nil) {
