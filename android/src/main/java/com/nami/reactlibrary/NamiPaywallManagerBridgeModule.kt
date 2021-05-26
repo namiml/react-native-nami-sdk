@@ -11,7 +11,9 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.namiml.NamiResultCallback
 import com.namiml.paywall.NamiPaywallManager
+import com.namiml.paywall.PreparePaywallResult
 
 class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), ActivityEventListener {
@@ -127,8 +129,16 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     fun preparePaywallForDisplay(backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         reactApplicationContext.runOnUiQueueThread {
-            NamiPaywallManager.preparePaywallForDisplay(backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
-                emitPreparePaywallFinished(success, null, error)
+
+            NamiPaywallManager.preparePaywallForDisplay(backgroundImageRequired, imageFetchTimeoutConvertedToLong) { result ->
+                when (result) {
+                    is PreparePaywallResult.Success -> {
+                        emitPreparePaywallFinished(true, null, null)
+                    }
+                    is PreparePaywallResult.Failure -> {
+                        emitPreparePaywallFinished(false, null, result.error)
+                    }
+                }
             }
         }
     }
@@ -138,8 +148,15 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     fun preparePaywallForDisplayByDeveloperPaywallId(developerPaywallID: String, backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         reactApplicationContext.runOnUiQueueThread {
-            NamiPaywallManager.preparePaywallForDisplay(developerPaywallID, backgroundImageRequired, imageFetchTimeoutConvertedToLong) { success, error ->
-                emitPreparePaywallFinished(success, developerPaywallID, error)
+            NamiPaywallManager.preparePaywallForDisplay(developerPaywallID, backgroundImageRequired, imageFetchTimeoutConvertedToLong) { result ->
+                when (result) {
+                    is PreparePaywallResult.Success -> {
+                        emitPreparePaywallFinished(true, developerPaywallID, null)
+                    }
+                    is PreparePaywallResult.Failure -> {
+                        emitPreparePaywallFinished(false, developerPaywallID, result.error)
+                    }
+                }
             }
         }
     }
