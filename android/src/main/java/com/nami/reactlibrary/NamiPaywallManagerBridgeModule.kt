@@ -11,7 +11,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.NamiResultCallback
 import com.namiml.paywall.NamiPaywallManager
 import com.namiml.paywall.PreparePaywallResult
 
@@ -48,7 +47,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
     }
 
-    fun emitBockedPaywallClosed() {
+    private fun emitBockedPaywallClosed() {
         val map = Arguments.createMap().apply {
             putBoolean("blockingPaywallClosed", true)
         }
@@ -124,13 +123,15 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         // TODO: Android SDK paywall impression call.
     }
 
-
     @ReactMethod
     fun preparePaywallForDisplay(backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         reactApplicationContext.runOnUiQueueThread {
 
-            NamiPaywallManager.preparePaywallForDisplay(backgroundImageRequired, imageFetchTimeoutConvertedToLong) { result ->
+            NamiPaywallManager.preparePaywallForDisplay(
+                backgroundImageRequired,
+                imageFetchTimeoutConvertedToLong
+            ) { result ->
                 when (result) {
                     is PreparePaywallResult.Success -> {
                         emitPreparePaywallFinished(true, null, null)
@@ -143,12 +144,19 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
     }
 
-
     @ReactMethod
-    fun preparePaywallForDisplayByDeveloperPaywallId(developerPaywallID: String, backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
+    fun preparePaywallForDisplayByDeveloperPaywallId(
+        developerPaywallID: String,
+        backgroundImageRequired: Boolean,
+        imageFetchTimeout: Double
+    ) {
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         reactApplicationContext.runOnUiQueueThread {
-            NamiPaywallManager.preparePaywallForDisplay(developerPaywallID, backgroundImageRequired, imageFetchTimeoutConvertedToLong) { result ->
+            NamiPaywallManager.preparePaywallForDisplay(
+                developerPaywallID,
+                backgroundImageRequired,
+                imageFetchTimeoutConvertedToLong
+            ) { result ->
                 when (result) {
                     is PreparePaywallResult.Success -> {
                         emitPreparePaywallFinished(true, developerPaywallID, null)
@@ -161,24 +169,31 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
     }
 
-    fun emitPreparePaywallFinished(success: Boolean, developerPaywallID:String?, error: com.namiml.paywall.PreparePaywallError?) {
+    private fun emitPreparePaywallFinished(
+        success: Boolean,
+        developerPaywallID: String?,
+        error: com.namiml.paywall.PreparePaywallError?
+    ) {
         val prepareContentMap = Arguments.createMap()
         prepareContentMap.putBoolean("success", success)
 
-        if ( developerPaywallID != null ) {
+        if (developerPaywallID != null) {
             prepareContentMap.putString("developerPaywallID", developerPaywallID)
         }
 
-        if ( error != null ) {
+        if (error != null) {
             prepareContentMap.putInt("errorCode", error.ordinal)
             prepareContentMap.putString("errorMessage", error.toString())
         }
 
-        Log.i(LOG_TAG, "Emitting preparePaywallForDisplay finished with result " + success + "error: " + error.toString())
+        Log.i(
+            LOG_TAG,
+            "Emitting preparePaywallForDisplay finished with result " + success + "error: " + error.toString()
+        )
         try {
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("PreparePaywallFinished", prepareContentMap)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("PreparePaywallFinished", prepareContentMap)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
