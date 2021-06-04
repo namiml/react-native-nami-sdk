@@ -17,8 +17,20 @@ const HomeScreen = (props) => {
   const {navigate} = props.navigation;
   const {purchases} = usePurchasesContext();
 
+  const onPreparePaywallFinished = (result) => {
+    if (result.success == true) {
+      console.log('prepare paywall success')
+        NativeModules.NamiPaywallManagerBridge.raisePaywall();
+    } else {
+        console.log("error is " + result.errorMessage );
+    }
+    eventEmitter.removeListener('PreparePaywallFinished', onPreparePaywallFinished);
+  }
+
+    
   const subscribeAction = () => {
-    NativeModules.NamiPaywallManagerBridge.raisePaywall();
+    eventEmitter.addListener('PreparePaywallFinished', onPreparePaywallFinished);
+    NativeModules.NamiPaywallManagerBridge.preparePaywallForDisplay(true, 2);
   };
 
   return (

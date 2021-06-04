@@ -236,6 +236,14 @@ bool hasNamiEmitterListeners;
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
         // This part is really meant to be internally facing, scrub from dictionary
 
+        NSMutableDictionary *marketingContentDictionary = [NSMutableDictionary dictionaryWithDictionary:paywallMeta[@"marketing_content"]];
+
+        // Populated SmartText formatted values in dictioanry to send
+        marketingContentDictionary[@"body"] = [paywallMetadata body];
+        marketingContentDictionary[@"title"] = [paywallMetadata title];
+        paywallMeta[@"marketing_content"] = marketingContentDictionary;
+        paywallMeta[@"purchase_terms"] = [paywallMetadata purchaseTerms];
+        
         // Strip out presention_position from all listed sku items
         NSArray *cleanedOrderdMetadata = [NamiBridgeUtil stripPresentationPositionFromOrderedMetadataForPaywallMetaDict:paywallMeta];
         [paywallMeta setObject:cleanedOrderdMetadata  forKey:@"formatted_skus"];
