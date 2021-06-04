@@ -196,6 +196,8 @@ fun NamiSKU.toSkuDict(): WritableMap {
     productDict.putString("localizedDescription", skuDetails.description)
     productDict.putString("localizedPrice", skuDetails.price)
     productDict.putString("localizedMultipliedPrice", skuDetails.price)
+    productDict.putString("displayText", displayText)
+    productDict.putString("displaySubText", displaySubText)
     productDict.putString("price", skuDetails.getFormattedPrice().toString())
     productDict.putString("priceLanguage", Locale.getDefault().language)
     productDict.putString("priceCountry", Locale.getDefault().country)
@@ -207,9 +209,6 @@ fun NamiSKU.toSkuDict(): WritableMap {
         }
         SubscriptionPeriod.HALF_YEAR -> {
             "half_year"
-        }
-        SubscriptionPeriod.DAY -> {
-            "day"
         }
         SubscriptionPeriod.WEEKLY -> {
             "week"

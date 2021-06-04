@@ -27,7 +27,7 @@ const HomeScreen = (props) => {
       console.log('prepare paywall success')
         NativeModules.NamiPaywallManagerBridge.raisePaywall();
     } else {
-        console.log("error is " + results.errorMessage );
+        console.log("error is " + result.errorMessage );
     }
     eventEmitter.removeListener('PreparePaywallFinished', onPreparePaywallFinished);
   }
