@@ -1,4 +1,4 @@
-![Nami SDK logo](https://nami-brand.s3.amazonaws.com/images/Nami.SDK.RGB.Color.120x120.png)
+![Nami SDK logo](https://nami-brand.s3.amazonaws.com/images/Nami.SDK.2.0.120x137.png)
 
 # React Native Bridge for the Nami SDK
 
