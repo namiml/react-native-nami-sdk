@@ -39,6 +39,12 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
             config.logLevel = NamiLogLevelDebug;
         }
         
+        NSString *languageString = configDict[@"namiLanguageCode"];
+        if ([logLevelString length] > 0) {
+            NSLog(@"Nami language code from dictionary is %@", languageString);
+            config.namiLanguageCode = languageString;
+        }
+        
         NSObject *bypassString = configDict[@"bypassStore"];
         if ( bypassString != NULL )
         {
