@@ -51,14 +51,37 @@ RCT_EXPORT_METHOD(isSKUIDPurchased:(nonnull NSString*)skuID completion:(RCTRespo
 RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
 {
     NSLog(@"NamiBridge: Info: Calling RestorePurchases");
-    [NamiPurchaseManager restorePurchasesWithHandler:^(BOOL success, NSError * _Nullable error) {
+    
+    [NamiPurchaseManager registerRestorePurchasesHandlerWithRestorePurchasesStateHandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
         NSString *errorDesc = [error localizedDescription];
-        NSDictionary *retDict;
+        NSDictionary *initialDict;
         if ([errorDesc length] > 0) {
-           retDict = @{@"success": [NSNumber numberWithBool:success], @"error": [error localizedDescription]};
+            initialDict = @{@"state": [NSNumber numberWithBool:state], @"error": [error localizedDescription]};
         } else {
-            retDict = @{@"success": [NSNumber numberWithBool:success]};
+            initialDict = @{@"state": [NSNumber numberWithBool:state]};
         }
+        
+        NSMutableDictionary *retDict = [NSMutableDictionary dictionary];
+        [retDict addEntriesFromDictionary:initialDict];
+          
+        NSMutableArray *newPurchaseDicts = [NSMutableArray array];
+        for ( NamiPurchase *purchaseRecord in newPurchases ) {
+            if ( purchaseRecord.skuID == nil ) {
+            }
+            NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
+            [newPurchaseDicts addObject:purchaseDict];
+        }
+
+        NSMutableArray *oldPurchaseDicts = [NSMutableArray array];
+        for ( NamiPurchase *purchaseRecord in oldPurchases ) {
+            if ( purchaseRecord.skuID == nil ) {
+            }
+            NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
+            [oldPurchaseDicts addObject:purchaseDict];
+        }
+        
+        retDict[@"newPurchases"] = newPurchaseDicts;
+        retDict[@"oldPurchases"] = oldPurchaseDicts;
         
         NSLog(@"NamiBridge: Info: RestorePurchases Returned %@", retDict);
         completion(@[retDict]);
