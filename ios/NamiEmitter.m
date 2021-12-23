@@ -259,7 +259,7 @@ bool hasNamiEmitterListeners;
         [paywallMeta removeObjectForKey:@"title"];
         [paywallMeta removeObjectForKey:@"style"];
 
-        [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
+        [self sendEventWithName:@"AppPaywallActivate" body:@{ @"namiSkus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
                                                             @"paywallMetadata": paywallMeta }];
   }
