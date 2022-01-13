@@ -36,15 +36,13 @@ const App = () => {
     console.log(NativeModules.NamiBridge);
 
     if (
-	typeof eventEmitter._subscriber == "undefined" ||
-	eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
+	eventEmitter?._subscriber?._subscriptionsForType?.PurchasesChanged == null
     ) {
       eventEmitter.addListener('PurchasesChanged', onPurchasesChanged);
     }
 
       if (
-	  typeof eventEmitter._subscriber == "undefined" ||
-	  eventEmitter._subscriber._subscriptionsForType.SignInActivate == null
+	  eventEmitter?._subscriber?._subscriptionsForType?.SignInActivate == null
       ) {
       eventEmitter.addListener('SignInActivate', onSignInActivated);
     }
