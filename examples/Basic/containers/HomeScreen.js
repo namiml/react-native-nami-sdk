@@ -31,7 +31,6 @@ const HomeScreen = (props) => {
     } else {
         console.log("error is " + result.errorMessage );
     }
-    //eventEmitter.removeListener('PreparePaywallFinished', onPreparePaywallFinished);
     listenSubscriber?.remove();
   }
 
