@@ -24,22 +24,30 @@ const HomeScreen = (props) => {
   const {purchases} = usePurchasesContext();
   const {data} = useDataContext();
 
+  let listenSubscriber;
+    
   const {NamiEmitter} = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
  
   const onPreparePaywallFinished = (result) => {
-    if (result.success == true) {
+    console.log('ExampleApp: Prepare Paywall complete.');
+      if (result.success == true) {
       console.log('prepare paywall success')
         NativeModules.NamiPaywallManagerBridge.raisePaywall();
     } else {
         console.log("error is " + result.errorMessage );
     }
-    eventEmitter.removeListener('PreparePaywallFinished', onPreparePaywallFinished);
+
+    listenSubscriber?.remove();
   }
  
   const subscribeAction = () => {
     console.log('ExampleApp: Asking Nami to raise paywall.');
-    eventEmitter.addListener('PreparePaywallFinished', onPreparePaywallFinished);
+    if (
+       eventEmitter?._subscriber?._subscriptionsForType?.PreparePaywallFinished == null
+    ) {
+	eventEmitter.addListener('PreparePaywallFinished', onPreparePaywallFinished);
+    }
     NativeModules.NamiPaywallManagerBridge.preparePaywallForDisplay(true, 2);
   };
 

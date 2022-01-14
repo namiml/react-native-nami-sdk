@@ -20,6 +20,8 @@
 		9DD857374923FA3601505381 /* libPods-BasicLinkedPaywall.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6BE80EB3D2396790B43C0C3 /* libPods-BasicLinkedPaywall.a */; };
 		A61A8F317FD7974EF4A525ED /* libPods-BasicLinkedPaywallTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40AFC429D801C6F83DBACF7F /* libPods-BasicLinkedPaywallTests.a */; };
 		BE27783C7A8B915E4EA1DDB4 /* libPods-BasicLinkedPaywall-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1A59209F0292000E4CB0366 /* libPods-BasicLinkedPaywall-tvOSTests.a */; };
+		EB3788662790FA4700C7E8E3 /* SwiftClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3788652790FA4700C7E8E3 /* SwiftClass.swift */; };
+		EB3788672790FA4700C7E8E3 /* SwiftClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3788652790FA4700C7E8E3 /* SwiftClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,9 @@
 		90A7477276AEFF5E134BCEE6 /* Pods-BasicLinkedPaywall-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicLinkedPaywall-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-BasicLinkedPaywall-tvOSTests/Pods-BasicLinkedPaywall-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9223CC09852E47B2F621C799 /* Pods-BasicLinkedPaywall-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicLinkedPaywall-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-BasicLinkedPaywall-tvOSTests/Pods-BasicLinkedPaywall-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		C1A59209F0292000E4CB0366 /* libPods-BasicLinkedPaywall-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BasicLinkedPaywall-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB3788632790FA4600C7E8E3 /* BasicLinkedPaywall-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BasicLinkedPaywall-Bridging-Header.h"; sourceTree = "<group>"; };
+		EB3788642790FA4600C7E8E3 /* BasicLinkedPaywallTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BasicLinkedPaywallTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		EB3788652790FA4700C7E8E3 /* SwiftClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftClass.swift; sourceTree = "<group>"; };
 		EBE9895E256C2723000784EB /* BasicLinkedPaywall.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = BasicLinkedPaywall.storekit; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -134,6 +139,9 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				EBE9895E256C2723000784EB /* BasicLinkedPaywall.storekit */,
+				EB3788652790FA4700C7E8E3 /* SwiftClass.swift */,
+				EB3788632790FA4600C7E8E3 /* BasicLinkedPaywall-Bridging-Header.h */,
+				EB3788642790FA4600C7E8E3 /* BasicLinkedPaywallTests-Bridging-Header.h */,
 			);
 			name = BasicLinkedPaywall;
 			sourceTree = "<group>";
@@ -227,7 +235,6 @@
 			buildPhases = (
 				F8F6D3560298E5FF5C67F566 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
-				EABADAA0BF692397DEE98E86 /* [CP] Prepare Artifacts */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
@@ -294,7 +301,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						LastSwiftMigration = 1320;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1320;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -439,10 +450,13 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BasicLinkedPaywall/Pods-BasicLinkedPaywall-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Nami/Nami.framework/Nami",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nami.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -491,24 +505,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EABADAA0BF692397DEE98E86 /* [CP] Prepare Artifacts */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BasicLinkedPaywall/Pods-BasicLinkedPaywall-artifacts.sh",
-				"${PODS_ROOT}/Nami/Nami.xcframework",
-			);
-			name = "[CP] Prepare Artifacts";
-			outputPaths = (
-				"${BUILT_PRODUCTS_DIR}/cocoapods-artifacts-${CONFIGURATION}.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BasicLinkedPaywall/Pods-BasicLinkedPaywall-artifacts.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F8F6D3560298E5FF5C67F566 /* [CP] Check Pods Manifest.lock */ = {
@@ -578,6 +574,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB3788672790FA4700C7E8E3 /* SwiftClass.swift in Sources */,
 				00E356F31AD99517003FC87E /* BasicLinkedPaywallTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -588,6 +585,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				EB3788662790FA4700C7E8E3 /* SwiftClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -640,7 +638,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 76C40F3C3041437BDF401B0A /* Pods-BasicLinkedPaywallTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -655,6 +655,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BasicLinkedPaywallTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BasicLinkedPaywall.app/BasicLinkedPaywall";
 			};
 			name = Debug;
@@ -663,7 +666,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 256EE725DFF20914F4C7CA5E /* Pods-BasicLinkedPaywallTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BasicLinkedPaywallTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -675,6 +680,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BasicLinkedPaywallTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BasicLinkedPaywall.app/BasicLinkedPaywall";
 			};
 			name = Release;
@@ -684,6 +691,7 @@
 			baseConfigurationReference = 5B70E0657EC80661DEB0225F /* Pods-BasicLinkedPaywall.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				INFOPLIST_FILE = BasicLinkedPaywall/Info.plist;
@@ -695,6 +703,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.namiml.TestProducts-Linked";
 				PRODUCT_NAME = BasicLinkedPaywall;
+				SWIFT_OBJC_BRIDGING_HEADER = "BasicLinkedPaywall-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -704,6 +715,7 @@
 			baseConfigurationReference = 0181B13B4307850E029DEF66 /* Pods-BasicLinkedPaywall.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = BasicLinkedPaywall/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -714,6 +726,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.namiml.TestProducts-Linked";
 				PRODUCT_NAME = BasicLinkedPaywall;
+				SWIFT_OBJC_BRIDGING_HEADER = "BasicLinkedPaywall-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -859,6 +873,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -912,6 +927,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
