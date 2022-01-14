@@ -98,10 +98,10 @@ const LinkedPaywall = (props) => {
           <Text style={styles.sectionTitle}>{title}</Text>
           <Text style={styles.sectionDescription}>{body}</Text>
         </View>
-        {skus && !!skus.length && (
+        {data.namiSkus && !!data.namiSkus.length && (
           <View style={styles.subscriptions}>
             <View style={styles.sectionContainer}>
-              {skus.map((sku, index) => {
+              {data.namiSkus.map((sku, index) => {
                 return (
                   <TouchableOpacity
                     key={index}
