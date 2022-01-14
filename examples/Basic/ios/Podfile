@@ -29,46 +29,26 @@ target 'Basic' do
 
       puts("Attempting to add Nami.xcframework reference to react-native-nami-sdk project.")
   installer.pods_project.targets.each do |target|
-    if target.name  == "Pods-RNNami"
-      puts("Found Pods-RNNami target.")
+    if target.name  == "react-native-nami-sdk"
+      puts("Found react-native-nami-sdk target.")
       all_filerefs = installer.pods_project.files
       all_filerefs.each do |fileref|
          if fileref.path.end_with? "Nami.xcframework"
           puts("Found Nami.xcframework fileref.")
           build_phase = target.frameworks_build_phase
-          puts("Determining if Pods-RNNami build phase needs correction.")
+          puts("Determining if react-native-nami-sdk build phase needs correction.")
           unless build_phase.files_references.include?(fileref)
-            puts("Adding Nami.xcframework to Pods-RNNami target")
+            puts("Adding Nami.xcframework to react-native-nami-sdk target")            
             build_phase.add_file_reference(fileref)
           end
          end
       end
     end
   end
-       ## Fix for XCode 12+, hotpatch of react files should be a great idea
-      find_and_replace("../node_modules/react-native/React/CxxBridge/RCTCxxBridge.mm",
-      "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
-      find_and_replace("../node_modules/react-native/ReactCommon/turbomodule/core/platform/ios/RCTTurboModuleManager.mm",
-      "RCTBridgeModuleNameForClass(module))", "RCTBridgeModuleNameForClass(Class(module)))")
-
-
   end
 end
 
 target 'BasicTests' do
     inherit! :search_paths
     # Pods for testing
-end
-
-def find_and_replace(dir, findstr, replacestr)
-  Dir[dir].each do |name|
-      text = File.read(name)
-      replace = text.gsub(findstr,replacestr)
-      if text != replace
-          puts "Fix: " + name
-          File.open(name, "w") { |file| file.puts replace }
-          STDOUT.flush
-      end
-  end
-  Dir[dir + '*/'].each(&method(:find_and_replace))
 end
