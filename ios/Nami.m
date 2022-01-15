@@ -21,7 +21,9 @@
 @implementation NamiBridge (RCTExternModule)
 
 RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
-    
+    if ([configDict count] == 0 || configDict[@"logLevel"] == @"DEBUG" ) {
+        NSLog(@"Configure dictionary is %@", configDict);
+    }
     NSString *appID = configDict[@"appPlatformID-apple"];
     
     if ([appID length] > 0 ) {
