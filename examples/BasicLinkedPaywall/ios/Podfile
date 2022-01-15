@@ -22,6 +22,21 @@ target 'BasicLinkedPaywall' do
   
   use_native_modules!
 
+  target 'BasicLinkedPaywallTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'BasicLinkedPaywall-tvOS' do
+    # Pods for BasicLinkedPaywall-tvOS
+
+    target 'BasicLinkedPaywall-tvOSTests' do
+      inherit! :search_paths
+      # Pods for testing
+    end
+
+  end
+
   
   post_install do |installer|
     react_native_post_install(installer)
@@ -48,18 +63,4 @@ target 'BasicLinkedPaywall' do
   end
 end
 
-target 'BasicLinkedPaywallTests' do
-    inherit! :search_paths
-    # Pods for testing
-end
-
-target 'BasicLinkedPaywall-tvOS' do
-  # Pods for BasicLinkedPaywall-tvOS
-
-  target 'BasicLinkedPaywall-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-end
 
