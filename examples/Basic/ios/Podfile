@@ -22,6 +22,10 @@ target 'Basic' do
   
   use_native_modules!
 
+  target 'BasicTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
   
   post_install do |installer|
     react_native_post_install(installer)
@@ -48,7 +52,3 @@ target 'Basic' do
   end
 end
 
-target 'BasicTests' do
-    inherit! :search_paths
-    # Pods for testing
-end
