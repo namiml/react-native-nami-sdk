@@ -40,11 +40,11 @@
   "license": "SEE LICENSE FILE",
   "peerDependencies": {
     "react": "^17.0.2",
-    "react-native": "^0.65.1"
+    "react-native": "^0.65.2"
   },
   "devDependencies": {
     "react": "^17.0.2",
-    "react-native": "^0.65.1",
+    "react-native": "^0.65.2",
     "react-native-codegen": "^0.0.12"
   },
   "repository": {
