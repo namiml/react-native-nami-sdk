@@ -24,7 +24,7 @@ const HomeScreen = (props) => {
   const {purchases} = usePurchasesContext();
   const {data} = useDataContext();
 
-  let listenSubscriber;
+  let preparePaywallListenSubscriber;
     
   const {NamiEmitter} = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
@@ -38,7 +38,7 @@ const HomeScreen = (props) => {
         console.log("error is " + result.errorMessage );
     }
 
-    listenSubscriber?.remove();
+    preparePaywallListenSubscriber?.remove();
   }
  
   const subscribeAction = () => {
@@ -46,7 +46,7 @@ const HomeScreen = (props) => {
     if (
        eventEmitter?._subscriber?._subscriptionsForType?.PreparePaywallFinished == null
     ) {
-	eventEmitter.addListener('PreparePaywallFinished', onPreparePaywallFinished);
+	preparePaywallListenSubscriber = eventEmitter.addListener('PreparePaywallFinished', onPreparePaywallFinished);
     }
     NativeModules.NamiPaywallManagerBridge.preparePaywallForDisplay(true, 2);
   };
