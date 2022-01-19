@@ -88,6 +88,7 @@ RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
     }];
 }
 
+/// Determines if any one of the passed in SKUID's have been purchased.
 RCT_EXPORT_METHOD(anySKUIDPurchased:(nonnull NSArray*)skuIDs completion:(RCTResponseSenderBlock)completion)
 {
     BOOL active = false;
@@ -99,6 +100,12 @@ RCT_EXPORT_METHOD(anySKUIDPurchased:(nonnull NSArray*)skuIDs completion:(RCTResp
     }
 
     completion(@[[NSNumber numberWithBool:active]]);
+}
+
+/// For consumable purchases, removes the SKU from Nami so a product may be purchased again.
+RCT_EXPORT_METHOD(consumePurchasedSKU:(nonnull NSString*)skuID)
+{
+    [NamiPurchaseManager consumePurchasedSKUWithSkuID:skuID];
 }
 
 /// This method does the purchase work, and can optionally be fed a paywall metadata object to pass along to the purchase flow.
