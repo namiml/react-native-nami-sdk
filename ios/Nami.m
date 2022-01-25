@@ -43,8 +43,13 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
         
         NSString *languageString = configDict[@"namiLanguageCode"];
         if ([logLevelString length] > 0) {
-            NSLog(@"Nami language code from dictionary is %@", languageString);
-            config.namiLanguageCode = languageString;
+            NSLog(@"Nami language code from config dictionary is %@", languageString);
+            if  ([[NamiLanguageCodes allAvailiableNamiLanguageCodes]
+                  containsObject:[languageString lowercaseString]] ) {
+              config.namiLanguageCode = languageString;
+            } else {
+                NSLog(@"Warning: Nami language code from config dictionary %@ not found in list of available Nami Language Codes:\n%@", languageString, [NamiLanguageCodes allAvailiableNamiLanguageCodes]);
+            }
         }
         
         NSObject *bypassString = configDict[@"bypassStore"];
