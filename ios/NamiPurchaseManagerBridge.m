@@ -56,9 +56,9 @@ RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
         NSString *errorDesc = [error localizedDescription];
         NSDictionary *initialDict;
         if ([errorDesc length] > 0) {
-            initialDict = @{@"state": [NSNumber numberWithBool:state], @"error": [error localizedDescription]};
+            initialDict = @{@"state": [NSNumber numberWithBool:state], @"stateDesc": [self restorePurchaseStateDescriptionFromCode:state], @"error": [error localizedDescription]};
         } else {
-            initialDict = @{@"state": [NSNumber numberWithBool:state]};
+            initialDict = @{@"state": [NSNumber numberWithBool:state], @"stateDesc": [self restorePurchaseStateDescriptionFromCode:state]};
         }
         
         NSMutableDictionary *retDict = [NSMutableDictionary dictionary];
@@ -106,6 +106,20 @@ RCT_EXPORT_METHOD(anySKUIDPurchased:(nonnull NSArray*)skuIDs completion:(RCTResp
 RCT_EXPORT_METHOD(consumePurchasedSKU:(nonnull NSString*)skuID)
 {
     [NamiPurchaseManager consumePurchasedSKUWithSkuID:skuID];
+}
+
+- (NSString *) restorePurchaseStateDescriptionFromCode:(NamiRestorePurchasesState)stateCode {
+    switch (stateCode) {
+        case NamiRestorePurchasesStateStarted:
+            return @"started";
+            break;
+        case NamiRestorePurchasesStateFinished:
+            return @"finished";
+            break;
+        case NamiRestorePurchasesStateError:
+            return @"error";
+            break;
+    }
 }
 
 /// This method does the purchase work, and can optionally be fed a paywall metadata object to pass along to the purchase flow.
