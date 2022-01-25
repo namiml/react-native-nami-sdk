@@ -21,7 +21,7 @@ const LinkedPaywall = (props) => {
   const restore = () => {
     NativeModules.NamiPurchaseManagerBridge.restorePurchases((result) => {
       console.log('ExampleApp: Nami restorePurchases results was ', result);
-      if (result.state == 1) {
+      if (result.stateDesc == "finished") {
         NativeModules.NamiPurchaseManagerBridge.purchases((resultInside) => {
           console.log('ExampleApp: Nami purchases are ', resultInside);
           console.log('Purchase count is ', resultInside.length);
@@ -41,7 +41,7 @@ const LinkedPaywall = (props) => {
             );
           }
         });
-      } else if (result.state == 2) {
+      } else if (result.stateDesc == "error") {
         Alert.alert(
           'Restore Failed',
           'Restore failed to complete.',
