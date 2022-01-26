@@ -15,6 +15,17 @@
 
 #import "React/RCTViewManager.h"
 
+@interface NamiEmitter : RCTEventEmitter
+- (void)sendRestorePurchasesStateChanged: (enum NamiRestorePurchasesState) state
+                            newPurchases: (NSArray<NamiPurchase *> * _Nonnull) newPurchases
+                            oldPurchases: (NSArray<NamiPurchase *> * _Nonnull) oldPurchases
+                                   error: (NSError * _Nullable) error;
+- (NSDictionary *)buildRestorePurchasesStateChangedDict: (enum NamiRestorePurchasesState) state
+                                           newPurchases: (NSArray<NamiPurchase *> * _Nonnull) newPurchases
+                                           oldPurchases: (NSArray<NamiPurchase *> * _Nonnull) oldPurchases
+                                                  error: (NSError * _Nullable) error;
++ (NamiEmitter *) reactInstance;
+@end
 
 @interface NamiPurchaseManagerBridge : NSObject <RCTBridgeModule>
 @end
@@ -52,39 +63,18 @@ RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
 {
     NSLog(@"NamiBridge: Info: Calling RestorePurchases");
     
-    [NamiPurchaseManager registerRestorePurchasesHandlerWithRestorePurchasesStateHandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
-        NSString *errorDesc = [error localizedDescription];
-        NSDictionary *initialDict;
-        if ([errorDesc length] > 0) {
-            initialDict = @{@"state": [NSNumber numberWithBool:state], @"stateDesc": [self restorePurchaseStateDescriptionFromCode:state], @"error": [error localizedDescription]};
-        } else {
-            initialDict = @{@"state": [NSNumber numberWithBool:state], @"stateDesc": [self restorePurchaseStateDescriptionFromCode:state]};
-        }
-        
-        NSMutableDictionary *retDict = [NSMutableDictionary dictionary];
-        [retDict addEntriesFromDictionary:initialDict];
-          
-        NSMutableArray *newPurchaseDicts = [NSMutableArray array];
-        for ( NamiPurchase *purchaseRecord in newPurchases ) {
-            if ( purchaseRecord.skuID == nil ) {
-            }
-            NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
-            [newPurchaseDicts addObject:purchaseDict];
-        }
-
-        NSMutableArray *oldPurchaseDicts = [NSMutableArray array];
-        for ( NamiPurchase *purchaseRecord in oldPurchases ) {
-            if ( purchaseRecord.skuID == nil ) {
-            }
-            NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
-            [oldPurchaseDicts addObject:purchaseDict];
-        }
-        
-        retDict[@"newPurchases"] = newPurchaseDicts;
-        retDict[@"oldPurchases"] = oldPurchaseDicts;
-        
-        NSLog(@"NamiBridge: Info: RestorePurchases Returned %@", retDict);
+    [NamiPurchaseManager restorePurchasesWithStatehandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
+        NSDictionary *retDict = [[NamiEmitter reactInstance] buildRestorePurchasesStateChangedDict:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
         completion(@[retDict]);
+    }];
+}
+
+RCT_EXPORT_METHOD(restorePurchases)
+{
+    NSLog(@"NamiBridge: Info: Calling RestorePurchases");
+    
+    [NamiPurchaseManager restorePurchasesWithStatehandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
+        [[NamiEmitter reactInstance] sendRestorePurchasesStateChanged:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
     }];
 }
 
@@ -106,20 +96,6 @@ RCT_EXPORT_METHOD(anySKUIDPurchased:(nonnull NSArray*)skuIDs completion:(RCTResp
 RCT_EXPORT_METHOD(consumePurchasedSKU:(nonnull NSString*)skuID)
 {
     [NamiPurchaseManager consumePurchasedSKUWithSkuID:skuID];
-}
-
-- (NSString *) restorePurchaseStateDescriptionFromCode:(NamiRestorePurchasesState)stateCode {
-    switch (stateCode) {
-        case NamiRestorePurchasesStateStarted:
-            return @"started";
-            break;
-        case NamiRestorePurchasesStateFinished:
-            return @"finished";
-            break;
-        case NamiRestorePurchasesStateError:
-            return @"error";
-            break;
-    }
 }
 
 /// This method does the purchase work, and can optionally be fed a paywall metadata object to pass along to the purchase flow.
