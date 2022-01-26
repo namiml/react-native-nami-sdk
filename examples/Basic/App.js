@@ -41,13 +41,13 @@ const App = () => {
 		    Alert.alert(
 			'Restore Complete',
 			'Found your subscription!',
-			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed") }],
+			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed") }]
 		    );
 		} else {
 		    Alert.alert(
 			'Restore Complete',
 			'No active subscriptions found.',
-			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed")}],
+			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed")}]
 		    );
 		}
             });
@@ -55,7 +55,7 @@ const App = () => {
             Alert.alert(
 		'Restore Failed',
 		'Restore failed to complete.',
-		[{text: 'OK', onPress: () => console.log("Restore Purchase Error was" + event.error)}],
+		[{text: 'OK', onPress: () => console.log("Restore Purchase Error was" + event.error)}]
             );
 	}
     }
