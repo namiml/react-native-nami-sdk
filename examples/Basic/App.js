@@ -42,14 +42,12 @@ const App = () => {
 			'Restore Complete',
 			'Found your subscription!',
 			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed") }],
-			{cancelable: false},
 		    );
 		} else {
 		    Alert.alert(
 			'Restore Complete',
 			'No active subscriptions found.',
 			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed")}],
-			{cancelable: false},
 		    );
 		}
             });
@@ -58,7 +56,6 @@ const App = () => {
 		'Restore Failed',
 		'Restore failed to complete.',
 		[{text: 'OK', onPress: () => console.log("Restore Purchase Error was" + event.error)}],
-		{cancelable: false},
             );
 	}
     }
