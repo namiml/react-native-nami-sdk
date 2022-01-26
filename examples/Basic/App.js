@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {NativeEventEmitter, NativeModules} from 'react-native';
+import {NativeEventEmitter, NativeModules, Alert} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import HomeScreen from './containers/HomeScreen';
@@ -31,6 +31,38 @@ const App = () => {
     console.log('ExampleApp: Data for sign-in ', event);
   };
 
+    const onRestorePurchasesStateChanged = (event) => {
+	console.log('Restore Purchases State Change: ', event);
+	if (event.stateDesc == "finished") {
+            NativeModules.NamiPurchaseManagerBridge.purchases((resultInside) => {
+		console.log('ExampleApp: Nami purchases are ', resultInside);
+		console.log('Purchase count is ', resultInside.length);
+		if (resultInside.length > 0) {
+		    Alert.alert(
+			'Restore Complete',
+			'Found your subscription!',
+			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed") }],
+			{cancelable: false},
+		    );
+		} else {
+		    Alert.alert(
+			'Restore Complete',
+			'No active subscriptions found.',
+			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed")}],
+			{cancelable: false},
+		    );
+		}
+            });
+	} else if (event.stateDesc == "error") {
+            Alert.alert(
+		'Restore Failed',
+		'Restore failed to complete.',
+		[{text: 'OK', onPress: () => console.log("Restore Purchase Error was" + event.error)}],
+		{cancelable: false},
+            );
+	}
+    }
+    
   useEffect(() => {
     console.log('ExampleApp: Nami Bridge is');
     console.log(NativeModules.NamiBridge);
@@ -41,12 +73,19 @@ const App = () => {
       eventEmitter.addListener('PurchasesChanged', onPurchasesChanged);
     }
 
-      if (
+    if (
 	  eventEmitter?._subscriber?._subscriptionsForType?.SignInActivate == null
       ) {
       eventEmitter.addListener('SignInActivate', onSignInActivated);
     }
 
+    if (
+	  eventEmitter?._subscriber?._subscriptionsForType?.RestorePurchasesStateChanged == null
+      ) {
+      eventEmitter.addListener('RestorePurchasesStateChanged', onRestorePurchasesStateChanged);
+    }
+
+      
     console.log(
       'ExampleApp: HavePaywallManager',
       NativeModules.NamiPaywallManagerBridge,
