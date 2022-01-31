@@ -33,24 +33,24 @@ const App = () => {
 
     const onRestorePurchasesStateChanged = (event) => {
 	console.log('Restore Purchases State Change: ', event);
-	if (event.stateDesc == "finished") {
-            NativeModules.NamiPurchaseManagerBridge.purchases((resultInside) => {
-		console.log('ExampleApp: Nami purchases are ', resultInside);
-		console.log('Purchase count is ', resultInside.length);
-		if (resultInside.length > 0) {
-		    Alert.alert(
-			'Restore Complete',
-			'Found your subscription!',
-			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed") }]
-		    );
-		} else {
-		    Alert.alert(
-			'Restore Complete',
-			'No active subscriptions found.',
-			[{text: 'OK', onPress: () => console.log("Found Purchase Confirmed")}]
-		    );
-		}
-            });
+	if (event.stateDesc == "started") {
+	    // Present "Restore Started" message if desired.
+	} else if (event.stateDesc == "finished") {
+	    console.log('ExampleApp: Nami purchases are ', event.newPurchases);
+	    console.log('Purchase count is ', event.newPurchases.length);
+	    if (event.newPurchases.length > 0) {
+		Alert.alert(
+		    'Restore Complete',
+		    'Found your subscription!',
+		    [{text: 'OK', onPress: () => console.log("Found Purchase Confirmed") }]
+		);
+	    } else {
+		Alert.alert(
+		    'Restore Complete',
+		    'No active subscriptions found.',
+		    [{text: 'OK', onPress: () => console.log("Found Purchase Confirmed")}]
+		);
+	    }
 	} else if (event.stateDesc == "error") {
             Alert.alert(
 		'Restore Failed',
