@@ -59,9 +59,9 @@ RCT_EXPORT_METHOD(isSKUIDPurchased:(nonnull NSString*)skuID completion:(RCTRespo
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
-RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(restorePurchasesWithCompletionHandler:(RCTResponseSenderBlock)completion)
 {
-    NSLog(@"NamiBridge: Info: Calling RestorePurchases");
+    NSLog(@"NamiBridge: Info: Calling RestorePurchasesWithCompletionHandler");
     
     [NamiPurchaseManager restorePurchasesWithStatehandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
         NSDictionary *retDict = [[NamiEmitter reactInstance] buildRestorePurchasesStateChangedDict:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
