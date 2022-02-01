@@ -15,12 +15,13 @@ import theme from '../../theme';
 const LinkedPaywall = (props) => {
   const {open, setOpen, data} = props;
   const {title, body} = data.paywallMetadata.marketing_content;
-  const {background_image_url_phone} = data.paywallMetadata;
+  const {background_image_url_phone} = data.paywallMetadata.backgrounds.phone;
   const {skus} = data.namiSkus;
 
   const restore = () => {
     NativeModules.NamiPurchaseManagerBridge.restorePurchasesWithCompletionHandler((result) => {
 	console.log('Restore Purchases State Change: ', result);
+	console.log('Backgroud image is ', data.paywallMetadata.backgrounds.phone);
 	if (result.stateDesc == "started") {
 	    // Present "Restore Started" message if desired.
 	} else if (result.stateDesc == "finished") {
@@ -84,7 +85,7 @@ const LinkedPaywall = (props) => {
         Alert.alert('LinkedPaywall has been closed.');
       }}>
       <ImageBackground
-        source={{uri: background_image_url_phone}}
+        source={{uri: data.paywallMetadata.backgrounds.phone}}
         style={{width: '100%', height: '100%'}}>
         <View style={styles.sectionContainer}>
           <TouchableOpacity onPress={() => setOpen(!open)} underlayColor="#fff">
