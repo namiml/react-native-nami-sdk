@@ -21,7 +21,6 @@ const LinkedPaywall = (props) => {
   const restore = () => {
     NativeModules.NamiPurchaseManagerBridge.restorePurchasesWithCompletionHandler((result) => {
 	console.log('Restore Purchases State Change: ', result);
-	console.log('Backgroud image is ', data.paywallMetadata.backgrounds.phone);
 	if (result.stateDesc == "started") {
 	    // Present "Restore Started" message if desired.
 	} else if (result.stateDesc == "finished") {
