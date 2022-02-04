@@ -98,6 +98,16 @@ RCT_EXPORT_METHOD(consumePurchasedSKU:(nonnull NSString*)skuID)
     [NamiPurchaseManager consumePurchasedSKUWithSkuID:skuID];
 }
 
+/// For consumable purchases, removes the SKU from Nami so a product may be purchased again.
+RCT_EXPORT_METHOD(presentCodeRedemptionSheet)
+{
+    if (@available(iOS 14.0, *)) {
+        [NamiPurchaseManager presentCodeRedemptionSheet];
+    } else {
+        NSLog(@"NamiBridge: Warning: presentCodeRedemptionSheet only present in iOS14 and higher");
+    }
+}
+
 /// This method does the purchase work, and can optionally be fed a paywall metadata object to pass along to the purchase flow.
 - (void) doSKUPurchaseWithSKUID:(nonnull NSString*)skuID namiPaywall:(NamiPaywall * _Nullable)namiPaywall completion:(RCTResponseSenderBlock)completion {
     [NamiPurchaseManager skusForSKUIDsWithSkuIDs:@[skuID] productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
