@@ -111,9 +111,9 @@ RCT_EXPORT_METHOD(presentCodeRedemptionSheet)
 RCT_EXPORT_METHOD(canPresentCodeRedemptionSheet:(RCTResponseSenderBlock)completion)
 {
     if (@available(iOS 14.0, *)) {
-        completion(@[[NSNumber true]]);
+        completion(@[[NSNumber numberWithBool:true]]);
     } else {
-        completion(@[[NSNumber falsose]]);
+        completion(@[[NSNumber numberWithBool:false]]);
     }
 }
 
