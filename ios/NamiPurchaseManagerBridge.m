@@ -108,6 +108,15 @@ RCT_EXPORT_METHOD(presentCodeRedemptionSheet)
     }
 }
 
+RCT_EXPORT_METHOD(canPresentCodeRedemptionSheet:(RCTResponseSenderBlock)completion)
+{
+    if (@available(iOS 14.0, *)) {
+        completion(@[[NSNumber true]]);
+    } else {
+        completion(@[[NSNumber falsose]]);
+    }
+}
+
 /// This method does the purchase work, and can optionally be fed a paywall metadata object to pass along to the purchase flow.
 - (void) doSKUPurchaseWithSKUID:(nonnull NSString*)skuID namiPaywall:(NamiPaywall * _Nullable)namiPaywall completion:(RCTResponseSenderBlock)completion {
     [NamiPurchaseManager skusForSKUIDsWithSkuIDs:@[skuID] productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable products, NSArray<NSString *> * _Nullable invalidProducts, NSError * _Nullable error) {
