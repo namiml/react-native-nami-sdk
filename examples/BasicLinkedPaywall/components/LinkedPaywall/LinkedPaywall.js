@@ -15,42 +15,39 @@ import theme from '../../theme';
 const LinkedPaywall = (props) => {
   const {open, setOpen, data} = props;
   const {title, body} = data.paywallMetadata.marketing_content;
-  const {background_image_url_phone} = data.paywallMetadata;
-  const {skus} = data;
+  const {background_image_url_phone} = data.paywallMetadata.backgrounds.phone;
+  const {skus} = data.namiSkus;
 
   const restore = () => {
-    NativeModules.NamiPurchaseManagerBridge.restorePurchases((result) => {
-      console.log('ExampleApp: Nami restorePurchases results was ', result);
-      if (result.success) {
-        NativeModules.NamiPurchaseManagerBridge.purchases((resultInside) => {
-          console.log('ExampleApp: Nami purchases are ', resultInside);
-          console.log('Purchase count is ', resultInside.length);
-          if (resultInside.length > 0) {
+    NativeModules.NamiPurchaseManagerBridge.restorePurchasesWithCompletionHandler((result) => {
+	console.log('Restore Purchases State Change: ', result);
+	if (result.stateDesc == "started") {
+	    // Present "Restore Started" message if desired.
+	} else if (result.stateDesc == "finished") {
+	    console.log('ExampleApp: Nami purchases are ', result.newPurchases);
+	    console.log('Purchase count is ', result.newPurchases.length);
+	    if (result.newPurchases.length > 0) {
+		Alert.alert(
+		    'Restore Complete',
+		    'Found your subscription!',
+		    [{text: 'OK', onPress: () => console.log("Found Purchase Confirmed") }]
+		);
+	    } else {
+		Alert.alert(
+		    'Restore Complete',
+		    'No active subscriptions found.',
+		    [{text: 'OK', onPress: () => console.log("Found Purchase Confirmed")}]
+		);
+	    }
+	} else if (result.stateDesc == "error") {
             Alert.alert(
-              'Restore Complete',
-              'Found your subscription!',
-              [{text: 'OK', onPress: () => setOpen(!open)}],
-              {cancelable: false},
+		'Restore Failed',
+		'Restore failed to complete.',
+		[{text: 'OK', onPress: () => console.log("Restore Purchase Error was" + result.error)}]
             );
-          } else {
-            Alert.alert(
-              'Restore Complete',
-              'No active subscriptions found.',
-              [{text: 'OK', onPress: () => setOpen(open)}],
-              {cancelable: false},
-            );
-          }
-        });
-      } else {
-        Alert.alert(
-          'Restore Failed',
-          'Restore failed to complete.',
-          [{text: 'OK', onPress: () => setOpen(open)}],
-          {cancelable: false},
-        );
-      }
+	}
     });
-  };
+  }
 
   const purchase = (skuIdentifier) => {
     NativeModules.NamiPurchaseManagerBridge.buySKU(
@@ -87,7 +84,7 @@ const LinkedPaywall = (props) => {
         Alert.alert('LinkedPaywall has been closed.');
       }}>
       <ImageBackground
-        source={{uri: background_image_url_phone}}
+        source={{uri: data.paywallMetadata.backgrounds.phone}}
         style={{width: '100%', height: '100%'}}>
         <View style={styles.sectionContainer}>
           <TouchableOpacity onPress={() => setOpen(!open)} underlayColor="#fff">
@@ -98,10 +95,10 @@ const LinkedPaywall = (props) => {
           <Text style={styles.sectionTitle}>{title}</Text>
           <Text style={styles.sectionDescription}>{body}</Text>
         </View>
-        {skus && !!skus.length && (
+        {data.namiSkus && !!data.namiSkus.length && (
           <View style={styles.subscriptions}>
             <View style={styles.sectionContainer}>
-              {skus.map((sku, index) => {
+              {data.namiSkus.map((sku, index) => {
                 return (
                   <TouchableOpacity
                     key={index}

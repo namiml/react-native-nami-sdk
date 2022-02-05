@@ -71,6 +71,11 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun consumePurchasedSKU(skuID: String) {
+        // Not implemented for Android.
+    }
+
+    @ReactMethod
     fun anySKUIDPurchased(skuIDs: ReadableArray, resultsCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
             val checkArray: MutableList<String> = mutableListOf()

@@ -54,6 +54,10 @@ static NamiEmitter *namiEmitter;
         [NamiPaywallManager registerBlockingPaywallClosedHandler:^{
             [self sendBlockingPaywallClosed];
         }];
+                
+        [NamiPurchaseManager registerRestorePurchasesHandlerWithRestorePurchasesStateHandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
+            [self sendRestorePurchasesStateChanged:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
+        }];
         
     }
     namiEmitter = self;
@@ -89,7 +93,7 @@ static NamiEmitter *namiEmitter;
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed", @"PreparePaywallFinished" ];
+    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed", @"PreparePaywallFinished", @"RestorePurchasesStateChanged" ];
 }
 
 - (NSDictionary<NSString *, NSObject *> *)constantsToExport {
@@ -259,10 +263,71 @@ bool hasNamiEmitterListeners;
         [paywallMeta removeObjectForKey:@"title"];
         [paywallMeta removeObjectForKey:@"style"];
 
-        [self sendEventWithName:@"AppPaywallActivate" body:@{ @"skus": skuDicts,
+        [self sendEventWithName:@"AppPaywallActivate" body:@{ @"namiSkus": skuDicts,
                                                             @"developerPaywallID": developerPaywallID,
                                                             @"paywallMetadata": paywallMeta }];
   }
+}
+
+- (NSDictionary *)buildRestorePurchasesStateChangedDict: (enum NamiRestorePurchasesState) state
+                                           newPurchases: (NSArray<NamiPurchase *> * _Nonnull) newPurchases
+                                           oldPurchases: (NSArray<NamiPurchase *> * _Nonnull) oldPurchases
+                                                  error: (NSError * _Nullable) error {
+    NSString *errorDesc = [error localizedDescription];
+    NSDictionary *initialDict;
+    if ([errorDesc length] > 0) {
+        initialDict = @{@"state": [NSNumber numberWithBool:state], @"stateDesc": [self restorePurchaseStateDescriptionFromCode:state], @"error": [error localizedDescription]};
+    } else {
+        initialDict = @{@"state": [NSNumber numberWithBool:state], @"stateDesc": [self restorePurchaseStateDescriptionFromCode:state]};
+    }
+    
+    NSMutableDictionary *retDict = [NSMutableDictionary dictionary];
+    [retDict addEntriesFromDictionary:initialDict];
+      
+    NSMutableArray *newPurchaseDicts = [NSMutableArray array];
+    for ( NamiPurchase *purchaseRecord in newPurchases ) {
+        if ( purchaseRecord.skuID == nil ) {
+        }
+        NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
+        [newPurchaseDicts addObject:purchaseDict];
+    }
+
+    NSMutableArray *oldPurchaseDicts = [NSMutableArray array];
+    for ( NamiPurchase *purchaseRecord in oldPurchases ) {
+        if ( purchaseRecord.skuID == nil ) {
+        }
+        NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
+        [oldPurchaseDicts addObject:purchaseDict];
+    }
+    
+    retDict[@"newPurchases"] = newPurchaseDicts;
+    retDict[@"oldPurchases"] = oldPurchaseDicts;
+    
+    NSLog(@"NamiBridge: Info: RestorePurchases state change: %@", retDict);
+
+    return retDict;
+}
+
+- (void)sendRestorePurchasesStateChanged: (enum NamiRestorePurchasesState) state
+                            newPurchases: (NSArray<NamiPurchase *> * _Nonnull) newPurchases
+                            oldPurchases: (NSArray<NamiPurchase *> * _Nonnull) oldPurchases
+                                   error: (NSError * _Nullable) error {
+    NSDictionary * retDict = [self buildRestorePurchasesStateChangedDict:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
+    [self sendEventWithName:@"RestorePurchasesStateChanged" body:retDict];
+}
+
+- (NSString *) restorePurchaseStateDescriptionFromCode:(NamiRestorePurchasesState)stateCode {
+    switch (stateCode) {
+        case NamiRestorePurchasesStateStarted:
+            return @"started";
+            break;
+        case NamiRestorePurchasesStateFinished:
+            return @"finished";
+            break;
+        case NamiRestorePurchasesStateError:
+            return @"error";
+            break;
+    }
 }
 
 - (void) sendBlockingPaywallClosed {

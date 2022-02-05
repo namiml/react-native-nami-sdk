@@ -14,26 +14,27 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-community/masked-view": "^0.1.5",
-    "react": "17.0.1",
-    "react-native": "0.63.3",
-    "react-native-gesture-handler": "^1.5.3",
-    "react-native-nami-sdk": "^1.2.1",
-    "react-native-reanimated": "^1.7.0",
-    "react-native-safe-area-context": "^3.1.8",
-    "react-native-screens": "^2.0.0-alpha.32",
-    "react-navigation": "^4.0.10",
-    "react-navigation-stack": "^2.0.13"
+    "@react-native-community/masked-view": "^0.1.11",
+    "react": "17.0.2",
+    "react-native": "0.66.4",
+    "react-native-gesture-handler": "^2.1.0",
+    "react-native-nami-sdk": "^1.2.0",
+    "react-native-reanimated": "^2.3.1",
+    "react-native-safe-area-context": "^3.3.2",
+    "react-native-screens": "^3.10.1",
+    "react-navigation": "^4.4.4",
+    "react-navigation-stack": "^2.10.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/runtime": "^7.6.2",
-    "@react-native-community/eslint-config": "^2.0.0",
-    "babel-jest": "^26.6.3",
-    "eslint": "^7.13.0",
-    "jest": "^26.6.3",
-    "metro-react-native-babel-preset": "^0.64.0",
-    "react-test-renderer": "17.0.1"
+    "@babel/core": "^7.16.5",
+    "@babel/runtime": "^7.16.5",
+    "@react-native-community/eslint-config": "^3.0.1",
+    "babel-jest": "^27.4.5",
+    "eslint": "^8.5.0",
+    "jest": "^27.4.5",
+    "metro-react-native-babel-preset": "^0.66.2",
+    "react-native-codegen": "^0.0.12",
+    "react-test-renderer": "17.0.2"
   },
   "jest": {
     "preset": "react-native"
