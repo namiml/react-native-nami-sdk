@@ -6,12 +6,15 @@ import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.bridge.WritableNativeMap
-import com.namiml.api.model.FormattedSku
 import com.namiml.billing.NamiPurchase
+import com.namiml.customer.CustomerJourneyState
 import com.namiml.entitlement.NamiEntitlement
+import com.namiml.paywall.LegalCitations
+import com.namiml.paywall.NamiLocaleConfig
 import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiPurchaseSource
 import com.namiml.paywall.NamiSKU
+import com.namiml.paywall.PaywallDisplayOptions
 import com.namiml.paywall.PaywallStyleData
 import com.namiml.paywall.SubscriptionPeriod
 import com.namiml.util.extensions.getFormattedPrice
@@ -21,13 +24,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-
-fun FormattedSku.toFormattedSkuDict(): WritableMap {
-    val map: WritableMap = Arguments.createMap()
-    map.putString("sku_ref_id", this.skuId)
-    map.putBoolean("featured", this.featured)
-    return map
-}
 
 fun NamiPaywall.toNamiPaywallDict(): WritableMap {
 
@@ -49,37 +45,55 @@ fun NamiPaywall.toNamiPaywallDict(): WritableMap {
 
     Log.i(LOG_TAG, "extraData items are $extraDataMap")
     paywallMap.putString("id", id)
-    paywallMap.putString("background_image_url_phone", backgroundImageUrlPhone.orEmpty())
-    paywallMap.putString("background_image_url_tablet", backgroundImageUrlTablet.orEmpty())
-    paywallMap.putString("privacy_policy", privacyPolicy.orEmpty())
+    paywallMap.putMap("backgrounds", Arguments.createMap().apply {
+        putString("phone", backgroundImageUrlPhone.orEmpty())
+        putString("tablet", backgroundImageUrlTablet.orEmpty())
+    })
     paywallMap.putString("purchase_terms", purchaseTerms.orEmpty())
-    paywallMap.putString("tos_link", tosLink.orEmpty())
     paywallMap.putString("name", name.orEmpty())
-    paywallMap.putString("cta_type", type)
+    paywallMap.putString("paywall_type", type)
+    paywallMap.putMap("locale_config", localeConfig.toDict())
+    paywallMap.putMap("legal_citations", legalCitations?.toDict())
+    paywallMap.putMap("display_options", displayOptions.toDict())
     paywallMap.putString("developer_paywall_id", developerPaywallId.orEmpty())
-
-    val allowClosing = allowClosing
-    paywallMap.putBoolean("allow_closing", allowClosing)
-
-    val restoreControl = restoreControl
-    paywallMap.putBoolean("restore_control", restoreControl)
-
-    val signInControl = signInControl
-    paywallMap.putBoolean("sign_in_control", signInControl)
-
-    val formattedSkusArray: WritableArray = Arguments.createArray()
-    for (formattedSku in formattedSkus) {
-        formattedSkusArray.pushMap(formattedSku.toFormattedSkuDict())
-    }
-    paywallMap.putArray("formatted_skus", formattedSkusArray)
-
     styleData?.let {
         paywallMap.putMap("styleData", it.toPaywallStylingDict())
     }
-
-    paywallMap.putBoolean("use_bottom_overlay", useBottomOverlay)
-
     return paywallMap
+}
+
+private fun NamiLocaleConfig.toDict(): WritableMap {
+    return Arguments.createMap().apply {
+        putString("close_button_text", closeButtonText)
+        putString("sign_in_button_text", signInButtonText)
+        putString("restore_purchase_button_text", restorePurchaseButtonText)
+        putString("purchase_button_hint_text_to_speech", purchaseButtonHintTextToSpeech)
+        putString("purchase_terms_prefix_hint_text_to_speech", purchaseTermsPrefixHintTextToSpeech)
+    }
+}
+
+private fun PaywallDisplayOptions.toDict(): WritableMap {
+    return Arguments.createMap().apply {
+        putBoolean("allow_closing", allowClosing)
+        putBoolean("restore_control", restoreControl)
+        putBoolean("sign_in_control", signInControl)
+        putString("scrollable_region_size", scrollableRegionSize)
+        putBoolean("show_nami_purchase_success_message", shouldShowNamiPurchaseSuccessMessage)
+        putBoolean("skus_in_scrollable_region", showSkusInScrollableRegion)
+        putBoolean("use_bottom_overlay", useBottomOverlay)
+    }
+}
+
+private fun LegalCitations.toDict(): WritableMap {
+    return Arguments.createMap().apply {
+        putString("id", id)
+        putString("privacy_url", privacyUrl)
+        putString("privacy_text", privacyText)
+        putString("tos_url", tosUrl)
+        putString("tos_text", tosText)
+        putString("clickwrap_text", clickWrapText)
+        putString("language", language)
+    }
 }
 
 fun PaywallStyleData.toPaywallStylingDict(): WritableMap {
@@ -107,6 +121,9 @@ fun PaywallStyleData.toPaywallStylingDict(): WritableMap {
 
     styleMap.putString("skuButtonColor", skuButtonColor)
     styleMap.putString("skuButtonTextColor", skuButtonTextColor)
+    styleMap.putString("skuSubDisplayTextColor", skuSubDisplayTextColor)
+    styleMap.putString("skuSubDisplayTextShadowColor", skuSubDisplayTextShadowColor)
+    styleMap.putDouble("skuSubDisplayTextShadowRadius", skuSubDisplayTextShadowRadius.toDouble())
 
     styleMap.putString("featuredSkusButtonColor", featuredSkuButtonColor)
     styleMap.putString("featuredSkusButtonTextColor", featuredSkuButtonTextColor)
@@ -196,6 +213,7 @@ fun NamiSKU.toSkuDict(): WritableMap {
     productDict.putString("localizedDescription", skuDetails.description)
     productDict.putString("localizedPrice", skuDetails.price)
     productDict.putString("localizedMultipliedPrice", skuDetails.price)
+    productDict.putBoolean("featured", featured)
     productDict.putString("displayText", displayText)
     productDict.putString("displaySubText", displaySubText)
     productDict.putString("price", skuDetails.getFormattedPrice().toString())
@@ -218,6 +236,9 @@ fun NamiSKU.toSkuDict(): WritableMap {
         }
         SubscriptionPeriod.ANNUAL -> {
             "year"
+        }
+        SubscriptionPeriod.FOUR_WEEKS -> {
+            "four_weeks"
         }
         else -> {
             null
@@ -265,6 +286,26 @@ fun NamiPurchase.toPurchaseDict(): WritableMap {
     purchaseMap.putMap("platformMetadata", WritableNativeMap())
 
     return purchaseMap
+}
+
+fun CustomerJourneyState?.toDict(): WritableMap? {
+    val formerSubscriber = this?.formerSubscriber ?: false
+    val inGracePeriod = this?.inGracePeriod ?: false
+    val inTrialPeriod = this?.inTrialPeriod ?: false
+    val inIntroOfferPeriod = this?.inIntroOfferPeriod ?: false
+    val inPause = this?.inPause ?: false
+    val inAccountHold = this?.inAccountHold ?: false
+    val isCancelled = this?.isCancelled ?: false
+
+    return WritableNativeMap().apply {
+        putBoolean("formerSubscriber", formerSubscriber)
+        putBoolean("inGracePeriod", inGracePeriod)
+        putBoolean("inTrialPeriod", inTrialPeriod)
+        putBoolean("inIntroOfferPeriod", inIntroOfferPeriod)
+        putBoolean("inPause", inPause)
+        putBoolean("inAccountHold", inAccountHold)
+        putBoolean("isCancelled", isCancelled)
+    }
 }
 
 fun NamiEntitlement.toEntitlementDict(): WritableMap? {
@@ -321,4 +362,3 @@ fun Date.toJavascriptDate(): String {
     }
     return df.format(this)
 }
-

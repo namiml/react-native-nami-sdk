@@ -16,7 +16,6 @@ const LinkedPaywall = (props) => {
   const {open, setOpen, data} = props;
   const {title, body} = data.paywallMetadata.marketing_content;
   const {background_image_url_phone} = data.paywallMetadata.backgrounds.phone;
-  const {skus} = data.namiSkus;
 
   const restore = () => {
     NativeModules.NamiPurchaseManagerBridge.restorePurchasesWithCompletionHandler((result) => {
