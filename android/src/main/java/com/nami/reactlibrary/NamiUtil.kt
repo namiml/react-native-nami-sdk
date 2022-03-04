@@ -28,9 +28,6 @@ import java.util.TimeZone
 fun NamiPaywall.toNamiPaywallDict(): WritableMap {
 
     val paywallMap: WritableMap = Arguments.createMap()
-    // These don't seem to exist, inconsistent between Android and iOS, leave in marketing content
-    //paywallMap.putString("title", title.orEmpty())
-    //paywallMap.putString("body", body.orEmpty())
 
     val marketingContentMap = Arguments.createMap()
     marketingContentMap.putString("title", title.orEmpty())
@@ -288,7 +285,7 @@ fun NamiPurchase.toPurchaseDict(): WritableMap {
     return purchaseMap
 }
 
-fun CustomerJourneyState?.toDict(): WritableMap? {
+fun CustomerJourneyState?.toDict(): WritableMap {
     val formerSubscriber = this?.formerSubscriber ?: false
     val inGracePeriod = this?.inGracePeriod ?: false
     val inTrialPeriod = this?.inTrialPeriod ?: false

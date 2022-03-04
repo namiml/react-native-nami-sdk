@@ -108,7 +108,17 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             null
         }
         languageCode?.let { code ->
-            builder.namiLanguageCode = NamiLanguageCode.values().find { it.code == code }
+            NamiLanguageCode.values().find { it.code == code }.let { namiLanguageCode ->
+                if (namiLanguageCode == null) {
+                    Log.d(
+                        LOG_TAG,
+                        "Nami language code from config dictionary \"$code\" not " +
+                            "found in list of available Nami Language Codes:\n"
+                    )
+                } else {
+                    builder.namiLanguageCode = namiLanguageCode
+                }
+            }
         }
 
         val namiCommandsReact: ReadableArray? =
