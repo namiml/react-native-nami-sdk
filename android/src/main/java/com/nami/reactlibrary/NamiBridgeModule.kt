@@ -110,7 +110,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         languageCode?.let { code ->
             NamiLanguageCode.values().find { it.code == code }.let { namiLanguageCode ->
                 if (namiLanguageCode == null) {
-                    Log.d(
+                    Log.w(
                         LOG_TAG,
                         "Nami language code from config dictionary \"$code\" not " +
                             "found in list of available Nami Language Codes:\n"
