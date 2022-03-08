@@ -54,6 +54,21 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
         NamiPurchaseManager.registerPurchasesChangedListener { list, namiPurchaseState, s ->
             emitPurchaseMade(list, namiPurchaseState, s)
         }
+
+        NamiCustomerManager.registerCustomerJourneyChangedListener {
+            emitCustomerJourneyChanged(it)
+        }
+    }
+
+    private fun emitCustomerJourneyChanged(customerJourneyState: CustomerJourneyState) {
+        Log.i(LOG_TAG, "Emitting CustomerJourneyChanged $customerJourneyState")
+        try {
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("CustomerJourneyStateChanged", customerJourneyState.toDict())
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
+        }
     }
 
     private fun emitPurchaseMade(
