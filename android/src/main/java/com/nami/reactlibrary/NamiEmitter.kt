@@ -121,7 +121,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
             skusArray.pushMap(sku.toSkuDict())
         }
 
-        map.putArray("skus", skusArray)
+        map.putArray("namiSkus", skusArray)
 
         try {
             reactApplicationContext
