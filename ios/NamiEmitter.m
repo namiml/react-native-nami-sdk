@@ -97,7 +97,7 @@ static NamiEmitter *namiEmitter;
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed", @"PreparePaywallFinished", @"RestorePurchasesStateChanged" ];
+    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed", @"PreparePaywallFinished", @"RestorePurchasesStateChanged", @"CustomerJourneyStateChanged" ];
 }
 
 - (NSDictionary<NSString *, NSObject *> *)constantsToExport {
