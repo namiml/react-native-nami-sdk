@@ -21,7 +21,9 @@
 @implementation NamiBridge (RCTExternModule)
 
 RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
-    
+    if ([configDict count] == 0 || [configDict[@"logLevel"] isEqual: @"DEBUG"] ) {
+        NSLog(@"Configure dictionary is %@", configDict);
+    }
     NSString *appID = configDict[@"appPlatformID-apple"];
     
     if ([appID length] > 0 ) {
@@ -37,6 +39,17 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
         } else {
             // If they messed up the params, just set logging to full.
             config.logLevel = NamiLogLevelDebug;
+        }
+        
+        NSString *languageString = configDict[@"namiLanguageCode"];
+        if ([logLevelString length] > 0) {
+            NSLog(@"Nami language code from config dictionary is %@", languageString);
+            if  ([[NamiLanguageCodes allAvailiableNamiLanguageCodes]
+                  containsObject:[languageString lowercaseString]] ) {
+              config.namiLanguageCode = languageString;
+            } else {
+                NSLog(@"Warning: Nami language code from config dictionary %@ not found in list of available Nami Language Codes:\n%@", languageString, [NamiLanguageCodes allAvailiableNamiLanguageCodes]);
+            }
         }
         
         NSObject *bypassString = configDict[@"bypassStore"];
@@ -70,7 +83,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
         }
         
         // Start commands with header iformation for Nami to let them know this is a React client.
-        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:0.3.0"]];
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:2.0.0"]];
         
         // Add additional namiCommands app may have sent in.
         NSObject *appCommandStrings = configDict[@"namiCommands"];

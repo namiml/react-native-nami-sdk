@@ -95,7 +95,7 @@ RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPayw
         paywallMeta[@"styleData"] = paywallStylingDict;
         
         
-        NSArray *wrapperArray = @[@{ @"products": productDicts,
+        NSArray *wrapperArray = @[@{ @"namiSkus": productDicts,
                                      @"developerPaywallID": developerPaywallID,
                                      @"paywallMetadata": paywallMeta }];
         completion(wrapperArray);

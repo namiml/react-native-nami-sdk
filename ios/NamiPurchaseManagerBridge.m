@@ -15,6 +15,17 @@
 
 #import "React/RCTViewManager.h"
 
+@interface NamiEmitter : RCTEventEmitter
+- (void)sendRestorePurchasesStateChanged: (enum NamiRestorePurchasesState) state
+                            newPurchases: (NSArray<NamiPurchase *> * _Nonnull) newPurchases
+                            oldPurchases: (NSArray<NamiPurchase *> * _Nonnull) oldPurchases
+                                   error: (NSError * _Nullable) error;
+- (NSDictionary *)buildRestorePurchasesStateChangedDict: (enum NamiRestorePurchasesState) state
+                                           newPurchases: (NSArray<NamiPurchase *> * _Nonnull) newPurchases
+                                           oldPurchases: (NSArray<NamiPurchase *> * _Nonnull) oldPurchases
+                                                  error: (NSError * _Nullable) error;
++ (NamiEmitter *) reactInstance;
+@end
 
 @interface NamiPurchaseManagerBridge : NSObject <RCTBridgeModule>
 @end
@@ -48,23 +59,26 @@ RCT_EXPORT_METHOD(isSKUIDPurchased:(nonnull NSString*)skuID completion:(RCTRespo
     completion(@[[NSNumber numberWithBool:active]]);
 }
 
-RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(restorePurchasesWithCompletionHandler:(RCTResponseSenderBlock)completion)
 {
-    NSLog(@"NamiBridge: Info: Calling RestorePurchases");
-    [NamiPurchaseManager restorePurchasesWithHandler:^(BOOL success, NSError * _Nullable error) {
-        NSString *errorDesc = [error localizedDescription];
-        NSDictionary *retDict;
-        if ([errorDesc length] > 0) {
-           retDict = @{@"success": [NSNumber numberWithBool:success], @"error": [error localizedDescription]};
-        } else {
-            retDict = @{@"success": [NSNumber numberWithBool:success]};
-        }
-        
-        NSLog(@"NamiBridge: Info: RestorePurchases Returned %@", retDict);
+    NSLog(@"NamiBridge: Info: Calling RestorePurchasesWithCompletionHandler");
+    
+    [NamiPurchaseManager restorePurchasesWithStatehandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
+        NSDictionary *retDict = [[NamiEmitter reactInstance] buildRestorePurchasesStateChangedDict:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
         completion(@[retDict]);
     }];
 }
 
+RCT_EXPORT_METHOD(restorePurchases)
+{
+    NSLog(@"NamiBridge: Info: Calling RestorePurchases");
+    
+    [NamiPurchaseManager restorePurchasesWithStatehandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
+        [[NamiEmitter reactInstance] sendRestorePurchasesStateChanged:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
+    }];
+}
+
+/// Determines if any one of the passed in SKUID's have been purchased.
 RCT_EXPORT_METHOD(anySKUIDPurchased:(nonnull NSArray*)skuIDs completion:(RCTResponseSenderBlock)completion)
 {
     BOOL active = false;
@@ -76,6 +90,31 @@ RCT_EXPORT_METHOD(anySKUIDPurchased:(nonnull NSArray*)skuIDs completion:(RCTResp
     }
 
     completion(@[[NSNumber numberWithBool:active]]);
+}
+
+/// For consumable purchases, removes the SKU from Nami so a product may be purchased again.
+RCT_EXPORT_METHOD(consumePurchasedSKU:(nonnull NSString*)skuID)
+{
+    [NamiPurchaseManager consumePurchasedSKUWithSkuID:skuID];
+}
+
+/// For consumable purchases, removes the SKU from Nami so a product may be purchased again.
+RCT_EXPORT_METHOD(presentCodeRedemptionSheet)
+{
+    if (@available(iOS 14.0, *)) {
+        [NamiPurchaseManager presentCodeRedemptionSheet];
+    } else {
+        NSLog(@"NamiBridge: Warning: presentCodeRedemptionSheet only present in iOS14 and higher");
+    }
+}
+
+RCT_EXPORT_METHOD(canPresentCodeRedemptionSheet:(RCTResponseSenderBlock)completion)
+{
+    if (@available(iOS 14.0, *)) {
+        completion(@[[NSNumber numberWithBool:true]]);
+    } else {
+        completion(@[[NSNumber numberWithBool:false]]);
+    }
 }
 
 /// This method does the purchase work, and can optionally be fed a paywall metadata object to pass along to the purchase flow.

@@ -109,13 +109,13 @@ const App = () => {
     console.log('ExampleApp: firebase is ', firebase);
 
     if (
-      eventEmitter._subscriber._subscriptionsForType.PurchasesChanged == null
+      eventEmitter?._subscriber?._subscriptionsForType?.PurchasesChanged == null
     ) {
       eventEmitter.addListener('PurchasesChanged', onPurchasesChanged);
     }
 
     if (
-      analyticsEmitter._subscriber._subscriptionsForType.NamiAnalyticsSent ==
+      analyticsEmitter?._subscriber?._subscriptionsForType?.NamiAnalyticsSent ==
       null
     ) {
       analyticsEmitter.addListener(

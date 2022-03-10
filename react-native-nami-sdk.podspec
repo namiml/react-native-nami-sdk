@@ -13,12 +13,12 @@ Pod::Spec.new do |s|
   s.homepage     = package['homepage']
   s.license      = package['license']
 
-  s.platform     = :ios, "11.0"
+  s.platform     = :ios, "11.2"
   s.source       = { :git => "https://github.com/namiml/react-native-nami-sdk.git", :tag => "#{s.version}" }
   s.source_files = "ios/**/*.{h,m}"
   s.requires_arc = true
 
-  s.dependency 'Nami', '2.7.0'
+  s.dependency 'Nami', '2.9.3'
   s.dependency 'React'
 
 end

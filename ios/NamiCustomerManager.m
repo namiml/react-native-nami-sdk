@@ -22,18 +22,7 @@
 
 RCT_EXPORT_METHOD(currentCustomerJourneyState:(RCTResponseSenderBlock)completion)
 {
-    CustomerJourneyState *journeyState = [NamiCustomerManager currentCustomerJourneyState];
-    
-    BOOL formerSubscriber = [journeyState formerSubscriber];
-    BOOL inGracePeriod = [journeyState inGracePeriod];
-    BOOL inTrialPeriod = [journeyState inTrialPeriod];
-    BOOL inIntroOfferPeriod = [journeyState inIntroOfferPeriod];
-    
-    NSDictionary *journeyDict = @{@"formerSubscriber":@(formerSubscriber),
-                                  @"inGracePeriod":@(inGracePeriod),
-                                  @"inTrialPeriod":@(inTrialPeriod),
-                                  @"inIntroOfferPeriod":@(inIntroOfferPeriod)
-    };
+    NSDictionary *journeyDict = [NamiBridgeUtil customerJourneyStateDict];
     
     completion(@[journeyDict]);
 }

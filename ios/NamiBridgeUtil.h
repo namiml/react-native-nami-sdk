@@ -25,6 +25,8 @@
 
 + (NSArray *)stripPresentationPositionFromOrderedMetadataForPaywallMetaDict: (NSDictionary *)paywallMeta;
 
++ (NSDictionary<NSString *,NSString *> *) customerJourneyStateDict;
+
 + (NSString *)hexStringForColor:(UIColor *)color;
 
 @end
