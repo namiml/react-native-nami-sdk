@@ -205,6 +205,30 @@
     return [NSISO8601DateFormatter stringFromDate:purchaseTimestamp timeZone:UTC formatOptions:options];
 }
 
+
++ (NSDictionary<NSString *,NSString *> *) customerJourneyStateDict {
+    CustomerJourneyState *journeyState = [NamiCustomerManager currentCustomerJourneyState];
+    
+    BOOL formerSubscriber = [journeyState formerSubscriber];
+    BOOL inGracePeriod = [journeyState inGracePeriod];
+    BOOL inTrialPeriod = [journeyState inTrialPeriod];
+    BOOL inIntroOfferPeriod = [journeyState inIntroOfferPeriod];
+    
+    BOOL isCancelled = [journeyState isCancelled];
+    BOOL inPause = [journeyState inPause];
+    BOOL inAccountHold = [journeyState inAccountHold];
+    
+    NSDictionary *journeyDict = @{@"formerSubscriber":@(formerSubscriber),
+                                  @"inGracePeriod":@(inGracePeriod),
+                                  @"inTrialPeriod":@(inTrialPeriod),
+                                  @"inIntroOfferPeriod":@(inIntroOfferPeriod),
+                                  @"isCancelled":@(isCancelled),
+                                  @"inPause":@(inPause),
+                                  @"inAccountHold":@(inAccountHold)
+    };
+    return journeyDict;
+}
+
 + (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling {
     NSMutableDictionary<NSString *,id> *stylingDict = [NSMutableDictionary new];
     if (styling != nil) {        

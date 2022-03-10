@@ -59,6 +59,10 @@ static NamiEmitter *namiEmitter;
             [self sendRestorePurchasesStateChanged:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
         }];
         
+        [NamiCustomerManager registerJourneyStateChangedHandler:^(CustomerJourneyState * _Nonnull journeyState) {
+            [self sendEventCustomerJourneyStateChanged:journeyState];
+        }];
+        
     }
     namiEmitter = self;
     return self;
@@ -93,7 +97,7 @@ static NamiEmitter *namiEmitter;
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed", @"PreparePaywallFinished", @"RestorePurchasesStateChanged" ];
+    return @[@"PurchasesChanged", @"SignInActivate", @"AppPaywallActivate", @"EntitlementsChanged", @"BlockingPaywallClosed", @"PreparePaywallFinished", @"RestorePurchasesStateChanged", @"CustomerJourneyStateChanged" ];
 }
 
 - (NSDictionary<NSString *, NSObject *> *)constantsToExport {
@@ -187,6 +191,13 @@ bool hasNamiEmitterListeners;
         
         NSLog(@"NamiBridge: Info: attempting to send result of preparePaywallForDisplay with result dictionary: %@", sendDict);
         [self sendEventWithName:@"PreparePaywallFinished" body:sendDict];
+    }
+}
+
+- (void)sendEventCustomerJourneyStateChanged:(CustomerJourneyState *)journeyState {
+    if (hasNamiEmitterListeners) {
+        NSDictionary *sendDict = [NamiBridgeUtil customerJourneyStateDict];
+        [self sendEventWithName:@"CustomerJourneyStateChanged" body:sendDict];
     }
 }
 
