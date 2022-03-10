@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   wrapper: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.primary,
+    backgroundColor: "#1374DE",
   }
 });
 

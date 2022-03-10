@@ -88,7 +88,7 @@ const HomeScreen = (props) => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              <Button title="Go to About" onPress={() => activateAbout()} />
+              <Button color="#1374DE" title="Go to About" onPress={() => activateAbout()} />
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Introduction</Text>
@@ -122,14 +122,14 @@ const HomeScreen = (props) => {
             </View>
             <View style={styles.sectionContainer}>
               {purchases.length === 0 ? (
-                <Button title="Subscribe" onPress={subscribeAction} />
+                <Button color="#1374DE" title="Subscribe" onPress={subscribeAction} />
               ) : (
-                <Button title="Change Subscription" onPress={subscribeAction} />
+                <Button color="#1374DE" title="Change Subscription" onPress={subscribeAction} />
               )}
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionMiddle}>
-                Subscription is:{' '}
+                Entitlement status:{' '}
                 {purchases.length === 0 ? (
                   <Text style={styles.danger}>Inactive</Text>
                 ) : (
@@ -187,10 +187,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   success: {
-    color: 'green',
+    color: "#66CC99",
   },
   danger: {
-    color: 'red',
+    color: "#FF5B74",
   },
 });
 
