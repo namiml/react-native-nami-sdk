@@ -11,7 +11,8 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.billing.NamiPurchase
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.billing.NamiPurchaseState
-import com.namiml.entitlement.NamiEntitlement
+import com.namiml.customer.CustomerJourneyState
+import com.namiml.customer.NamiCustomerManager
 import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiPaywallManager
 import com.namiml.paywall.NamiSKU
@@ -32,15 +33,15 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
     }
 
     override fun initialize() {
-        NamiPaywallManager.registerSignInListener { context, paywallData, developerPaywallID ->
+        NamiPaywallManager.registerSignInListener { _, _, developerPaywallID ->
             Log.i(LOG_TAG, "Sign in clicked with developerPaywallID $developerPaywallID")
 
-            emitSignInActivated(paywallData, developerPaywallID)
+            emitSignInActivated(developerPaywallID)
         }
 
         Log.i(LOG_TAG, "In Emitter Initialize()")
 
-        NamiPaywallManager.registerPaywallRaiseListener { context, paywallData, products, developerPaywallId ->
+        NamiPaywallManager.registerPaywallRaiseListener { _, paywallData, products, developerPaywallId ->
             Log.i(
                 LOG_TAG,
                 "Products from registerPaywallRaiseListener callback are $products"
@@ -53,28 +54,24 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
         NamiPurchaseManager.registerPurchasesChangedListener { list, namiPurchaseState, s ->
             emitPurchaseMade(list, namiPurchaseState, s)
         }
+
+        NamiCustomerManager.registerCustomerJourneyChangedListener {
+            emitCustomerJourneyChanged(it)
+        }
     }
 
-    fun emitEntitlementsChanged(entitlements: List<NamiEntitlement>) {
-        val map = Arguments.createMap()
-
-        val resultArray: WritableArray = WritableNativeArray()
-        for (entitlement in entitlements) {
-            resultArray.pushMap(entitlement.toEntitlementDict())
-        }
-        map.putArray("entitlements", resultArray)
-
-        Log.i(LOG_TAG, "Emitting entitlements changed")
+    private fun emitCustomerJourneyChanged(customerJourneyState: CustomerJourneyState) {
+        Log.i(LOG_TAG, "Emitting CustomerJourneyChanged $customerJourneyState")
         try {
             reactApplicationContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit("EntitlementsChanged", map)
+                .emit("CustomerJourneyStateChanged", customerJourneyState.toDict())
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
-    fun emitPurchaseMade(
+    private fun emitPurchaseMade(
         purchases: List<NamiPurchase>,
         purchaseState: NamiPurchaseState,
         errorString: String?
@@ -117,7 +114,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
         }
     }
 
-    fun emitPaywallRaise(
+    private fun emitPaywallRaise(
         namiPaywall: NamiPaywall,
         productDicts: List<NamiSKU>,
         paywallDeveloperID: String?
@@ -139,7 +136,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
             skusArray.pushMap(sku.toSkuDict())
         }
 
-        map.putArray("skus", skusArray)
+        map.putArray("namiSkus", skusArray)
 
         try {
             reactApplicationContext
@@ -150,7 +147,7 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
         }
     }
 
-    fun emitSignInActivated(paywallData: NamiPaywall, paywallDeveloperID: String?) {
+    private fun emitSignInActivated(paywallDeveloperID: String?) {
 
         val map = Arguments.createMap().apply {
             putString("developerPaywallID", paywallDeveloperID)
@@ -159,21 +156,6 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
             reactApplicationContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                 .emit("SignInActivate", map)
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "Caught Exception: " + e.message)
-        }
-    }
-
-    fun emitPurchaseMade(paywallDeveloperID: String) {
-
-        val map = Arguments.createMap().apply {
-            putString("key1", "Value1")
-            putString("key1", "Value1")
-        }
-        try {
-            reactApplicationContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit("customEventName", map)
         } catch (e: Exception) {
             Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }

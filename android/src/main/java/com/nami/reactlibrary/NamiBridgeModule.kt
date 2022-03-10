@@ -15,6 +15,7 @@ import com.facebook.react.bridge.WritableNativeArray
 import com.namiml.Nami
 import com.namiml.NamiConfiguration
 import com.namiml.NamiExternalIdentifierType
+import com.namiml.NamiLanguageCode
 import com.namiml.NamiLogLevel
 
 class NamiBridgeModule(reactContext: ReactApplicationContext) :
@@ -26,18 +27,13 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         private const val CONFIG_MAP_DEVELOPMENT_MODE_KEY = "developmentMode"
         private const val CONFIG_MAP_BYPASS_STORE_KEY = "bypassStore"
         private const val CONFIG_MAP_NAMI_COMMANDS_KEY = "namiCommands"
+        private const val CONFIG_MAP_LANGUAGE_CODE_KEY = "namiLanguageCode"
         private const val PLATFORM_ID_ERROR_VALUE = "APPPLATFORMID_NOT_FOUND"
     }
 
     override fun getName(): String {
         return "NamiBridge"
     }
-
-//    @ReactMethod
-//    public void sampleMethod(String stringArgument, int numberArgument, Callback callback) {
-//        // TODO: Implement some actually useful functionality
-//        callback.invoke("Received numberArgument: " + numberArgument + " stringArgument: " + stringArgument);
-//    }
 
     @ReactMethod
     fun configure(configDict: ReadableMap) {
@@ -104,6 +100,25 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         Log.i(LOG_TAG, "Nami Configuration bypassStoreMode is $bypassStoreMode")
         if (bypassStoreMode) {
             builder.bypassStore = true
+        }
+
+        val languageCode = if (configDict.hasKey(CONFIG_MAP_LANGUAGE_CODE_KEY)) {
+            configDict.getString(CONFIG_MAP_LANGUAGE_CODE_KEY)
+        } else {
+            null
+        }
+        languageCode?.let { code ->
+            NamiLanguageCode.values().find { it.code == code }.let { namiLanguageCode ->
+                if (namiLanguageCode == null) {
+                    Log.w(
+                        LOG_TAG,
+                        "Nami language code from config dictionary \"$code\" not " +
+                            "found in list of available Nami Language Codes:\n"
+                    )
+                } else {
+                    builder.namiLanguageCode = namiLanguageCode
+                }
+            }
         }
 
         val namiCommandsReact: ReadableArray? =
