@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Modal,
   Text,
@@ -8,16 +8,18 @@ import {
   ImageBackground,
   TouchableOpacity,
   NativeModules,
-  Alert,
+  Linking,
+    Alert,
 } from 'react-native';
 import theme from '../../theme';
 
 const LinkedPaywall = (props) => {
   const {open, setOpen, data} = props;
   const {title, body} = data.paywallMetadata.marketing_content;
+    const {privacy_text, tos_text, privacy_url, tos_url, clickwrap_text} = data.paywallMetadata.legal_citations;
   const {background_image_url_phone} = data.paywallMetadata.backgrounds.phone;
   const {skus} = data.namiSkus;
-
+      
   const restore = () => {
     NativeModules.NamiPurchaseManagerBridge.restorePurchasesWithCompletionHandler((result) => {
 	console.log('Restore Purchases State Change: ', result);
@@ -116,7 +118,21 @@ const LinkedPaywall = (props) => {
                 onPress={() => restore()}
                 underlayColor="#f00"
                 title="Restore"
-              />
+		/>
+
+		<View style={styles.container}>
+  <Text>
+                  By purchasing, you agree to our{' '}
+                  <Text style={styles.textStyle} onPress={() => Linking.openURL(tos_url)}>
+                   {tos_text}
+                  </Text>
+                   {' '}and{' '} 
+                  <Text style={styles.textStyle} onPress={() => Linking.openURL(privacy_url)}>
+                    {privacy_text}
+            </Text>
+		.
+                </Text>
+              </View>
             </View>
           </View>
         )}
@@ -198,6 +214,10 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     fontWeight: '600',
   },
+
+  textStyle: {
+    color: "blue"
+  }
 });
 
 export default LinkedPaywall;
