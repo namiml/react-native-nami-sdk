@@ -71,8 +71,10 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun consumePurchasedSKU(skuID: String) {
-        // Not implemented for Android.
+    fun consumePurchasedSKU(skuRefId: String) {
+        reactApplicationContext.runOnUiQueueThread {
+            NamiPurchaseManager.consumePurchasedSKU(skuRefId)
+        }
     }
 
     @ReactMethod

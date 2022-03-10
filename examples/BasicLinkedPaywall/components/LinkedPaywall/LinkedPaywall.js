@@ -18,8 +18,6 @@ const LinkedPaywall = (props) => {
   const {title, body} = data.paywallMetadata.marketing_content;
     const {privacy_text, tos_text, privacy_url, tos_url, clickwrap_text} = data.paywallMetadata.legal_citations;
   const {background_image_url_phone} = data.paywallMetadata.backgrounds.phone;
-  const {skus} = data.namiSkus;
-      
   const restore = () => {
     NativeModules.NamiPurchaseManagerBridge.restorePurchasesWithCompletionHandler((result) => {
 	console.log('Restore Purchases State Change: ', result);
