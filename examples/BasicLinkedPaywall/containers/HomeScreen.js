@@ -108,7 +108,7 @@ const HomeScreen = (props) => {
               {purchases.length === 0 ? (
                 <Button color="#1374DE" title="Subscribe" onPress={subscribeAction} />
               ) : (
-                <Button title="Change Subscription" onPress={subscribeAction} />
+                <Button color="#1374DE" title="Change Subscription" onPress={subscribeAction} />
               )}
             </View>
             <View style={styles.sectionContainer}>
