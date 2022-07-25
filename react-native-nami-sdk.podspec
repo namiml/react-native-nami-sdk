@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.version      = package['version']
   s.summary      = package['description']
 
-  s.author       = { "Nami ML, Inc." => "info@namiml.com" }
+  s.author       = { "Nami ML Inc." => "info@namiml.com" }
 
   s.homepage     = package['homepage']
   s.license      = package['license']
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m}"
   s.requires_arc = true
 
-  s.dependency 'Nami', '2.9.4'
+  s.dependency 'Nami', '2.9.5'
   s.dependency 'React'
 
 end
