@@ -49,11 +49,6 @@ jobs:
       - name: Setup .npmrc
         run: |
           cat .npmrc
-          echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > .npmrc 
-          npm whoami 
-          cat .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
 
       - name: Run Yarn
         run: |
