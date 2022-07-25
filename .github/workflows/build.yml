@@ -14,8 +14,6 @@ on:
     secrets:
       BUILD_USER_PAT:
         required: true    
-      NPM_ACCESS_TOKEN:
-        required: true
 
 jobs:
   build:
@@ -54,13 +52,13 @@ jobs:
         run: |
           yarn --frozen-lockfile
         env:
-          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish
         run: |
           npm publish --access public
         env:
-          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create Github Release
         run: |-
