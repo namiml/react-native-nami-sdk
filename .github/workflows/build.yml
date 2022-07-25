@@ -54,7 +54,7 @@ jobs:
 
       - name: Publish
         run: |
-        echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN  }}' > ${{ github.workspace }}/.npmrc
+          echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN  }}' > ${{ github.workspace }}/.npmrc
           npm publish --access public
 
       - name: Create Github Release
