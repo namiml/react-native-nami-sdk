@@ -26,6 +26,11 @@ const App = () => {
     }
   };
 
+  const onEntitlementsChanged = (event) => {
+    // Add code to check for entitlements activating or deactivating features
+    console.log("ExampleApp: Data for entitlements changed ", event.activeEntitlements);
+  };
+
   const onSignInActivated = (event) => {
     // Add code to present UI for sign-in
     console.log('ExampleApp: Data for sign-in ', event);
@@ -82,6 +87,11 @@ const App = () => {
       eventEmitter.addListener('RestorePurchasesStateChanged', onRestorePurchasesStateChanged);
     }
 
+    if (
+    eventEmitter?._subscriber?._subscriptionsForType?.EntitlementsChanged == null
+    ) {
+      eventEmitter.addListener('EntitlementsChanged', onEntitlementsChanged);
+    }
       
     console.log(
       'ExampleApp: HavePaywallManager',

@@ -8,7 +8,7 @@ source 'https://cdn.cocoapods.org/'
 
 target 'RNNami' do
   config = use_native_modules!
-  pod 'Nami', '2.9.4'
+  pod 'Nami', '2.9.5'
 
   use_react_native!(
     :path => config[:reactNativePath],
