@@ -49,6 +49,8 @@ jobs:
 
       - name: Publish
         run: |
+          npm whoami
+          cat .npmrc
           npm publish --access public
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
