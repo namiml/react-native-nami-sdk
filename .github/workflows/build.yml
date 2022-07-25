@@ -29,13 +29,6 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      # Setup .npmrc file to publish to npm
-      - name: Setup Node
-        uses: actions/setup-node@v3        
-        with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
-
       # human error checks
       - name: Set up Python
         uses: actions/setup-python@v1
@@ -51,11 +44,14 @@ jobs:
       - name: Run Yarn
         run: |
           yarn --frozen-lockfile
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
 
       - name: Publish
         run: |
-          echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN  }}' > ${{ github.workspace }}/.npmrc
           npm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
 
       - name: Create Github Release
         run: |-
