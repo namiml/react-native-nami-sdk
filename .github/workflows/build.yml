@@ -10,12 +10,7 @@ on:
       earlyaccess:
         description: "Is this a early access build?"
         default: true
-        type: boolean        
-    secrets:
-      BUILD_USER_PAT:
-        required: true    
-      NPM_ACCESS_TOKEN:
-        required: true
+        type: boolean
 
 jobs:
   build:
