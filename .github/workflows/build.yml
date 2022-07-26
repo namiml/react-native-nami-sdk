@@ -14,8 +14,6 @@ on:
     secrets:
       BUILD_USER_PAT:
         required: true    
-      NPM_ACCESS_TOKEN:
-        required: true
 
 jobs:
   build:
@@ -34,21 +32,11 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-          registry-url: 'https://registry.npmjs.org'        
-
       # human error checks
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
           python-version: "3.10"
-
-      - name: Install Python Dependencies
-        run: |
-          pip install toml
 
       - name: Release Preflight Checks
         run: |
@@ -56,15 +44,21 @@ jobs:
         env:
           NAMI_SDK_VERSION: ${{ inputs.version }}
 
+      - name: Setup .npmrc
+        run: |
+          cat .npmrc
+
       - name: Run Yarn
         run: |
           yarn --frozen-lockfile
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish
         run: |
           npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create Github Release
         run: |-
