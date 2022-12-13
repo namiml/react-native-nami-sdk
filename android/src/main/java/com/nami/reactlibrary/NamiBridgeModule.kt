@@ -127,7 +127,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             } else {
                 Arguments.createArray()
             }
-        val settingsList = mutableListOf("extendedClientInfo:react-native:2.0.2")
+        val settingsList = mutableListOf("extendedClientInfo:react-native:2.0.4")
         namiCommandsReact?.toArrayList()?.filterIsInstance<String>()?.let { commandsFromReact ->
             settingsList.addAll(commandsFromReact)
         }
@@ -144,7 +144,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun setExternalIdentifier(externalIdentifier: String, externalIDType: String) {
+    fun setExternalIdentifier(externalIdentifier: String, externalIDType: String, completion: Callback) {
 
         Log.i(LOG_TAG, "Setting external identifier $externalIdentifier of type $externalIDType")
 
@@ -155,7 +155,12 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         }
 
         reactApplicationContext.runOnUiQueueThread {
-            Nami.setExternalIdentifier(externalIdentifier, useType)
+            Nami.setExternalIdentifier(externalIdentifier, useType) { success, error ->
+                if (error) {
+                    completion(success, error)
+                }
+                completion(nil, success)
+            }
         }
     }
 
@@ -172,10 +177,15 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun clearExternalIdentifier() {
+    fun clearExternalIdentifier(completion: Callback) {
         Log.i(LOG_TAG, "Clearing external identifier.")
         reactApplicationContext.runOnUiQueueThread {
-            Nami.clearExternalIdentifier()
+            Nami.clearExternalIdentifier()  { success, error ->
+                if (error) {
+                    completion(success, error)
+                }
+                completion(nil, success)
+            }
         }
     }
 }

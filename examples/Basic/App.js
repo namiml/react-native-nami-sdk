@@ -108,6 +108,32 @@ const App = () => {
 
     NativeModules.NamiBridge.configure(configDict);
     NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
+
+    NativeModules.NamiBridge.clearExternalIdentifier( (error, success) => {
+      if (error) {
+        console.error(`Error found! ${error}`);
+      } else if (success == true) {
+        console.log(`clearExternalIdentifier returned success ${success}`);
+
+        let ei = NativeModules.NamiBridge.getExternalIdentifier()
+        console.log(`getExternalIdentifier after clear ${ei} (expected nil)`);
+
+      }
+    });
+
+  //   NativeModules.NamiBridge.setExternalIdentifier("f1851c87-e0ff-4349-a824-cd9b5e5211b9", "uuid", (success, error) => {
+  //     if (error) {
+  //       console.error(`Error found! ${error}`);
+  //     }
+  //     console.log(`ssuccess ${success} returned`);
+  //   });
+
+
+
+
+
+  //   NativeModules.NamiBridge.setExternalIdentifier("b909a31c-7a73-11ed-a1eb-0242ac120002", "uuid");
+
   }, []);
 
   return <AppNavigation />;
