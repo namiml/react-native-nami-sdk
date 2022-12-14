@@ -17,6 +17,7 @@ import com.namiml.NamiConfiguration
 import com.namiml.NamiExternalIdentifierType
 import com.namiml.NamiLanguageCode
 import com.namiml.NamiLogLevel
+//import com.namiml.NamiApiResponseHandler
 
 class NamiBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
@@ -156,10 +157,10 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
 
         reactApplicationContext.runOnUiQueueThread {
             Nami.setExternalIdentifier(externalIdentifier, useType) { success, error ->
-                if (error) {
-                    completion(success, error)
+                if (error != null) {
+                    completion.invoke(error)
                 }
-                completion(nil, success)
+                completion.invoke(null)
             }
         }
     }
@@ -181,10 +182,10 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         Log.i(LOG_TAG, "Clearing external identifier.")
         reactApplicationContext.runOnUiQueueThread {
             Nami.clearExternalIdentifier()  { success, error ->
-                if (error) {
-                    completion(success, error)
+                if (error != null) {
+                    completion.invoke(error)
                 }
-                completion(nil, success)
+                completion.invoke(null)
             }
         }
     }

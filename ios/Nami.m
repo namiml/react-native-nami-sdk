@@ -121,11 +121,11 @@ RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier  type:(N
     
     NSLog(@"NamiBridge: Setting external identifier %@ of type %@", externalIdentifier, type);
 
-    [Nami setExternalIdentifierWithExternalIdentifier:externalIdentifier type:useType completionHandler:^(BOOL success, NSError * _Nullable error) {
+    [Nami setExternalIdentifierWithExternalIdentifier:externalIdentifier type:useType completion:^(BOOL success, NSError * _Nullable error) {
         if (error) {
-            completion(error.localizedDescription, success)
-        } 
-        completion(nil, success);
+            completion(@[error]);
+        }
+        completion(nil);
     }];
 }
 
@@ -142,11 +142,10 @@ RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
 
 RCT_EXPORT_METHOD(clearExternalIdentifier:(RCTResponseSenderBlock)completion) {
     NSLog(@"NamiBridge: Clearing external identifier.");
-    [Nami clearExternalIdentifierWithCompletionHandler:^(BOOL success, NSError * _Nullable error) {
+    [Nami clearExternalIdentifierWithCompletion:^(BOOL success, NSError * _Nullable error) {
         if (error) {
-            completion(error.localizedDescription, success)
-        } 
-        completion(nil, success);
+            success        }
+        completion(nil);
     }];
 }
 

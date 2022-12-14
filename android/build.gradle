@@ -17,8 +17,9 @@ def safeExtGet(prop, fallback) {
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
 buildscript {
-    ext.kotlin_version = '1.4.31'
+    ext.kotlin_version = '1.6.10'
     // The Android Gradle plugin is only required when opening the android folder stand-alone.
     // This avoids unnecessary downloads and potential conflicts when the library is included as a
     // module dependency in an application project.
@@ -57,7 +58,8 @@ android {
 repositories {
     mavenCentral()
     // ref: https://www.baeldung.com/maven-local-repository
-    maven { url("https://nami-android.s3.amazonaws.com/") }
+    mavenLocal()
+    maven { url("https://packages.namiml.com/NamiSDK/Android/") }
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url("$rootDir/../node_modules/react-native/android")
@@ -74,7 +76,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    implementation "com.namiml:sdk-android:2.0.1"
+    implementation "com.namiml:sdk-android:2.0.2"
 
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }
