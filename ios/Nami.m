@@ -83,7 +83,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
         }
         
         // Start commands with header iformation for Nami to let them know this is a React client.
-        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:2.0.2"]];
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:2.0.4"]];
         
         // Add additional namiCommands app may have sent in.
         NSObject *appCommandStrings = configDict[@"namiCommands"];
@@ -109,7 +109,7 @@ RCT_EXPORT_METHOD(performNamiCommand: (NSString *)command) {
     [NamiCommand performCommand:command];
 }
 
-RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier  type:(NSString *)type) {
+RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier  type:(NSString *)type completion: (RCTResponseSenderBlock) completion) {
     
     NamiExternalIdentifierType useType;
      
@@ -121,7 +121,12 @@ RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier  type:(N
     
     NSLog(@"NamiBridge: Setting external identifier %@ of type %@", externalIdentifier, type);
 
-    [Nami setExternalIdentifierWithExternalIdentifier:externalIdentifier type:useType];
+    [Nami setExternalIdentifierWithExternalIdentifier:externalIdentifier type:useType completion:^(BOOL success, NSError * _Nullable error) {
+        if (error) {
+            completion(@[error]);
+        }
+        completion(nil);
+    }];
 }
 
 RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
@@ -135,13 +140,14 @@ RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
     }
 }
 
-RCT_EXPORT_METHOD(clearExternalIdentifier) {
+RCT_EXPORT_METHOD(clearExternalIdentifier:(RCTResponseSenderBlock)completion) {
     NSLog(@"NamiBridge: Clearing external identifier.");
-    [Nami clearExternalIdentifier];
+    [Nami clearExternalIdentifierWithCompletion:^(BOOL success, NSError * _Nullable error) {
+        if (error) {
+            success        }
+        completion(nil);
+    }];
 }
-
-
-
 
 @end
 
