@@ -26,6 +26,11 @@ const App = () => {
     }
   };
 
+  const onEntitlementsChanged = (event) => {
+    // Add code to check for entitlements activating or deactivating features
+    console.log("ExampleApp: Data for entitlements changed ", event.activeEntitlements);
+  };
+
   const onSignInActivated = (event) => {
     // Add code to present UI for sign-in
     console.log('ExampleApp: Data for sign-in ', event);
@@ -82,6 +87,11 @@ const App = () => {
       eventEmitter.addListener('RestorePurchasesStateChanged', onRestorePurchasesStateChanged);
     }
 
+    if (
+    eventEmitter?._subscriber?._subscriptionsForType?.EntitlementsChanged == null
+    ) {
+      eventEmitter.addListener('EntitlementsChanged', onEntitlementsChanged);
+    }
       
     console.log(
       'ExampleApp: HavePaywallManager',
@@ -98,6 +108,55 @@ const App = () => {
 
     NativeModules.NamiBridge.configure(configDict);
     NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
+
+    NativeModules.NamiBridge.clearExternalIdentifier( (error) => {
+      if (error) {
+        console.error(`EI- Error clearExternalIdentifier! ${error}`);
+      } else {
+        console.log(`EI- clearExternalIdentifier was successful`);
+
+        NativeModules.NamiBridge.getExternalIdentifier( (ei) => {
+          console.log(`EI- getExternalIdentifier after clear ${ei} (expected nil)`);
+        });
+
+        NativeModules.NamiBridge.setExternalIdentifier("f1851c87-e0ff-4349-a824-cd9b5e5211b9", "uuid", (error) => {
+          if (error) {
+            console.error(`EI- Error setExternalIdentifier (f185)! ${error}`);
+          } else {
+            console.log(`EI- setExternalIdentifier was successful (f185)`);
+
+            NativeModules.NamiBridge.getExternalIdentifier( (ei) => {
+              console.log(`EI- getExternalIdentifier after clear ${ei} (expected f185)`);
+            });
+
+            NativeModules.NamiBridge.clearExternalIdentifier( (error) => {
+              if (error) {
+                console.error(`EI- Error clearExternalIdentifier! ${error}`);
+              } else {
+                console.log(`EI- clearExternalIdentifier was successful`);
+
+                NativeModules.NamiBridge.getExternalIdentifier( (ei) => {
+                  console.log(`EI- getExternalIdentifier after clear ${ei} (expected nil)`);
+                });
+
+                NativeModules.NamiBridge.setExternalIdentifier("b909a31c-7a73-11ed-a1eb-0242ac120002", "uuid", (error) => {
+                  if (error) {
+                    console.error(`EI- Error setExternalIdentifier (b909)! ${error}`);
+                  } else {
+                    console.log(`EI- setExternalIdentifier was successful (b909)`);
+
+                    NativeModules.NamiBridge.getExternalIdentifier( (ei) => {
+                      console.log(`EI- getExternalIdentifier after clear ${ei} (expected b909)`);
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+
   }, []);
 
   return <AppNavigation />;

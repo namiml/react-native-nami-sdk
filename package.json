@@ -1,7 +1,7 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "2.0.0",
-  "description": "React Native Module for Nami - The Smartest Way to Sell Subscriptions.",
+  "version": "2.0.4",
+  "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -20,12 +20,15 @@
     "paywall",
     "react-native",
     "storekit",
-    "subscriptions"
+    "subscriptions",
+    "iap",
+    "play-billing",
+    "payments"
   ],
   "author": {
-    "username": "namiml",
-    "name": "Nami ML, Inc.",
-    "email": "francisco.pena@namiml.com"
+    "username": "hellonami",
+    "name": "Nami ML Inc.",
+    "email": "hello@namiml.com"
   },
   "contributors": [
     {
@@ -51,7 +54,7 @@
     "type": "git",
     "url": "git+https://github.com/namiml/react-native-nami-sdk.git"
   },
-  "homepage": "https://www.nami.ml",
+  "homepage": "https://www.namiml.com",
   "bugs": {
     "url": "https://github.com/namiml/react-native-nami-sdk/issues"
   }

@@ -17,6 +17,7 @@ import com.namiml.NamiConfiguration
 import com.namiml.NamiExternalIdentifierType
 import com.namiml.NamiLanguageCode
 import com.namiml.NamiLogLevel
+//import com.namiml.NamiApiResponseHandler
 
 class NamiBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
@@ -127,7 +128,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             } else {
                 Arguments.createArray()
             }
-        val settingsList = mutableListOf("extendedClientInfo:react-native:1.2.1")
+        val settingsList = mutableListOf("extendedClientInfo:react-native:2.0.4")
         namiCommandsReact?.toArrayList()?.filterIsInstance<String>()?.let { commandsFromReact ->
             settingsList.addAll(commandsFromReact)
         }
@@ -144,7 +145,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun setExternalIdentifier(externalIdentifier: String, externalIDType: String) {
+    fun setExternalIdentifier(externalIdentifier: String, externalIDType: String, completion: Callback) {
 
         Log.i(LOG_TAG, "Setting external identifier $externalIdentifier of type $externalIDType")
 
@@ -155,7 +156,12 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         }
 
         reactApplicationContext.runOnUiQueueThread {
-            Nami.setExternalIdentifier(externalIdentifier, useType)
+            Nami.setExternalIdentifier(externalIdentifier, useType) { success, error ->
+                if (error != null) {
+                    completion.invoke(error)
+                }
+                completion.invoke(null)
+            }
         }
     }
 
@@ -172,10 +178,15 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun clearExternalIdentifier() {
+    fun clearExternalIdentifier(completion: Callback) {
         Log.i(LOG_TAG, "Clearing external identifier.")
         reactApplicationContext.runOnUiQueueThread {
-            Nami.clearExternalIdentifier()
+            Nami.clearExternalIdentifier()  { success, error ->
+                if (error != null) {
+                    completion.invoke(error)
+                }
+                completion.invoke(null)
+            }
         }
     }
 }

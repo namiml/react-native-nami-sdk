@@ -1,10 +1,21 @@
-![Nami SDK logo](https://nami-brand.s3.amazonaws.com/images/Nami.SDK.2.0.120x137.png)
+![Nami SDK logo](https://cdn.namiml.com/brand/sdk/Nami-SDK@0.5x.png)
 
 # React Native Bridge for the Nami SDK
 
-Nami is the smartest way to sell subscriptions.  Our SDK is built for the subscription economy, providing an end-to-end solution powered by on-device machine learning to accelerate your in-app purchases.
+Nami is easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.
 
-The Nami SDK takes care of platform specific implementation details to offer in-app purchases so you can focus on building your core app experience.
+ This library helps you easily offer in-app purchases and subscriptions using Apple App Store StoreKit & Google Play Billing APIs.
+  - No IAP code to write.
+  - Focus on your app experience.
+  - All edge cases are handled and no server is required.
+  - Includes is powerful built-in paywalls templates, built with native SwiftUI and Jetpack Compose
+  - Update paywalls easily using a browser-based paywall CMS.
+  - Conduct paywall A/B tests, to improve your conversion rate.
+  - Robust subscription analytics, webhooks, and much more.
+
+Requires an account with Nami. The free tier is generous and includes everything you need to get up and running.
+
+See https://www.namiml.com for more details and to create a free account.
 
 ## Getting started with React Native and Nami
 

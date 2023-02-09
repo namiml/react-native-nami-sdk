@@ -1,0 +1,70 @@
+name: Build Bridge
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git Tag, Branch or SHA to build"
+        required: true
+        default: "develop"
+      earlyaccess:
+        description: "Is this a early access build?"
+        default: true
+        type: boolean        
+    secrets:
+      BUILD_USER_PAT:
+        required: true    
+
+jobs:
+  build:
+    name: Build Bridge release
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+      id-token: write
+    steps:
+
+      # clone the repo at a specific version
+      - name: Checkout ${{ inputs.ref }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.ref }}
+
+      # human error checks
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.10"
+
+      - name: Release Preflight Checks
+        run: |
+          python3 build-utils/preflight.py
+        env:
+          NAMI_SDK_VERSION: ${{ inputs.version }}
+
+      - name: Setup .npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Run Yarn
+        run: |
+          yarn --frozen-lockfile
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish
+        run: |
+          npm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Github Release
+        run: |-
+          #sh gh-release-command.sh
+          echo "Release me"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
