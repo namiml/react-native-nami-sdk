@@ -19,7 +19,7 @@ target 'Analytics' do
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable the next line.
   use_flipper!({ "Flipper-DoubleConversion" => "1.1.7" })
-  
+
   use_native_modules!
 
   target 'AnalyticsTests' do
@@ -27,7 +27,7 @@ target 'Analytics' do
     # Pods for testing
   end
 
-  
+
   post_install do |installer|
     react_native_post_install(installer)
     #__apply_Xcode_12_5_M1_post_install_workaround(installer)
@@ -43,7 +43,7 @@ target 'Analytics' do
           build_phase = target.frameworks_build_phase
           puts("Determining if react-native-nami-sdk build phase needs correction.")
           unless build_phase.files_references.include?(fileref)
-            puts("Adding Nami.xcframework to react-native-nami-sdk target")            
+            puts("Adding Nami.xcframework to react-native-nami-sdk target")
             build_phase.add_file_reference(fileref)
           end
          end
@@ -52,4 +52,3 @@ target 'Analytics' do
   end
   end
 end
-

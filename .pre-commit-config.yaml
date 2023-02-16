@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.8.0
+    hooks:
+      - id: eslint
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        exclude: ^.*\b(\.(js|jsx|tsx).snap)\b$
+  - repo: https://github.com/nicklockwood/SwiftFormat
+    rev: 0.50.8 
+    hooks:
+      - id: swiftformat
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.6.0
+    hooks:
+      - id: pretty-format-kotlin

@@ -28,7 +28,7 @@
         productDict[@"priceLanguage"] = productInt.priceLocale.languageCode;
         productDict[@"priceCountry"] = productInt.priceLocale.countryCode;
         productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
-        
+
         // Add smart text processed values for sku buttons to sku dictionary
         productDict[@"displayText"] = [sku namiDisplayText];
         productDict[@"displaySubText"] = [sku namiSubDisplayText];
@@ -71,18 +71,18 @@
 
  + (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiPurchase *)purchase {
      NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
-     
+
      purchaseDict[@"skuIdentifier"] = purchase.skuID;
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
 
      // Removed, not sure why, should add back in when possible.
      //     purchaseDict[@"purchaseInitiatedTimestamp"] = [self javascriptDateFromNSDate:purchase.purchaseInitiatedTimestamp];
-     
+
      NSDate *subscriptionExpirationDate = purchase.expires;
      if (subscriptionExpirationDate != nil) {
          purchaseDict[@"subscriptionExpirationDate"] = [self javascriptDateFromNSDate:subscriptionExpirationDate];
      }
-     
+
      NSString *convertedSourceString = @"UNKNOWN";
      switch (purchase.purchaseSource) {
           case 0:
@@ -98,9 +98,9 @@
              break;
      }
      purchaseDict[@"purchaseSource"] =  convertedSourceString;
-     
+
 //     NamiSKU *purchaseSku = [purchase ]
-     
+
      return purchaseDict;
  }
 
@@ -109,7 +109,7 @@
 + (NSArray *)stripPresentationPositionFromOrderedMetadataForPaywallMetaDict: (NSDictionary *)paywallMeta {
     NSArray *baseSkuArray = [paywallMeta objectForKey:@"sku_ordered_metadata"];
     NSMutableArray *newOrderedMetadata = [NSMutableArray new];
-    
+
     if ( [baseSkuArray isKindOfClass:[NSArray class]] ) {
         for (NSDictionary *baseSkuDict in baseSkuArray) {
             NSMutableDictionary *skuFormattingDict = [NSMutableDictionary dictionaryWithDictionary:baseSkuDict];
@@ -127,12 +127,12 @@
     entitlementDict[@"namiID"] = [entitlement namiID] ? [entitlement namiID] : @"";
     entitlementDict[@"desc"] = [entitlement desc] ? [entitlement desc] : @"";
     entitlementDict[@"name"] = [entitlement name] ? [entitlement name] : @"";
-    
+
     if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceID] length] == 0) {
         NSLog(@"NamiBridge: Bad entitlement in system, empty referenceID.");
         return nil;
     }
-    
+
     NSArray <NamiPurchase *>*activePurchases = [entitlement activePurchases];
     NSMutableArray *convertedActivePurchases = [NSMutableArray array];
     for (NamiPurchase *purchase in activePurchases) {
@@ -142,7 +142,7 @@
         }
     }
     entitlementDict[@"activePurchases"] = convertedActivePurchases;
-    
+
     NSArray <NamiSKU *>*purchasedSKUs = [entitlement purchasedSKUs];
        NSMutableArray *convertedPurchasedSKUs = [NSMutableArray array];
        for (NamiSKU *sku in purchasedSKUs) {
@@ -152,8 +152,8 @@
            }
        }
        entitlementDict[@"purchasedSKUs"] = convertedPurchasedSKUs;
-    
-    
+
+
     NSArray <NamiSKU *>*relatedSKUs = [entitlement relatedSKUs];
     NSMutableArray *convertedRelatedSKUs = [NSMutableArray array];
     for (NamiSKU *sku in relatedSKUs) {
@@ -163,7 +163,7 @@
         }
     }
     entitlementDict[@"relatedSKUs"] = convertedRelatedSKUs;
-    
+
     NamiPurchase *lastPurchase;
     for (NamiPurchase *purchase in [entitlement activePurchases]) {
         if (lastPurchase == NULL || ([lastPurchase purchaseInitiatedTimestamp] < [purchase purchaseInitiatedTimestamp])) {
@@ -173,9 +173,9 @@
     if (lastPurchase != NULL) {
 //        entitlementDict[@"latestPurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
     }
-    
+
     NSString *lastPurchaseSKUID = [lastPurchase skuID];
-    
+
     NamiSKU *lastPurchasedSKU;
     if (lastPurchaseSKUID != NULL ) {
         for (NamiSKU *sku in [entitlement purchasedSKUs]) {
@@ -184,7 +184,7 @@
             }
         }
     }
-    
+
     if (lastPurchasedSKU != NULL) {
         lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
     }
@@ -192,7 +192,7 @@
     if (lastPurchasedSKU != NULL) {
 //        entitlementDict[@"lastPurchasedSKU"] = [NamiBridgeUtil skuToSKUDict:lastPurchasedSKU];
     }
-   
+
     return entitlementDict;
 }
 
@@ -201,23 +201,23 @@
 + (NSString *)javascriptDateFromNSDate:(NSDate *)purchaseTimestamp {
     NSTimeZone *UTC = [NSTimeZone timeZoneWithAbbreviation: @"UTC"];
     NSISO8601DateFormatOptions options = NSISO8601DateFormatWithInternetDateTime | NSISO8601DateFormatWithDashSeparatorInDate | NSISO8601DateFormatWithColonSeparatorInTime | NSISO8601DateFormatWithTimeZone;
-    
+
     return [NSISO8601DateFormatter stringFromDate:purchaseTimestamp timeZone:UTC formatOptions:options];
 }
 
 
 + (NSDictionary<NSString *,NSString *> *) customerJourneyStateDict {
     CustomerJourneyState *journeyState = [NamiCustomerManager currentCustomerJourneyState];
-    
+
     BOOL formerSubscriber = [journeyState formerSubscriber];
     BOOL inGracePeriod = [journeyState inGracePeriod];
     BOOL inTrialPeriod = [journeyState inTrialPeriod];
     BOOL inIntroOfferPeriod = [journeyState inIntroOfferPeriod];
-    
+
     BOOL isCancelled = [journeyState isCancelled];
     BOOL inPause = [journeyState inPause];
     BOOL inAccountHold = [journeyState inAccountHold];
-    
+
     NSDictionary *journeyDict = @{@"formerSubscriber":@(formerSubscriber),
                                   @"inGracePeriod":@(inGracePeriod),
                                   @"inTrialPeriod":@(inTrialPeriod),
@@ -231,52 +231,52 @@
 
 + (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling {
     NSMutableDictionary<NSString *,id> *stylingDict = [NSMutableDictionary new];
-    if (styling != nil) {        
+    if (styling != nil) {
         stylingDict[@"backgroundColor"] = [NamiBridgeUtil hexStringForColor: styling.backgroundColor];
-        
+
         stylingDict[@"bodyFontSize"] = @(styling.bodyFontSize);
         stylingDict[@"bodyTextColor"] = [NamiBridgeUtil hexStringForColor: styling.bodyTextColor];
         stylingDict[@"bodyShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.bodyShadowColor];
         stylingDict[@"bodyShadowRadius"] = @(styling.bodyShadowRadius);
-        
+
         stylingDict[@"titleFontSize"] = @(styling.titleFontSize);
         stylingDict[@"titleTextColor"] = [NamiBridgeUtil hexStringForColor: styling.titleTextColor];
         stylingDict[@"titleShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.titleShadowColor];
         stylingDict[@"titleShadowRadius"] = @(styling.titleShadowRadius);
-        
+
         stylingDict[@"closeButtonFontSize"] = @(styling.closeButtonFontSize);
         stylingDict[@"closeButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.closeButtonTextColor];
         stylingDict[@"closeButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.closeButtonShadowColor];
         stylingDict[@"closeButtonShadowRadius"] = @(styling.closeButtonShadowRadius);
-        
+
         stylingDict[@"bottomOverlayColor"] = [NamiBridgeUtil hexStringForColor: styling.bottomOverlayColor];
         stylingDict[@"bottomOverlayCornerRadius"] = @(styling.bottomOverlayCornerRadius);
-        
+
         stylingDict[@"skuButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonColor];
         stylingDict[@"skuButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonTextColor];
-        
+
         stylingDict[@"featuredSkusButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonColor];
         stylingDict[@"featuredSkusButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonTextColor];
-        
+
         stylingDict[@"signinButtonFontSize"] = @(styling.signinButtonFontSize);
         stylingDict[@"signinButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.signinButtonTextColor];
         stylingDict[@"signinButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.signinButtonShadowColor];
         stylingDict[@"signinButtonShadowRadius"] = @(styling.signinButtonShadowRadius);
-        
+
         stylingDict[@"restoreButtonFontSize"] = @(styling.restoreButtonFontSize);
         stylingDict[@"restoreButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.restoreButtonTextColor];
         stylingDict[@"restoreButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.restoreButtonShadowColor];
         stylingDict[@"restoreButtonShadowRadius"] = @(styling.restoreButtonShadowRadius);
-        
+
         stylingDict[@"purchaseTermsFontSize"] = @(styling.purchaseTermsFontSize);
         stylingDict[@"purchaseTermsTextColor"] = [NamiBridgeUtil hexStringForColor: styling.purchaseTermsTextColor];
         stylingDict[@"purchaseTermsShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.purchaseTermsShadowColor];
         stylingDict[@"purchaseTermsShadowRadius"] = @(styling.purchaseTermsShadowRadius);
-        
+
 
         stylingDict[@"termsLinkColor"] = styling.termsLinkColor;
     }
-    
+
     return stylingDict;
 }
 

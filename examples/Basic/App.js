@@ -64,7 +64,7 @@ const App = () => {
             );
 	}
     }
-    
+
   useEffect(() => {
     console.log('ExampleApp: Nami Bridge is');
     console.log(NativeModules.NamiBridge);
@@ -92,7 +92,7 @@ const App = () => {
     ) {
       eventEmitter.addListener('EntitlementsChanged', onEntitlementsChanged);
     }
-      
+
     console.log(
       'ExampleApp: HavePaywallManager',
       NativeModules.NamiPaywallManagerBridge,

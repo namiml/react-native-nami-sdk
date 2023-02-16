@@ -34,16 +34,16 @@ RCT_EXPORT_METHOD(isEntitlementActive:(nonnull NSString*)entitlementRefID comple
 RCT_EXPORT_METHOD(getEntitlements:(RCTResponseSenderBlock)completion)
 {
     NSArray<NamiEntitlement *> *entitlements = [NamiEntitlementManager getEntitlements];
-    
+
     NSMutableArray *entitlementDicts = [NSMutableArray new];
-       
+
        for (NamiEntitlement *entitlement in entitlements) {
            NSDictionary *entitlementDict = [NamiBridgeUtil entitlementToEntitlementDict:entitlement];
            if ([entitlementDict count] > 0) {
                [entitlementDicts addObject:entitlementDict];
            }
        }
-       
+
        completion(@[entitlementDicts]);
 }
 
@@ -51,16 +51,16 @@ RCT_EXPORT_METHOD(getEntitlements:(RCTResponseSenderBlock)completion)
 RCT_EXPORT_METHOD(activeEntitlements:(RCTResponseSenderBlock)completion)
 {
     NSArray<NamiEntitlement *> *entitlements = [NamiEntitlementManager activeEntitlements];
-    
+
     NSMutableArray *entitlementDicts = [NSMutableArray new];
-    
+
     for (NamiEntitlement *entitlement in entitlements) {
         NSDictionary *entitlementDict = [NamiBridgeUtil entitlementToEntitlementDict:entitlement];
         if ([entitlementDict count] > 0) {
             [entitlementDicts addObject:entitlementDict];
         }
     }
-    
+
     completion(@[entitlementDicts]);
 }
 
@@ -77,9 +77,9 @@ RCT_EXPORT_METHOD(setEntitlements:(NSArray *)entitlementSetterDicts)
             NSString *expiresStr = entitlementSetterDict[@"expires"];
             // TODO: figure out reverse parsing of date string passed in
             NSDate* expires = NULL;
-            
+
             NSString *platormStr = entitlementSetterDict[@"platform"];
-            
+
             NamiPlatformType platform = NamiPlatformTypeOther;
             if ([platormStr isEqualToString:@"android"]) {
                 platform = NamiPlatformTypeAndroid;
@@ -90,16 +90,16 @@ RCT_EXPORT_METHOD(setEntitlements:(NSArray *)entitlementSetterDicts)
             } else if ([platormStr isEqualToString:@"web"]) {
                 platform = NamiPlatformTypeWeb;
             }
-            
+
             NamiEntitlementSetter *setter = [NamiEntitlementSetter alloc];
             setter = [setter initWithId:referenceID platform:platform purchasedSKUid:purchasedSKUid expires:expires];
-            
+
             [entitlementSetters addObject:setter];
         } else {
             NSLog(@"Warning, entitlement to set had empty referenceID, whole entitlement is \n %@", entitlementSetterDict);
         }
     }
-    
+
     [NamiEntitlementManager setEntitlements:entitlementSetters];
 }
 

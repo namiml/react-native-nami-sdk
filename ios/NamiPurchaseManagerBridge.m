@@ -47,9 +47,9 @@ RCT_EXPORT_METHOD(purchases:(RCTResponseSenderBlock)completion)
             anyProductNil = YES;
         }
         NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
-        [convertedPurchaseDicts addObject:purchaseDict];       
+        [convertedPurchaseDicts addObject:purchaseDict];
     }
-    
+
     completion(@[convertedPurchaseDicts]);
 }
 
@@ -62,7 +62,7 @@ RCT_EXPORT_METHOD(isSKUIDPurchased:(nonnull NSString*)skuID completion:(RCTRespo
 RCT_EXPORT_METHOD(restorePurchasesWithCompletionHandler:(RCTResponseSenderBlock)completion)
 {
     NSLog(@"NamiBridge: Info: Calling RestorePurchasesWithCompletionHandler");
-    
+
     [NamiPurchaseManager restorePurchasesWithStatehandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
         NSDictionary *retDict = [[NamiEmitter reactInstance] buildRestorePurchasesStateChangedDict:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
         completion(@[retDict]);
@@ -72,7 +72,7 @@ RCT_EXPORT_METHOD(restorePurchasesWithCompletionHandler:(RCTResponseSenderBlock)
 RCT_EXPORT_METHOD(restorePurchases)
 {
     NSLog(@"NamiBridge: Info: Calling RestorePurchases");
-    
+
     [NamiPurchaseManager restorePurchasesWithStatehandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
         [[NamiEmitter reactInstance] sendRestorePurchasesStateChanged:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
     }];
@@ -127,7 +127,7 @@ RCT_EXPORT_METHOD(canPresentCodeRedemptionSheet:(RCTResponseSenderBlock)completi
                 NSLog(@"NamiBridge: Info: Purchase result is %@, purchased is %d, purchaseState is %@, error is %@", purchase, (purchaseState == NamiPurchaseStatePurchased), [NSNumber numberWithInt:(int)purchaseState], [error localizedDescription]);
                 if (purchaseState == NamiPurchaseStatePurchased) {
                     completion(@[[NSNumber numberWithBool:true]]);
-                } 
+                }
             }];
         } else {
             completion(@[[NSNumber numberWithBool:false]]);
