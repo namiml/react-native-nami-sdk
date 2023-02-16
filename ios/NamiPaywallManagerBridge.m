@@ -83,18 +83,18 @@ RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPayw
         }
 
         NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
-        // This part is really meant to be internally facing, scrub from dictionary        
+        // This part is really meant to be internally facing, scrub from dictionary
         // Strip out presention_position from all listed sku items
-        NSArray *cleanedOrderdMetadata = [NamiBridgeUtil stripPresentationPositionFromOrderedMetadataForPaywallMetaDict:paywallMeta];        
+        NSArray *cleanedOrderdMetadata = [NamiBridgeUtil stripPresentationPositionFromOrderedMetadataForPaywallMetaDict:paywallMeta];
         [paywallMeta setObject:cleanedOrderdMetadata  forKey:@"formatted_skus"];
-        
+
         [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
         [paywallMeta removeObjectForKey:@"skus"];
 
         NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
         paywallMeta[@"styleData"] = paywallStylingDict;
-        
-        
+
+
         NSArray *wrapperArray = @[@{ @"namiSkus": productDicts,
                                      @"developerPaywallID": developerPaywallID,
                                      @"paywallMetadata": paywallMeta }];

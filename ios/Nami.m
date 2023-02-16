@@ -2,8 +2,7 @@
 //  Nami.m
 //  RNNami
 //
-//  Created by Kendall Gelner on 1/7/20.
-//  Copyright © 2020 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -25,10 +24,10 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
         NSLog(@"Configure dictionary is %@", configDict);
     }
     NSString *appID = configDict[@"appPlatformID-apple"];
-    
+
     if ([appID length] > 0 ) {
         NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformID:appID];
-        
+
         NSString *logLevelString = configDict[@"logLevel"];
         if ([logLevelString isEqualToString:@"ERROR" ]) {
             config.logLevel = NamiLogLevelError;
@@ -40,7 +39,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
             // If they messed up the params, just set logging to full.
             config.logLevel = NamiLogLevelDebug;
         }
-        
+
         NSString *languageString = configDict[@"namiLanguageCode"];
         if ([logLevelString length] > 0) {
             NSLog(@"Nami language code from config dictionary is %@", languageString);
@@ -51,7 +50,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
                 NSLog(@"Warning: Nami language code from config dictionary %@ not found in list of available Nami Language Codes:\n%@", languageString, [NamiLanguageCodes allAvailiableNamiLanguageCodes]);
             }
         }
-        
+
         NSObject *bypassString = configDict[@"bypassStore"];
         if ( bypassString != NULL )
         {
@@ -66,7 +65,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
                 }
             }
         }
-        
+
         NSObject *developmentModeString = configDict[@"developmentMode"];
         if ( developmentModeString != NULL )
         {
@@ -81,10 +80,10 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
                 }
             }
         }
-        
+
         // Start commands with header iformation for Nami to let them know this is a React client.
-        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:2.0.4"]];
-        
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:2.0.5"]];
+
         // Add additional namiCommands app may have sent in.
         NSObject *appCommandStrings = configDict[@"namiCommands"];
         if ( appCommandStrings != NULL ) {
@@ -97,10 +96,10 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
                 }
             }
         }
-        
+
         config.namiCommands = namiCommandStrings;
 
-        
+
         [Nami configureWithNamiConfig:config];
     }
 }
@@ -110,15 +109,15 @@ RCT_EXPORT_METHOD(performNamiCommand: (NSString *)command) {
 }
 
 RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier  type:(NSString *)type completion: (RCTResponseSenderBlock) completion) {
-    
+
     NamiExternalIdentifierType useType;
-     
+
     if ( [type isEqualToString:@"sha256"] ) {
         useType = NamiExternalIdentifierTypeSha256;
     } else {
         useType = NamiExternalIdentifierTypeUuid;
     }
-    
+
     NSLog(@"NamiBridge: Setting external identifier %@ of type %@", externalIdentifier, type);
 
     [Nami setExternalIdentifierWithExternalIdentifier:externalIdentifier type:useType completion:^(BOOL success, NSError * _Nullable error) {
@@ -132,7 +131,7 @@ RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier  type:(N
 RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
 {
     NSString *externalIdentifier = [Nami getExternalIdentifier];
-   
+
     if (externalIdentifier == NULL || [externalIdentifier length] == 0) {
         completion(@[]);
     } else {
@@ -144,7 +143,8 @@ RCT_EXPORT_METHOD(clearExternalIdentifier:(RCTResponseSenderBlock)completion) {
     NSLog(@"NamiBridge: Clearing external identifier.");
     [Nami clearExternalIdentifierWithCompletion:^(BOOL success, NSError * _Nullable error) {
         if (error) {
-            success        }
+            completion(@[error]);
+        }
         completion(nil);
     }];
 }

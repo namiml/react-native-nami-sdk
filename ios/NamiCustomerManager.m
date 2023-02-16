@@ -23,7 +23,7 @@
 RCT_EXPORT_METHOD(currentCustomerJourneyState:(RCTResponseSenderBlock)completion)
 {
     NSDictionary *journeyDict = [NamiBridgeUtil customerJourneyStateDict];
-    
+
     completion(@[journeyDict]);
 }
 

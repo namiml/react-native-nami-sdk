@@ -25,10 +25,10 @@ const HomeScreen = (props) => {
   const {data} = useDataContext();
 
   let preparePaywallListenSubscriber;
-    
+
   const {NamiEmitter} = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
- 
+
   const onPreparePaywallFinished = (result) => {
     console.log('ExampleApp: Prepare Paywall complete.');
       if (result.success == true) {
@@ -40,7 +40,7 @@ const HomeScreen = (props) => {
 
     preparePaywallListenSubscriber?.remove();
   }
- 
+
   const subscribeAction = () => {
     console.log('ExampleApp: Asking Nami to raise paywall.');
     if (

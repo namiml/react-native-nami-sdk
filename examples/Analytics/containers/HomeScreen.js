@@ -18,7 +18,7 @@ const HomeScreen = (props) => {
   const {purchases} = usePurchasesContext();
 
   let preparePaywallListenSubscriber;
-    
+
   const onPreparePaywallFinished = (result) => {
     if (result.success == true) {
       console.log('prepare paywall success')
@@ -29,7 +29,7 @@ const HomeScreen = (props) => {
     preparePaywallListenSubscriber?.remove();
   }
 
-    
+
   const subscribeAction = () => {
     if (
        eventEmitter?._subscriber?._subscriptionsForType?.PreparePaywallFinished == null
