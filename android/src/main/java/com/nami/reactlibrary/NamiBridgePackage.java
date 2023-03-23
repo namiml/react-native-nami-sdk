@@ -47,6 +47,3 @@ public class NamiBridgePackage implements ReactPackage {
         );
     }
 }
-
-
-

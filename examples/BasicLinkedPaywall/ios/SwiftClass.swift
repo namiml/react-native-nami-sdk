@@ -10,5 +10,5 @@ import Foundation
 
 /// This class is created only to import Swift related libraries properly for the project
 class SwiftClass {
-  var someString: String?
+    var someString: String?
 }

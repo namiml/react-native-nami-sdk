@@ -124,7 +124,7 @@ const LinkedPaywall = (props) => {
                   <Text style={styles.textStyle} onPress={() => Linking.openURL(tos_url)}>
                    {tos_text}
                   </Text>
-                   {' '}and{' '} 
+                   {' '}and{' '}
                   <Text style={styles.textStyle} onPress={() => Linking.openURL(privacy_url)}>
                     {privacy_text}
             </Text>

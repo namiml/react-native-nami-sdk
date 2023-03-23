@@ -9,5 +9,5 @@
 import Foundation
 
 class SwiftClass {
-  let someVar: String = ""
+    let someVar: String = ""
 }

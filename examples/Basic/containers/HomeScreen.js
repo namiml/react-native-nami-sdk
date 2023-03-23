@@ -20,10 +20,10 @@ const HomeScreen = (props) => {
   const {purchases} = usePurchasesContext();
 
   let preparePaywallListenSubscriber;
-    
+
   const {NamiEmitter} = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
- 
+
   const onPreparePaywallFinished = (result) => {
     if (result.success == true) {
       console.log('prepare paywall success')
