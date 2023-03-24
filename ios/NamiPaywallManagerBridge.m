@@ -39,11 +39,10 @@
     return self;
 }
 
-//  Didn't found new API
-//RCT_EXTERN_METHOD(raisePaywall)
-//- (void)raisePaywall {
-//  [NamiPaywallManager raisePaywallFromVC:nil];
-//}
+RCT_EXTERN_METHOD(raisePaywall)
+- (void)raisePaywall {
+    [NamiCampaignManager launch];
+}
 
 //    Didn't found new API
 //RCT_EXPORT_METHOD(raisePaywallByDeveloperPaywallId:(NSString * _Nonnull) developerPaywallID)
@@ -62,7 +61,6 @@ RCT_EXPORT_METHOD(blockPaywallRaise:(BOOL)blockRaise)
 //    BOOL canRaise = [NamiPaywallManager canRaisePaywall];
 //    completion(@[[NSNumber numberWithBool:canRaise]]);
 //}
-
 
 RCT_EXPORT_METHOD(presentNamiPaywall:(NSArray *)skuIDs metapaywallDefinition:(NSDictionary *)paywallDict)
 {
@@ -102,32 +100,6 @@ RCT_EXPORT_METHOD(presentNamiPaywall:(NSArray *)skuIDs metapaywallDefinition:(NS
 //        completion(wrapperArray);
 //    }];
 //}
-
-//    Didn't found new API
-//RCT_EXPORT_METHOD(paywallImpression:(NSString *)developerPaywallID)
-//{
-//    [NamiPaywallManager paywallImpressionWithDeveloperID:developerPaywallID];
-//}
-
-//    Didn't found new API
-//RCT_EXPORT_METHOD( preparePaywallForDisplay:(BOOL)backgroundImageRequired
-//    imageFetchTimeout:(double)imageFetchTimeout )
-//{
-//    [NamiPaywallManager preparePaywallForDisplayWithBackgroundImageRequired:backgroundImageRequired imageFetchTimeout:imageFetchTimeout prepareHandler:^(BOOL success, NSError * _Nullable error) {
-//        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success developerPaywallID:nil error:error];
-//    }];
-//}
-
-//    Didn't found new API
-//RCT_EXPORT_METHOD(preparePaywallForDisplayByDeveloperPaywallId:(NSString *)developerPaywallID
-//    backgroundImageRequired: (BOOL)backgroundImageRequired
-//    imageFetchTimeout:(double)imageFetchTimeout )
-//{
-//    [NamiPaywallManager preparePaywallForDisplayWithDeveloperPaywallID:developerPaywallID backgroundImageRequired:backgroundImageRequired imageFetchTimeout:imageFetchTimeout prepareHandler:^(BOOL success, NSError * _Nullable error) {
-//        [[NamiEmitter reactInstance] sendEventPreparePaywallForDisplayFinishedWithResult:success developerPaywallID:developerPaywallID error:error];
-//    }];
-//}
-
 
 RCT_EXPORT_METHOD(processSmartTextForProducts:(NSString *)smartText  skuIDs:(NSArray<NSString *> *)skuIDs completion:(RCTResponseSenderBlock)completion)
 {

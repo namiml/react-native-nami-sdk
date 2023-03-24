@@ -66,22 +66,6 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
             }
         }
 
-        //    Didn't found new API
-//        NSObject *developmentModeString = configDict[@"developmentMode"];
-//        if ( developmentModeString != NULL )
-//        {
-//            NSLog(@"bypassStore from dictionary is %@", configDict[@"developmentMode"]);
-//            if ([developmentModeString isKindOfClass:[NSNumber class]]) {
-//                config.developmentMode = [((NSNumber *)developmentModeString) boolValue];
-//            } else if ([developmentModeString isKindOfClass:[NSString class]] ) {
-//                if ([[((NSString *)developmentModeString) lowercaseString] hasPrefix:@"t"] )
-//                {
-//                    // bypass is false by default, so we only worry about checking for enabling bypass
-//                    config.developmentMode = true;
-//                }
-//            }
-//        }
-
         // Start commands with header iformation for Nami to let them know this is a React client.
         NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:2.0.5"]];
 
