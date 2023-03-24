@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-#import <Nami/Nami.h>
+#import <NamiApple/NamiApple.h>
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>

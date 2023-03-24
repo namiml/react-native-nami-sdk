@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Nami/Nami.h>
+#import <NamiApple/NamiApple.h>
 
 #import "NamiBridgeUtil.h"
 
@@ -17,7 +17,7 @@
     + (NSDictionary<NSString *,NSString *> *) skuToSKUDict:(NamiSKU *)sku {
         NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
 
-        productDict[@"skuIdentifier"] = sku.platformID;
+        productDict[@"skuIdentifier"] = sku.platformId;
 
         SKProduct *productInt = sku.product;
         productDict[@"localizedTitle"] = productInt.localizedTitle;
@@ -30,8 +30,8 @@
         productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
 
         // Add smart text processed values for sku buttons to sku dictionary
-        productDict[@"displayText"] = [sku namiDisplayText];
-        productDict[@"displaySubText"] = [sku namiSubDisplayText];
+        productDict[@"displayText"] = [sku localizedDisplayText];
+        productDict[@"displaySubText"] = [sku localizedSubDisplayText];
 
         if (@available(iOS 12.0, *)) {
             if (productInt != nil && productInt.subscriptionGroupIdentifier != nil) {
@@ -72,7 +72,7 @@
  + (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiPurchase *)purchase {
      NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
 
-     purchaseDict[@"skuIdentifier"] = purchase.skuID;
+     purchaseDict[@"skuIdentifier"] = purchase.skuId;
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
 
      // Removed, not sure why, should add back in when possible.
@@ -123,12 +123,12 @@
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
     NSMutableDictionary<NSString *,id> *entitlementDict = [NSMutableDictionary new];
     NSLog(@"Converting entitlement %@", entitlement);
-    entitlementDict[@"referenceID"] = [entitlement referenceID];
-    entitlementDict[@"namiID"] = [entitlement namiID] ? [entitlement namiID] : @"";
+    entitlementDict[@"referenceID"] = [entitlement referenceId];
+    entitlementDict[@"namiID"] = [entitlement namiId] ? [entitlement namiId] : @"";
     entitlementDict[@"desc"] = [entitlement desc] ? [entitlement desc] : @"";
     entitlementDict[@"name"] = [entitlement name] ? [entitlement name] : @"";
 
-    if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceID] length] == 0) {
+    if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceId] length] == 0) {
         NSLog(@"NamiBridge: Bad entitlement in system, empty referenceID.");
         return nil;
     }
@@ -143,7 +143,7 @@
     }
     entitlementDict[@"activePurchases"] = convertedActivePurchases;
 
-    NSArray <NamiSKU *>*purchasedSKUs = [entitlement purchasedSKUs];
+    NSArray <NamiSKU *>*purchasedSKUs = [entitlement purchasedSkus];
        NSMutableArray *convertedPurchasedSKUs = [NSMutableArray array];
        for (NamiSKU *sku in purchasedSKUs) {
            NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
@@ -154,7 +154,7 @@
        entitlementDict[@"purchasedSKUs"] = convertedPurchasedSKUs;
 
 
-    NSArray <NamiSKU *>*relatedSKUs = [entitlement relatedSKUs];
+    NSArray <NamiSKU *>*relatedSKUs = [entitlement relatedSkus];
     NSMutableArray *convertedRelatedSKUs = [NSMutableArray array];
     for (NamiSKU *sku in relatedSKUs) {
         NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
@@ -174,19 +174,19 @@
 //        entitlementDict[@"latestPurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
     }
 
-    NSString *lastPurchaseSKUID = [lastPurchase skuID];
+    NSString *lastPurchaseSKUID = [lastPurchase skuId];
 
     NamiSKU *lastPurchasedSKU;
     if (lastPurchaseSKUID != NULL ) {
-        for (NamiSKU *sku in [entitlement purchasedSKUs]) {
-            if ( [[sku platformID] isEqualToString:lastPurchaseSKUID] ) {
+        for (NamiSKU *sku in [entitlement purchasedSkus]) {
+            if ( [[sku platformId] isEqualToString:lastPurchaseSKUID] ) {
                 lastPurchasedSKU = sku;
             }
         }
     }
 
     if (lastPurchasedSKU != NULL) {
-        lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
+        lastPurchasedSKU = [[entitlement purchasedSkus] lastObject];
     }
 
     if (lastPurchasedSKU != NULL) {
@@ -207,7 +207,7 @@
 
 
 + (NSDictionary<NSString *,NSString *> *) customerJourneyStateDict {
-    CustomerJourneyState *journeyState = [NamiCustomerManager currentCustomerJourneyState];
+    CustomerJourneyState *journeyState = [NamiCustomerManager journeyState];
 
     BOOL formerSubscriber = [journeyState formerSubscriber];
     BOOL inGracePeriod = [journeyState inGracePeriod];
@@ -255,8 +255,8 @@
         stylingDict[@"skuButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonColor];
         stylingDict[@"skuButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonTextColor];
 
-        stylingDict[@"featuredSkusButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonColor];
-        stylingDict[@"featuredSkusButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonTextColor];
+        stylingDict[@"featuredSkusButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkuButtonColor];
+        stylingDict[@"featuredSkusButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkuButtonTextColor];
 
         stylingDict[@"signinButtonFontSize"] = @(styling.signinButtonFontSize);
         stylingDict[@"signinButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.signinButtonTextColor];
