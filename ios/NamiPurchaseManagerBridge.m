@@ -136,18 +136,6 @@ RCT_EXPORT_METHOD(canPresentCodeRedemptionSheet:(RCTResponseSenderBlock)completi
 
 }
 
-RCT_EXPORT_METHOD(buySKU:(nonnull NSString*)skuID paywallDeveloperID:(nonnull NSString*)paywallDeveloperID completion:(RCTResponseSenderBlock)completion)
-{
-    if (paywallDeveloperID.length > 0) {
-//        Didn't found new API
-//        [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:paywallDeveloperID :^(NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nullable namiPaywall)  {
-//            [self doSKUPurchaseWithSKUID:skuID namiPaywall:namiPaywall completion:completion];
-//        }];
-    } else {
-        [self doSKUPurchaseWithSKUID:skuID namiPaywall:nil completion:completion];
-    }
-}
-
 @end
 
 @implementation NamiPurchaseManagerBridge

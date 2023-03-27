@@ -44,23 +44,15 @@ RCT_EXTERN_METHOD(raisePaywall)
     [NamiCampaignManager launch];
 }
 
-//    Didn't found new API
-//RCT_EXPORT_METHOD(raisePaywallByDeveloperPaywallId:(NSString * _Nonnull) developerPaywallID)
-//{
-//    [NamiPaywallManager raisePaywallWithDeveloperPaywallID:developerPaywallID fromVC:nil];
-//}
+RCT_EXPORT_METHOD(raisePaywallByDeveloperPaywallId)
+{
+    [NamiCampaignManager launch];
+}
 
 RCT_EXPORT_METHOD(blockPaywallRaise:(BOOL)blockRaise)
 {
     [self setBlockPaywallRaise:blockRaise];
 }
-
-//    Didn't found new API
-//RCT_EXPORT_METHOD(canRaisePaywall:(RCTResponseSenderBlock)completion)
-//{
-//    BOOL canRaise = [NamiPaywallManager canRaisePaywall];
-//    completion(@[[NSNumber numberWithBool:canRaise]]);
-//}
 
 RCT_EXPORT_METHOD(presentNamiPaywall:(NSArray *)skuIDs metapaywallDefinition:(NSDictionary *)paywallDict)
 {
@@ -71,35 +63,6 @@ RCT_EXPORT_METHOD(presentNamiPaywall:(NSArray *)skuIDs metapaywallDefinition:(NS
         // No way to handle this case for now as we cannot cretae a NamiMetaPaywall
     }
 }
-
-//    Didn't found new API
-//RCT_EXPORT_METHOD(fetchCustomPaywallMetaForDeveloperID:(NSString *)developerPaywallID completion:(RCTResponseSenderBlock)completion)
-//{
-//    [NamiPaywallManager fetchCustomPaywallMetaForDeveloperID:developerPaywallID :^(NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nullable paywallMetadata) {
-//        NSMutableArray<NSDictionary<NSString *,NSString *> *> *productDicts = [NSMutableArray new];
-//        for (NamiSKU *product in products) {
-//          [productDicts addObject:[NamiBridgeUtil skuToSKUDict:product]];
-//        }
-//
-//        NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
-//        // This part is really meant to be internally facing, scrub from dictionary
-//        // Strip out presention_position from all listed sku items
-//        NSArray *cleanedOrderdMetadata = [NamiBridgeUtil stripPresentationPositionFromOrderedMetadataForPaywallMetaDict:paywallMeta];
-//        [paywallMeta setObject:cleanedOrderdMetadata  forKey:@"formatted_skus"];
-//
-//        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
-//        [paywallMeta removeObjectForKey:@"skus"];
-//
-//        NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
-//        paywallMeta[@"styleData"] = paywallStylingDict;
-//
-//
-//        NSArray *wrapperArray = @[@{ @"namiSkus": productDicts,
-//                                     @"developerPaywallID": developerPaywallID,
-//                                     @"paywallMetadata": paywallMeta }];
-//        completion(wrapperArray);
-//    }];
-//}
 
 RCT_EXPORT_METHOD(processSmartTextForProducts:(NSString *)smartText  skuIDs:(NSArray<NSString *> *)skuIDs completion:(RCTResponseSenderBlock)completion)
 {
