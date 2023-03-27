@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Nami/Nami.h>
+#import <NamiApple/NamiApple.h>
 #import "NamiBridgeUtil.h"
 
 #import <React/RCTBridgeModule.h>
