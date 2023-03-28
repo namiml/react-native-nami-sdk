@@ -67,6 +67,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    console.log('NativeModules', NativeModules);
     console.log('ExampleApp: Nami Bridge is');
     if (
       eventEmitter?._subscriber?._subscriptionsForType?.PurchasesChanged == null
