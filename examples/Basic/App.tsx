@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {NativeEventEmitter, NativeModules, Alert, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import CampaignScreen from './containers/CampaignScreen';
 import {usePurchasesContext} from './hooks/usePurchases';
@@ -15,6 +16,12 @@ export const UNTITLED_HEADER_OPTIONS = {
 type ViewerTabNavigatorParams = {
   Campaign: undefined;
 };
+
+export interface ViewerTabProps<
+  RouteParam extends keyof ViewerTabNavigatorParams,
+> {
+  navigation: NativeStackNavigationProp<ViewerTabNavigatorParams, RouteParam>;
+}
 
 const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
