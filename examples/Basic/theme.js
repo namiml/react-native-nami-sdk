@@ -5,8 +5,8 @@ const theme = {
   light: '#DAE1E7',
   dark: '#444',
   black: '#000',
+  secondaryFont: '#aaa',
+  links: '#0084ff',
 };
 
-
-
-export default theme
+export default theme;

@@ -6,13 +6,14 @@ import {
   FlatList,
   View,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 
 import theme from '../theme';
 
 const {RNNamiCampaignManager} = NativeModules;
 
-const CampaignScreen: FC<any> = (props) => {
+const CampaignScreen: FC<any> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState([]);
   const checkIsCampaignAvailable = async () => {
     const isCampaignAvailable = await RNNamiCampaignManager.isCampaignAvailable(
@@ -27,30 +28,77 @@ const CampaignScreen: FC<any> = (props) => {
     console.log('allCampaigns', allCampaigns);
   };
 
+  const onItemPress = (label?: string) => {
+    RNNamiCampaignManager.launch(label);
+  };
+
   useEffect(() => {
-    RNNamiCampaignManager.launch();
-    getAllCampaigns();
     checkIsCampaignAvailable();
+    getAllCampaigns();
   }, []);
 
   const renderCampaigns = ({item}) => {
+    if (!item.value) {
+      return null;
+    }
     return (
-      <View style={styles.item}>
-        <Text>{item.value}</Text>
-      </View>
+      <TouchableOpacity
+        onPress={() => onItemPress(item.value)}
+        style={styles.item}>
+        <Text style={styles.itemText}>{item.value}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderDefault = () => {
+    return (
+      <TouchableOpacity onPress={() => onItemPress()} style={styles.item}>
+        <Text style={styles.itemText}>default</Text>
+      </TouchableOpacity>
     );
   };
 
   return (
-    <SafeAreaView>
-      <FlatList data={campaigns} renderItem={renderCampaigns} />
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Campaigns</Text>
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
+        {renderDefault()}
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
+        <FlatList data={campaigns} renderItem={renderCampaigns} />
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: theme.lighter,
+    backgroundColor: theme.white,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    justifyContent: 'center',
+    borderRadius: 8,
+  },
+  itemText: {
+    color: theme.links,
+  },
+  container: {
+    paddingHorizontal: 15,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  sectionHeader: {
+    color: theme.secondaryFont,
+    marginLeft: 15,
+    marginBottom: 5,
+  },
+  section: {
+    marginTop: 20,
   },
 });
 

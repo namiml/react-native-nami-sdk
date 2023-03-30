@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {NativeEventEmitter, NativeModules, Alert} from 'react-native';
+import {NativeEventEmitter, NativeModules, Alert, Text} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
@@ -9,11 +9,18 @@ import CampaignScreen from './containers/CampaignScreen';
 import {usePurchasesContext} from './hooks/usePurchases';
 
 const TabNavigator = createBottomTabNavigator({
-  Campaign: {screen: CampaignScreen},
+  Campaign: {
+    screen: CampaignScreen,
+  },
 });
 
 const MainNavigator = createStackNavigator({
-  Tabs: {screen: TabNavigator},
+  Tabs: {
+    screen: TabNavigator,
+    navigationOptions: {
+      title: '',
+    },
+  },
   Home: {screen: HomeScreen},
   About: {screen: AboutScreen},
 });
