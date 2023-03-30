@@ -1,6 +1,3 @@
+import { NativeModules } from "react-native";
 
-import { NativeModules } from 'react-native';
-
-const { RNNami } = NativeModules;
-
-export default RNNami;
+export const { RNNamiCampaignManager } = NativeModules;

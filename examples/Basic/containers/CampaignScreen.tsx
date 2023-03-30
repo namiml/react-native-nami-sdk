@@ -1,6 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
 import {
-  NativeModules,
   SafeAreaView,
   StyleSheet,
   FlatList,
@@ -8,10 +7,9 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import {RNNamiCampaignManager} from 'react-native-nami-sdk';
 
 import theme from '../theme';
-
-const {RNNamiCampaignManager} = NativeModules;
 
 const CampaignScreen: FC<any> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState([]);
@@ -19,7 +17,6 @@ const CampaignScreen: FC<any> = ({navigation}) => {
     const isCampaignAvailable = await RNNamiCampaignManager.isCampaignAvailable(
       null,
     );
-    console.log('isCampaignAvailable', isCampaignAvailable);
   };
 
   const getAllCampaigns = async () => {
@@ -32,10 +29,28 @@ const CampaignScreen: FC<any> = ({navigation}) => {
     RNNamiCampaignManager.launch(label);
   };
 
+  const onRefreshPress = () => {
+    RNNamiCampaignManager.refresh();
+  };
+
   useEffect(() => {
     checkIsCampaignAvailable();
     getAllCampaigns();
   }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <TouchableOpacity
+            style={styles.headerButton}
+            onPress={onRefreshPress}>
+            <Text style={styles.headerButtonText}>Refresh</Text>
+          </TouchableOpacity>
+        );
+      },
+    });
+  }, [navigation]);
 
   const renderCampaigns = ({item}) => {
     if (!item.value) {
@@ -99,6 +114,16 @@ const styles = StyleSheet.create({
   },
   section: {
     marginTop: 20,
+  },
+  headerButton: {
+    marginRight: 15,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerButtonText: {
+    color: theme.links,
+    fontSize: 16,
   },
 });
 

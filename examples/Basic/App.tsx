@@ -1,31 +1,22 @@
 import React, {useEffect} from 'react';
 import {NativeEventEmitter, NativeModules, Alert, Text} from 'react-native';
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
-import HomeScreen from './containers/HomeScreen';
-import AboutScreen from './containers/AboutScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import CampaignScreen from './containers/CampaignScreen';
 import {usePurchasesContext} from './hooks/usePurchases';
 
-const TabNavigator = createBottomTabNavigator({
-  Campaign: {
-    screen: CampaignScreen,
-  },
-});
+export const UNTITLED_HEADER_OPTIONS = {
+  title: '',
+  headerBackTitleVisible: false,
+  headerShadowVisible: false,
+  headerStyle: {backgroundColor: 'transparent'},
+};
 
-const MainNavigator = createStackNavigator({
-  Tabs: {
-    screen: TabNavigator,
-    navigationOptions: {
-      title: '',
-    },
-  },
-  Home: {screen: HomeScreen},
-  About: {screen: AboutScreen},
-});
+type ViewerTabNavigatorParams = {
+  Campaign: undefined;
+};
 
-const AppNavigation = createAppContainer(MainNavigator);
+const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
   const {setPurchases} = usePurchasesContext();
@@ -197,7 +188,17 @@ const App = () => {
     // });
   }, []);
 
-  return <AppNavigation />;
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Campaign"
+          component={CampaignScreen}
+          options={UNTITLED_HEADER_OPTIONS}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
 };
 
 export default App;
