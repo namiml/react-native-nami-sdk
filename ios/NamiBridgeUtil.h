@@ -6,6 +6,9 @@
 //  Copyright © 2020 Nami ML Inc. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import <NamiApple/NamiApple.h>
+
 #ifndef NamiBridgeUtil_h
 #define NamiBridgeUtil_h
 
