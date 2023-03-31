@@ -6,38 +6,27 @@
 //  Copyright © 2020 Nami ML Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <NamiApple/NamiApple.h>
-#import "NamiBridgeUtil.h"
-
 #import <React/RCTBridgeModule.h>
-#import <React/RCTEventEmitter.h>
 
-#import "React/RCTViewManager.h"
+@interface RCT_EXTERN_MODULE(RNNamiCustomerManager, NSObject)
 
-@interface NamiCustomerManagerBridge : NSObject <RCTBridgeModule>
-@end
-@implementation NamiCustomerManagerBridge (RCTExternModule)
+RCT_EXTERN_METHOD(setCustomerAttributeh:(NSString *)key value:(NSString *)value)
 
+RCT_EXTERN_METHOD(getCustomerAttribute:(NSString *)key resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXPORT_METHOD(currentCustomerJourneyState:(RCTResponseSenderBlock)completion)
-{
-    NSDictionary *journeyDict = [NamiBridgeUtil customerJourneyStateDict];
+RCT_EXTERN_METHOD(clearCustomerAttribute:(NSString *)key)
 
-    completion(@[journeyDict]);
-}
+RCT_EXTERN_METHOD(clearAllCustomerAttributes)
 
+RCT_EXTERN_METHOD(journeyState:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
-@end
+RCT_EXTERN_METHOD(isLoggedIn:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(loggedInId:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
-@implementation NamiCustomerManagerBridge
-RCT_EXPORT_MODULE_NO_LOAD(NamiCustomerManagerBridge, NamiCustomerManagerBridge)
+RCT_EXTERN_METHOD(login:(RCTPromiseResolveBlock)customerId completion:(nullable  RCTResponseSenderBlock)callback)
 
-- (dispatch_queue_t)methodQueue
-{
-  return dispatch_get_main_queue();
-}
+RCT_EXTERN_METHOD(logout)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;
