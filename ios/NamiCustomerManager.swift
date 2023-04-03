@@ -64,7 +64,7 @@ class RNNamiCustomerManager: NSObject {
     }
     
     @objc(login:completion:)
-    func login(customerId: String, callback: RCTResponseSenderBlock?) -> Void {
+    func login(customerId: String, loginCompleteHandler: RCTResponseSenderBlock?) -> Void {
         NamiCustomerManager.login(withId: customerId, loginCompleteHandler: {success, error in
         })
     }

@@ -24,7 +24,7 @@ RCT_EXTERN_METHOD(isLoggedIn:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
 
 RCT_EXTERN_METHOD(loggedInId:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(login:(RCTPromiseResolveBlock)customerId completion:(nullable  RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(login:(RCTPromiseResolveBlock)customerId completion:(nullable  RCTResponseSenderBlock)loginCompleteHandler)
 
 RCT_EXTERN_METHOD(logout)
 

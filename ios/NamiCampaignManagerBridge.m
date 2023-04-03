@@ -10,7 +10,7 @@
 
 @interface RCT_EXTERN_MODULE(RNNamiCampaignManager, NSObject)
 
-RCT_EXTERN_METHOD(launch:(nullable NSString *)label)
+RCT_EXTERN_METHOD(launch:(nullable NSString *)label completion:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(allCampaigns:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
@@ -18,7 +18,7 @@ RCT_EXTERN_METHOD(isCampaignAvailable:(nullable NSString *)label resolver:(RCTPr
 
 RCT_EXTERN_METHOD(refresh)
 
-RCT_EXTERN_METHOD(registerAvailableCampaignsHandler)
+RCT_EXTERN_METHOD(registerAvailableCampaignsHandler:(RCTResponseSenderBlock)callback)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;

@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {RNNamiCampaignManager, NamiCampaign} from 'react-native-nami-sdk';
+import {NamiCampaignManager, NamiCampaign} from 'react-native-nami-sdk';
 import {ViewerTabProps} from '../App';
 
 import theme from '../theme';
@@ -18,25 +18,35 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
 
   const getAllCampaigns = async () => {
-    const allCampaigns = await RNNamiCampaignManager.allCampaigns();
+    const allCampaigns = await NamiCampaignManager.allCampaigns();
+    console.log('allCampaigns', allCampaigns);
     setCampaigns(allCampaigns);
   };
 
   const onItemPress = async (label?: string) => {
-    const isCampaignAvailable = await RNNamiCampaignManager.isCampaignAvailable(
+    const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(
       label,
     );
     if (isCampaignAvailable) {
-      RNNamiCampaignManager.launch(label);
+      NamiCampaignManager.launch(label, (success, error) => {
+        console.log('success', success);
+        console.log('error', error);
+      });
     }
   };
 
   const onRefreshPress = () => {
-    RNNamiCampaignManager.refresh();
+    NamiCampaignManager.refresh();
   };
 
   useEffect(() => {
     getAllCampaigns();
+    NamiCampaignManager.registerAvailableCampaignsHandler(
+      (availableCampaigns) => {
+        console.log('availableCampaigns', availableCampaigns);
+        setCampaigns(availableCampaigns);
+      },
+    );
   }, []);
 
   useEffect(() => {
