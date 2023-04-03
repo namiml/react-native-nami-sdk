@@ -24,9 +24,12 @@ RCT_EXTERN_METHOD(isLoggedIn:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
 
 RCT_EXTERN_METHOD(loggedInId:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(login:(RCTPromiseResolveBlock)customerId completion:(nullable  RCTResponseSenderBlock)loginCompleteHandler)
+RCT_EXTERN_METHOD(login:(NSString *)customerId completion:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(logout)
+RCT_EXTERN_METHOD(logout:(RCTResponseSenderBlock)callback)
+
+RCT_EXTERN_METHOD(registerJourneyStateHandler:(RCTResponseSenderBlock)callback)
+
 
 + (BOOL)requiresMainQueueSetup {
   return YES;

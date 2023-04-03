@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState, useLayoutEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -49,7 +49,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     );
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
         return (

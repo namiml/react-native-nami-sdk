@@ -45,8 +45,14 @@ export const NamiCustomerManager: {
   journeyState: () => Promise<CustomerJourneyState | undefined>;
   isLoggedIn: () => Promise<boolean>;
   loggedInId: () => Promise<string | undefined>;
-  login: (customerId: string, loginCompleteHandler: () => void) => void;
-  logout: () => void;
+  login: (
+    customerId: string,
+    callback?: (success: boolean, error?: number) => void
+  ) => void;
+  logout: (callback?: (success: boolean, error?: number) => void) => void;
+  registerJourneyStateHandler: (
+    callback: (journeyState: CustomerJourneyState) => void
+  ) => void;
 };
 
 export type CustomerJourneyState = {

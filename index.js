@@ -14,4 +14,10 @@ export const NamiCampaignManager = {
 
 export const NamiCustomerManager = {
   ...RNNamiCustomerManager,
+  login: (customerId, callback) => {
+    RNNamiCustomerManager.login(customerId, callback ?? (() => {}));
+  },
+  logout: (callback) => {
+    RNNamiCustomerManager.logout(callback ?? (() => {}));
+  },
 };

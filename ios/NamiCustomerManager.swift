@@ -12,6 +12,19 @@ import NamiApple
 @objc(RNNamiCustomerManager)
 class RNNamiCustomerManager: NSObject {
     
+    private func journeyStateToDictionary(_ journeyState: CustomerJourneyState) -> NSDictionary {
+        let dictionary: [String: Any?] = [
+            "formerSubscriber": journeyState.formerSubscriber,
+            "inGracePeriod": journeyState.inGracePeriod,
+            "inTrialPeriod": journeyState.inTrialPeriod,
+            "inIntroOfferPeriod": journeyState.inIntroOfferPeriod,
+            "isCancelled": journeyState.isCancelled,
+            "inPause": journeyState.inPause,
+            "inAccountHold": journeyState.inAccountHold,
+        ]
+        return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
+    }
+    
     @objc(setCustomerAttribute:value:)
     func setCustomerAttribute(key: String, value: String) -> Void {
         NamiCustomerManager.setCustomerAttribute(key, value)
@@ -36,16 +49,8 @@ class RNNamiCustomerManager: NSObject {
     @objc(journeyState:rejecter:)
     func journeyState(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
         if let journeyState = NamiCustomerManager.journeyState() {
-            let dictionary: [String: Bool] = [
-                "formerSubscriber": journeyState.formerSubscriber,
-                "inGracePeriod": journeyState.inGracePeriod,
-                "inTrialPeriod": journeyState.inTrialPeriod,
-                "inIntroOfferPeriod": journeyState.inIntroOfferPeriod,
-                "isCancelled": journeyState.isCancelled,
-                "inPause": journeyState.inPause,
-                "inAccountHold": journeyState.inAccountHold,
-            ]
-            resolve(NSDictionary(dictionary: dictionary.compactMapValues { $0 }))
+            let dictionary = self.journeyStateToDictionary(journeyState)
+            resolve(dictionary)
         } else {
             resolve(nil)
         }
@@ -64,14 +69,24 @@ class RNNamiCustomerManager: NSObject {
     }
     
     @objc(login:completion:)
-    func login(customerId: String, loginCompleteHandler: RCTResponseSenderBlock?) -> Void {
+    func login(customerId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         NamiCustomerManager.login(withId: customerId, loginCompleteHandler: {success, error in
+            callback([success, error?._code as Any])
         })
     }
     
-    @objc(logout)
-    func logout() -> Void {
-        NamiCustomerManager.logout()
+    @objc(logout:)
+    func logout(callback: @escaping RCTResponseSenderBlock) -> Void {
+        NamiCustomerManager.logout(logoutCompleteHandler: {success, error in
+            callback([success, error?._code as Any])
+        })
     }
     
+    @objc(registerJourneyStateHandler:)
+    func registerJourneyStateHandler(callback: @escaping RCTResponseSenderBlock) {
+        NamiCustomerManager.registerJourneyStateHandler { journeyState in
+            let dictionary = self.journeyStateToDictionary(journeyState)
+            callback([dictionary])
+        }
+    }
 }

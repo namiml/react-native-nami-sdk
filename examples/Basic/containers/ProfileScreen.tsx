@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState, useLayoutEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,8 +6,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  NativeModules,
 } from 'react-native';
+import {NamiCustomerManager, CustomerJourneyState} from 'react-native-nami-sdk';
 import {ViewerTabProps} from '../App';
 
 import theme from '../theme';
@@ -19,39 +19,65 @@ const Dot = (props: {value?: boolean}) => {
 interface ProfileScreenProps extends ViewerTabProps<'Profile'> {}
 
 const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
-  const [journeyState, setJourneyState] = useState(undefined);
-  const {RNNamiCustomerManager} = NativeModules;
+  const [journeyState, setJourneyState] = useState<
+    CustomerJourneyState | undefined
+  >(undefined);
+  const [isUserLogin, setIsUserLogin] = useState<boolean>(false);
   const onLoginPress = () => {
-    // RNNamiCustomerManager.login('f1851c87-e0ff-4349-a824-cd9b5e5211b9');
+    NamiCustomerManager.login(
+      'f1851c87-e0ff-4349-a824-cd9b5e5211b9',
+      (success, error) => {
+        setIsUserLogin(success);
+        console.log('success', success);
+        console.log('error', error);
+      },
+    );
+  };
+
+  const onLogoutPress = () => {
+    NamiCustomerManager.logout((success, error) => {
+      setIsUserLogin(!success);
+      console.log('success', success);
+      console.log('error', error);
+    });
   };
 
   const getJourneyState = async () => {
-    const myJourneyState = await RNNamiCustomerManager.journeyState();
+    const myJourneyState = await NamiCustomerManager.journeyState();
     console.log('journeyState', journeyState);
     setJourneyState(myJourneyState);
   };
 
   const checkIsLoggedIn = async () => {
-    const isLoggedIn = await RNNamiCustomerManager.isLoggedIn();
+    const isLoggedIn = await NamiCustomerManager.isLoggedIn();
+    setIsUserLogin(isLoggedIn);
     console.log('isLoggedIn', isLoggedIn);
   };
 
   useEffect(() => {
     checkIsLoggedIn();
     getJourneyState();
+    NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
+      console.log('newJourneyState', newJourneyState);
+      setJourneyState(newJourneyState);
+    });
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
         return (
-          <TouchableOpacity style={styles.headerButton} onPress={onLoginPress}>
-            <Text style={styles.headerButtonText}>Login</Text>
+          <TouchableOpacity
+            style={styles.headerButton}
+            onPress={isUserLogin ? onLogoutPress : onLoginPress}>
+            <Text style={styles.headerButtonText}>
+              {isUserLogin ? 'Logout' : 'Login'}
+            </Text>
           </TouchableOpacity>
         );
       },
     });
-  }, [navigation]);
+  }, [navigation, isUserLogin]);
 
   return (
     <SafeAreaView style={styles.container}>
