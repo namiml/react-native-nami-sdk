@@ -1,8 +1,13 @@
-import React, {FC, useEffect, useState, useLayoutEffect} from 'react';
+import React, {
+  FC,
+  useEffect,
+  useState,
+  useLayoutEffect,
+  useCallback,
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  FlatList,
   View,
   Text,
   TouchableOpacity,
@@ -23,45 +28,62 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     CustomerJourneyState | undefined
   >(undefined);
   const [isUserLogin, setIsUserLogin] = useState<boolean>(false);
-  const onLoginPress = () => {
+  const [externalId, setExternalId] = useState<string | undefined>(undefined);
+  const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
+
+  const onLoginPress = useCallback(() => {
     NamiCustomerManager.login(
       'f1851c87-e0ff-4349-a824-cd9b5e5211b9',
       (success, error) => {
         setIsUserLogin(success);
+        checkId();
         console.log('success', success);
         console.log('error', error);
       },
     );
-  };
+  }, []);
 
-  const onLogoutPress = () => {
+  const onLogoutPress = useCallback(() => {
     NamiCustomerManager.logout((success, error) => {
       setIsUserLogin(!success);
+      checkId();
       console.log('success', success);
       console.log('error', error);
     });
-  };
+  }, []);
 
-  const getJourneyState = async () => {
+  const getJourneyState = useCallback(async () => {
     const myJourneyState = await NamiCustomerManager.journeyState();
-    console.log('journeyState', journeyState);
+    console.log('myJourneyState', myJourneyState);
     setJourneyState(myJourneyState);
-  };
+  }, []);
 
   const checkIsLoggedIn = async () => {
     const isLoggedIn = await NamiCustomerManager.isLoggedIn();
     setIsUserLogin(isLoggedIn);
     console.log('isLoggedIn', isLoggedIn);
   };
+  const checkId = async () => {
+    const loggedIn = await NamiCustomerManager.loggedInId();
+    const deviceId = await NamiCustomerManager.deviceId();
+    setExternalId(loggedIn);
+    setDisplayedDeviceId(deviceId);
+  };
 
   useEffect(() => {
     checkIsLoggedIn();
     getJourneyState();
-    NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
-      console.log('newJourneyState', newJourneyState);
-      setJourneyState(newJourneyState);
-    });
-  }, []);
+    checkId();
+    // NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
+    //   console.log('newJourneyState', newJourneyState);
+    //   setJourneyState(newJourneyState);
+    // });
+    // NamiCustomerManager.registerAccountStateHandler(
+    //   (action, success, error) => {
+    //     console.log('accountState', action, success, error);
+    //   },
+    // );
+  }, [getJourneyState]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -77,13 +99,23 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
         );
       },
     });
-  }, [navigation, isUserLogin]);
+  }, [navigation, isUserLogin, onLogoutPress, onLoginPress]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Profile</Text>
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>ANONYMOUS USER</Text>
+        <Text style={styles.sectionHeader}>
+          {isUserLogin ? 'REGISTERED_USER' : 'ANONYMOUS USER'}
+        </Text>
+        <View style={styles.idSection}>
+          <Text style={styles.idLabel}>
+            {isUserLogin ? 'External Id' : 'Device Id'}
+          </Text>
+          <Text style={styles.id}>
+            {isUserLogin ? externalId : displayedDeviceId}
+          </Text>
+        </View>
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>JORNEY STATE</Text>
@@ -146,6 +178,14 @@ const styles = StyleSheet.create({
   section: {
     marginTop: 20,
   },
+  idSection: {
+    backgroundColor: theme.white,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   block: {
     backgroundColor: theme.white,
     borderRadius: 8,
@@ -169,6 +209,14 @@ const styles = StyleSheet.create({
   },
   active: {
     backgroundColor: 'green',
+  },
+  id: {
+    color: theme.links,
+  },
+  idLabel: {
+    color: theme.secondaryFont,
+    fontSize: 12,
+    marginRight: 10,
   },
 });
 

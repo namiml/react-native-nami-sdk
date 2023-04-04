@@ -68,6 +68,12 @@ class RNNamiCustomerManager: NSObject {
         resolve(id)
     }
     
+    @objc(deviceId:rejecter:)
+    func deviceId(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+        let id = NamiCustomerManager.deviceId()
+        resolve(id)
+    }
+    
     @objc(login:completion:)
     func login(customerId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         NamiCustomerManager.login(withId: customerId, loginCompleteHandler: {success, error in
@@ -88,5 +94,12 @@ class RNNamiCustomerManager: NSObject {
             let dictionary = self.journeyStateToDictionary(journeyState)
             callback([dictionary])
         }
+    }
+    
+    @objc(registerAccountStateHandler:)
+    func registerAccountStateHandler(callback: @escaping RCTResponseSenderBlock) {
+        NamiCustomerManager.registerAccountStateHandler({action, success, error in
+            callback([action.rawValue, success, error?._code as Any])
+        })
     }
 }

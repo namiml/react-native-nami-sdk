@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {NamiCampaignManager, NamiCampaign} from 'react-native-nami-sdk';
+
 import {ViewerTabProps} from '../App';
 
 import theme from '../theme';
@@ -41,12 +42,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   useEffect(() => {
     getAllCampaigns();
-    NamiCampaignManager.registerAvailableCampaignsHandler(
-      (availableCampaigns) => {
-        console.log('availableCampaigns', availableCampaigns);
-        setCampaigns(availableCampaigns);
-      },
-    );
+    // NamiCampaignManager.registerAvailableCampaignsHandler(
+    //   (availableCampaigns) => {
+    //     console.log('availableCampaigns', availableCampaigns);
+    //     setCampaigns(availableCampaigns);
+    //   },
+    // );
   }, []);
 
   useLayoutEffect(() => {

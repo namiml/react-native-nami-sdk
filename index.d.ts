@@ -45,6 +45,7 @@ export const NamiCustomerManager: {
   journeyState: () => Promise<CustomerJourneyState | undefined>;
   isLoggedIn: () => Promise<boolean>;
   loggedInId: () => Promise<string | undefined>;
+  deviceId: () => Promise<string>;
   login: (
     customerId: string,
     callback?: (success: boolean, error?: number) => void

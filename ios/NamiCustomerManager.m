@@ -24,11 +24,15 @@ RCT_EXTERN_METHOD(isLoggedIn:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
 
 RCT_EXTERN_METHOD(loggedInId:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(deviceId:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(login:(NSString *)customerId completion:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(logout:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(registerJourneyStateHandler:(RCTResponseSenderBlock)callback)
+
+RCT_EXTERN_METHOD(registerAccountStateHandler:(RCTResponseSenderBlock)callback)
 
 
 + (BOOL)requiresMainQueueSetup {
