@@ -36,10 +36,7 @@ export enum LaunchCampaignError {
 
 export const NamiCustomerManager: {
   setCustomerAttribute: (key: string, value: string) => void;
-  getCustomerAttribute: (
-    key: string,
-    value: string
-  ) => Promise<string | undefined>;
+  getCustomerAttribute: (key: string) => Promise<string | undefined>;
   clearCustomerAttribute: (key: string) => void;
   clearAllCustomerAttributes: () => void;
   journeyState: () => Promise<CustomerJourneyState | undefined>;

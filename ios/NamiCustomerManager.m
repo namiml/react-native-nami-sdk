@@ -10,7 +10,7 @@
 
 @interface RCT_EXTERN_MODULE(RNNamiCustomerManager, NSObject)
 
-RCT_EXTERN_METHOD(setCustomerAttributeh:(NSString *)key value:(NSString *)value)
+RCT_EXTERN_METHOD(setCustomerAttribute:(NSString *)key value:(NSString *)value)
 
 RCT_EXTERN_METHOD(getCustomerAttribute:(NSString *)key resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
