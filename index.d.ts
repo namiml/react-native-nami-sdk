@@ -8,7 +8,7 @@ export const NamiCampaignManager: {
   refresh: () => void;
   registerAvailableCampaignsHandler: (
     callback: (availableCampaigns: NamiCampaign[]) => void
-  ) => void;
+  ) => EmitterSubscription["remove"];
 };
 
 export type NamiCampaign = {
@@ -50,7 +50,14 @@ export const NamiCustomerManager: {
   logout: (callback?: (success: boolean, error?: number) => void) => void;
   registerJourneyStateHandler: (
     callback: (journeyState: CustomerJourneyState) => void
-  ) => void;
+  ) => EmitterSubscription["remove"];
+  registerAccountStateHandler: (
+    callback: (
+      action: AccountStateAction,
+      success: boolean,
+      error?: number
+    ) => void
+  ) => EmitterSubscription["remove"];
 };
 
 export type CustomerJourneyState = {
@@ -62,3 +69,5 @@ export type CustomerJourneyState = {
   inPause: boolean;
   inAccountHold: boolean;
 };
+
+export type AccountStateAction = "login" | "logout";

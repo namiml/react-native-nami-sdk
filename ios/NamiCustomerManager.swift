@@ -8,9 +8,14 @@
 
 import Foundation
 import NamiApple
+import React
 
 @objc(RNNamiCustomerManager)
-class RNNamiCustomerManager: NSObject {
+class RNNamiCustomerManager: RCTEventEmitter {
+    
+    override func supportedEvents() -> [String]! {
+      return ["JourneyStateChanged", "AccountStateChanged"]
+    }
     
     private func journeyStateToDictionary(_ journeyState: CustomerJourneyState) -> NSDictionary {
         let dictionary: [String: Any?] = [
@@ -88,18 +93,18 @@ class RNNamiCustomerManager: NSObject {
         })
     }
     
-    @objc(registerJourneyStateHandler:)
-    func registerJourneyStateHandler(callback: @escaping RCTResponseSenderBlock) {
+    @objc(registerJourneyStateHandler)
+    func registerJourneyStateHandler() {
         NamiCustomerManager.registerJourneyStateHandler { journeyState in
             let dictionary = self.journeyStateToDictionary(journeyState)
-            callback([dictionary])
+            self.sendEvent(withName: "JourneyStateChanged", body: dictionary)
         }
     }
     
-    @objc(registerAccountStateHandler:)
-    func registerAccountStateHandler(callback: @escaping RCTResponseSenderBlock) {
+    @objc(registerAccountStateHandler)
+    func registerAccountStateHandler() {
         NamiCustomerManager.registerAccountStateHandler({action, success, error in
-            callback([action.rawValue, success, error?._code as Any])
+            self.sendEvent(withName: "AccountStateChanged", body: [action.rawValue, success, error?._code as Any])
         })
     }
 }

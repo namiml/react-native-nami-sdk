@@ -64,9 +64,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     console.log('isLoggedIn', isLoggedIn);
   };
   const checkId = async () => {
-    const loggedIn = await NamiCustomerManager.loggedInId();
+    const loggedId = await NamiCustomerManager.loggedInId();
     const deviceId = await NamiCustomerManager.deviceId();
-    setExternalId(loggedIn);
+    setExternalId(loggedId);
     setDisplayedDeviceId(deviceId);
   };
 
@@ -74,15 +74,21 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     checkIsLoggedIn();
     getJourneyState();
     checkId();
-    // NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
-    //   console.log('newJourneyState', newJourneyState);
-    //   setJourneyState(newJourneyState);
-    // });
-    // NamiCustomerManager.registerAccountStateHandler(
-    //   (action, success, error) => {
-    //     console.log('accountState', action, success, error);
-    //   },
-    // );
+    const subscriptionJourneyStateRemover =
+      NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
+        console.log('newJourneyState', newJourneyState);
+        setJourneyState(newJourneyState);
+      });
+    const subscriptionAccountStateRemover =
+      NamiCustomerManager.registerAccountStateHandler(
+        (action, success, error) => {
+          console.log('accountState', action, success, error);
+        },
+      );
+    return () => {
+      subscriptionJourneyStateRemover();
+      subscriptionAccountStateRemover();
+    };
   }, [getJourneyState]);
 
   useLayoutEffect(() => {

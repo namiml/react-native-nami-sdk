@@ -42,12 +42,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   useEffect(() => {
     getAllCampaigns();
-    // NamiCampaignManager.registerAvailableCampaignsHandler(
-    //   (availableCampaigns) => {
-    //     console.log('availableCampaigns', availableCampaigns);
-    //     setCampaigns(availableCampaigns);
-    //   },
-    // );
+    const subscriptionRemover =
+      NamiCampaignManager.registerAvailableCampaignsHandler(
+        (availableCampaigns) => {
+          console.log('availableCampaigns', availableCampaigns);
+          setCampaigns(availableCampaigns);
+        },
+      );
+    return () => {
+      subscriptionRemover();
+    };
   }, []);
 
   useLayoutEffect(() => {

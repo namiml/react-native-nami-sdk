@@ -18,7 +18,7 @@ RCT_EXTERN_METHOD(isCampaignAvailable:(nullable NSString *)label resolver:(RCTPr
 
 RCT_EXTERN_METHOD(refresh)
 
-RCT_EXTERN_METHOD(registerAvailableCampaignsHandler:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(registerAvailableCampaignsHandler)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;

@@ -30,9 +30,9 @@ RCT_EXTERN_METHOD(login:(NSString *)customerId completion:(RCTResponseSenderBloc
 
 RCT_EXTERN_METHOD(logout:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(registerJourneyStateHandler:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(registerJourneyStateHandler)
 
-RCT_EXTERN_METHOD(registerAccountStateHandler:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(registerAccountStateHandler)
 
 
 + (BOOL)requiresMainQueueSetup {

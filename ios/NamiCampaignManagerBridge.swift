@@ -8,9 +8,13 @@
 
 import Foundation
 import NamiApple
+import React
 
 @objc(RNNamiCampaignManager)
-class RNNamiCampaignManager: NSObject {
+class RNNamiCampaignManager: RCTEventEmitter {
+    override func supportedEvents() -> [String]! {
+      return ["AvailableCampaignsChanged"]
+    }
     
     private func campaignInToDictionary(_ campaign: NamiCampaign) -> NSDictionary {
         let dictionary: [String: Any?] = [
@@ -54,11 +58,11 @@ class RNNamiCampaignManager: NSObject {
         NamiCampaignManager.refresh()
     }
 
-    @objc(registerAvailableCampaignsHandler:)
-    func registerForAvailableCampaigns(callback: @escaping RCTResponseSenderBlock) {
+    @objc(registerAvailableCampaignsHandler)
+    func registerForAvailableCampaigns() {
         NamiCampaignManager.registerAvailableCampaignsHandler { availableCampaigns in
             let dictionaries = availableCampaigns.map { campaign in self.campaignInToDictionary(campaign) }
-            callback([dictionaries])
+            self.sendEvent(withName: "AvailableCampaignsChanged", body: dictionaries)
         }
     }
 }
