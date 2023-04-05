@@ -5,6 +5,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
+import EntitlementsScreen from './containers/EntitlementsScreen';
 import {usePurchasesContext} from './hooks/usePurchases';
 
 export const UNTITLED_HEADER_OPTIONS = {
@@ -17,6 +18,7 @@ export const UNTITLED_HEADER_OPTIONS = {
 type ViewerTabNavigatorParams = {
   Campaign: undefined;
   Profile: undefined;
+  Entitlements: undefined;
 };
 
 export interface ViewerTabProps<
@@ -202,6 +204,7 @@ const App = () => {
       <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
         <Tab.Screen name="Campaign" component={CampaignScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="Entitlements" component={EntitlementsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
