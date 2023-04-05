@@ -1,4 +1,4 @@
-import { NativeModules } from "react-native";
+import { NativeModules, NativeEventEmitter } from "react-native";
 
 export const { RNNamiCampaignManager, RNNamiCustomerManager } = NativeModules;
 
@@ -16,7 +16,7 @@ export const NamiCampaignManager = {
       "AvailableCampaignsChanged",
       callback
     );
-    RNNamiCampaignManager.registerAvailableCampaignsHandler(callback);
+    RNNamiCampaignManager.registerAvailableCampaignsHandler();
     return subscription.remove;
   },
 };
