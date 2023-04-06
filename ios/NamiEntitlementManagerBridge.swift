@@ -16,19 +16,6 @@ class RNNamiEntitlementManager: RCTEventEmitter {
       return ["EntitlementsChanged"]
     }
     
-    private func entitlementToDictionary(_ entitlement: NamiEntitlement) -> NSDictionary {
-        let dictionary: [String: Any?] = [
-//            "activePurchases"
-            "desc": entitlement.desc,
-            "name": entitlement.name,
-            "namiId": entitlement.namiId,
-//            "purchasedSkus"
-            "referenceId": entitlement.referenceId,
-//            "relatedSkus"
-        ]
-        return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
-    }
-    
     @objc(isEntitlementActive:resolver:rejecter:)
     func isEntitlementActive(referenceId: String, resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
         let isEntitlementActive = NamiEntitlementManager.isEntitlementActive(referenceId)
@@ -38,7 +25,10 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     @objc(active:rejecter:)
     func active(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
         let entitlements = NamiEntitlementManager.active()
-        let dictionaries = entitlements.map { entitlement in self.entitlementToDictionary(entitlement) }
+        let dictionaries = entitlements.map { entitlement in
+            let dictionary = NamiBridgeUtil.entitlement(toEntitlementDict: entitlement)
+            return NSDictionary(dictionary: dictionary!.compactMapValues { $0 })
+        }
         resolve(dictionaries)
     }
     
@@ -50,7 +40,10 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     @objc(registerActiveEntitlementsHandler)
     func registerActiveEntitlementsHandler() {
         NamiEntitlementManager.registerActiveEntitlementsHandler { activeEntitlements in
-            let dictionaries = activeEntitlements.map { entitlement in self.entitlementToDictionary(entitlement) }
+            let dictionaries = activeEntitlements.map { entitlement in
+                let dictionary = NamiBridgeUtil.entitlement(toEntitlementDict: entitlement)
+                return NSDictionary(dictionary: dictionary!.compactMapValues { $0 })
+            }
             self.sendEvent(withName: "EntitlementsChanged", body: dictionaries)
         }
     }
