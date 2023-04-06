@@ -1,6 +1,13 @@
 import { NativeModules, NativeEventEmitter } from "react-native";
 
-export const { RNNamiCampaignManager, RNNamiCustomerManager } = NativeModules;
+export const {
+  RNNamiCampaignManager,
+  RNNamiCustomerManager,
+  RNNamiEntitlementManager,
+  NamiPurchaseManagerBridge,
+  NamiEmitter,
+  RNNamiPurchaseManager,
+} = NativeModules;
 
 export const NamiCampaignManager = {
   emitter: new NativeEventEmitter(RNNamiCampaignManager),
@@ -58,6 +65,34 @@ export const NamiEntitlementManager = {
       callback
     );
     RNNamiEntitlementManager.registerActiveEntitlementsHandler();
+    return subscription.remove;
+  },
+};
+
+export const NamiPurchaseManager = {
+  emitter: new NativeEventEmitter(NamiEmitter),
+  purchaseEmitter: new NativeEventEmitter(RNNamiPurchaseManager),
+  ...RNNamiPurchaseManager,
+  ...NamiPurchaseManagerBridge,
+  registerPurchasesChangedHandler(callback) {
+    const subscription = this.emitter.addListener("PurchasesChanged", callback);
+    NamiEmitter.registerPurchasesChangedHandler();
+    return subscription.remove;
+  },
+  registerRestorePurchasesHandler(callback) {
+    const subscription = this.emitter.addListener(
+      "RestorePurchasesStateChanged",
+      callback
+    );
+    NamiEmitter.registerRestorePurchasesHandler();
+    return subscription.remove;
+  },
+  registerBuySkuHandler(callback) {
+    const subscription = this.purchaseEmitter.addListener(
+      "RegisterBuySKU",
+      callback
+    );
+    NamiPurchaseManagerBridge.registerBuySkuHandler();
     return subscription.remove;
   },
 };

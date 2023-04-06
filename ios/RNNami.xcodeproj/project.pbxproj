@@ -18,6 +18,7 @@
 		EBC59E6023C7E2EC008A123A /* NamiAnalyticsEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */; };
 		EBC59E6323C7F634008A123A /* NamiBridgeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E6223C7F634008A123A /* NamiBridgeUtil.m */; };
 		EBEEAC10243C29C800E01389 /* NamiMLManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */; };
+		FA4CEE3D29DEE01600058372 /* NamiPurchaseManagerBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CEE3C29DEE01600058372 /* NamiPurchaseManagerBridge.swift */; };
 		FA86299F29DDA881000090C6 /* NamiEntitlementManagerBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86299E29DDA881000090C6 /* NamiEntitlementManagerBridge.swift */; };
 		FAADDB4F29D376590096591A /* NamiCampaignManagerBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAADDB4D29D376590096591A /* NamiCampaignManagerBridge.swift */; };
 		FAADDB5229D377560096591A /* NamiCampaignManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FAADDB5129D377560096591A /* NamiCampaignManagerBridge.m */; };
@@ -54,6 +55,7 @@
 		EBC59E6423C7F7A0008A123A /* NamiBridgeUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NamiBridgeUtil.h; sourceTree = "<group>"; };
 		EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiMLManagerBridge.m; sourceTree = "<group>"; };
 		FA02430629D2EAE00018CA56 /* RNNami-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNNami-Bridging-Header.h"; sourceTree = "<group>"; };
+		FA4CEE3C29DEE01600058372 /* NamiPurchaseManagerBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamiPurchaseManagerBridge.swift; sourceTree = "<group>"; };
 		FA86299E29DDA881000090C6 /* NamiEntitlementManagerBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamiEntitlementManagerBridge.swift; sourceTree = "<group>"; };
 		FAADDB4D29D376590096591A /* NamiCampaignManagerBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamiCampaignManagerBridge.swift; sourceTree = "<group>"; };
 		FAADDB5129D377560096591A /* NamiCampaignManagerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiCampaignManagerBridge.m; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				FA4CEE3E29DEE01E00058372 /* NamiPurchaseManager */,
 				FA8629A029DDA8A5000090C6 /* NamiEntitlementManager */,
 				FADE7CFB29DD9875000BF262 /* NamiCustomerManager */,
 				FADE7CFA29DD984E000BF262 /* NamiCampaignManager */,
@@ -95,7 +98,6 @@
 				EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */,
 				EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */,
 				EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */,
-				EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */,
 				EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				82475599A9F3B58440ACDC6E /* Frameworks */,
@@ -118,6 +120,15 @@
 				90B290F36EAE177CDC017BA3 /* Pods-RNNami.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		FA4CEE3E29DEE01E00058372 /* NamiPurchaseManager */ = {
+			isa = PBXGroup;
+			children = (
+				FA4CEE3C29DEE01600058372 /* NamiPurchaseManagerBridge.swift */,
+				EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */,
+			);
+			name = NamiPurchaseManager;
 			sourceTree = "<group>";
 		};
 		FA8629A029DDA8A5000090C6 /* NamiEntitlementManager */ = {
@@ -236,6 +247,7 @@
 				EB1C9AFB23BE9C5700CAD548 /* NamiPurchaseManagerBridge.m in Sources */,
 				EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerBridge.m in Sources */,
 				EBC59E6323C7F634008A123A /* NamiBridgeUtil.m in Sources */,
+				FA4CEE3D29DEE01600058372 /* NamiPurchaseManagerBridge.swift in Sources */,
 				FA86299F29DDA881000090C6 /* NamiEntitlementManagerBridge.swift in Sources */,
 				FAD132F729D6BD5E001059A2 /* NamiCustomerManager.swift in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNNami.m in Sources */,
