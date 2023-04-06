@@ -20,6 +20,7 @@
 		EBEEAC10243C29C800E01389 /* NamiMLManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */; };
 		FAADDB4F29D376590096591A /* NamiCampaignManagerBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAADDB4D29D376590096591A /* NamiCampaignManagerBridge.swift */; };
 		FAADDB5229D377560096591A /* NamiCampaignManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FAADDB5129D377560096591A /* NamiCampaignManagerBridge.m */; };
+		FAD132F729D6BD5E001059A2 /* NamiCustomerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD132F629D6BD5E001059A2 /* NamiCustomerManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,6 +55,7 @@
 		FA02430629D2EAE00018CA56 /* RNNami-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RNNami-Bridging-Header.h"; sourceTree = "<group>"; };
 		FAADDB4D29D376590096591A /* NamiCampaignManagerBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamiCampaignManagerBridge.swift; sourceTree = "<group>"; };
 		FAADDB5129D377560096591A /* NamiCampaignManagerBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NamiCampaignManagerBridge.m; sourceTree = "<group>"; };
+		FAD132F629D6BD5E001059A2 /* NamiCustomerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamiCustomerManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,8 +81,8 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				FAADDB5129D377560096591A /* NamiCampaignManagerBridge.m */,
-				FAADDB4D29D376590096591A /* NamiCampaignManagerBridge.swift */,
+				FADE7CFB29DD9875000BF262 /* NamiCustomerManager */,
+				FADE7CFA29DD984E000BF262 /* NamiCampaignManager */,
 				FA02430629D2EAE00018CA56 /* RNNami-Bridging-Header.h */,
 				EBC59E6423C7F7A0008A123A /* NamiBridgeUtil.h */,
 				EBC59E6223C7F634008A123A /* NamiBridgeUtil.m */,
@@ -90,7 +92,6 @@
 				EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */,
 				EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */,
 				EB1C9AF923BE9C5600CAD548 /* NamiPaywallManagerBridge.m */,
-				EB75992024F031E900430D98 /* NamiCustomerManager.m */,
 				EB1C9AF823BE9C5600CAD548 /* NamiPurchaseManagerBridge.m */,
 				EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */,
 				EB7B50CD243E314900EBA6B7 /* NamiEntitlementManagerBridge.m */,
@@ -115,6 +116,24 @@
 				90B290F36EAE177CDC017BA3 /* Pods-RNNami.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		FADE7CFA29DD984E000BF262 /* NamiCampaignManager */ = {
+			isa = PBXGroup;
+			children = (
+				FAADDB5129D377560096591A /* NamiCampaignManagerBridge.m */,
+				FAADDB4D29D376590096591A /* NamiCampaignManagerBridge.swift */,
+			);
+			name = NamiCampaignManager;
+			sourceTree = "<group>";
+		};
+		FADE7CFB29DD9875000BF262 /* NamiCustomerManager */ = {
+			isa = PBXGroup;
+			children = (
+				FAD132F629D6BD5E001059A2 /* NamiCustomerManager.swift */,
+				EB75992024F031E900430D98 /* NamiCustomerManager.m */,
+			);
+			name = NamiCustomerManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,6 +225,7 @@
 				EB1C9AFB23BE9C5700CAD548 /* NamiPurchaseManagerBridge.m in Sources */,
 				EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerBridge.m in Sources */,
 				EBC59E6323C7F634008A123A /* NamiBridgeUtil.m in Sources */,
+				FAD132F729D6BD5E001059A2 /* NamiCustomerManager.swift in Sources */,
 				B3E7B58A1CC2AC0600A0062D /* RNNami.m in Sources */,
 				FAADDB4F29D376590096591A /* NamiCampaignManagerBridge.swift in Sources */,
 				FAADDB5229D377560096591A /* NamiCampaignManagerBridge.m in Sources */,

@@ -8,28 +8,37 @@
 
 import Foundation
 import NamiApple
+import React
 
 @objc(RNNamiCampaignManager)
-class RNNamiCampaignManager: NSObject {
-    @objc(launch:)
-    func launch(label: String?) -> Void {
-        NamiCampaignManager.launch(label: label)
+class RNNamiCampaignManager: RCTEventEmitter {
+    override func supportedEvents() -> [String]! {
+      return ["AvailableCampaignsChanged"]
+    }
+    
+    private func campaignInToDictionary(_ campaign: NamiCampaign) -> NSDictionary {
+        let dictionary: [String: Any?] = [
+            "id": campaign.id,
+            "rule": campaign.rule,
+            "segment": campaign.segment,
+            "paywall": campaign.paywall,
+            "type": campaign.type.rawValue,
+            "value": campaign.value
+        ]
+        return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
+    }
+    
+    @objc(launch:completion:)
+    func launch(label: String?, callback: @escaping RCTResponseSenderBlock) -> Void {
+        NamiCampaignManager.launch(label: label, launchHandler: { success, error in
+            callback([success, error?._code as Any])
+         })
     }
 
     @objc(allCampaigns:rejecter:)
     func allCampaigns(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
         let campaigns = NamiCampaignManager.allCampaigns()
-        let dictionaries = campaigns.map { campaign -> NSDictionary in
-            let dictionary: [String: Any?] = [
-                "id": campaign.id,
-                "rule": campaign.rule,
-                "segment": campaign.segment,
-                "paywall": campaign.paywall,
-                "type": campaign.type.rawValue,
-                "value": campaign.value
-            ]
-            return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
-        }
+        let dictionaries = campaigns.map { campaign in self.campaignInToDictionary(campaign) }
         resolve(dictionaries)
     }
 
@@ -50,9 +59,11 @@ class RNNamiCampaignManager: NSObject {
     }
 
     @objc(registerAvailableCampaignsHandler)
-    func registerAvailableCampaignsHandler() -> Void {
-        NamiCampaignManager.registerAvailableCampaignsHandler { campaigns in
-          }
+    func registerForAvailableCampaigns() {
+        NamiCampaignManager.registerAvailableCampaignsHandler { availableCampaigns in
+            let dictionaries = availableCampaigns.map { campaign in self.campaignInToDictionary(campaign) }
+            self.sendEvent(withName: "AvailableCampaignsChanged", body: dictionaries)
+        }
     }
 }
 

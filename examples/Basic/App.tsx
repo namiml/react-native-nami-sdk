@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
-import {NativeEventEmitter, NativeModules, Alert, Text} from 'react-native';
+import {NativeEventEmitter, NativeModules, Alert} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import CampaignScreen from './containers/CampaignScreen';
+import ProfileScreen from './containers/ProfileScreen';
 import {usePurchasesContext} from './hooks/usePurchases';
 
 export const UNTITLED_HEADER_OPTIONS = {
@@ -15,6 +16,7 @@ export const UNTITLED_HEADER_OPTIONS = {
 
 type ViewerTabNavigatorParams = {
   Campaign: undefined;
+  Profile: undefined;
 };
 
 export interface ViewerTabProps<
@@ -197,12 +199,9 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Campaign"
-          component={CampaignScreen}
-          options={UNTITLED_HEADER_OPTIONS}
-        />
+      <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
+        <Tab.Screen name="Campaign" component={CampaignScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
