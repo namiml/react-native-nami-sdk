@@ -17,10 +17,6 @@
 
 @interface RCT_EXTERN_MODULE(RNNamiPurchaseManager, NSObject)
 
-RCT_EXTERN_METHOD(buySkuComplete:(RCTResponseSenderBlock)callback)
-
-RCT_EXTERN_METHOD(registerBuySkuHandler)
-
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }

@@ -15,6 +15,22 @@
 
 #import "React/RCTViewManager.h"
 
+@interface RCT_EXTERN_MODULE(RNNamiPaywallManager, NSObject)
+
+RCT_EXTERN_METHOD(buySkuComplete:(RCTResponseSenderBlock)callback)
+
+RCT_EXTERN_METHOD(registerBuySkuHandler)
+
+RCT_EXTERN_METHOD(dismiss:(Bool)animated completion:(RCTResponseSenderBlock)callback)
+
+RCT_EXTERN_METHOD(displayedViewController)
+
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
+
+@end
+
 @interface NamiEmitter : RCTEventEmitter
 - (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success developerPaywallID: (NSString * _Nullable) developerPaywallID error:(NSError * _Nullable) error;
 + (NamiEmitter *) reactInstance;
