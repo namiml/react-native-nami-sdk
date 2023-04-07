@@ -3,7 +3,7 @@
 //  RNNami
 //
 //  Created by Kendall Gelner on 8/21/20.
-//  Copyright © 2020 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
 //
 
 #import <React/RCTBridgeModule.h>

@@ -3,7 +3,7 @@
 //  RNNami
 //
 //  Created by Kendall Gelner on 4/8/20.
-//  Copyright © 2020 Facebook. All rights reserved.
+//  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
