@@ -35,13 +35,16 @@ const App = () => {
   const {NamiEmitter} = NativeModules;
   const eventEmitter = new NativeEventEmitter(NamiEmitter);
 
-  const onPurchasesChanged = useCallback(() => {
-    console.log('ExampleApp: Purchases changed: ', event);
-    if (event.purchaseState == 'PURCHASED') {
-      console.log('Detected purchase, setting SKU IDs');
-      setPurchases(event.purchases);
-    }
-  }, [setPurchases]);
+  const onPurchasesChanged = useCallback(
+    (event) => {
+      console.log('ExampleApp: Purchases changed: ', event);
+      if (event.purchaseState == 'PURCHASED') {
+        console.log('Detected purchase, setting SKU IDs');
+        setPurchases(event.purchases);
+      }
+    },
+    [setPurchases],
+  );
 
   const onEntitlementsChanged = (event) => {
     // Add code to check for entitlements activating or deactivating features
@@ -130,7 +133,6 @@ const App = () => {
 
     NativeModules.NamiBridge.configure(configDict);
     NativeModules.NamiPurchaseManagerBridge.clearBypassStorePurchases();
-
     NamiCustomerManager.logout();
   }, [eventEmitter, onPurchasesChanged]);
 

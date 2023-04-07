@@ -2,8 +2,7 @@
 //  NamiCampaignManagerBridge.swift
 //  RNNami
 //
-//  Created by macbook on 27.03.2023.
-//  Copyright © 2023 Facebook. All rights reserved.
+//  Copyright © 2023 Nami ML INc.. All rights reserved.
 //
 
 import Foundation
