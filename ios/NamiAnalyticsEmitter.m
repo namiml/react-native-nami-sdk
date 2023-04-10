@@ -3,13 +3,13 @@
 //  RNNami
 //
 //  Created by Kendall Gelner on 1/9/20.
-//  Copyright © 2020 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 
-#import <Nami/Nami.h>
+#import <NamiApple/NamiApple.h>
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>

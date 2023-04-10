@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <Nami/Nami.h>
+#import <NamiApple/NamiApple.h>
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
@@ -38,20 +38,19 @@ static NamiEmitter *namiEmitter;
             [self sendEventPurchaseMadeWithPurchases:purchases withState:purchaseState error:error];
         }];
 
-        [NamiEntitlementManager registerEntitlementsChangedHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
+        [NamiEntitlementManager registerActiveEntitlementsHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
             [self sendEventEntitlementsChangedWithEntitlements:entitlements];
         }];
 
-
-        [NamiPaywallManager registerSignInHandler:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
-            [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
+        [NamiPaywallManager registerSignInHandler:^(UIViewController * _Nullable fromVC) {
+            [self sendSignInActivateFromVC:fromVC];
         }];
 
-        [NamiPaywallManager registerPaywallRaiseHandler:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
-            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
+        [NamiPaywallManager renderCustomUiHandler:^(NSArray<NamiSKU *> * _Nullable products, NamiPaywall * _Nullable paywallMetadata) {
+            [self sendPaywallActivatedForPaywall:paywallMetadata.developerPaywallId withProducts:products paywallMetadata:paywallMetadata];
         }];
 
-        [NamiPaywallManager registerBlockingPaywallClosedHandler:^{
+        [NamiPaywallManager registerCloseHandler:^(UIViewController * _Nullable fromVC) {
             [self sendBlockingPaywallClosed];
         }];
 
@@ -59,10 +58,9 @@ static NamiEmitter *namiEmitter;
             [self sendRestorePurchasesStateChanged:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
         }];
 
-        [NamiCustomerManager registerJourneyStateChangedHandler:^(CustomerJourneyState * _Nonnull journeyState) {
+        [NamiCustomerManager registerJourneyStateHandler:^(CustomerJourneyState * _Nonnull journeyState) {
             [self sendEventCustomerJourneyStateChanged:journeyState];
         }];
-
     }
     namiEmitter = self;
     return self;
@@ -86,7 +84,7 @@ static NamiEmitter *namiEmitter;
     NSArray<NamiPurchase *> *purchases = NamiPurchaseManager.allPurchases;
     NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
     for (NamiPurchase *purchase in purchases) {
-        [productIDs addObject:purchase.skuID];
+        [productIDs addObject:purchase.skuId];
     }
 
     return productIDs;
@@ -157,7 +155,7 @@ bool hasNamiEmitterListeners;
 
         NSMutableArray *convertedEntitlementDicts = [NSMutableArray new];
         for ( NamiEntitlement *entitlementRecord in entitlements ) {
-            if ( entitlementRecord.referenceID != nil ) {
+            if ( entitlementRecord.referenceId != nil ) {
                 NSDictionary *entitlementDict = [NamiBridgeUtil entitlementToEntitlementDict:entitlementRecord];
                 [convertedEntitlementDicts addObject:entitlementDict];
             }
@@ -209,7 +207,7 @@ bool hasNamiEmitterListeners;
 
         NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
         for ( NamiPurchase *purchaseRecord in purchases ) {
-            if ( purchaseRecord.skuID != nil ) {
+            if ( purchaseRecord.skuId != nil ) {
                 NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
                 [convertedPurchaseDicts addObject:purchaseDict];
             }
@@ -229,17 +227,14 @@ bool hasNamiEmitterListeners;
 }
 
 
-- (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC
-                       forPaywall:(NSString * _Nonnull) developerPaywallID
-                      paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata {
+- (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC {
   if (hasNamiEmitterListeners) {
       // Pass along paywall ID use in sign-in provider.
-      [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID }];
+      [self sendEventWithName:@"SignInActivate" body:@{ }];
   }
 }
 
-- (void)sendPaywallActivatedFromVC:(UIViewController * _Nullable) fromVC
-                        forPaywall:(NSString * _Nonnull) developerPaywallID
+- (void)sendPaywallActivatedForPaywall:(NSString * _Nonnull) developerPaywallID
                       withProducts:(NSArray<NamiSKU *> * _Nullable) products
                        paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata  {
     if (hasNamiEmitterListeners) {
@@ -297,7 +292,7 @@ bool hasNamiEmitterListeners;
 
     NSMutableArray *newPurchaseDicts = [NSMutableArray array];
     for ( NamiPurchase *purchaseRecord in newPurchases ) {
-        if ( purchaseRecord.skuID == nil ) {
+        if ( purchaseRecord.skuId == nil ) {
         }
         NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
         [newPurchaseDicts addObject:purchaseDict];
@@ -305,7 +300,7 @@ bool hasNamiEmitterListeners;
 
     NSMutableArray *oldPurchaseDicts = [NSMutableArray array];
     for ( NamiPurchase *purchaseRecord in oldPurchases ) {
-        if ( purchaseRecord.skuID == nil ) {
+        if ( purchaseRecord.skuId == nil ) {
         }
         NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
         [oldPurchaseDicts addObject:purchaseDict];
