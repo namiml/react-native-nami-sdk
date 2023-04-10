@@ -628,7 +628,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.TestProducts;
+				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.stg.testreactnative;
 				PRODUCT_NAME = Basic;
 				SWIFT_OBJC_BRIDGING_HEADER = "Basic-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -652,7 +652,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.TestProducts;
+				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.stg.testreactnative;
 				PRODUCT_NAME = Basic;
 				SWIFT_OBJC_BRIDGING_HEADER = "Basic-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
