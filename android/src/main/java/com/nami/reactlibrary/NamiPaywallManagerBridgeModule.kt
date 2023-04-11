@@ -20,11 +20,11 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     private var blockRaisePaywall: Boolean = false
 
     init {
-        NamiPaywallManager.registerApplicationAutoRaisePaywallBlocker {
-            Log.i(LOG_TAG, "Nami flag for blocking paywall raise is $blockRaisePaywall")
-            blockRaisePaywall
-        }
-        reactContext.addActivityEventListener(this)
+//        NamiPaywallManager.registerApplicationAutoRaisePaywallBlocker {
+//            Log.i(LOG_TAG, "Nami flag for blocking paywall raise is $blockRaisePaywall")
+//            blockRaisePaywall
+//        }
+//        reactContext.addActivityEventListener(this)
     }
 
     override fun getName(): String {
@@ -79,30 +79,30 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     private fun raisePaywall(activity: Activity?, developerPaywallID: String?) {
-        if (NamiPaywallManager.canRaisePaywall()) {
-            Log.d(LOG_TAG, "About to raise Paywall ")
-            if (activity != null) {
-                Log.i(LOG_TAG, "Nami Activity to raise paywall is $activity")
-                if (developerPaywallID == null) {
-                    Log.i(LOG_TAG, "Raising Paywall: ")
-                    NamiPaywallManager.raisePaywall(activity)
-                } else {
-                    Log.i(LOG_TAG, "Raising Paywall by Id: $developerPaywallID")
-                    NamiPaywallManager.raisePaywall(developerPaywallID, activity)
-                }
-            } else {
-                Log.w(LOG_TAG, "Activity from react getCurrentActivity was null.")
-            }
-        } else {
-            Log.w(LOG_TAG, "Paywall not raised, SDK says paywall cannot be raised at this time.")
-        }
+//        if (NamiPaywallManager.canRaisePaywall()) {
+//            Log.d(LOG_TAG, "About to raise Paywall ")
+//            if (activity != null) {
+//                Log.i(LOG_TAG, "Nami Activity to raise paywall is $activity")
+//                if (developerPaywallID == null) {
+//                    Log.i(LOG_TAG, "Raising Paywall: ")
+//                    NamiPaywallManager.raisePaywall(activity)
+//                } else {
+//                    Log.i(LOG_TAG, "Raising Paywall by Id: $developerPaywallID")
+//                    NamiPaywallManager.raisePaywall(developerPaywallID, activity)
+//                }
+//            } else {
+//                Log.w(LOG_TAG, "Activity from react getCurrentActivity was null.")
+//            }
+//        } else {
+//            Log.w(LOG_TAG, "Paywall not raised, SDK says paywall cannot be raised at this time.")
+//        }
     }
 
     @ReactMethod
     fun canRaisePaywall(successCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
-            val canRaiseResult = NamiPaywallManager.canRaisePaywall()
-            successCallback.invoke(canRaiseResult)
+//            val canRaiseResult = NamiPaywallManager.canRaisePaywall()
+//            successCallback.invoke(canRaiseResult)
         }
     }
 
@@ -128,19 +128,19 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         reactApplicationContext.runOnUiQueueThread {
 
-            NamiPaywallManager.preparePaywallForDisplay(
-                backgroundImageRequired,
-                imageFetchTimeoutConvertedToLong
-            ) { result ->
-                when (result) {
-                    is PreparePaywallResult.Success -> {
-                        emitPreparePaywallFinished(true, null, null)
-                    }
-                    is PreparePaywallResult.Failure -> {
-                        emitPreparePaywallFinished(false, null, result.error)
-                    }
-                }
-            }
+//            NamiPaywallManager.preparePaywallForDisplay(
+//                backgroundImageRequired,
+//                imageFetchTimeoutConvertedToLong
+//            ) { result ->
+//                when (result) {
+//                    is PreparePaywallResult.Success -> {
+//                        emitPreparePaywallFinished(true, null, null)
+//                    }
+//                    is PreparePaywallResult.Failure -> {
+//                        emitPreparePaywallFinished(false, null, result.error)
+//                    }
+//                }
+//            }
         }
     }
 
@@ -152,20 +152,20 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     ) {
         val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
         reactApplicationContext.runOnUiQueueThread {
-            NamiPaywallManager.preparePaywallForDisplay(
-                developerPaywallID,
-                backgroundImageRequired,
-                imageFetchTimeoutConvertedToLong
-            ) { result ->
-                when (result) {
-                    is PreparePaywallResult.Success -> {
-                        emitPreparePaywallFinished(true, developerPaywallID, null)
-                    }
-                    is PreparePaywallResult.Failure -> {
-                        emitPreparePaywallFinished(false, developerPaywallID, result.error)
-                    }
-                }
-            }
+//            NamiPaywallManager.preparePaywallForDisplay(
+//                developerPaywallID,
+//                backgroundImageRequired,
+//                imageFetchTimeoutConvertedToLong
+//            ) { result ->
+//                when (result) {
+//                    is PreparePaywallResult.Success -> {
+//                        emitPreparePaywallFinished(true, developerPaywallID, null)
+//                    }
+//                    is PreparePaywallResult.Failure -> {
+//                        emitPreparePaywallFinished(false, developerPaywallID, result.error)
+//                    }
+//                }
+//            }
         }
     }
 

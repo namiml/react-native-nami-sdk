@@ -14,7 +14,7 @@ import com.facebook.react.bridge.WritableNativeMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
-import com.namiml.entitlement.NamiEntitlementSetter
+//import com.namiml.entitlement.NamiEntitlementSetter
 import com.namiml.entitlement.NamiPlatformType
 import java.util.ArrayList
 import java.util.Date
@@ -23,9 +23,9 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     ReactContextBaseJavaModule(reactContext) {
 
     init {
-        NamiEntitlementManager.registerEntitlementChangeListener {
-            emitEntitlementsChanged(it)
-        }
+//        NamiEntitlementManager.registerEntitlementChangeListener {
+//            emitEntitlementsChanged(it)
+//        }
     }
 
     private fun emitEntitlementsChanged(activeEntitlements: List<NamiEntitlement>) {
@@ -49,7 +49,7 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     }
 
     override fun getName(): String {
-        return "NamiEntitlementManagerBridge"
+        return "RNNamiEntitlementManager"
     }
 
     @ReactMethod
@@ -69,14 +69,14 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     fun activeEntitlements(resultsCallback: Callback) {
 
         reactApplicationContext.runOnUiQueueThread {
-            val nativeEntitlements = NamiEntitlementManager.activeEntitlements()
+//            val nativeEntitlements = NamiEntitlementManager.activeEntitlements()
 
             val resultArray: WritableArray = WritableNativeArray()
-            for (entitlement in nativeEntitlements) {
-                entitlement.toEntitlementDict()?.let { entitlementDict ->
-                    resultArray.pushMap(entitlementDict)
-                }
-            }
+//            for (entitlement in nativeEntitlements) {
+//                entitlement.toEntitlementDict()?.let { entitlementDict ->
+//                    resultArray.pushMap(entitlementDict)
+//                }
+//            }
             resultsCallback.invoke(resultArray)
         }
     }
@@ -85,83 +85,83 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     fun getEntitlements(resultsCallback: Callback) {
 
         reactApplicationContext.runOnUiQueueThread {
-            val nativeEntitlements = NamiEntitlementManager.getEntitlements()
+//            val nativeEntitlements = NamiEntitlementManager.getEntitlements()
 
-            Log.i(LOG_TAG, "getEntitlements result is $nativeEntitlements")
+//            Log.i(LOG_TAG, "getEntitlements result is $nativeEntitlements")
 
             val resultArray: WritableArray = WritableNativeArray()
-            for (entitlement in nativeEntitlements) {
-                entitlement.toEntitlementDict()?.let { entitlementDict ->
-                    resultArray.pushMap(entitlementDict)
-                }
-            }
+//            for (entitlement in nativeEntitlements) {
+//                entitlement.toEntitlementDict()?.let { entitlementDict ->
+//                    resultArray.pushMap(entitlementDict)
+//                }
+//            }
             resultsCallback.invoke(resultArray)
         }
     }
 
     @ReactMethod
     fun setEntitlements(entitlements: ReadableArray) {
-        val entitlementsToSet = ArrayList<NamiEntitlementSetter>()
+//        val entitlementsToSet = ArrayList<NamiEntitlementSetter>()
 
         val size = entitlements.size()
         var index = 0
-        while (index < size) {
-            val setterMap: ReadableMap? = entitlements.getMap(index)
-            setterMap?.let {
-                val entitlementSetter = entitlementSetterFromSetterMap(setterMap)
-                entitlementSetter?.let {
-                    entitlementsToSet.add(entitlementSetter)
-                }
-            }
-            index += 1
-        }
+//        while (index < size) {
+//            val setterMap: ReadableMap? = entitlements.getMap(index)
+//            setterMap?.let {
+//                val entitlementSetter = entitlementSetterFromSetterMap(setterMap)
+//                entitlementSetter?.let {
+//                    entitlementsToSet.add(entitlementSetter)
+//                }
+//            }
+//            index += 1
+//        }
 
-        reactApplicationContext.runOnUiQueueThread {
-            NamiEntitlementManager.setEntitlements(entitlementsToSet)
-        }
+//        reactApplicationContext.runOnUiQueueThread {
+//            NamiEntitlementManager.setEntitlements(entitlementsToSet)
+//        }
     }
 
     @ReactMethod
     fun clearAllEntitlements() {
         reactApplicationContext.runOnUiQueueThread {
-            NamiEntitlementManager.clearAllEntitlements()
+//            NamiEntitlementManager.clearAllEntitlements()
         }
     }
 
-    private fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
-        if (entitlementSetterMap.hasKey("referenceID")) {
-            val referenceID = entitlementSetterMap.getString("referenceID").orEmpty()
-            if (referenceID.isNotEmpty()) {
-                val expires: Date? = null
-
-                var purchasedSKUid: String? = null
-                if (entitlementSetterMap.hasKey("purchasedSKUID")) {
-                    purchasedSKUid = entitlementSetterMap.getString("purchasedSKUid")
-                }
-
-                var platform: NamiPlatformType = NamiPlatformType.OTHER
-                if (entitlementSetterMap.hasKey("platform")) {
-                    platform = when (entitlementSetterMap.getString("platform")) {
-                        "other" -> NamiPlatformType.OTHER
-
-                        "android" -> NamiPlatformType.ANDROID
-
-                        "apple" -> NamiPlatformType.APPLE
-
-                        "roku" -> NamiPlatformType.ROKU
-
-                        "web" -> NamiPlatformType.WEB
-
-                        else -> NamiPlatformType.OTHER
-                    }
-                }
-
-                //referenceId: kotlin.String, purchasedSKUid: kotlin.String?, expires: java.util.Date?, platform: com.namiml.entitlement.NamiPlatformType
-                return NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires)
-            }
-        }
-        Log.e(LOG_TAG, "Attempted to set entitlement with no referenceID $entitlementSetterMap")
-
-        return null
-    }
+//    private fun entitlementSetterFromSetterMap(entitlementSetterMap: ReadableMap): NamiEntitlementSetter? {
+//        if (entitlementSetterMap.hasKey("referenceID")) {
+//            val referenceID = entitlementSetterMap.getString("referenceID").orEmpty()
+//            if (referenceID.isNotEmpty()) {
+//                val expires: Date? = null
+//
+//                var purchasedSKUid: String? = null
+//                if (entitlementSetterMap.hasKey("purchasedSKUID")) {
+//                    purchasedSKUid = entitlementSetterMap.getString("purchasedSKUid")
+//                }
+//
+//                var platform: NamiPlatformType = NamiPlatformType.OTHER
+//                if (entitlementSetterMap.hasKey("platform")) {
+//                    platform = when (entitlementSetterMap.getString("platform")) {
+//                        "other" -> NamiPlatformType.OTHER
+//
+//                        "android" -> NamiPlatformType.ANDROID
+//
+//                        "apple" -> NamiPlatformType.APPLE
+//
+//                        "roku" -> NamiPlatformType.ROKU
+//
+//                        "web" -> NamiPlatformType.WEB
+//
+//                        else -> NamiPlatformType.OTHER
+//                    }
+//                }
+//
+//                //referenceId: kotlin.String, purchasedSKUid: kotlin.String?, expires: java.util.Date?, platform: com.namiml.entitlement.NamiPlatformType
+//                return NamiEntitlementSetter(referenceID, platform, purchasedSKUid, expires)
+//            }
+//        }
+//        Log.e(LOG_TAG, "Attempted to set entitlement with no referenceID $entitlementSetterMap")
+//
+//        return null
+//    }
 }

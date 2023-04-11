@@ -13,13 +13,23 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
-        return "NamiCustomerManagerBridge"
+        return "RNNamiCustomerManager"
     }
 
     init {
-        NamiCustomerManager.registerCustomerJourneyChangedListener { customerJourneyState ->
-            emitCustomerJourneyChanged(customerJourneyState)
-        }
+//        NamiCustomerManager.registerCustomerJourneyChangedListener { customerJourneyState ->
+//            emitCustomerJourneyChanged(customerJourneyState)
+//        }
+    }
+
+    @ReactMethod
+    fun login(){
+
+    }
+
+    @ReactMethod
+    fun logout() {
+
     }
 
     private fun emitCustomerJourneyChanged(customerJourneyState: CustomerJourneyState) {
@@ -34,9 +44,9 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun currentCustomerJourneyState(resultsCallback: Callback) {
+    fun journeyState(resultsCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
-            resultsCallback.invoke(NamiCustomerManager.currentCustomerJourneyState().toDict())
+//            resultsCallback.invoke(NamiCustomerManager.currentCustomerJourneyState().toDict())
         }
     }
 }

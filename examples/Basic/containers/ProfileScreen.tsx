@@ -76,21 +76,21 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     checkIsLoggedIn();
     getJourneyState();
     checkId();
-    const subscriptionJourneyStateRemover =
-      NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
-        console.log('newJourneyState', newJourneyState);
-        setJourneyState(newJourneyState);
-      });
-    const subscriptionAccountStateRemover =
-      NamiCustomerManager.registerAccountStateHandler(
-        (action, success, error) => {
-          console.log('accountState', action, success, error);
-        },
-      );
-    return () => {
-      subscriptionJourneyStateRemover();
-      subscriptionAccountStateRemover();
-    };
+    // const subscriptionJourneyStateRemover =
+    //   NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
+    //     console.log('newJourneyState', newJourneyState);
+    //     setJourneyState(newJourneyState);
+    //   });
+    // const subscriptionAccountStateRemover =
+    //   NamiCustomerManager.registerAccountStateHandler(
+    //     (action, success, error) => {
+    //       console.log('accountState', action, success, error);
+    //     },
+    //   );
+    // return () => {
+    //   subscriptionJourneyStateRemover();
+    //   subscriptionAccountStateRemover();
+    // };
   }, [getJourneyState]);
 
   useLayoutEffect(() => {

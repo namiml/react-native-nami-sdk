@@ -60,6 +60,7 @@ repositories {
     // ref: https://www.baeldung.com/maven-local-repository
     mavenLocal()
     maven { url("https://packages.namiml.com/NamiSDK/Android/") }
+    maven { url 'https://jitpack.io' }
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url("$rootDir/../node_modules/react-native/android")
@@ -76,7 +77,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    implementation "com.namiml:sdk-android:2.0.2"
+    implementation 'com.github.jeziellago:compose-markdown:0.3.2'
+    implementation "com.namiml:sdk-android:3.0.7"
 
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }

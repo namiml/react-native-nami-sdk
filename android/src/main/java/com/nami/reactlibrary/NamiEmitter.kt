@@ -33,31 +33,31 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
     }
 
     override fun initialize() {
-        NamiPaywallManager.registerSignInListener { _, _, developerPaywallID ->
-            Log.i(LOG_TAG, "Sign in clicked with developerPaywallID $developerPaywallID")
-
-            emitSignInActivated(developerPaywallID)
-        }
+//        NamiPaywallManager.registerSignInListener { _, _, developerPaywallID ->
+//            Log.i(LOG_TAG, "Sign in clicked with developerPaywallID $developerPaywallID")
+//
+//            emitSignInActivated(developerPaywallID)
+//        }
 
         Log.i(LOG_TAG, "In Emitter Initialize()")
 
-        NamiPaywallManager.registerPaywallRaiseListener { _, paywallData, products, developerPaywallId ->
-            Log.i(
-                LOG_TAG,
-                "Products from registerPaywallRaiseListener callback are $products"
-            )
+//        NamiPaywallManager.registerPaywallRaiseListener { _, paywallData, products, developerPaywallId ->
+//            Log.i(
+//                LOG_TAG,
+//                "Products from registerPaywallRaiseListener callback are $products"
+//            )
+//
+//            val sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
+//            emitPaywallRaise(paywallData, sendProducts, developerPaywallId)
+//        }
 
-            val sendProducts: List<NamiSKU> = products ?: ArrayList<NamiSKU>()
-            emitPaywallRaise(paywallData, sendProducts, developerPaywallId)
-        }
-
-        NamiPurchaseManager.registerPurchasesChangedListener { list, namiPurchaseState, s ->
-            emitPurchaseMade(list, namiPurchaseState, s)
-        }
-
-        NamiCustomerManager.registerCustomerJourneyChangedListener {
-            emitCustomerJourneyChanged(it)
-        }
+//        NamiPurchaseManager.registerPurchasesChangedListener { list, namiPurchaseState, s ->
+//            emitPurchaseMade(list, namiPurchaseState, s)
+//        }
+//
+//        NamiCustomerManager.registerCustomerJourneyChangedListener {
+//            emitCustomerJourneyChanged(it)
+//        }
     }
 
     private fun emitCustomerJourneyChanged(customerJourneyState: CustomerJourneyState) {

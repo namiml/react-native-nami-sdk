@@ -35,11 +35,11 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
   useEffect(() => {
-    const registerPurchasesChangedRemover =
-      NamiPurchaseManager.registerPurchasesChangedHandler(() => {});
+    // const registerPurchasesChangedRemover =
+    //   NamiPurchaseManager.registerPurchasesChangedHandler(() => {});
 
-    const registerRestorePurchasesRemover =
-      NamiPurchaseManager.registerRestorePurchasesHandler(() => {});
+    // const registerRestorePurchasesRemover =
+    //   NamiPurchaseManager.registerRestorePurchasesHandler(() => {});
 
     let configDict = {
       // 'appPlatformID-apple': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
@@ -55,10 +55,10 @@ const App = () => {
 
     Nami.configure(configDict);
     NamiPurchaseManager.clearBypassStorePurchases();
-    NamiCustomerManager.logout();
+    // NamiCustomerManager.logout();
     return () => {
-      registerPurchasesChangedRemover();
-      registerRestorePurchasesRemover();
+      // registerPurchasesChangedRemover();
+      // registerRestorePurchasesRemover();
     };
   }, []);
 
