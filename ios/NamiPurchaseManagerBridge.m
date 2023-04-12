@@ -15,6 +15,14 @@
 
 #import "React/RCTViewManager.h"
 
+@interface RCT_EXTERN_MODULE(RNNamiPurchaseManager, NSObject)
+
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
+
+@end
+
 @interface NamiEmitter : RCTEventEmitter
 - (void)sendRestorePurchasesStateChanged: (enum NamiRestorePurchasesState) state
                             newPurchases: (NSArray<NamiPurchase *> * _Nonnull) newPurchases
@@ -53,7 +61,7 @@ RCT_EXPORT_METHOD(purchases:(RCTResponseSenderBlock)completion)
     completion(@[convertedPurchaseDicts]);
 }
 
-RCT_EXPORT_METHOD(isSKUIDPurchased:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
+RCT_EXPORT_METHOD(skuPurchased:(nonnull NSString*)skuID completion:(RCTResponseSenderBlock)completion)
 {
     BOOL active = [NamiPurchaseManager skuPurchased:skuID];
     completion(@[[NSNumber numberWithBool:active]]);

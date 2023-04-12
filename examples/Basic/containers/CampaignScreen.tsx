@@ -83,7 +83,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   const renderDefault = () => {
     return (
-      <TouchableOpacity onPress={() => onItemPress()} style={styles.item}>
+      <TouchableOpacity onPress={() => onItemPress()} style={styles.itemDef}>
         <Text style={styles.itemText}>default</Text>
       </TouchableOpacity>
     );
@@ -98,7 +98,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
-        <FlatList data={campaigns} renderItem={renderCampaigns} />
+        <FlatList
+          data={campaigns}
+          renderItem={renderCampaigns}
+          style={styles.list}
+        />
       </View>
     </SafeAreaView>
   );
@@ -106,6 +110,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   item: {
+    backgroundColor: theme.white,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    justifyContent: 'center',
+  },
+  itemDef: {
     backgroundColor: theme.white,
     paddingHorizontal: 15,
     paddingVertical: 10,
@@ -140,6 +150,9 @@ const styles = StyleSheet.create({
   headerButtonText: {
     color: theme.links,
     fontSize: 16,
+  },
+  list: {
+    borderRadius: 8,
   },
 });
 
