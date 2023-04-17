@@ -157,6 +157,7 @@ jobs:
       - name: Package Local SDK
         run: |
           yarn link && yarn pack
+        working-directory: source/
 
       - name: Install SDK pod dependencies
         run: |
