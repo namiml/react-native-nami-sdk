@@ -99,7 +99,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: '16.20.8'
+          node-version: '16'
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v2
