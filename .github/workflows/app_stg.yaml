@@ -96,10 +96,10 @@ jobs:
       id-token: write
     runs-on: macos-12
     steps:
-      - name: Set up Node.js 12.16.1
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: 12.16.1
+          node-version: '18'
+          cache: 'yarn'
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v2
