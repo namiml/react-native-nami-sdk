@@ -159,7 +159,7 @@ jobs:
           yarn link && yarn pack
         working-directory: source/
 
-      - name: Install SDK pod dependencies
+      - name: Link to local SDK
         run: |
           yarn link react-native-nami-sdk
         working-directory: source/examples/Basic
