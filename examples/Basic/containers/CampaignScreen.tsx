@@ -41,6 +41,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   };
 
   useEffect(() => {
+    console.log('NamiCampaignManager', NamiCampaignManager);
     getAllCampaigns();
     // const subscriptionRemover =
     //   NamiCampaignManager.registerAvailableCampaignsHandler(

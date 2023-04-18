@@ -15,7 +15,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
-        return "RNNamiCampaignrManager"
+        return "RNNamiCampaignManager"
     }
 
     private fun campaignToJsonObject(campaign: NamiCampaign): JSONObject {

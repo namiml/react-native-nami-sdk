@@ -15,7 +15,7 @@ def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
+// apply plugin: 'maven'
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
 buildscript {
@@ -30,17 +30,17 @@ buildscript {
             google()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:4.2.1'
+            classpath 'com.android.tools.build:gradle:7.0.4'
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         }
     }
 }
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
     defaultConfig {
-        minSdkVersion 26
-        targetSdkVersion 31
+        minSdkVersion 22
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
     }
@@ -52,7 +52,10 @@ android {
         abortOnError false
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 }
 repositories {
@@ -77,7 +80,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    implementation 'com.github.jeziellago:compose-markdown:0.3.2'
+    implementation 'com.github.jeziellago:compose-markdown:0.3.0'
     implementation "com.namiml:sdk-android:3.0.7"
 
     implementation 'com.facebook.react:react-native:+'  // From node_modules
@@ -106,13 +109,19 @@ def configureReactNativePom(def pom) {
         }
     }
 }
+
+configurations {
+  customConfig.extendsFrom implementation
+}
+
 afterEvaluate { project ->
     // some Gradle build hooks ref:
     // https://www.oreilly.com/library/view/gradle-beyond-the/9781449373801/ch03.html
     task androidJavadoc(type: Javadoc) {
         source = android.sourceSets.main.java.srcDirs
         classpath += files(android.bootClasspath)
-        classpath += files(project.getConfigurations().getByName('compile').asList())
+        // classpath += files(project.getConfigurations().getByName('compile').asList())
+        classpath += files(project.getConfigurations().getByName('customConfig').asList())
         include '**/*.java'
     }
     task androidJavadocJar(type: Jar, dependsOn: androidJavadoc) {
@@ -137,10 +146,10 @@ afterEvaluate { project ->
     }
     task installArchives(type: Upload) {
         configuration = configurations.archives
-        repositories.mavenDeployer {
-            // Deploy to react-native-event-bridge/maven, ready to publish to npm
-            repository url: "file://${projectDir}/../android/maven"
-            configureReactNativePom pom
-        }
+        // repositories.mavenDeployer {
+        //     // Deploy to react-native-event-bridge/maven, ready to publish to npm
+        //     repository url: "file://${projectDir}/../android/maven"
+        //     configureReactNativePom pom
+        // }
     }
 }
