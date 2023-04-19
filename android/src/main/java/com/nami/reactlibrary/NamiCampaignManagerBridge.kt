@@ -1,11 +1,15 @@
 package com.nami.reactlibrary
 
+import android.content.Intent
 import android.util.Log
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
@@ -18,31 +22,37 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         return "RNNamiCampaignManager"
     }
 
-    private fun campaignToJsonObject(campaign: NamiCampaign): JSONObject {
-        val jsonObject = JSONObject()
-//        jsonObject.put("id", campaign.id)
-//        jsonObject.put("rule", campaign.rule)
-        jsonObject.put("segment", campaign.segment)
-        jsonObject.put("paywall", campaign.paywall)
-//        jsonObject.put("type", campaign.type.rawValue)
-        jsonObject.put("value", campaign.value)
-        return jsonObject
+    private fun campaignToReadableMap(campaign: NamiCampaign): ReadableMap {
+        val readableMap = Arguments.createMap()
+        readableMap.putString("segment", campaign.segment)
+        readableMap.putString("paywall", campaign.paywall)
+        readableMap.putString("value", campaign.value)
+        readableMap.putString("type", campaign.type.toString().lowercase())
+        return readableMap
     }
 
     @ReactMethod
     fun launch(label: String?, callback: (Boolean, Int?) -> Void) {
-        if (label != null) {
-            NamiCampaignManager.launch(currentActivity!!, label!!)
-        } else {
-            NamiCampaignManager.launch(currentActivity!!)
+        Log.d(LOG_TAG, "label")
+
+        reactApplicationContext.runOnUiQueueThread {
+            if (label != null) {
+                NamiCampaignManager.launch(reactApplicationContext.currentActivity!!, label!!)
+            } else {
+                Log.d(LOG_TAG, (reactApplicationContext.currentActivity != null).toString())
+                NamiCampaignManager.launch(reactApplicationContext.currentActivity!!)
+            }
         }
     }
 
     @ReactMethod
     fun allCampaigns(promise: Promise){
         val campaigns = NamiCampaignManager.allCampaigns()
-        val jsonArray = campaigns.map { campaign -> campaignToJsonObject(campaign) }
-        promise.resolve(jsonArray)
+        val array = WritableNativeArray()
+        campaigns.forEach { campaign ->
+            array.pushMap(campaignToReadableMap(campaign))
+        }
+        promise.resolve(array)
     }
 
     @ReactMethod
@@ -63,6 +73,14 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun registerAvailableCampaignsHandler() {
-       
+        NamiCampaignManager.registerAvailableCampaignsHandler { availableCampaigns ->
+            val array = WritableNativeArray()
+            availableCampaigns.forEach { campaign ->
+                array.pushMap(campaignToReadableMap(campaign))
+            }
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("AvailableCampaignsChanged", array)
+        }
     }
 }

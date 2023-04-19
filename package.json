@@ -45,6 +45,11 @@
     "react": "^17.0.2",
     "react-native": "^0.65.2"
   },
+  "devDependencies": {
+    "react": "^17.0.2",
+    "react-native": "^0.65.2",
+    "react-native-codegen": "^0.0.12"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/namiml/react-native-nami-sdk.git"

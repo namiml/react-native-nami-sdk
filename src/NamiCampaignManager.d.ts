@@ -19,7 +19,7 @@ export type NamiCampaign = {
   segment: string;
   paywall: string;
   type: NamiCampaignRuleType;
-  value?: string;
+  value?: string | null;
 };
 
 export enum NamiCampaignRuleType {

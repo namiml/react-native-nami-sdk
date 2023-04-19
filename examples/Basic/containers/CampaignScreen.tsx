@@ -28,6 +28,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(
       label,
     );
+    console.log('isCampaignAvailable', isCampaignAvailable);
     if (isCampaignAvailable) {
       NamiCampaignManager.launch(label, (success, error) => {
         console.log('success', success);
@@ -43,16 +44,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   useEffect(() => {
     console.log('NamiCampaignManager', NamiCampaignManager);
     getAllCampaigns();
-    // const subscriptionRemover =
-    //   NamiCampaignManager.registerAvailableCampaignsHandler(
-    //     (availableCampaigns) => {
-    //       console.log('availableCampaigns', availableCampaigns);
-    //       setCampaigns(availableCampaigns);
-    //     },
-    //   );
-    // return () => {
-    //   subscriptionRemover();
-    // };
+    const subscriptionRemover =
+      NamiCampaignManager.registerAvailableCampaignsHandler(
+        (availableCampaigns) => {
+          console.log('availableCampaigns', availableCampaigns);
+          setCampaigns(availableCampaigns);
+        },
+      );
+    return () => {
+      subscriptionRemover();
+    };
   }, []);
 
   useLayoutEffect(() => {
