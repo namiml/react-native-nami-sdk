@@ -36,16 +36,16 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
 
   useEffect(() => {
     getAllEntitlements();
-    // const subscriptionRemover =
-    //   NamiEntitlementManager.registerActiveEntitlementsHandler(
-    //     (activeEntitlements) => {
-    //       console.log('activeEntitlements', activeEntitlements);
-    //       setEntitlements(activeEntitlements);
-    //     },
-    //   );
-    // return () => {
-    //   subscriptionRemover();
-    // };
+    const subscriptionRemover =
+      NamiEntitlementManager.registerActiveEntitlementsHandler(
+        (activeEntitlements) => {
+          console.log('activeEntitlements', activeEntitlements);
+          setEntitlements(activeEntitlements);
+        },
+      );
+    return () => {
+      subscriptionRemover();
+    };
   }, []);
 
   useLayoutEffect(() => {

@@ -4,13 +4,13 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   NamiCustomerManager,
-  NamiPurchaseManager,
+  // NamiPurchaseManager,
   Nami,
 } from 'react-native-nami-sdk';
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
-import {Platform} from 'react-native';
+import {Platform, View} from 'react-native';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -52,15 +52,16 @@ const App = () => {
       developmentMode: false,
       bypassStore: false,
     };
-
     Nami.configure(configDict);
-    NamiPurchaseManager.clearBypassStorePurchases();
-    // NamiCustomerManager.logout();
+    // NamiPurchaseManager.clearBypassStorePurchases();
+    NamiCustomerManager.logout();
     return () => {
       // registerPurchasesChangedRemover();
       // registerRestorePurchasesRemover();
     };
   }, []);
+
+  // return <View style={{flex: 1, backgroundColor: 'red'}} />;
 
   return (
     <NavigationContainer>
