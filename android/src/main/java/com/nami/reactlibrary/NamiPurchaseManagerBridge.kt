@@ -11,6 +11,7 @@ import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.bridge.WritableNativeMap
 import com.namiml.billing.NamiPurchaseManager
+import com.namiml.paywall.NamiPaywallManager
 
 class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
@@ -27,7 +28,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun buySKU(skuPlatformID: String, developerPaywallID: String, resultsCallback: Callback) {
+    fun buySku(skuPlatformID: String, developerPaywallID: String, resultsCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
             currentActivity?.let {
                 NamiPurchaseManager.buySKU(it, skuPlatformID) {
@@ -63,7 +64,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun isSKUIDPurchased(skuID: String, resultsCallback: Callback) {
+    fun skuPurchased(skuID: String, resultsCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
             val isPurchased = NamiPurchaseManager.isSKUIDPurchased(skuID)
             resultsCallback.invoke(isPurchased)
@@ -71,14 +72,14 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun consumePurchasedSKU(skuRefId: String) {
+    fun consumePurchasedSku(skuRefId: String) {
         reactApplicationContext.runOnUiQueueThread {
             NamiPurchaseManager.consumePurchasedSKU(skuRefId)
         }
     }
 
     @ReactMethod
-    fun anySKUIDPurchased(skuIDs: ReadableArray, resultsCallback: Callback) {
+    fun anySkuPurchased(skuIDs: ReadableArray, resultsCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
             val checkArray: MutableList<String> = mutableListOf()
             for (x in 0 until skuIDs.size()) {
@@ -108,5 +109,12 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
             )
         }
         resultsCallback.invoke(resultMap)
+    }
+
+    @ReactMethod
+    fun registerPurchasesChangedHandler() {
+        NamiPurchaseManager.registerPurchasesChangedHandler{list, purchaseState,status -> {
+
+        }}
     }
 }

@@ -39,7 +39,6 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             if (label != null) {
                 NamiCampaignManager.launch(reactApplicationContext.currentActivity!!, label!!)
             } else {
-                Log.d(LOG_TAG, (reactApplicationContext.currentActivity != null).toString())
                 NamiCampaignManager.launch(reactApplicationContext.currentActivity!!)
             }
         }

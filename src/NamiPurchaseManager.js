@@ -1,26 +1,25 @@
-import { NativeModules, NativeEventEmitter } from "react-native";
+import { NativeModules, NativeEventEmitter, Platform } from "react-native";
 
-export const {
-  NamiPurchaseManagerBridge,
-  NamiEmitter,
-  // RNNamiPurchaseManager
-} = NativeModules;
+const { NamiPurchaseManagerBridge, NamiEmitter } = NativeModules;
+
+const RNNamiPurchaseManager =
+  Platform.OS == "ios" ? NativeModules.RNNamiPurchaseManager : {};
 
 export const NamiPurchaseManager = {
   emitter: new NativeEventEmitter(NamiEmitter),
-  // ...RNNamiPurchaseManager,
+  ...RNNamiPurchaseManager,
   ...NamiPurchaseManagerBridge,
-  // registerPurchasesChangedHandler(callback) {
-  //   const subscription = this.emitter.addListener("PurchasesChanged", callback);
-  //   // NamiPurchaseManagerBridge.registerPurchasesChangedHandler();
-  //   return subscription.remove;
-  // },
-  // registerRestorePurchasesHandler(callback) {
-  //   const subscription = this.emitter.addListener(
-  //     "RestorePurchasesStateChanged",
-  //     callback
-  //   );
-  //   // NamiPurchaseManagerBridge.restorePurchasesWithCompletionHandler();
-  //   return subscription.remove;
-  // },
+  registerPurchasesChangedHandler(callback) {
+    const subscription = this.emitter.addListener("PurchasesChanged", callback);
+    // NamiPurchaseManagerBridge.registerPurchasesChangedHandler();
+    return subscription.remove;
+  },
+  registerRestorePurchasesHandler(callback) {
+    const subscription = this.emitter.addListener(
+      "RestorePurchasesStateChanged",
+      callback
+    );
+    // NamiPurchaseManagerBridge.restorePurchasesWithCompletionHandler();
+    return subscription.remove;
+  },
 };

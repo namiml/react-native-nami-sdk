@@ -3,13 +3,8 @@ package com.nami.reactlibrary
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import com.facebook.react.bridge.ActivityEventListener
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.Callback
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.WritableNativeMap
+import com.android.billingclient.api.Purchase
+import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.paywall.NamiPaywallManager
 import com.namiml.paywall.PreparePaywallResult
@@ -19,17 +14,44 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     private var blockRaisePaywall: Boolean = false
 
-    init {
-//        NamiPaywallManager.registerApplicationAutoRaisePaywallBlocker {
-//            Log.i(LOG_TAG, "Nami flag for blocking paywall raise is $blockRaisePaywall")
-//            blockRaisePaywall
-//        }
-//        reactContext.addActivityEventListener(this)
-    }
-
     override fun getName(): String {
         return "NamiPaywallManagerBridge"
     }
+
+    @ReactMethod
+    fun dismiss(animated: Boolean, callback: Callback) {
+//        NamiPaywallManager.dismiss()
+    }
+
+    @ReactMethod
+    fun displayedViewController() {
+//        NamiPaywallManager.displayedViewController()
+    }
+
+    @ReactMethod
+    fun buySkuComplete(purchase: WritableMap, skuRefId: String) {
+//        NamiPaywallManager.buySkuComplete(currentActivity!!, purchase, skuRefId)
+    }
+
+    @ReactMethod
+    fun renderCustomUiHandler() {
+        NamiPaywallManager.renderCustomUiHandler { context, namiPaywall, skus -> {} }
+    }
+
+    @ReactMethod
+    fun registerCloseHandler() {
+        NamiPaywallManager.registerCloseHandler { activity -> {} }
+    }
+
+    @ReactMethod
+    fun registerBuySkuHandler() {
+        NamiPaywallManager.registerBuySkuHandler { buySkuHandler, status ->
+//            reactApplicationContext
+//                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+//                    .emit("RegisterBuySKU")
+        }
+    }
+
 
     override fun onActivityResult(
         activity: Activity?,
@@ -64,21 +86,14 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         // do nothing
     }
 
-    @ReactMethod
-    fun raisePaywall() {
-        reactApplicationContext.runOnUiQueueThread {
-            raisePaywall(currentActivity, null)
-        }
-    }
+//    @ReactMethod
+//    fun raisePaywallByDeveloperPaywallId(developerPaywallID: String) {
+//        reactApplicationContext.runOnUiQueueThread {
+//            raisePaywall(currentActivity, developerPaywallID)
+//        }
+//    }
 
-    @ReactMethod
-    fun raisePaywallByDeveloperPaywallId(developerPaywallID: String) {
-        reactApplicationContext.runOnUiQueueThread {
-            raisePaywall(currentActivity, developerPaywallID)
-        }
-    }
-
-    private fun raisePaywall(activity: Activity?, developerPaywallID: String?) {
+//    private fun raisePaywall(activity: Activity?, developerPaywallID: String?) {
 //        if (NamiPaywallManager.canRaisePaywall()) {
 //            Log.d(LOG_TAG, "About to raise Paywall ")
 //            if (activity != null) {
@@ -96,106 +111,72 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 //        } else {
 //            Log.w(LOG_TAG, "Paywall not raised, SDK says paywall cannot be raised at this time.")
 //        }
-    }
+//    }
 
-    @ReactMethod
-    fun canRaisePaywall(successCallback: Callback) {
-        reactApplicationContext.runOnUiQueueThread {
-//            val canRaiseResult = NamiPaywallManager.canRaisePaywall()
-//            successCallback.invoke(canRaiseResult)
-        }
-    }
+//    @ReactMethod
+//    fun blockRaisePaywall(blockRaise: Boolean) {
+//        blockRaisePaywall = blockRaise
+//    }
 
-    @ReactMethod
-    fun blockRaisePaywall(blockRaise: Boolean) {
-        blockRaisePaywall = blockRaise
-    }
+//    @ReactMethod
+//    fun fetchCustomMetadataForDeveloperID(paywallDeveloperID: String, successCallback: Callback) {
+//        val sendDict = WritableNativeMap()
+//        //TODO: Android SDK needs fetchCustomMetadataForDeveloperID
+//        successCallback(sendDict)
+//    }
 
-    @ReactMethod
-    fun fetchCustomMetadataForDeveloperID(paywallDeveloperID: String, successCallback: Callback) {
-        val sendDict = WritableNativeMap()
-        //TODO: Android SDK needs fetchCustomMetadataForDeveloperID
-        successCallback(sendDict)
-    }
+//    @ReactMethod
+//    fun preparePaywallForDisplayByDeveloperPaywallId(
+//        developerPaywallID: String,
+//        backgroundImageRequired: Boolean,
+//        imageFetchTimeout: Double
+//    ) {
+//        val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
+//        reactApplicationContext.runOnUiQueueThread {
+////            NamiPaywallManager.preparePaywallForDisplay(
+////                developerPaywallID,
+////                backgroundImageRequired,
+////                imageFetchTimeoutConvertedToLong
+////            ) { result ->
+////                when (result) {
+////                    is PreparePaywallResult.Success -> {
+////                        emitPreparePaywallFinished(true, developerPaywallID, null)
+////                    }
+////                    is PreparePaywallResult.Failure -> {
+////                        emitPreparePaywallFinished(false, developerPaywallID, result.error)
+////                    }
+////                }
+////            }
+//        }
+//    }
 
-    @ReactMethod
-    fun paywallImpression(developerPaywallID: String) {
-        // TODO: Android SDK paywall impression call.
-    }
-
-    @ReactMethod
-    fun preparePaywallForDisplay(backgroundImageRequired: Boolean, imageFetchTimeout: Double) {
-        val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
-        reactApplicationContext.runOnUiQueueThread {
-
-//            NamiPaywallManager.preparePaywallForDisplay(
-//                backgroundImageRequired,
-//                imageFetchTimeoutConvertedToLong
-//            ) { result ->
-//                when (result) {
-//                    is PreparePaywallResult.Success -> {
-//                        emitPreparePaywallFinished(true, null, null)
-//                    }
-//                    is PreparePaywallResult.Failure -> {
-//                        emitPreparePaywallFinished(false, null, result.error)
-//                    }
-//                }
-//            }
-        }
-    }
-
-    @ReactMethod
-    fun preparePaywallForDisplayByDeveloperPaywallId(
-        developerPaywallID: String,
-        backgroundImageRequired: Boolean,
-        imageFetchTimeout: Double
-    ) {
-        val imageFetchTimeoutConvertedToLong: Long = imageFetchTimeout.toLong()
-        reactApplicationContext.runOnUiQueueThread {
-//            NamiPaywallManager.preparePaywallForDisplay(
-//                developerPaywallID,
-//                backgroundImageRequired,
-//                imageFetchTimeoutConvertedToLong
-//            ) { result ->
-//                when (result) {
-//                    is PreparePaywallResult.Success -> {
-//                        emitPreparePaywallFinished(true, developerPaywallID, null)
-//                    }
-//                    is PreparePaywallResult.Failure -> {
-//                        emitPreparePaywallFinished(false, developerPaywallID, result.error)
-//                    }
-//                }
-//            }
-        }
-    }
-
-    private fun emitPreparePaywallFinished(
-        success: Boolean,
-        developerPaywallID: String?,
-        error: com.namiml.paywall.PreparePaywallError?
-    ) {
-        val prepareContentMap = Arguments.createMap()
-        prepareContentMap.putBoolean("success", success)
-
-        if (developerPaywallID != null) {
-            prepareContentMap.putString("developerPaywallID", developerPaywallID)
-        }
-
-        if (error != null) {
-            prepareContentMap.putInt("errorCode", error.ordinal)
-            prepareContentMap.putString("errorMessage", error.toString())
-        }
-
-        Log.i(
-            LOG_TAG,
-            "Emitting preparePaywallForDisplay finished with result " + success + "error: " + error.toString()
-        )
-        try {
-            reactApplicationContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit("PreparePaywallFinished", prepareContentMap)
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "Caught Exception: " + e.message)
-        }
-    }
+//    private fun emitPreparePaywallFinished(
+//        success: Boolean,
+//        developerPaywallID: String?,
+//        error: com.namiml.paywall.PreparePaywallError?
+//    ) {
+//        val prepareContentMap = Arguments.createMap()
+//        prepareContentMap.putBoolean("success", success)
+//
+//        if (developerPaywallID != null) {
+//            prepareContentMap.putString("developerPaywallID", developerPaywallID)
+//        }
+//
+//        if (error != null) {
+//            prepareContentMap.putInt("errorCode", error.ordinal)
+//            prepareContentMap.putString("errorMessage", error.toString())
+//        }
+//
+//        Log.i(
+//            LOG_TAG,
+//            "Emitting preparePaywallForDisplay finished with result " + success + "error: " + error.toString()
+//        )
+//        try {
+//            reactApplicationContext
+//                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+//                .emit("PreparePaywallFinished", prepareContentMap)
+//        } catch (e: Exception) {
+//            Log.e(LOG_TAG, "Caught Exception: " + e.message)
+//        }
+//    }
 }
