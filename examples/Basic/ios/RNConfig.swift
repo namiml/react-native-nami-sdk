@@ -18,9 +18,9 @@ class RNConfig: NSObject {
     var flavor: String?
     switch schemeName {
     case "BasicProduction":
-      flavor = "Production"
+      flavor = "production"
     case "Basic":
-      flavor = "Staging"
+      flavor = "staging"
     default:
       flavor = nil
     }
