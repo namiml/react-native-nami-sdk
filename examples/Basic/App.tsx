@@ -10,6 +10,7 @@ import {
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
+import {getConfigObject} from './config';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -33,24 +34,14 @@ export interface ViewerTabProps<
 const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
+  const configDict = getConfigObject();
+  console.log('configDict', configDict);
   useEffect(() => {
     // const registerPurchasesChangedRemover =
     //   NamiPurchaseManager.registerPurchasesChangedHandler(() => {});
 
     // const registerRestorePurchasesRemover =
     //   NamiPurchaseManager.registerRestorePurchasesHandler(() => {});
-
-    let configDict = {
-      'appPlatformID-apple': '4a2f6dbf-e684-4d65-a4df-0488771c577d',
-      'appPlatformID-google': '3d062066-9d3c-430e-935d-855e2c56dd8e',
-      // appPlatformId:
-      //   Platform.OS === 'ios'
-      //     ? '4a2f6dbf-e684-4d65-a4df-0488771c577d'
-      //     : '3d062066-9d3c-430e-935d-855e2c56dd8e',
-      logLevel: 'DEBUG',
-      developmentMode: false,
-      bypassStore: false,
-    };
     Nami.configure(configDict);
     // NamiPurchaseManager.clearBypassStorePurchases();
     NamiCustomerManager.logout();
@@ -58,7 +49,7 @@ const App = () => {
       // registerPurchasesChangedRemover();
       // registerRestorePurchasesRemover();
     };
-  }, []);
+  }, [configDict]);
 
   return (
     <NavigationContainer>
