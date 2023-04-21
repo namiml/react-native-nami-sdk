@@ -4,13 +4,12 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   NamiCustomerManager,
-  NamiPurchaseManager,
+  // NamiPurchaseManager,
   Nami,
 } from 'react-native-nami-sdk';
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
-import {Platform} from 'react-native';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -35,11 +34,11 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
   useEffect(() => {
-    const registerPurchasesChangedRemover =
-      NamiPurchaseManager.registerPurchasesChangedHandler(() => {});
+    // const registerPurchasesChangedRemover =
+    //   NamiPurchaseManager.registerPurchasesChangedHandler(() => {});
 
-    const registerRestorePurchasesRemover =
-      NamiPurchaseManager.registerRestorePurchasesHandler(() => {});
+    // const registerRestorePurchasesRemover =
+    //   NamiPurchaseManager.registerRestorePurchasesHandler(() => {});
 
     let configDict = {
       'appPlatformID-apple': '4a2f6dbf-e684-4d65-a4df-0488771c577d',
@@ -51,15 +50,13 @@ const App = () => {
       logLevel: 'DEBUG',
       developmentMode: false,
       bypassStore: false,
-      namiCommands: ['useStagingAPI'],
     };
-
     Nami.configure(configDict);
-    NamiPurchaseManager.clearBypassStorePurchases();
+    // NamiPurchaseManager.clearBypassStorePurchases();
     NamiCustomerManager.logout();
     return () => {
-      registerPurchasesChangedRemover();
-      registerRestorePurchasesRemover();
+      // registerPurchasesChangedRemover();
+      // registerRestorePurchasesRemover();
     };
   }, []);
 

@@ -1,7 +1,9 @@
-import { NativeModules, NativeEventEmitter } from "react-native";
+import { NativeModules, NativeEventEmitter, Platform } from "react-native";
 
-export const { NamiPurchaseManagerBridge, NamiEmitter, RNNamiPurchaseManager } =
-  NativeModules;
+const { NamiPurchaseManagerBridge, NamiEmitter } = NativeModules;
+
+const RNNamiPurchaseManager =
+  Platform.OS == "ios" ? NativeModules.RNNamiPurchaseManager : {};
 
 export const NamiPurchaseManager = {
   emitter: new NativeEventEmitter(NamiEmitter),

@@ -1,42 +1,111 @@
 package com.nami.reactlibrary
 
 import android.util.Log
-import com.facebook.react.bridge.Callback
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.namiml.campaign.NamiCampaignManager
 import com.namiml.customer.CustomerJourneyState
 import com.namiml.customer.NamiCustomerManager
+
 
 class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
-        return "NamiCustomerManagerBridge"
+        return "RNNamiCustomerManager"
     }
 
-    init {
-        NamiCustomerManager.registerCustomerJourneyChangedListener { customerJourneyState ->
-            emitCustomerJourneyChanged(customerJourneyState)
-        }
+    private fun journeyStateToReadableMap(journeyState: CustomerJourneyState): ReadableMap {
+        val readableMap = Arguments.createMap()
+        readableMap.putBoolean("formerSubscriber", journeyState.formerSubscriber)
+        readableMap.putBoolean("inGracePeriodl", journeyState.inGracePeriod)
+        readableMap.putBoolean("inTrialPeriod", journeyState.inTrialPeriod)
+        readableMap.putBoolean("inIntroOfferPeriod", journeyState.inIntroOfferPeriod)
+        readableMap.putBoolean("isCancelled", journeyState.isCancelled)
+        readableMap.putBoolean("inPause", journeyState.inPause)
+        readableMap.putBoolean("inAccountHold", journeyState.inAccountHold)
+        return readableMap
+    }
+    @ReactMethod
+    fun setCustomerAttribute(key: String, value: String){
+        NamiCustomerManager.setCustomerAttribute(key, value)
     }
 
-    private fun emitCustomerJourneyChanged(customerJourneyState: CustomerJourneyState) {
-        Log.i(LOG_TAG, "Emitting CustomerJourneyState changed")
-        try {
+    @ReactMethod
+    fun getCustomerAttribute(key: String, promise: Promise){
+        val customerAttribute = NamiCustomerManager.getCustomerAttribute(key)
+        promise.resolve(customerAttribute)
+    }
+
+    @ReactMethod
+    fun clearCustomerAttribute(key: String){
+        NamiCustomerManager.clearCustomerAttribute(key)
+    }
+
+    @ReactMethod
+    fun clearAllCustomerAttributes(){
+        NamiCustomerManager.clearAllCustomerAttributes()
+    }
+
+    @ReactMethod
+   fun journeyState(promise: Promise){
+     val journeyState = NamiCustomerManager.journeyState()
+       if (journeyState != null) {
+           val handledJourneyState = journeyStateToReadableMap(journeyState)
+           promise.resolve(handledJourneyState)
+       } else {
+           promise.resolve(null)
+       }
+   }
+
+    @ReactMethod
+    fun isLoggedIn(promise: Promise){
+        val isLoggedIn = NamiCustomerManager.isLoggedIn()
+        promise.resolve(isLoggedIn)
+    }
+
+    @ReactMethod
+    fun loggedInId(promise: Promise){
+        val id = NamiCustomerManager.loggedInId()
+        promise.resolve(id)
+    }
+
+    @ReactMethod
+    fun deviceId(promise: Promise){
+        val id = NamiCustomerManager.deviceId()
+        promise.resolve(id)
+    }
+
+    @ReactMethod
+    fun login(customerId: String){
+        NamiCustomerManager.login(customerId)
+    }
+
+    @ReactMethod
+    fun logout() {
+        NamiCustomerManager.logout()
+    }
+
+    @ReactMethod
+    fun registerJourneyStateHandler() {
+        NamiCustomerManager.registerJourneyStateHandler { journeyState ->
+            val handledJourneyState = journeyStateToReadableMap(journeyState)
             reactApplicationContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit("CustomerJourneyStateChanged", customerJourneyState.toDict())
-        } catch (e: Exception) {
-            Log.e(LOG_TAG, "Caught Exception: " + e.message)
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("JourneyStateChanged", handledJourneyState)
         }
     }
 
     @ReactMethod
-    fun currentCustomerJourneyState(resultsCallback: Callback) {
-        reactApplicationContext.runOnUiQueueThread {
-            resultsCallback.invoke(NamiCustomerManager.currentCustomerJourneyState().toDict())
+    fun registerAccountStateHandler() {
+        NamiCustomerManager.registerAccountStateHandler { action, success, error ->
+            val body = Arguments.createMap()
+            body.putString("action", action.toString())
+            body.putBoolean("success", success)
+            body.putString("error", error.toString())
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("AccountStateChanged", body)
         }
     }
 }

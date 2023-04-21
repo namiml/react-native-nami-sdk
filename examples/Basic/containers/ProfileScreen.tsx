@@ -37,8 +37,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     NamiCustomerManager.login(
       'E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF',
       (success, error) => {
-        setIsUserLogin(success);
-        checkId();
         console.log('success', success);
         console.log('error', error);
       },
@@ -47,8 +45,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
 
   const onLogoutPress = useCallback(() => {
     NamiCustomerManager.logout((success, error) => {
-      setIsUserLogin(!success);
-      checkId();
       console.log('success', success);
       console.log('error', error);
     });
@@ -85,6 +81,14 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
       NamiCustomerManager.registerAccountStateHandler(
         (action, success, error) => {
           console.log('accountState', action, success, error);
+          if (action === 'login' && success) {
+            setIsUserLogin(success);
+            checkId();
+          }
+          if (action === 'logout' && success) {
+            setIsUserLogin(!success);
+            checkId();
+          }
         },
       );
     return () => {
