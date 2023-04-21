@@ -2,21 +2,16 @@ package com.nami.reactlibrary
 
 import android.content.Intent
 import android.util.Log
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.Callback
-import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.WritableNativeArray
+import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
-import org.json.JSONObject
+import com.namiml.paywall.NamiSKU
+import com.namiml.paywall.model.NamiPaywallAction
+import android.app.Activity
 
 class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
-    ReactContextBaseJavaModule(reactContext) {
+    ReactContextBaseJavaModule(reactContext), ActivityEventListener {
 
     override fun getName(): String {
         return "RNNamiCampaignManager"
@@ -32,16 +27,40 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun launch(label: String?, callback: (Boolean, Int?) -> Void) {
+    fun launch(label: String?, callback: Callback) {
         Log.d(LOG_TAG, "label")
+        if (label != null) {
+            Log.d(LOG_TAG, label)
+        }
+        val intent = Intent(currentActivity, PaywallActivity::class.java)
+        currentActivity!!.startActivity(intent)
+
+        val paywallActionCallback: (NamiPaywallAction, NamiSKU?) -> Unit = { action, sku ->
+
+        }
 
         reactApplicationContext.runOnUiQueueThread {
             if (label != null) {
-                NamiCampaignManager.launch(reactApplicationContext.currentActivity!!, label!!)
+                NamiCampaignManager.launch(currentActivity!!, label, paywallActionCallback) { result -> {
+
+                }}
             } else {
-                NamiCampaignManager.launch(reactApplicationContext.currentActivity!!)
+                NamiCampaignManager.launch(currentActivity!!)
             }
         }
+    }
+
+    override fun onActivityResult(
+            activity: Activity?,
+            requestCode: Int,
+            resultCode: Int,
+            intent: Intent?
+    ) {
+        Log.d(LOG_TAG, "Nami Activity result listener activated, code is $requestCode")
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        // do nothing
     }
 
     @ReactMethod

@@ -4,13 +4,15 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   NamiCustomerManager,
+  NamiCampaignManager,
   // NamiPurchaseManager,
   Nami,
 } from 'react-native-nami-sdk';
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
-import {Platform, View} from 'react-native';
+import {Platform, Text, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -61,7 +63,9 @@ const App = () => {
     };
   }, []);
 
-  // return <View style={{flex: 1, backgroundColor: 'red'}} />;
+  const onPress = () => {
+    NamiCampaignManager.launch();
+  };
 
   return (
     <NavigationContainer>

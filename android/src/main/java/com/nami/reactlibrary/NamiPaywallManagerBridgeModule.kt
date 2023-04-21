@@ -33,10 +33,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 //        NamiPaywallManager.buySkuComplete(currentActivity!!, purchase, skuRefId)
     }
 
-    @ReactMethod
-    fun renderCustomUiHandler() {
-        NamiPaywallManager.renderCustomUiHandler { context, namiPaywall, skus -> {} }
-    }
 
     @ReactMethod
     fun registerCloseHandler() {
