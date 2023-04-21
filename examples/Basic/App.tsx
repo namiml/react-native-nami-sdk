@@ -4,15 +4,12 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   NamiCustomerManager,
-  NamiCampaignManager,
   // NamiPurchaseManager,
   Nami,
 } from 'react-native-nami-sdk';
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
-import {Platform, Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -44,11 +41,11 @@ const App = () => {
     //   NamiPurchaseManager.registerRestorePurchasesHandler(() => {});
 
     let configDict = {
-      'appPlatformID-apple': '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af',
+      'appPlatformID-apple': '4a2f6dbf-e684-4d65-a4df-0488771c577d',
       'appPlatformID-google': '3d062066-9d3c-430e-935d-855e2c56dd8e',
       // appPlatformId:
       //   Platform.OS === 'ios'
-      //     ? '002e2c49-7f66-4d22-a05c-1dc9f2b7f2af'
+      //     ? '4a2f6dbf-e684-4d65-a4df-0488771c577d'
       //     : '3d062066-9d3c-430e-935d-855e2c56dd8e',
       logLevel: 'DEBUG',
       developmentMode: false,
@@ -62,10 +59,6 @@ const App = () => {
       // registerRestorePurchasesRemover();
     };
   }, []);
-
-  const onPress = () => {
-    NamiCampaignManager.launch();
-  };
 
   return (
     <NavigationContainer>

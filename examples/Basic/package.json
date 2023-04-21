@@ -14,11 +14,12 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "react": "17.0.2",
-    "react-native": "0.66.4",
+    "react-native": "0.65.2",
     "react-native-gesture-handler": "^2.1.0",
     "react-native-nami-sdk": "file:../../",
     "react-native-reanimated": "^2.3.1",
@@ -49,5 +50,8 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "resolutions": {
+    "react-native-gesture-handler": "2.1.0"
   }
 }
