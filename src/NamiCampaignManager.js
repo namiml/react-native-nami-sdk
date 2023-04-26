@@ -5,8 +5,12 @@ export const { RNNamiCampaignManager } = NativeModules;
 export const NamiCampaignManager = {
   emitter: new NativeEventEmitter(RNNamiCampaignManager),
   ...RNNamiCampaignManager,
-  launch: (label, callback) => {
-    RNNamiCampaignManager.launch(label ?? null, callback ?? (() => {}));
+  launch: (label, actionCallback, resultCallback) => {
+    RNNamiCampaignManager.launch(
+      label ?? null,
+      actionCallback ?? (() => {}),
+      resultCallback ?? (() => {})
+    );
   },
   isCampaignAvailable: (label) => {
     return RNNamiCampaignManager.isCampaignAvailable(label ?? null);

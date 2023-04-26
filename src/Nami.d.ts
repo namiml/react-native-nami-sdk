@@ -3,7 +3,8 @@ export const Nami: {
 };
 
 export type NamiConfiguration = {
-  appPlatformId: string;
+  "appPlatformID-apple": string;
+  "appPlatformID-google": string;
   logLevel: string;
   namiLanguageCode?: NamiLanguageCodes;
   bypassStore?: boolean;

@@ -28,3 +28,11 @@ export type NamiPurchase = {
   skuId: string;
   purchaseInitiatedTimestamp: Date;
 };
+
+export enum NamiPurchaseState {
+  PURCHASED = "PURCHASED",
+  FAILED = "FAILED",
+  CANCELLED = "CANCELLEDd",
+  PENDING = "PENDING",
+  UNKNOWN = "UNKNOWN",
+}

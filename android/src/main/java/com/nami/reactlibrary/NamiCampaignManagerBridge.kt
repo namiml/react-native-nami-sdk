@@ -9,6 +9,9 @@ import com.namiml.campaign.NamiCampaignManager
 import com.namiml.paywall.NamiSKU
 import com.namiml.paywall.model.NamiPaywallAction
 import android.app.Activity
+import com.namiml.billing.NamiPurchase
+import com.namiml.billing.NamiPurchaseState
+import com.namiml.campaign.LaunchCampaignResult
 
 class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), ActivityEventListener {
@@ -27,25 +30,40 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun launch(label: String?, callback: Callback) {
-        Log.d(LOG_TAG, "label")
-        if (label != null) {
-            Log.d(LOG_TAG, label)
-        }
-        val intent = Intent(currentActivity, PaywallActivity::class.java)
-        currentActivity!!.startActivity(intent)
-
-        val paywallActionCallback: (NamiPaywallAction, NamiSKU?) -> Unit = { action, sku ->
-
-        }
-
+    fun launch(label: String?, actionCallback: Callback, resultCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
             if (label != null) {
-                NamiCampaignManager.launch(currentActivity!!, label, paywallActionCallback) { result -> {
-
-                }}
+                NamiCampaignManager.launch(currentActivity!!, label,
+                        paywallActionCallback = { action, sku, purchaseError, purchases ->
+                            handlePaywallCallback(action, sku, purchaseError, purchases, actionCallback)
+                        }
+                ) { result -> handleResult(result, resultCallback) }
             } else {
-                NamiCampaignManager.launch(currentActivity!!)
+                NamiCampaignManager.launch(currentActivity!!,
+                        paywallActionCallback = { action, sku,purchaseError, purchases  ->
+                            handlePaywallCallback(action, sku, purchaseError, purchases, actionCallback)
+                        }
+                ) { result -> handleResult(result, resultCallback) }
+            }
+        }
+    }
+
+    private fun handlePaywallCallback(action: NamiPaywallAction, sku: NamiSKU?, purchaseError: String?, purchases: List<NamiPurchase>?,  actionCallback: Callback){
+        val actionString = action.toString()
+        val skuString = sku?.skuId.orEmpty()
+        val purchasesString = purchases.toString()
+        actionCallback.invoke(actionString, skuString, purchaseError, purchasesString)
+    }
+
+    private fun handleResult(result: LaunchCampaignResult, resultCallback: Callback) {
+        val resultMap = Arguments.createMap()
+        when (result) {
+            is LaunchCampaignResult.Success -> {
+                resultCallback.invoke("success")
+            }
+            is LaunchCampaignResult.Failure -> {
+                resultMap.putString("error", "${result.error}")
+                resultCallback.invoke("failure", resultMap)
             }
         }
     }

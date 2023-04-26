@@ -29,10 +29,19 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       label,
     );
     if (isCampaignAvailable) {
-      NamiCampaignManager.launch(label, (success, error) => {
-        console.log('success', success);
-        console.log('error', error);
-      });
+      NamiCampaignManager.launch(
+        label,
+        (action, sku, purchaseError, purchases) => {
+          console.log('action', action);
+          console.log('sku', sku);
+          console.log('purchaseError', purchaseError);
+          console.log('purchases', purchases);
+        },
+        (action, obj) => {
+          console.log('action', action);
+          console.log('obj', obj);
+        },
+      );
     }
   };
 
@@ -74,7 +83,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     }
     return (
       <TouchableOpacity
-        onPress={() => onItemPress(item.value)}
+        onPress={() => onItemPress(item.value ?? undefined)}
         style={styles.item}>
         <Text style={styles.itemText}>{item.value}</Text>
       </TouchableOpacity>
