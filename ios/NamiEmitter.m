@@ -46,10 +46,6 @@ static NamiEmitter *namiEmitter;
             [self sendSignInActivateFromVC:fromVC];
         }];
 
-        [NamiPaywallManager renderCustomUiHandler:^(NSArray<NamiSKU *> * _Nullable products, NamiPaywall * _Nullable paywallMetadata) {
-            [self sendPaywallActivatedForPaywall:paywallMetadata.developerPaywallId withProducts:products paywallMetadata:paywallMetadata];
-        }];
-
         [NamiPaywallManager registerCloseHandler:^(UIViewController * _Nullable fromVC) {
             [self sendBlockingPaywallClosed];
         }];

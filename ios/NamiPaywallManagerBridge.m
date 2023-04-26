@@ -47,10 +47,7 @@ RCT_EXTERN_METHOD(displayedViewController)
 {
     self = [super init];
     if (self) {
-        [self setBlockPaywallRaise:false];
-        [NamiPaywallManager renderCustomUiHandler:^(NSArray<NamiSKU *> * _Nullable products, NamiPaywall * _Nullable paywallMetadata) {
-            NSLog(@"Block paywall raise set to %d", [self blockPaywallRaise]);
-        }];        
+        [self setBlockPaywallRaise:false];       
     }
     return self;
 }
@@ -68,16 +65,6 @@ RCT_EXPORT_METHOD(raisePaywallByDeveloperPaywallId)
 RCT_EXPORT_METHOD(blockPaywallRaise:(BOOL)blockRaise)
 {
     [self setBlockPaywallRaise:blockRaise];
-}
-
-RCT_EXPORT_METHOD(presentNamiPaywall:(NSArray *)skuIDs metapaywallDefinition:(NSDictionary *)paywallDict)
-{
-    NSString *paywallDeveloperID = paywallDict[@"developerPaywallID"];
-    if ( paywallDeveloperID != nil ) {        
-        [NamiPaywallManager renderCustomUiHandler:nil];
-    } else {
-        // No way to handle this case for now as we cannot cretae a NamiMetaPaywall
-    }
 }
 
 RCT_EXPORT_METHOD(processSmartTextForProducts:(NSString *)smartText  skuIDs:(NSArray<NSString *> *)skuIDs completion:(RCTResponseSenderBlock)completion)
