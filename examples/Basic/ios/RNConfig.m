@@ -11,5 +11,8 @@
 
 @interface RCT_EXTERN_MODULE(RNConfig, NSObject)
 
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
 
 @end

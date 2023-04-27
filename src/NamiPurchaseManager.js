@@ -11,7 +11,7 @@ export const NamiPurchaseManager = {
   ...NamiPurchaseManagerBridge,
   registerPurchasesChangedHandler(callback) {
     const subscription = this.emitter.addListener("PurchasesChanged", callback);
-    // NamiPurchaseManagerBridge.registerPurchasesChangedHandler();
+    NamiPurchaseManagerBridge.registerPurchasesChangedHandler();
     return subscription.remove;
   },
   registerRestorePurchasesHandler(callback) {
