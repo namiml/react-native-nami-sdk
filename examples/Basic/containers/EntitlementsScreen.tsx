@@ -65,7 +65,9 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
   const renderCampaigns = ({item}: {item: NamiEntitlement}) => {
     return (
       <TouchableOpacity
-        onPress={() => onItemPress(item.referenceId)}
+        onPress={() => {
+          onItemPress(item.referenceId);
+        }}
         style={styles.item}>
         <Text style={styles.itemText}>{item.name}</Text>
       </TouchableOpacity>

@@ -16,69 +16,17 @@ class RNNamiEntitlementManager: RCTEventEmitter {
       return ["EntitlementsChanged"]
     }
     
-    private func productToDict(_ product: SKProduct) -> NSDictionary {
-        let productDict : [String: Any?] = [
-            "localizedTitle" : product.localizedTitle,
-            "localizedDescription" : product.localizedDescription,
-            "localizedPrice" : product.localizedPrice,
-            "localizedMultipliedPrice" : product.localizedMultipliedPrice,
-            "price" : product.price.stringValue,
-            "priceLanguage" : product.priceLocale.languageCode,
-            "priceCurrency" : product.priceLocale.currencyCode,
-        ]
-        return NSDictionary(dictionary: productDict.compactMapValues { $0 })
-    }
-    
-    private func skuToSKUDict(_ sku: NamiSKU) -> NSDictionary {
-        var productDict: NSDictionary?
-        if let product = sku.product {
-               productDict = self.productToDict(product)
-        }
-        
-        let typeString: String
-        switch sku.type {
-        case .unknown:
-            typeString = "unknown"
-        case .one_time_purchase:
-            typeString = "one_time_purchase"
-        case .subscription:
-            typeString = "subscription"
-        @unknown default:
-            typeString = "unknown"
-        }
-
-        let skuDict : [String: Any?] = [
-            "name": sku.name,
-            "skuId": sku.skuId,
-            "type": typeString,
-            "product": productDict,
-            "displayText": sku.localizedDisplayText,
-            "displaySubText": sku.localizedSubDisplayText,
-        ]
-
-        return NSDictionary(dictionary: skuDict.compactMapValues { $0 })
-    }
-    
-    private func purchaseToPurchaseDict(_ purchase: NamiPurchase) -> NSDictionary {
-        let purchaseDict: [String: Any?] = [
-            "skuIdentifier" : purchase.skuId,
-            "transactionIdentifier" : purchase.transactionIdentifier,
-            "purchaseSource" : "UNKNOWN",
-        ]
-        return NSDictionary(dictionary: purchaseDict.compactMapValues { $0 })
-    }
-    
     private func entitlementInToDictionary(_ entitlement: NamiEntitlement) -> NSDictionary {
         let activePurchasesDict = entitlement.activePurchases.map { purchase in
-            let dictionary = self.purchaseToPurchaseDict(purchase)
+            let dictionary = RNNamiPurchaseManager.purchaseToPurchaseDict(purchase)
             return dictionary
         }
         let purchasedSkusDict = entitlement.purchasedSkus.map { sku in
-            let dictionary = self.skuToSKUDict(sku)
+            let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
             return dictionary
         }
         let relatedSkusDict = entitlement.relatedSkus.map { sku in
-            let dictionary = self.skuToSKUDict(sku)
+            let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
             return dictionary
         }
         let dictionary: [String: Any?] = [

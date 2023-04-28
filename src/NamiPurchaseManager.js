@@ -10,16 +10,29 @@ export const NamiPurchaseManager = {
   ...RNNamiPurchaseManager,
   ...NamiPurchaseManagerBridge,
   registerPurchasesChangedHandler(callback) {
-    const subscription = this.emitter.addListener("PurchasesChanged", callback);
-    NamiPurchaseManagerBridge.registerPurchasesChangedHandler();
+    const subscription = this.emitter.addListener(
+      "PurchasesChanged",
+      (body) => {
+        var purchases = body.purchases;
+        var purchaseState = body.purchaseState.toLowerCase();
+        var error = body.error;
+        callback(purchaseState, purchases, error);
+      }
+    );
+    RNNamiPurchaseManager.registerPurchasesChangedHandler();
     return subscription.remove;
   },
   registerRestorePurchasesHandler(callback) {
     const subscription = this.emitter.addListener(
       "RestorePurchasesStateChanged",
-      callback
+      (body) => {
+        var state = body.state.toLowerCase();
+        var newPurchases = body.newPurchases;
+        var oldPurchases = body.oldPurchases;
+        callback(state, newPurchases, oldPurchases);
+      }
     );
-    // NamiPurchaseManagerBridge.restorePurchasesWithCompletionHandler();
+    RNNamiPurchaseManager.registerRestorePurchasesHandler();
     return subscription.remove;
   },
 };

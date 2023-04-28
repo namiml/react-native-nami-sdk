@@ -1,27 +1,36 @@
 import { EmitterSubscription } from "react-native";
+import { NamiSKU } from "./types";
+import { NamiEntitlement } from "./NamiEntitlementManager";
 
 export const NamiPurchaseManager: {
+  allPurchases: () => NamiPurchase[];
   anySkuPurchased: (skuIds: string[]) => boolean;
   consumePurchasedSku: (skuId: string) => void;
   clearBypassStorePurchases: () => void;
   presentCodeRedemptionSheet: () => void;
-  // restorePurchases: () => void;
+  restorePurchases: () => void;
   skuPurchased: (skuId: string) => boolean;
   registerPurchasesChangedHandler: (
-    callback: (responseHandler: any) => void
+    callback: (
+      purchaseState: NamiPurchasesState,
+      purchases: NamiPurchase[],
+      error: string
+    ) => void
   ) => EmitterSubscription["remove"];
   registerRestorePurchasesHandler: (
-    callback: (changeHandler: any) => void
+    callback: (
+      state: NamiRestorePurchasesState,
+      newPurchases: NamiPurchase[],
+      oldPurchases: NamiPurchase[]
+    ) => void
   ) => EmitterSubscription["remove"];
 };
 
 export type NamiPurchase = {
-  // sku: any,
-  expires?: Date;
-  // entitlementsGranted: [any],
-  transactionIdentifier?: string;
-  // transaction : any,
+  sku?: NamiSKU;
   skuId: string;
+  transactionIdentifier?: string;
+  expires?: Date;
   purchaseInitiatedTimestamp: Date;
 };
 
@@ -32,3 +41,16 @@ export enum NamiPurchaseState {
   PENDING = "PENDING",
   UNKNOWN = "UNKNOWN",
 }
+
+export type NamiRestorePurchasesState = "started" | "finished" | "error";
+
+export type NamiPurchasesState =
+  | "pending"
+  | "purchased"
+  | "consumed"
+  | "resubscribed"
+  | "unsubscribed"
+  | "deferred"
+  | "failed"
+  | "cancelled"
+  | "unknown";

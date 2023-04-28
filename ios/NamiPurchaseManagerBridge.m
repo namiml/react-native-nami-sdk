@@ -17,11 +17,17 @@
 
 @interface RCT_EXTERN_MODULE(RNNamiPurchaseManager, NSObject)
 
+RCT_EXTERN_METHOD(allPurchases:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(skuPurchased:(NSString *)skuId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(anySkuPurchased:(NSArray*)skuIds resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(consumePurchasedSku:(NSString *)skuId)
+
+RCT_EXTERN_METHOD(registerPurchasesChangedHandler)
+
+RCT_EXTERN_METHOD(registerRestorePurchasesHandler)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;
@@ -51,21 +57,6 @@ RCT_EXTERN_METHOD(clearBypassStorePurchases)
   [NamiPurchaseManager clearBypassStorePurchases];
 }
 
-RCT_EXPORT_METHOD(purchases:(RCTResponseSenderBlock)completion)
-{
-    NSArray <NamiPurchase *> *purchases = [NamiPurchaseManager allPurchases];
-    NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
-    BOOL anyProductNil = NO;
-    for ( NamiPurchase *purchaseRecord in purchases ) {
-        if ( purchaseRecord.skuId == nil ) {
-            anyProductNil = YES;
-        }
-        NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
-        [convertedPurchaseDicts addObject:purchaseDict];
-    }
-
-    completion(@[convertedPurchaseDicts]);
-}
 
 RCT_EXPORT_METHOD(restorePurchasesWithCompletionHandler:(RCTResponseSenderBlock)completion)
 {
