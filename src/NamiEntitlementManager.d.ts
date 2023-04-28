@@ -1,4 +1,6 @@
 import { EmitterSubscription } from "react-native";
+import { NamiPurchase } from "./NamiPurchaseManager";
+import { NamiSKU } from "./types";
 
 export const NamiEntitlementManager: {
   active: () => Promise<Array<NamiEntitlement>>;
@@ -10,11 +12,11 @@ export const NamiEntitlementManager: {
 };
 
 export type NamiEntitlement = {
-  //"activePurchases"
+  activePurchases: NamiPurchase[];
   desc: string;
   name: string;
   namiId: string;
-  //"purchasedSkus"
+  purchasedSkus: NamiSKU[];
   referenceId: string;
-  //"relatedSkus"
+  relatedSkus: NamiSKU[];
 };

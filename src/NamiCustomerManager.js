@@ -28,22 +28,12 @@ export const NamiCustomerManager = {
     return subscription.remove;
   },
   registerAccountStateHandler(callback) {
-    const actions = ["login", "logout"];
     const subscription = this.emitter.addListener(
       "AccountStateChanged",
       (body) => {
-        var action;
-        var error;
-        var success;
-        if (Platform.OS === "ios") {
-          action = actions[body[0]];
-          error = body[2];
-          success = body[1];
-        } else {
-          action = body.action.toLowerCase();
-          error = body.error;
-          success = body.success;
-        }
+        var action = body.action.toLowerCase();
+        var error = body.error;
+        var success = body.success;
         callback(action, success, error);
       }
     );

@@ -16,6 +16,31 @@ class RNNamiEntitlementManager: RCTEventEmitter {
       return ["EntitlementsChanged"]
     }
     
+    private func entitlementInToDictionary(_ entitlement: NamiEntitlement) -> NSDictionary {
+        let activePurchasesDict = entitlement.activePurchases.map { purchase in
+            let dictionary = RNNamiPurchaseManager.purchaseToPurchaseDict(purchase)
+            return dictionary
+        }
+        let purchasedSkusDict = entitlement.purchasedSkus.map { sku in
+            let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
+            return dictionary
+        }
+        let relatedSkusDict = entitlement.relatedSkus.map { sku in
+            let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
+            return dictionary
+        }
+        let dictionary: [String: Any?] = [
+            "name": entitlement.name,
+            "desc": entitlement.desc,
+            "namiId": entitlement.namiId,
+            "referenceId": entitlement.referenceId,
+            "activePurchases": activePurchasesDict,
+            "relatedSkus": relatedSkusDict,
+            "purchasedSkus": purchasedSkusDict,
+        ]
+        return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
+    }
+    
     @objc(isEntitlementActive:resolver:rejecter:)
     func isEntitlementActive(referenceId: String, resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
         let isEntitlementActive = NamiEntitlementManager.isEntitlementActive(referenceId)
@@ -26,8 +51,8 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     func active(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
         let entitlements = NamiEntitlementManager.active()
         let dictionaries = entitlements.map { entitlement in
-            let dictionary = NamiBridgeUtil.entitlement(toEntitlementDict: entitlement)
-            return NSDictionary(dictionary: dictionary!.compactMapValues { $0 })
+            let dictionary = self.entitlementInToDictionary(entitlement)
+            return dictionary
         }
         resolve(dictionaries)
     }
@@ -41,8 +66,8 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     func registerActiveEntitlementsHandler() {
         NamiEntitlementManager.registerActiveEntitlementsHandler { activeEntitlements in
             let dictionaries = activeEntitlements.map { entitlement in
-                let dictionary = NamiBridgeUtil.entitlement(toEntitlementDict: entitlement)
-                return NSDictionary(dictionary: dictionary!.compactMapValues { $0 })
+                let dictionary = self.entitlementInToDictionary(entitlement)
+                return dictionary
             }
             self.sendEvent(withName: "EntitlementsChanged", body: dictionaries)
         }

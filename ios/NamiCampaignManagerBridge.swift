@@ -62,7 +62,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
             let skuId = sku?.skuId
             let errorSting = purchaseError?.localizedDescription
             let dictionaries = purchases.map { purchase in NamiBridgeUtil.purchase(toPurchaseDict: purchase) }
-            callback([actionString, skuId as Any, errorSting as Any, dictionaries])
+//            paywallCallback([actionString, skuId as Any, errorSting as Any, dictionaries])
         })
         
     }

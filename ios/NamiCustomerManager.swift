@@ -103,7 +103,21 @@ class RNNamiCustomerManager: RCTEventEmitter {
     @objc(registerAccountStateHandler)
     func registerAccountStateHandler() {
         NamiCustomerManager.registerAccountStateHandler({action, success, error in
-            self.sendEvent(withName: "AccountStateChanged", body: [action.rawValue, success, error?._code as Any])
+            let actionString: String
+            switch action {
+            case .login:
+                actionString = "login"
+            case .logout:
+                actionString = "logout"
+            @unknown default:
+                actionString = "unknown"
+            }
+            let payload: [String: Any?] = [
+                "action": actionString,
+                "success": success,
+                "error": error?._code as Any
+            ]
+            self.sendEvent(withName: "AccountStateChanged", body: payload)
         })
     }
 }
