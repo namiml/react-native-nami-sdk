@@ -12,7 +12,7 @@ import React
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
-      return ["AvailableCampaignsChanged"]
+      return ["AvailableCampaignsChanged", "ResultCampaign"]
     }
     
     private func campaignInToDictionary(_ campaign: NamiCampaign) -> NSDictionary {
@@ -62,7 +62,13 @@ class RNNamiCampaignManager: RCTEventEmitter {
             let skuId = sku?.skuId
             let errorSting = purchaseError?.localizedDescription
             let dictionaries = purchases.map { purchase in NamiBridgeUtil.purchase(toPurchaseDict: purchase) }
-//            paywallCallback([actionString, skuId as Any, errorSting as Any, dictionaries])
+            let payload: [String: Any?] = [
+                "action": actionString,
+                "skuId": skuId,
+                "purchaseError": errorSting,
+                "purchases": dictionaries
+            ]
+            self.sendEvent(withName: "ResultCampaign", body: payload)
         })
         
     }

@@ -1,4 +1,5 @@
 import { EmitterSubscription } from "react-native";
+import { NamiPurchase } from "./NamiPurchaseManager";
 
 export const NamiCampaignManager: {
   allCampaigns: () => Promise<Array<NamiCampaign>>;
@@ -15,7 +16,9 @@ export const NamiCampaignManager: {
     ) => void,
     resultCallback?: (
       action: LaunchCampaignResultAction,
-      resultObject?: FailureResultObject
+      skuId?: string,
+      purchaseError?: string,
+      purchases?: NamiPurchase[]
     ) => void
   ) => void;
   refresh: () => void;
