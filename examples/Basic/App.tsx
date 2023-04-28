@@ -2,15 +2,10 @@ import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {
-  NamiCustomerManager,
-  // NamiPurchaseManager,
-  Nami,
-} from 'react-native-nami-sdk';
+import {NamiCustomerManager} from 'react-native-nami-sdk';
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
-import {getConfigObject} from './config';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -34,22 +29,11 @@ export interface ViewerTabProps<
 const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
-  const configDict = getConfigObject();
-  console.log('configDict', configDict);
   useEffect(() => {
-    // const registerPurchasesChangedRemover =
-    //   NamiPurchaseManager.registerPurchasesChangedHandler(() => {});
-
-    // const registerRestorePurchasesRemover =
-    //   NamiPurchaseManager.registerRestorePurchasesHandler(() => {});
-    Nami.configure(configDict);
     // NamiPurchaseManager.clearBypassStorePurchases();
     NamiCustomerManager.logout();
-    return () => {
-      // registerPurchasesChangedRemover();
-      // registerRestorePurchasesRemover();
-    };
-  }, [configDict]);
+    return () => {};
+  }, []);
 
   return (
     <NavigationContainer>
