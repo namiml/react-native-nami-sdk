@@ -105,7 +105,7 @@ RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier completi
 RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
 {
     NSString *externalIdentifier = [NamiCustomerManager loggedInId];
-    
+
     if (externalIdentifier == NULL || [externalIdentifier length] == 0) {
         completion(@[]);
     } else {

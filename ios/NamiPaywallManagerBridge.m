@@ -47,7 +47,7 @@ RCT_EXTERN_METHOD(displayedViewController)
 {
     self = [super init];
     if (self) {
-        [self setBlockPaywallRaise:false];       
+        [self setBlockPaywallRaise:false];
     }
     return self;
 }

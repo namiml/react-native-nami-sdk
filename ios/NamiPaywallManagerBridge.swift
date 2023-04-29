@@ -13,11 +13,11 @@ import React
 @objc(RNNamiPaywallManager)
 class RNNamiPaywallManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
-      return ["RegisterBuySKU"]
+        return ["RegisterBuySKU"]
     }
-    
+
     @objc(buySkuComplete:)
-    func buySkuComplete(callback: @escaping RCTResponseSenderBlock) -> Void {
+    func buySkuComplete(callback _: @escaping RCTResponseSenderBlock) {
 //        NamiPaywallManager.buySkuComplete
     }
 
@@ -28,14 +28,14 @@ class RNNamiPaywallManager: RCTEventEmitter {
             self.sendEvent(withName: "RegisterBuySKU", body: dictionary)
         }
     }
-    
+
     @objc(dismiss:callback:)
     func dismiss(animated: Bool, callback: @escaping RCTResponseSenderBlock) {
         NamiPaywallManager.dismiss(animated: animated) {
             callback([])
         }
     }
-    
+
     @objc(displayedViewController)
     func displayedViewController() {
         _ = NamiPaywallManager.displayedViewController()

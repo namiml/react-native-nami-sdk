@@ -1,9 +1,8 @@
 //
-//  NamiEntitlementManagerBridge.swift
-//  RNNami
+// NamiEntitlementManagerBridge.swift
+// RNNami
 //
-//  Created by macbook on 05.04.2023.
-//  Copyright © 2023 Facebook. All rights reserved.
+// Copyright © 2023 Nami ML Inc.. All rights reserved.
 //
 
 import Foundation
@@ -13,9 +12,9 @@ import React
 @objc(RNNamiEntitlementManager)
 class RNNamiEntitlementManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
-      return ["EntitlementsChanged"]
+        return ["EntitlementsChanged"]
     }
-    
+
     private func entitlementInToDictionary(_ entitlement: NamiEntitlement) -> NSDictionary {
         let activePurchasesDict: [NSDictionary] = entitlement.activePurchases.map { purchase in
             let dictionary = RNNamiPurchaseManager.purchaseToPurchaseDict(purchase)
@@ -41,15 +40,15 @@ class RNNamiEntitlementManager: RCTEventEmitter {
         ]
         return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
     }
-    
+
     @objc(isEntitlementActive:resolver:rejecter:)
-    func isEntitlementActive(referenceId: String, resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func isEntitlementActive(referenceId: String, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let isEntitlementActive = NamiEntitlementManager.isEntitlementActive(referenceId)
         resolve(isEntitlementActive)
     }
-    
+
     @objc(active:rejecter:)
-    func active(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func active(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let entitlements = NamiEntitlementManager.active()
         let dictionaries: [NSDictionary] = entitlements.map { entitlement in
             let dictionary = self.entitlementInToDictionary(entitlement)
@@ -57,9 +56,9 @@ class RNNamiEntitlementManager: RCTEventEmitter {
         }
         resolve(dictionaries)
     }
-    
+
     @objc(refresh)
-    func refresh() -> Void {
+    func refresh() {
         NamiEntitlementManager.refresh()
     }
 
