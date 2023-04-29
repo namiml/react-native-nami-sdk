@@ -133,7 +133,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
-    flavorDimensions "default" 
+    flavorDimensions "default"
     productFlavors {
         production {
             applicationId "com.namiml.testreact.prod"

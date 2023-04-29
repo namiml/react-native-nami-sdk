@@ -8,4 +8,3 @@
 @interface RNNami : NSObject <RCTBridgeModule>
 
 @end
-
