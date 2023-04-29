@@ -24,4 +24,3 @@ RCT_EXTERN_METHOD(registerAvailableCampaignsHandler)
 }
 
 @end
-
