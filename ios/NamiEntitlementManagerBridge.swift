@@ -17,15 +17,16 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     }
     
     private func entitlementInToDictionary(_ entitlement: NamiEntitlement) -> NSDictionary {
-        let activePurchasesDict = entitlement.activePurchases.map { purchase in
+        let activePurchasesDict: [NSDictionary] = entitlement.activePurchases.map { purchase in
             let dictionary = RNNamiPurchaseManager.purchaseToPurchaseDict(purchase)
             return dictionary
         }
-        let purchasedSkusDict = entitlement.purchasedSkus.map { sku in
+
+        let purchasedSkusDict: [NSDictionary] = entitlement.purchasedSkus.map { sku in
             let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
             return dictionary
         }
-        let relatedSkusDict = entitlement.relatedSkus.map { sku in
+        let relatedSkusDict: [NSDictionary] = entitlement.relatedSkus.map { sku in
             let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
             return dictionary
         }
@@ -50,7 +51,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     @objc(active:rejecter:)
     func active(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
         let entitlements = NamiEntitlementManager.active()
-        let dictionaries = entitlements.map { entitlement in
+        let dictionaries: [NSDictionary] = entitlements.map { entitlement in
             let dictionary = self.entitlementInToDictionary(entitlement)
             return dictionary
         }
@@ -65,7 +66,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     @objc(registerActiveEntitlementsHandler)
     func registerActiveEntitlementsHandler() {
         NamiEntitlementManager.registerActiveEntitlementsHandler { activeEntitlements in
-            let dictionaries = activeEntitlements.map { entitlement in
+            let dictionaries: [NSDictionary] = activeEntitlements.map { entitlement in
                 let dictionary = self.entitlementInToDictionary(entitlement)
                 return dictionary
             }
