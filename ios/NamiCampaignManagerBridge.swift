@@ -77,7 +77,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
     @objc(isCampaignAvailable:resolver:rejecter:)
     func isCampaignAvailable(label: String?, resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
         let isCampaignAvailable: Bool
-        if let label {
+        if let label = label {
             isCampaignAvailable = NamiCampaignManager.isCampaignAvailable(label: label)
         } else {
             isCampaignAvailable = NamiCampaignManager.isCampaignAvailable()
