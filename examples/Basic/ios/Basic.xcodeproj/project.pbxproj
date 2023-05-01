@@ -786,7 +786,7 @@
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Basic/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Test Nami";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
@@ -815,7 +815,7 @@
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Basic/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Test Nami";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
