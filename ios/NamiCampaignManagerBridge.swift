@@ -12,7 +12,7 @@ import React
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
-        return ["AvailableCampaignsChanged"]
+      return ["AvailableCampaignsChanged", "ResultCampaign"]
     }
 
     private func campaignInToDictionary(_ campaign: NamiCampaign) -> NSDictionary {
@@ -35,34 +35,40 @@ class RNNamiCampaignManager: RCTEventEmitter {
             let actionString: String
             switch action {
             case .close_paywall:
-                actionString = "NAMI_CLOSE_PAYWALL"
+                actionString = "CLOSE_PAYWALL"
             case .restore_purchases:
-                actionString = "NAMI_RESTORE_PURCHASES"
+                actionString = "RESTORE_PURCHASES"
             case .sign_in:
-                actionString = "NAMI_SIGN_IN"
+                actionString = "SIGN_IN"
             case .buy_sku:
-                actionString = "NAMI_BUY_SKU"
+                actionString = "BUY_SKU"
             case .select_sku:
-                actionString = "NAMI_SELECT_SKU"
+                actionString = "SELECT_SKU"
             case .purchase_selected_sku:
-                actionString = "NAMI_PURCHASE_SELECTED_SKU"
+                actionString = "PURCHASE_SELECTED_SKU"
             case .purchase_success:
-                actionString = "NAMI_PURCHASE_SUCCESS"
+                actionString = "PURCHASE_SUCCESS"
             case .purchase_deferred:
-                actionString = "NAMI_PURCHASE_DEFERRED"
+                actionString = "PURCHASE_DEFERRED"
             case .purchase_failed:
-                actionString = "NAMI_PURCHASE_FAILED"
+                actionString = "PURCHASE_FAILED"
             case .purchase_cancelled:
-                actionString = "NAMI_PURCHASE_CANCELLED"
+                actionString = "PURCHASE_CANCELLED"
             case .purchase_unknown:
-                actionString = "NAMI_PURCHASE_UNKNOWN"
+                actionString = "PURCHASE_UNKNOWN"
             @unknown default:
-                actionString = "NAMI_PURCHASE_UNKNOWN"
+                actionString = "PURCHASE_UNKNOWN"
             }
             let skuId = sku?.skuId
             let errorSting = purchaseError?.localizedDescription
             let dictionaries = purchases.map { purchase in NamiBridgeUtil.purchase(toPurchaseDict: purchase) }
-//            paywallCallback([actionString, skuId as Any, errorSting as Any, dictionaries])
+            let payload: [String: Any?] = [
+                "action": actionString,
+                "skuId": skuId,
+                "purchaseError": errorSting,
+                "purchases": dictionaries
+            ]
+            self.sendEvent(withName: "ResultCampaign", body: payload)
         })
     }
 

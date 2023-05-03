@@ -37,7 +37,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun configure(configDict: ReadableMap) {
+    fun configure(configDict: ReadableMap, completion: Callback) {
 
         // Need to be sure we have some valid string.
         val appPlatformID: String = if (configDict.hasKey(CONFIG_MAP_PLATFORM_ID_KEY)) {

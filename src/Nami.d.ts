@@ -1,5 +1,8 @@
 export const Nami: {
-  configure: (config: NamiConfiguration) => void;
+  configure: (
+    config: NamiConfiguration,
+    resultCallback?: (resultObject: { success: boolean }) => void
+  ) => void;
 };
 
 export type NamiConfiguration = {

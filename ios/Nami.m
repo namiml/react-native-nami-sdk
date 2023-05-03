@@ -19,7 +19,7 @@
 @end
 @implementation NamiBridge (RCTExternModule)
 
-RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
+RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponseSenderBlock) completion) {
     if ([configDict count] == 0 || [configDict[@"logLevel"] isEqual: @"DEBUG"] ) {
         NSLog(@"Configure dictionary is %@", configDict);
     }
@@ -86,6 +86,8 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
 
 
         [Nami configureWith:config];
+        NSDictionary *dict = @{@"success": @YES};
+        completion(@[dict]);
     }
 }
 

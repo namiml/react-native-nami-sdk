@@ -1,23 +1,30 @@
 /**
  * @format
  */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {View, Platform} from 'react-native';
 import {AppRegistry} from 'react-native';
 import {Nami} from 'react-native-nami-sdk';
 import App from './App';
 import {name as appName} from './app.json';
-import {PurchasesContextProvider} from './hooks/usePurchases';
 import {getConfigObject} from './config';
 
 const configDict = getConfigObject();
 console.log('configDict', configDict);
-Nami.configure(configDict);
 
 const Root = () => {
-  return (
-    <PurchasesContextProvider>
-      <App />
-    </PurchasesContextProvider>
+  const [isConfigurationComplete, setIsConfigurationComplete] = useState();
+  useEffect(() => {
+    Nami.configure(configDict, (resultObject) =>
+      setIsConfigurationComplete(resultObject.success),
+    );
+    return () => {};
+  }, []);
+
+  return isConfigurationComplete || Platform.OS === 'android' ? (
+    <App />
+  ) : (
+    <View />
   );
 };
 

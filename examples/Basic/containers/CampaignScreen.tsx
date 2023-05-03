@@ -37,9 +37,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           console.log('purchaseError', purchaseError);
           console.log('purchases', purchases);
         },
-        (action, obj) => {
+        (action, skuId, purchaseError, purchases) => {
           console.log('action', action);
-          console.log('obj', obj);
+          console.log('skuId', skuId);
+          console.log('purchaseError', purchaseError);
+          console.log('purchases', purchases);
         },
       );
     }
