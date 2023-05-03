@@ -24,4 +24,13 @@ export const NamiPaywallManager = {
     NamiPaywallManagerBridge.registerBuySkuHandler();
     return subscription.remove;
   },
+  registerCloseHandler(callback) {
+    var subscription;
+    subscription = this.paywallEmitter.addListener(
+      "BlockingPaywallClosed",
+      callback
+    );
+    NamiPaywallManagerBridge.registerCloseHandler();
+    return subscription.remove;
+  },
 };

@@ -21,6 +21,8 @@ RCT_EXTERN_METHOD(buySkuComplete:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(registerBuySkuHandler)
 
+RCT_EXTERN_METHOD(registerCloseHandler)
+
 RCT_EXTERN_METHOD(dismiss:(Bool)animated completion:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(displayedViewController)
