@@ -2,7 +2,7 @@
  * @format
  */
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {View, Platform} from 'react-native';
 import {AppRegistry} from 'react-native';
 import {Nami} from 'react-native-nami-sdk';
 import App from './App';
@@ -21,7 +21,11 @@ const Root = () => {
     return () => {};
   }, []);
 
-  return isConfigurationComplete ? <App /> : <View />;
+  return isConfigurationComplete || Platform.OS === 'android' ? (
+    <App />
+  ) : (
+    <View />
+  );
 };
 
 AppRegistry.registerComponent(appName, () => Root);
