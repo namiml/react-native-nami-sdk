@@ -6,24 +6,23 @@
 //  Copyright © 2023 Facebook. All rights reserved.
 //
 
-import UIKit
 import Foundation
+import UIKit
 
 @objc(RNConfig)
 class RNConfig: NSObject {
-  
-  @objc
-  func constantsToExport() -> [String: Any]! {
-    let schemeName = Bundle.main.infoDictionary!["CFBundleExecutable"] as! String
-    var flavor: String?
-    switch schemeName {
-    case "BasicProduction":
-      flavor = "production"
-    case "Basic":
-      flavor = "staging"
-    default:
-      flavor = nil
+    @objc
+    func constantsToExport() -> [String: Any]! {
+        let schemeName = Bundle.main.infoDictionary!["CFBundleExecutable"] as! String
+        var flavor: String?
+        switch schemeName {
+        case "BasicProduction":
+            flavor = "production"
+        case "Basic":
+            flavor = "staging"
+        default:
+            flavor = nil
+        }
+        return ["FLAVOR": flavor]
     }
-    return ["FLAVOR": flavor]
-  }
 }

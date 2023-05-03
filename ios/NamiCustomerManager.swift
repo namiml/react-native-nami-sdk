@@ -11,11 +11,10 @@ import React
 
 @objc(RNNamiCustomerManager)
 class RNNamiCustomerManager: RCTEventEmitter {
-    
     override func supportedEvents() -> [String]! {
-      return ["JourneyStateChanged", "AccountStateChanged"]
+        return ["JourneyStateChanged", "AccountStateChanged"]
     }
-    
+
     private func journeyStateToDictionary(_ journeyState: CustomerJourneyState) -> NSDictionary {
         let dictionary: [String: Any?] = [
             "formerSubscriber": journeyState.formerSubscriber,
@@ -28,70 +27,70 @@ class RNNamiCustomerManager: RCTEventEmitter {
         ]
         return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
     }
-    
+
     @objc(setCustomerAttribute:value:)
-    func setCustomerAttribute(key: String, value: String) -> Void {
+    func setCustomerAttribute(key: String, value: String) {
         NamiCustomerManager.setCustomerAttribute(key, value)
     }
-    
+
     @objc(getCustomerAttribute:resolver:rejecter:)
-    func getCustomerAttribute(key: String,resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func getCustomerAttribute(key: String, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let customerAttribute = NamiCustomerManager.getCustomerAttribute(key: key)
         resolve(customerAttribute)
     }
-    
+
     @objc(clearCustomerAttribute:)
-    func clearCustomerAttribute(key: String) -> Void {
+    func clearCustomerAttribute(key: String) {
         NamiCustomerManager.clearCustomerAttribute(key)
     }
-    
+
     @objc(clearAllCustomerAttributes)
-    func clearAllCustomerAttributes() -> Void {
+    func clearAllCustomerAttributes() {
         NamiCustomerManager.clearAllCustomerAttributes()
     }
-    
+
     @objc(journeyState:rejecter:)
-    func journeyState(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func journeyState(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         if let journeyState = NamiCustomerManager.journeyState() {
-            let dictionary = self.journeyStateToDictionary(journeyState)
+            let dictionary = journeyStateToDictionary(journeyState)
             resolve(dictionary)
         } else {
             resolve(nil)
         }
     }
-    
+
     @objc(isLoggedIn:rejecter:)
-    func isLoggedIn(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func isLoggedIn(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let isLoggedIn = NamiCustomerManager.isLoggedIn()
         resolve(isLoggedIn)
     }
-    
+
     @objc(loggedInId:rejecter:)
-    func loggedInId(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func loggedInId(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let id = NamiCustomerManager.loggedInId()
         resolve(id)
     }
-    
+
     @objc(deviceId:rejecter:)
-    func deviceId(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func deviceId(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let id = NamiCustomerManager.deviceId()
         resolve(id)
     }
-    
+
     @objc(login:completion:)
-    func login(customerId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
-        NamiCustomerManager.login(withId: customerId, loginCompleteHandler: {success, error in
+    func login(customerId: String, callback: @escaping RCTResponseSenderBlock) {
+        NamiCustomerManager.login(withId: customerId, loginCompleteHandler: { success, error in
             callback([success, error?._code as Any])
         })
     }
-    
+
     @objc(logout:)
-    func logout(callback: @escaping RCTResponseSenderBlock) -> Void {
-        NamiCustomerManager.logout(logoutCompleteHandler: {success, error in
+    func logout(callback: @escaping RCTResponseSenderBlock) {
+        NamiCustomerManager.logout(logoutCompleteHandler: { success, error in
             callback([success, error?._code as Any])
         })
     }
-    
+
     @objc(registerJourneyStateHandler)
     func registerJourneyStateHandler() {
         NamiCustomerManager.registerJourneyStateHandler { journeyState in
@@ -99,7 +98,7 @@ class RNNamiCustomerManager: RCTEventEmitter {
             self.sendEvent(withName: "JourneyStateChanged", body: dictionary)
         }
     }
-    
+
     @objc(registerAccountStateHandler)
     func registerAccountStateHandler() {
         NamiCustomerManager.registerAccountStateHandler({action, success, error in

@@ -19,7 +19,7 @@
 @end
 @implementation NamiBridge (RCTExternModule)
 
-RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
+RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponseSenderBlock) completion) {
     if ([configDict count] == 0 || [configDict[@"logLevel"] isEqual: @"DEBUG"] ) {
         NSLog(@"Configure dictionary is %@", configDict);
     }
@@ -67,7 +67,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
         }
 
         // Start commands with header iformation for Nami to let them know this is a React client.
-        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:2.0.5"]];
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.0.0"]];
 
         // Add additional namiCommands app may have sent in.
         NSObject *appCommandStrings = configDict[@"namiCommands"];
@@ -86,6 +86,8 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
 
 
         [Nami configureWith:config];
+        NSDictionary *dict = @{@"success": @YES};
+        completion(@[dict]);
     }
 }
 
@@ -105,7 +107,7 @@ RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier completi
 RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
 {
     NSString *externalIdentifier = [NamiCustomerManager loggedInId];
-    
+
     if (externalIdentifier == NULL || [externalIdentifier length] == 0) {
         completion(@[]);
     } else {

@@ -15,9 +15,9 @@ class RNNamiPaywallManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
       return ["RegisterBuySKU", "BlockingPaywallClosed"]
     }
-    
+
     @objc(buySkuComplete:)
-    func buySkuComplete(callback: @escaping RCTResponseSenderBlock) -> Void {
+    func buySkuComplete(callback _: @escaping RCTResponseSenderBlock) {
 //        NamiPaywallManager.buySkuComplete
     }
 
@@ -44,7 +44,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
             callback([])
         }
     }
-    
+
     @objc(displayedViewController)
     func displayedViewController() {
         _ = NamiPaywallManager.displayedViewController()

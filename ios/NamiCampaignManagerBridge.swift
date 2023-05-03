@@ -14,7 +14,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
       return ["AvailableCampaignsChanged", "ResultCampaign"]
     }
-    
+
     private func campaignInToDictionary(_ campaign: NamiCampaign) -> NSDictionary {
         let dictionary: [String: Any?] = [
             "id": campaign.id,
@@ -22,16 +22,16 @@ class RNNamiCampaignManager: RCTEventEmitter {
             "segment": campaign.segment,
             "paywall": campaign.paywall,
             "type": campaign.type.rawValue,
-            "value": campaign.value
+            "value": campaign.value,
         ]
         return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
     }
-    
+
     @objc(launch:completion:paywallCompletion:)
-    func launch(label: String?, callback: @escaping RCTResponseSenderBlock, paywallCallback: @escaping RCTResponseSenderBlock) -> Void {
+    func launch(label: String?, callback: @escaping RCTResponseSenderBlock, paywallCallback _: @escaping RCTResponseSenderBlock) {
         NamiCampaignManager.launch(label: label, launchHandler: { success, error in
             callback([success, error?._code as Any])
-        }, paywallActionHandler: { action, sku, purchaseError, purchases -> () in
+        }, paywallActionHandler: { action, sku, purchaseError, purchases in
             let actionString: String
             switch action {
             case .close_paywall:
@@ -70,20 +70,19 @@ class RNNamiCampaignManager: RCTEventEmitter {
             ]
             self.sendEvent(withName: "ResultCampaign", body: payload)
         })
-        
     }
 
     @objc(allCampaigns:rejecter:)
-    func allCampaigns(resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func allCampaigns(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let campaigns = NamiCampaignManager.allCampaigns()
         let dictionaries = campaigns.map { campaign in self.campaignInToDictionary(campaign) }
         resolve(dictionaries)
     }
 
     @objc(isCampaignAvailable:resolver:rejecter:)
-    func isCampaignAvailable(label: String?, resolve: @escaping RCTPromiseResolveBlock,reject: @escaping RCTPromiseRejectBlock) -> Void {
+    func isCampaignAvailable(label: String?, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let isCampaignAvailable: Bool
-        if let label {
+        if let label = label {
             isCampaignAvailable = NamiCampaignManager.isCampaignAvailable(label: label)
         } else {
             isCampaignAvailable = NamiCampaignManager.isCampaignAvailable()
@@ -92,7 +91,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
     }
 
     @objc(refresh)
-    func refresh() -> Void {
+    func refresh() {
         NamiCampaignManager.refresh()
     }
 
@@ -104,4 +103,3 @@ class RNNamiCampaignManager: RCTEventEmitter {
         }
     }
 }
-
