@@ -2,7 +2,7 @@
  * @format
  */
 import React, {useEffect, useState} from 'react';
-import {View, Platform} from 'react-native';
+import {View} from 'react-native';
 import {AppRegistry} from 'react-native';
 import {Nami} from 'react-native-nami-sdk';
 import App from './App';
@@ -15,17 +15,13 @@ console.log('configDict', configDict);
 const Root = () => {
   const [isConfigurationComplete, setIsConfigurationComplete] = useState();
   useEffect(() => {
-    Nami.configure(configDict, (resultObject) =>
-      setIsConfigurationComplete(resultObject.success),
-    );
+    Nami.configure(configDict, (resultObject) => {
+      setIsConfigurationComplete(resultObject.success);
+    });
     return () => {};
   }, []);
 
-  return isConfigurationComplete || Platform.OS === 'android' ? (
-    <App />
-  ) : (
-    <View />
-  );
+  return isConfigurationComplete ? <App /> : <View />;
 };
 
 AppRegistry.registerComponent(appName, () => Root);
