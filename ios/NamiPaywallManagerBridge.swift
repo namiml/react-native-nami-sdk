@@ -13,7 +13,7 @@ import React
 @objc(RNNamiPaywallManager)
 class RNNamiPaywallManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
-      return ["RegisterBuySKU", "BlockingPaywallClosed"]
+        return ["RegisterBuySKU", "BlockingPaywallClosed"]
     }
 
     @objc(buySkuComplete:)
@@ -28,16 +28,15 @@ class RNNamiPaywallManager: RCTEventEmitter {
             self.sendEvent(withName: "RegisterBuySKU", body: dictionary)
         }
     }
-    
+
     @objc(registerCloseHandler)
     func registerCloseHandler() {
-        NamiPaywallManager.registerCloseHandler { viewContoler in
+        NamiPaywallManager.registerCloseHandler { _ in
             let dictionary = NSDictionary(dictionary: ["blockingPaywallClosed": true].compactMapValues { $0 })
             self.sendEvent(withName: "BlockingPaywallClosed", body: dictionary)
         }
     }
-    
-    
+
     @objc(dismiss:callback:)
     func dismiss(animated: Bool, callback: @escaping RCTResponseSenderBlock) {
         NamiPaywallManager.dismiss(animated: animated) {
