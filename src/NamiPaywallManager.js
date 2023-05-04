@@ -21,7 +21,7 @@ export const NamiPaywallManager = {
     } else {
       subscription = this.emitter.addListener("RegisterBuySKU", callback);
     }
-    NamiPaywallManagerBridge.registerBuySkuHandler();
+    RNNamiPaywallManager.registerBuySkuHandler();
     return subscription.remove;
   },
   registerCloseHandler(callback) {
@@ -30,7 +30,7 @@ export const NamiPaywallManager = {
       "BlockingPaywallClosed",
       callback
     );
-    NamiPaywallManagerBridge.registerCloseHandler();
+    RNNamiPaywallManager.registerCloseHandler();
     return subscription.remove;
   },
 };
