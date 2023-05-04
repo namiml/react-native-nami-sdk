@@ -4,7 +4,7 @@ on:
     inputs:
       ref:
         default: develop
-        description: 'Git Tag, Branch or SHA to build'
+        description: "Git Tag, Branch or SHA to build"
         required: true
     secrets:
       BUILD_USER_PAT:
@@ -99,13 +99,13 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "16"
 
-      - name: 'Checkout ${{ inputs.ref }}'
+      - name: "Checkout ${{ inputs.ref }}"
         uses: actions/checkout@v2
         with:
           path: source
-          ref: '${{ inputs.ref }}'
+          ref: "${{ inputs.ref }}"
 
       - name: Checkout appstoreconnect-build-tools
         uses: actions/checkout@v2
@@ -117,7 +117,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Get expected build number
         run: |
@@ -130,15 +130,15 @@ jobs:
         #  python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --version=$CURRENT_VERSION > $RUNNER_TEMP/.next_build_number
         working-directory: appstoreconnect-build-tools
         env:
-          APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
-          APPSTORE_API_PRIVATE_KEY: '${{ secrets.APPSTORE_API_PRIVATE_KEY }}'
-          APPSTORE_ISSUER_ID: '${{ secrets.APPSTORE_ISSUER_ID }}'
+          APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
+          APPSTORE_API_PRIVATE_KEY: "${{ secrets.APPSTORE_API_PRIVATE_KEY }}"
+          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
 
       - name: Install Apple Certificate
         uses: apple-actions/import-codesign-certs@v1
         with:
-          p12-file-base64: '${{ secrets.IOS_P12_BASE64 }}'
-          p12-password: '${{ secrets.IOS_CERTIFICATE_PASSWORD }}'
+          p12-file-base64: "${{ secrets.IOS_P12_BASE64 }}"
+          p12-password: "${{ secrets.IOS_CERTIFICATE_PASSWORD }}"
 
       - name: Install the provisioning profile
         run: |
@@ -147,11 +147,11 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
         env:
-          PROVISIONING_CERTIFICATE_BASE64: '${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_STG }}'
+          PROVISIONING_CERTIFICATE_BASE64: "${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_STG }}"
 
       - name: Install SDK dependencies
         run: |
-          yarn install
+          yarn
         working-directory: source/
 
       - name: Package Local SDK
@@ -188,12 +188,10 @@ jobs:
           yarn install
         working-directory: source/examples/Basic
 
-
       - name: Install test iOS dependencies
         run: |
           pod install
         working-directory: source/examples/Basic/ios
-
 
       - name: Build resolve Swift dependencies
         run: |
@@ -215,5 +213,5 @@ jobs:
           xcrun altool --upload-app --type ios --file build-output/ios-stg/example.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
         working-directory: source/examples/Basic
         env:
-          APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
-          APPSTORE_ISSUER_ID: '${{ secrets.APPSTORE_ISSUER_ID }}'
+          APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
+          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
