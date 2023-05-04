@@ -125,9 +125,9 @@ jobs:
           pip3 install pydantic
           pip3 install cryptography
           pip3 install PyJWT
-          echo "1.0.0" > $RUNNER_TEMP/.current_version
+          echo "1.0" > $RUNNER_TEMP/.current_version
           export CURRENT_VERSION=`cat $RUNNER_TEMP/.current_version`
-        #  python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --version=$CURRENT_VERSION > $RUNNER_TEMP/.next_build_number
+          python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --version=$CURRENT_VERSION > $RUNNER_TEMP/.next_build_number
         working-directory: appstoreconnect-build-tools
         env:
           APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
