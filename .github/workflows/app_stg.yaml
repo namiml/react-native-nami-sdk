@@ -210,7 +210,8 @@ jobs:
 
       - name: Upload app to TestFlight
         run: |
-          xcrun altool --upload-app --type ios --file build-output/ios-stg/example.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
+          ls build-output/ios-stg
+          xcrun altool --upload-app --type ios --file build-output/ios-stg/app-stg.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
         working-directory: source/examples/Basic
         env:
           APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
