@@ -12,7 +12,7 @@ import React
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
-      return ["AvailableCampaignsChanged", "ResultCampaign"]
+        return ["AvailableCampaignsChanged", "ResultCampaign"]
     }
 
     private func campaignInToDictionary(_ campaign: NamiCampaign) -> NSDictionary {
@@ -66,7 +66,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
                 "action": actionString,
                 "skuId": skuId,
                 "purchaseError": errorSting,
-                "purchases": dictionaries
+                "purchases": dictionaries,
             ]
             self.sendEvent(withName: "ResultCampaign", body: payload)
         })
