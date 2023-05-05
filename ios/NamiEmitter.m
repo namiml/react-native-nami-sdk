@@ -2,7 +2,6 @@
 //  NamiEmitter.m
 //  namiReactNative
 //
-//  Created by Kendall Helmstetter Gelner on 12/11/19.
 //  Copyright © 2019 Nami ML Inc. All rights reserved.
 //
 

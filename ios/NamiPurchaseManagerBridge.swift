@@ -2,8 +2,7 @@
 //  NamiPurchaseManagerBridge.swift
 //  RNNami
 //
-//  Created by macbook on 06.04.2023.
-//  Copyright © 2023 Nami ML INc.. All rights reserved.
+//  Copyright © 2023 Nami ML Inc. All rights reserved.
 //
 
 import Foundation
