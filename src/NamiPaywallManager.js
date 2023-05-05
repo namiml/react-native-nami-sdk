@@ -33,4 +33,13 @@ export const NamiPaywallManager = {
     RNNamiPaywallManager.registerCloseHandler();
     return subscription.remove;
   },
+  registerCloseHandler(callback) {
+    var subscription;
+    subscription = this.paywallEmitter.addListener(
+      "BlockingPaywallClosed",
+      callback
+    );
+    NamiPaywallManagerBridge.registerCloseHandler();
+    return subscription.remove;
+  },
 };

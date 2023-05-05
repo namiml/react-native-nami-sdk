@@ -4,7 +4,7 @@ on:
     inputs:
       ref:
         default: develop
-        description: 'Git Tag, Branch or SHA to build'
+        description: "Git Tag, Branch or SHA to build"
         required: true
     secrets:
       BUILD_USER_PAT:
@@ -20,74 +20,69 @@ on:
         required: true
 
 jobs:
-  # build-android:
-  #   name: Generate Play Store STG
-  #   permissions:
-  #     actions: write
-  #     contents: write
-  #     id-token: write
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/setup-java@v1
-  #       with:
-  #         java-version: 12.x
+  build-android:
+    name: Generate Play Store STG
+    permissions:
+      actions: write
+      contents: write
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
 
-  #     - name: Setup Flutter SDK
-  #       uses: flutter-actions/setup-flutter@v2
-  #       with:
-  #         channel: stable
-  #         version: 3.3.5
+      - name: 'Checkout ${{ inputs.ref }}'
+        uses: actions/checkout@v2
+        with:
+          path: source
+          ref: '${{ inputs.ref }}'
 
-  #     - name: 'Checkout ${{ inputs.ref }}'
-  #       uses: actions/checkout@v2
-  #       with:
-  #         path: source
-  #         ref: '${{ inputs.ref }}'
+      - name: Install Google API python client
+        run: |
+          pip install google-api-python-client
 
-  #     - name: Install Google API python client
-  #       run: |
-  #         pip install google-api-python-client
+      - name: Get new version code
+        run: |
+          echo $GOOGLE_PLAY_SERVICE_ACCOUNT > $RUNNER_TEMP/.service_account
+          python3 build-utils/get_version_code.py $RUNNER_TEMP/.service_account com.namiml.stg.testreactnative internal  --quiet >> $RUNNER_TEMP/.new_version_code
+          rm -f .service_account
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT: '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}'
+        working-directory: source
 
-  #     - name: Get new version code
-  #       run: |
-  #         echo $GOOGLE_PLAY_SERVICE_ACCOUNT > $RUNNER_TEMP/.service_account
-  #         python3 build-utils/get_version_code.py $RUNNER_TEMP/.service_account com.namiml.testflutter.stg internal  --quiet >> $RUNNER_TEMP/.new_version_code
-  #         rm -f .service_account
-  #       env:
-  #         GOOGLE_PLAY_SERVICE_ACCOUNT: '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}'
-  #       working-directory: source
+      - name: Update version code
+        working-directory: source/examples/Basic/android/app
+        run: |
+          NEW_VERSION_CODE=`cat $RUNNER_TEMP/.new_version_code`
+          echo $NEW_VERSION_CODE
+          sed -i "s/versionCode 1/versionCode $NEW_VERSION_CODE/" build.gradle
 
-  #     - name: Create the Keystore
-  #       run: |
-  #         # import keystore from secrets
-  #         echo $KEYSTORE_BASE64 | base64 -d > $RUNNER_TEMP/my_production.keystore
-  #       env:
-  #         KEYSTORE_BASE64: '${{ secrets.KEY_STORE_BASE64 }}'
+      - name: Create the Keystore
+        run: |
+          # import keystore from secrets
+          echo $KEYSTORE_BASE64 | base64 -d > $RUNNER_TEMP/my_production.keystore
+        env:
+          KEYSTORE_BASE64: '${{ secrets.KEY_STORE_BASE64 }}'
 
-  #     - name: Get dependencies
-  #       run: |
-  #         flutter pub get
-  #       working-directory: source/sdk/example/testnami
+      - name: Build Android App Bundle
+        run: |
+          ./gradlew clean  bundleStagingRelease
+        working-directory: source/examples/Basic/android/app
 
-  #     - name: Build Android App Bundle
-  #       run: |
-  #         export BUILD_NUMBER_STG=`cat $RUNNER_TEMP/.new_version_code`
-  #         flutter build appbundle -t lib/main-staging.dart --flavor stg --release --build-name 1.0.0 --build-number $BUILD_NUMBER_STG
-  #       working-directory: source/sdk/example/testnami
+      - name: Sign Android App Bundle
+        run: |
+          jarsigner -keystore $RUNNER_TEMP/my_production.keystore -storepass '${{ secrets.KEY_STORE_PASSWORD }}' -keypass '${{ secrets.KEY_PASSWORD }}' -sigalg SHA256withRSA -digestalg SHA-256 -signedjar build/outputs/bundle/stagingRelease/app-staging-release-signed.aab build/outputs/bundle/stagingRelease/app-staging-release.aab'${{ secrets.KEY_ALIAS }}'
+        working-directory: source/examples/Basic/android/app
 
-  #     - name: Sign Android App Bundle
-  #       run: |
-  #         jarsigner -keystore $RUNNER_TEMP/my_production.keystore -storepass '${{ secrets.KEY_STORE_PASSWORD }}' -keypass '${{ secrets.KEY_PASSWORD }}' -sigalg SHA256withRSA -digestalg SHA-256 -signedjar build/app/outputs/bundle/stgRelease/app-stg-release-signed.aab build/app/outputs/bundle/stgRelease/app-stg-release.aab '${{ secrets.KEY_ALIAS }}'
-  #       working-directory: source/sdk/example/testnami
-
-  #     - name: Uploading to test track
-  #       uses: r0adkll/upload-google-play@v1.0.17
-  #       with:
-  #         packageName: 'com.namiml.testflutter.stg'
-  #         releaseFiles: source/sdk/example/testnami/build/app/outputs/bundle/stgRelease/app-stg-release-signed.aab
-  #         serviceAccountJsonPlainText: '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}'
-  #         status: completed
-  #         track: internal
+      - name: Uploading to test track
+        uses: r0adkll/upload-google-play@v1.0.17
+        with:
+          packageName: 'com.namiml.stg.testreactnative'
+          releaseFiles: source/examples/Basic/android/app/build/outputs/bundle/stagingRelease/app-staging-release-signed.aab
+          serviceAccountJsonPlainText: '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}'
+          status: completed
+          track: internal
   build-ios:
     name: Generate Apple STG
     permissions:
@@ -99,13 +94,13 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "16"
 
-      - name: 'Checkout ${{ inputs.ref }}'
+      - name: "Checkout ${{ inputs.ref }}"
         uses: actions/checkout@v2
         with:
           path: source
-          ref: '${{ inputs.ref }}'
+          ref: "${{ inputs.ref }}"
 
       - name: Checkout appstoreconnect-build-tools
         uses: actions/checkout@v2
@@ -117,7 +112,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Get expected build number
         run: |
@@ -125,20 +120,20 @@ jobs:
           pip3 install pydantic
           pip3 install cryptography
           pip3 install PyJWT
-          echo "1.0.0" > $RUNNER_TEMP/.current_version
+          echo "1.0" > $RUNNER_TEMP/.current_version
           export CURRENT_VERSION=`cat $RUNNER_TEMP/.current_version`
-        #  python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --version=$CURRENT_VERSION > $RUNNER_TEMP/.next_build_number
+          python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --version=$CURRENT_VERSION > $RUNNER_TEMP/.next_build_number
         working-directory: appstoreconnect-build-tools
         env:
-          APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
-          APPSTORE_API_PRIVATE_KEY: '${{ secrets.APPSTORE_API_PRIVATE_KEY }}'
-          APPSTORE_ISSUER_ID: '${{ secrets.APPSTORE_ISSUER_ID }}'
+          APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
+          APPSTORE_API_PRIVATE_KEY: "${{ secrets.APPSTORE_API_PRIVATE_KEY }}"
+          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
 
       - name: Install Apple Certificate
         uses: apple-actions/import-codesign-certs@v1
         with:
-          p12-file-base64: '${{ secrets.IOS_P12_BASE64 }}'
-          p12-password: '${{ secrets.IOS_CERTIFICATE_PASSWORD }}'
+          p12-file-base64: "${{ secrets.IOS_P12_BASE64 }}"
+          p12-password: "${{ secrets.IOS_CERTIFICATE_PASSWORD }}"
 
       - name: Install the provisioning profile
         run: |
@@ -147,22 +142,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
         env:
-          PROVISIONING_CERTIFICATE_BASE64: '${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_STG }}'
-
-      - name: Install SDK dependencies
-        run: |
-          yarn install
-        working-directory: source/
-
-      - name: Package Local SDK
-        run: |
-          yarn link && yarn pack
-        working-directory: source/
-
-      - name: Link to local SDK
-        run: |
-          yarn link react-native-nami-sdk
-        working-directory: source/examples/Basic
+          PROVISIONING_CERTIFICATE_BASE64: "${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_STG }}"
 
       - name: Store App Store Private Key
         run: |
@@ -175,25 +155,24 @@ jobs:
           sed -i '' -e "s/APPSTORE_PROVISIONING_PROFILE_UUID/${{ secrets.APPSTORE_PROV_PROFILE_UUID_TEST_REACT_STG }}/g" ExportOptions.plist
         working-directory: source/examples/Basic/ios
 
-      # - name: Adjust version & build number
-      #   working-directory: source/examples/Basic
-      #   run: |-
-      #     export CURRENT_VERSION=`cat $RUNNER_TEMP/.current_version`
-      #     export BUILD_NUMBER=`cat $RUNNER_TEMP/.next_build_number`
-      #     sed -i '' -e "s/CURRENT_PROJECT_VERSION = 1/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/" ios/Basic.xcodeproj/project.pbxproj
-      #     sed -i '' -e "s/MARKETING_VERSION = 1.0/MARKETING_VERSION = $CURRENT_VERSION/" ios/Basic.xcodeproj/project.pbxproj
+      - name: Adjust version & build number
+        run: |-
+           export CURRENT_VERSION=`cat $RUNNER_TEMP/.current_version`
+           export BUILD_NUMBER=`cat $RUNNER_TEMP/.next_build_number`
+           sed -i '' -e "s/CURRENT_PROJECT_VERSION = 1/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/" ios/Basic.xcodeproj/project.pbxproj
+           sed -i '' -e "s/MARKETING_VERSION = 1.0/MARKETING_VERSION = $CURRENT_VERSION/" ios/Basic.xcodeproj/project.pbxproj
+           sed -i '' -e "s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/"  ios/Basic/Info.plist
+        working-directory: source/examples/Basic
 
       - name: Install test app dependencies
         run: |
           yarn install
         working-directory: source/examples/Basic
 
-
       - name: Install test iOS dependencies
         run: |
           pod install
         working-directory: source/examples/Basic/ios
-
 
       - name: Build resolve Swift dependencies
         run: |
@@ -212,8 +191,8 @@ jobs:
 
       - name: Upload app to TestFlight
         run: |
-          xcrun altool --upload-app --type ios --file build-output/ios-stg/example.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
+          xcrun altool --upload-app --type ios --file build-output/ios-stg/Basic.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
         working-directory: source/examples/Basic
         env:
-          APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
-          APPSTORE_ISSUER_ID: '${{ secrets.APPSTORE_ISSUER_ID }}'
+          APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
+          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
