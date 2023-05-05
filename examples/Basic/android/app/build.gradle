@@ -139,13 +139,13 @@ android {
             applicationId "com.namiml.testreact.prod"
             minSdkVersion 26
             targetSdkVersion 33
-            resValue "string", "app_name", "Basic Production"
+            resValue "string", "app_name", "TestReact Prod"
         }
         staging {
             applicationId "com.namiml.stg.testreactnative"
             minSdkVersion 26
             targetSdkVersion 33
-            resValue "string", "app_name", "Basic"
+            resValue "string", "app_name", "TestReact Stg"
         }
     }
     dexOptions {
@@ -180,7 +180,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig null
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
