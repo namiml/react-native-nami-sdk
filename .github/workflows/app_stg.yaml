@@ -128,7 +128,6 @@ jobs:
           echo "1.0" > $RUNNER_TEMP/.current_version
           export CURRENT_VERSION=`cat $RUNNER_TEMP/.current_version`
           python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --version=$CURRENT_VERSION > $RUNNER_TEMP/.next_build_number
-          cat $RUNNER_TEMP/.next_build_number
         working-directory: appstoreconnect-build-tools
         env:
           APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
@@ -167,8 +166,7 @@ jobs:
            export BUILD_NUMBER=`cat $RUNNER_TEMP/.next_build_number`
            sed -i '' -e "s/CURRENT_PROJECT_VERSION = 1/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/" ios/Basic.xcodeproj/project.pbxproj
            sed -i '' -e "s/MARKETING_VERSION = 1.0/MARKETING_VERSION = $CURRENT_VERSION/" ios/Basic.xcodeproj/project.pbxproj
-           echo $BUILD_NUMBER
-           cat ios/Basic.xcodeproj/project.pbxproj|grep CURRENT_PROJECT_VERSION
+           sed -i '' -e "s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/"  ios/Basic/Info.plist
         working-directory: source/examples/Basic
 
       - name: Install test app dependencies
