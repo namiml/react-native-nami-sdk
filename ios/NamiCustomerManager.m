@@ -2,7 +2,6 @@
 //  NamiCustomerManager.m
 //  RNNami
 //
-//  Created by Kendall Gelner on 8/21/20.
 //  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
 //
 

@@ -2,7 +2,6 @@
 //  NamiBridgeUtil.h
 //  RNNami
 //
-//  Created by Kendall Gelner on 1/9/20.
 //  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
 //
 
@@ -24,13 +23,9 @@
 
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement;
 
-+ (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling;
-
 + (NSArray *)stripPresentationPositionFromOrderedMetadataForPaywallMetaDict: (NSDictionary *)paywallMeta;
 
 + (NSDictionary<NSString *,NSString *> *) customerJourneyStateDict;
-
-+ (NSString *)hexStringForColor:(UIColor *)color;
 
 @end
 

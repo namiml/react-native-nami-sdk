@@ -2,7 +2,7 @@
 //  NamiCampaignManagerBridge.swift
 //  RNNami
 //
-//  Copyright © 2023 Nami ML INc.. All rights reserved.
+//  Copyright © 2023 Nami ML Inc. All rights reserved.
 //
 
 import Foundation
