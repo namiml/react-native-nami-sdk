@@ -141,6 +141,9 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         reactApplicationContext.runOnUiQueueThread {
             // Configure must be called on main thread
             Nami.configure(builtConfig)
+            val resultMap = Arguments.createMap()
+            resultMap.putBoolean("success", true)
+            completion.invoke(resultMap)
         }
     }
 

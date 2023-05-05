@@ -2,7 +2,7 @@ import { EmitterSubscription } from "react-native";
 import { NamiSKU } from "./types";
 
 export const NamiPaywallManager: {
-  // buySkuComplete: () => void;
+  buySkuComplete: (purchaseSuccess: PurchaseSuccess) => void;
   dismiss: (animated: boolean, callback: () => void) => void;
   displayedViewController: () => void;
   renderCustomUiHandler: () => any;
@@ -12,6 +12,31 @@ export const NamiPaywallManager: {
   registerCloseHandler: (
     callback: (resultObject: { blockingPaywallClosed: boolean }) => void
   ) => EmitterSubscription["remove"];
+};
+
+export type PurchaseSuccess = {
+  product: PurchaseSuccessProduct;
+  transactionID: string;
+  originalTransactionID: string;
+  originalPurchaseDate: number;
+  purchaseDate: number;
+  expiresDate?: number;
+  price: string;
+  currencyCode: string;
+  locale: string;
+};
+
+export type PurchaseSuccessProduct = {
+  id: string;
+  platformID: string;
+  skuId: string;
+  languageCode: string;
+  name: string;
+  featured: boolean;
+  storeId: string;
+  type: number;
+  isFeatured: boolean;
+  namiID: string;
 };
 
 export enum NamiPaywallAction {

@@ -13,12 +13,50 @@ import React
 @objc(RNNamiPaywallManager)
 class RNNamiPaywallManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
-        return ["RegisterBuySKU", "BlockingPaywallClosed"]
+      return ["RegisterBuySKU", "BlockingPaywallClosed"]
     }
 
     @objc(buySkuComplete:)
-    func buySkuComplete(callback _: @escaping RCTResponseSenderBlock) {
-//        NamiPaywallManager.buySkuComplete
+    func buySkuComplete(dict: NSDictionary) {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: dict["product"] as Any, options: []) else {
+            print("Error converting dictionary to JSON data")
+            return
+        }
+        do {
+            let decoder = JSONDecoder()
+            let product = try decoder.decode(NamiSKU.self, from: jsonData)
+ 
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = .init(identifier: "en_US_POSIX")
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            
+            if
+            let transactionID = dict["transactionID"] as? String,
+            let originalTransactionID = dict["originalTransactionID"] as? String,
+            let priceDecimal = Decimal(string: dict["price"] as! String),
+            let currencyCode = dict["currencyCode"] as? String,
+            let localeString = dict["locale"] as? String
+            {
+                let expiresDate = Date(timeIntervalSince1970: dict["purchaseDate"] as! Double? ?? 0)
+                let originalPurchaseDate =  Date(timeIntervalSince1970: dict["originalPurchaseDate"] as! Double)
+                let purchaseDate = Date(timeIntervalSince1970: dict["purchaseDate"] as! Double)
+                let locale = Locale(identifier: localeString)
+                let purchaseSuccess = NamiPurchaseSuccess(
+                    product: product,
+                    transactionID: transactionID,
+                    originalTransactionID: originalTransactionID,
+                    originalPurchaseDate: originalPurchaseDate,
+                    purchaseDate: purchaseDate,
+                    expiresDate: expiresDate,
+                    price: priceDecimal,
+                    currencyCode: currencyCode,
+                    locale: locale
+                )
+                NamiPaywallManager.buySkuComplete(purchaseSuccess: purchaseSuccess)
+            }
+        } catch {
+            print("Error decoding JSON: \(error)")
+        }
     }
 
     @objc(registerBuySkuHandler)
@@ -36,7 +74,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
             self.sendEvent(withName: "BlockingPaywallClosed", body: dictionary)
         }
     }
-
+    
     @objc(dismiss:callback:)
     func dismiss(animated: Bool, callback: @escaping RCTResponseSenderBlock) {
         NamiPaywallManager.dismiss(animated: animated) {

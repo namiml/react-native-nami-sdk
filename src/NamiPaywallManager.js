@@ -21,7 +21,16 @@ export const NamiPaywallManager = {
     } else {
       subscription = this.emitter.addListener("RegisterBuySKU", callback);
     }
-    NamiPaywallManagerBridge.registerBuySkuHandler();
+    RNNamiPaywallManager.registerBuySkuHandler();
+    return subscription.remove;
+  },
+  registerCloseHandler(callback) {
+    var subscription;
+    subscription = this.paywallEmitter.addListener(
+      "BlockingPaywallClosed",
+      callback
+    );
+    RNNamiPaywallManager.registerCloseHandler();
     return subscription.remove;
   },
   registerCloseHandler(callback) {

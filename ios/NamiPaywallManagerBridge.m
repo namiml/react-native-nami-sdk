@@ -17,7 +17,7 @@
 
 @interface RCT_EXTERN_MODULE(RNNamiPaywallManager, NSObject)
 
-RCT_EXTERN_METHOD(buySkuComplete:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(buySkuComplete:(NSDictionary)dict)
 
 RCT_EXTERN_METHOD(registerBuySkuHandler)
 
