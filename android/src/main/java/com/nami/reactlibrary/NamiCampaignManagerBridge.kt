@@ -30,7 +30,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun launch(label: String?, actionCallback: Callback, resultCallback: Callback) {
+    fun launch(label: String?, resultCallback: Callback, actionCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
             if (label != null) {
                 NamiCampaignManager.launch(currentActivity!!, label,
@@ -51,19 +51,30 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     private fun handlePaywallCallback(action: NamiPaywallAction, sku: NamiSKU?, purchaseError: String?, purchases: List<NamiPurchase>?,  actionCallback: Callback){
         val actionString = action.toString()
         val skuString = sku?.skuId.orEmpty()
-        val purchasesString = purchases.toString()
-        actionCallback.invoke(actionString, skuString, purchaseError, purchasesString)
+        val purchasesArray: WritableArray = WritableNativeArray()
+        if (purchases != null) {
+            for (purchase in purchases) {
+                purchasesArray.pushMap(purchase.toPurchaseDict())
+            }
+        }
+        val resultMap = Arguments.createMap()
+        resultMap.putString("action", actionString)
+        resultMap.putString("skuId", skuString)
+        resultMap.putString("purchaseError", purchaseError)
+        resultMap.putArray("purchases", purchasesArray)
+        reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("ResultCampaign", resultMap)
     }
 
     private fun handleResult(result: LaunchCampaignResult, resultCallback: Callback) {
         val resultMap = Arguments.createMap()
         when (result) {
             is LaunchCampaignResult.Success -> {
-                resultCallback.invoke("success")
+                resultCallback.invoke(true)
             }
             is LaunchCampaignResult.Failure -> {
-                resultMap.putString("error", "${result.error}")
-                resultCallback.invoke("failure", resultMap)
+                resultCallback.invoke(false, "${result.error}")
             }
         }
     }
