@@ -1,5 +1,4 @@
 export { Nami } from "./src/Nami";
-export { NamiAnalytics } from "./src/NamiAnalytics";
 export { NamiMLManager } from "./src/NamiMLManager";
 export { NamiCampaignManager } from "./src/NamiCampaignManager";
 export { NamiCustomerManager } from "./src/NamiCustomerManager";

@@ -67,11 +67,15 @@ class RNNamiPaywallManager: RCTEventEmitter {
         }
     }
 
-    @objc(registerCloseHandler)
-    func registerCloseHandler() {
+    @objc(registerCloseHandler:)
+    func registerCloseHandler(blockDismiss: Bool) {
         NamiPaywallManager.registerCloseHandler { _ in
             let dictionary = NSDictionary(dictionary: ["blockingPaywallClosed": true].compactMapValues { $0 })
             self.sendEvent(withName: "BlockingPaywallClosed", body: dictionary)
+            if (blockDismiss) {
+                return
+            }
+            NamiPaywallManager.dismiss(animated: true, completion: {})
         }
     }
     

@@ -51,8 +51,8 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             "skuId": sku.skuId,
             "type": typeString,
             "product": productDict,
-            "displayText": sku.localizedDisplayText,
-            "displaySubText": sku.localizedSubDisplayText,
+//            "displayText": sku.localizedDisplayText,
+//            "displaySubText": sku.localizedSubDisplayText,
         ]
 
         return NSDictionary(dictionary: skuDict.compactMapValues { $0 })

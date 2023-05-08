@@ -21,9 +21,9 @@ RCT_EXTERN_METHOD(buySkuComplete:(NSDictionary)dict)
 
 RCT_EXTERN_METHOD(registerBuySkuHandler)
 
-RCT_EXTERN_METHOD(registerCloseHandler)
+RCT_EXTERN_METHOD(registerCloseHandler:(BOOL)blockDismiss)
 
-RCT_EXTERN_METHOD(dismiss:(Bool)animated completion:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(dismiss:(BOOL)animated completion:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(displayedViewController)
 
@@ -69,19 +69,19 @@ RCT_EXPORT_METHOD(blockPaywallRaise:(BOOL)blockRaise)
     [self setBlockPaywallRaise:blockRaise];
 }
 
-RCT_EXPORT_METHOD(processSmartTextForProducts:(NSString *)smartText  skuIDs:(NSArray<NSString *> *)skuIDs completion:(RCTResponseSenderBlock)completion)
-{
-    [NamiPurchaseManager skusForSKUIdsWithSkuIds:skuIDs productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable skus, NSArray<NSString *> * _Nullable invalidSkuIDs, NSError * _Nullable error) {
-        if (skus != NULL) {
-            // Found some of the skus they were looking for, process text
-            NSString *processedText = [NamiPaywallManager processSmartTextWithText:smartText dataStores:skus];
-            completion(@[processedText]);
-        } else {
-            // No products found so cannot process smart text, just send back.
-            completion(@[smartText]);
-        }
-    }];
-}
+//RCT_EXPORT_METHOD(processSmartTextForProducts:(NSString *)smartText  skuIDs:(NSArray<NSString *> *)skuIDs completion:(RCTResponseSenderBlock)completion)
+//{
+//    [NamiPurchaseManager skusForSKUIdsWithSkuIds:skuIDs productHandler:^(BOOL success, NSArray<NamiSKU *> * _Nullable skus, NSArray<NSString *> * _Nullable invalidSkuIDs, NSError * _Nullable error) {
+//        if (skus != NULL) {
+//            // Found some of the skus they were looking for, process text
+//            NSString *processedText = [NamiPaywallManager processSmartTextWithText:smartText dataStores:skus];
+//            completion(@[processedText]);
+//        } else {
+//            // No products found so cannot process smart text, just send back.
+//            completion(@[smartText]);
+//        }
+//    }];
+//}
 
 
 @end

@@ -10,6 +10,7 @@ export const NamiPaywallManager: {
     callback: (sku: NamiSKU) => void
   ) => EmitterSubscription["remove"];
   registerCloseHandler: (
+    blockDismiss: boolean,
     callback: (resultObject: { blockingPaywallClosed: boolean }) => void
   ) => EmitterSubscription["remove"];
 };
