@@ -14,7 +14,6 @@ import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableNativeArray
 import com.namiml.Nami
 import com.namiml.NamiConfiguration
-//import com.namiml.NamiExternalIdentifierType
 import com.namiml.NamiLanguageCode
 import com.namiml.NamiLogLevel
 //import com.namiml.NamiApiResponseHandler
@@ -144,52 +143,6 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             val resultMap = Arguments.createMap()
             resultMap.putBoolean("success", true)
             completion.invoke(resultMap)
-        }
-    }
-
-    @ReactMethod
-    fun setExternalIdentifier(externalIdentifier: String, externalIDType: String, completion: Callback) {
-
-        Log.i(LOG_TAG, "Setting external identifier $externalIdentifier of type $externalIDType")
-
-//        val useType: NamiExternalIdentifierType = if (externalIDType == "sha256") {
-//            NamiExternalIdentifierType.SHA_256
-//        } else {
-//            NamiExternalIdentifierType.UUID
-//        }
-//
-//        reactApplicationContext.runOnUiQueueThread {
-//            Nami.setExternalIdentifier(externalIdentifier, useType) { success, error ->
-//                if (error != null) {
-//                    completion.invoke(error)
-//                }
-//                completion.invoke(null)
-//            }
-//        }
-    }
-
-    @ReactMethod
-    fun getExternalIdentifier(successCallback: Callback) {
-        reactApplicationContext.runOnUiQueueThread {
-            val externalIdentifierResult: WritableArray = WritableNativeArray()
-//            Nami.getExternalIdentifier()?.let { externalIdentifier ->
-//                Log.i(LOG_TAG, "getting external identifier, found $externalIdentifier")
-//                externalIdentifierResult.pushString(externalIdentifier)
-//            }
-//            successCallback.invoke(externalIdentifierResult)
-        }
-    }
-
-    @ReactMethod
-    fun clearExternalIdentifier(completion: Callback) {
-        Log.i(LOG_TAG, "Clearing external identifier.")
-        reactApplicationContext.runOnUiQueueThread {
-//            Nami.clearExternalIdentifier()  { success, error ->
-//                if (error != null) {
-//                    completion.invoke(error)
-//                }
-//                completion.invoke(null)
-//            }
         }
     }
 }

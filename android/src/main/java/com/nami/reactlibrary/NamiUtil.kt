@@ -14,8 +14,6 @@ import com.namiml.paywall.NamiLocaleConfig
 import com.namiml.paywall.NamiPaywall
 import com.namiml.paywall.NamiPurchaseSource
 import com.namiml.paywall.NamiSKU
-import com.namiml.paywall.PaywallDisplayOptions
-import com.namiml.paywall.PaywallStyleData
 import com.namiml.paywall.SubscriptionPeriod
 import com.namiml.util.extensions.getFormattedPrice
 import com.namiml.util.extensions.getSubscriptionPeriodEnum
@@ -25,125 +23,6 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
-fun NamiPaywall.toNamiPaywallDict(): WritableMap {
-
-    val paywallMap: WritableMap = Arguments.createMap()
-
-    val marketingContentMap = Arguments.createMap()
-    marketingContentMap.putString("title", title.orEmpty())
-    marketingContentMap.putString("body", body.orEmpty())
-
-    val extraDataMap = extraData
-    if (extraDataMap != null) {
-        marketingContentMap.putMap("extra_data", extraDataMap.toWritableMap())
-    }
-
-    paywallMap.putMap("marketing_content", marketingContentMap)
-
-    Log.i(LOG_TAG, "extraData items are $extraDataMap")
-    paywallMap.putString("id", id)
-    paywallMap.putMap("backgrounds", Arguments.createMap().apply {
-        putString("phone", backgroundImageUrlPhone.orEmpty())
-        putString("tablet", backgroundImageUrlTablet.orEmpty())
-    })
-    paywallMap.putString("purchase_terms", purchaseTerms.orEmpty())
-    paywallMap.putString("name", name.orEmpty())
-    paywallMap.putString("paywall_type", type)
-    paywallMap.putMap("locale_config", localeConfig.toDict())
-    paywallMap.putMap("legal_citations", legalCitations?.toDict())
-    paywallMap.putMap("display_options", displayOptions.toDict())
-//    paywallMap.putString("developer_paywall_id", developerPaywallId.orEmpty())
-    styleData?.let {
-        paywallMap.putMap("styleData", it.toPaywallStylingDict())
-    }
-    return paywallMap
-}
-
-private fun NamiLocaleConfig.toDict(): WritableMap {
-    return Arguments.createMap().apply {
-        putString("close_button_text", closeButtonText)
-        putString("sign_in_button_text", signInButtonText)
-        putString("restore_purchase_button_text", restorePurchaseButtonText)
-        putString("purchase_button_hint_text_to_speech", purchaseButtonHintTextToSpeech)
-        putString("purchase_terms_prefix_hint_text_to_speech", purchaseTermsPrefixHintTextToSpeech)
-    }
-}
-
-private fun PaywallDisplayOptions.toDict(): WritableMap {
-    return Arguments.createMap().apply {
-        putBoolean("allow_closing", allowClosing)
-        putBoolean("restore_control", restoreControl)
-        putBoolean("sign_in_control", signInControl)
-        putString("scrollable_region_size", scrollableRegionSize)
-        putBoolean("show_nami_purchase_success_message", shouldShowNamiPurchaseSuccessMessage)
-        putBoolean("skus_in_scrollable_region", showSkusInScrollableRegion)
-        putBoolean("use_bottom_overlay", useBottomOverlay)
-    }
-}
-
-private fun LegalCitations.toDict(): WritableMap {
-    return Arguments.createMap().apply {
-        putString("id", id)
-        putString("privacy_url", privacyUrl)
-        putString("privacy_text", privacyText)
-        putString("tos_url", tosUrl)
-        putString("tos_text", tosText)
-        putString("clickwrap_text", clickWrapText)
-        putString("language", language)
-    }
-}
-
-fun PaywallStyleData.toPaywallStylingDict(): WritableMap {
-
-    val styleMap: WritableMap = Arguments.createMap()
-    styleMap.putString("backgroundColor", backgroundColor)
-
-    styleMap.putDouble("bodyFontSize", bodyFontSize.toDouble())
-    styleMap.putString("bodyTextColor", bodyTextColor)
-    styleMap.putString("bodyShadowColor", bodyShadowColor)
-    styleMap.putDouble("bodyShadowRadius", bodyShadowRadius.toDouble())
-
-    styleMap.putDouble("titleFontSize", titleFontSize.toDouble())
-    styleMap.putString("titleTextColor", titleTextColor)
-    styleMap.putString("titleShadowColor", titleShadowColor)
-    styleMap.putDouble("titleShadowRadius", titleShadowRadius.toDouble())
-
-    styleMap.putDouble("closeButtonFontSize", closeButtonFontSize.toDouble())
-    styleMap.putString("closeButtonTextColor", closeButtonTextColor)
-    styleMap.putString("closeButtonShadowColor", closeButtonShadowColor)
-    styleMap.putDouble("closeButtonShadowRadius", closeButtonShadowRadius.toDouble())
-
-    styleMap.putString("bottomOverlayColor", bottomOverlayColor)
-    styleMap.putDouble("bottomOverlayCornerRadius", bottomOverlayCornerRadius.toDouble())
-
-    styleMap.putString("skuButtonColor", skuButtonColor)
-    styleMap.putString("skuButtonTextColor", skuButtonTextColor)
-    styleMap.putString("skuSubDisplayTextColor", skuSubDisplayTextColor)
-    styleMap.putString("skuSubDisplayTextShadowColor", skuSubDisplayTextShadowColor)
-    styleMap.putDouble("skuSubDisplayTextShadowRadius", skuSubDisplayTextShadowRadius.toDouble())
-
-    styleMap.putString("featuredSkusButtonColor", featuredSkuButtonColor)
-    styleMap.putString("featuredSkusButtonTextColor", featuredSkuButtonTextColor)
-
-    styleMap.putDouble("signinButtonFontSize", signInButtonFontSize.toDouble())
-    styleMap.putString("signinButtonTextColor", signInButtonTextColor)
-    styleMap.putString("signinButtonShadowColor", signInButtonShadowColor)
-    styleMap.putDouble("signinButtonShadowRadius", signInButtonShadowRadius.toDouble())
-
-    styleMap.putDouble("restoreButtonFontSize", restoreButtonFontSize.toDouble())
-    styleMap.putString("restoreButtonTextColor", restoreButtonTextColor)
-    styleMap.putString("restoreButtonShadowColor", restoreButtonShadowColor)
-    styleMap.putDouble("restoreButtonShadowRadius", restoreButtonShadowRadius.toDouble())
-
-    styleMap.putDouble("purchaseTermsFontSize", purchaseTermsFontSize.toDouble())
-    styleMap.putString("purchaseTermsTextColor", purchaseTermsTextColor)
-    styleMap.putString("purchaseTermsShadowColor", purchaseTermsShadowColor)
-    styleMap.putDouble("purchaseTermsShadowRadius", purchaseTermsShadowRadius.toDouble())
-
-    styleMap.putString("termsLinkColor", termsLinkColor)
-
-    return styleMap
-}
 
 fun List<*>.toWritableArray(): WritableArray {
     val convertedArray = Arguments.createArray()
