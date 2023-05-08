@@ -6,22 +6,27 @@ export const NamiCampaignManager = {
   launchSubscription: undefined,
   emitter: new NativeEventEmitter(RNNamiCampaignManager),
   ...RNNamiCampaignManager,
-  launch(label, actionCallback, resultCallback) {
+  launch(label, resultCallback, actionCallback) {
     this.launchSubscription?.remove();
     this.launchSubscription = this.emitter.addListener(
       "ResultCampaign",
       (body) => {
         var action = body.action;
+
+        if (action.startsWith("NAMI_")) {
+          action = action.substring(5, action.length);
+        }
+
         var skuId = body.skuId;
         var purchaseError = body.purchaseError;
         var purchases = body.purchases;
-        resultCallback(action, skuId, purchaseError, purchases);
+        actionCallback(action, skuId, purchaseError, purchases);
       }
     );
     RNNamiCampaignManager.launch(
       label ?? null,
-      actionCallback ?? (() => {}),
-      resultCallback ?? (() => {})
+      resultCallback ?? (() => {}),
+      actionCallback ?? (() => {})
     );
   },
   isCampaignAvailable: (label) => {

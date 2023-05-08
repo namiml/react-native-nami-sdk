@@ -31,11 +31,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     if (isCampaignAvailable) {
       NamiCampaignManager.launch(
         label,
-        (action, sku, purchaseError, purchases) => {
-          console.log('action', action);
-          console.log('sku', sku);
-          console.log('purchaseError', purchaseError);
-          console.log('purchases', purchases);
+        (successAction, error) => {
+          console.log('successAction', successAction);
+          console.log('error', error);
         },
         (action, skuId, purchaseError, purchases) => {
           console.log('action', action);
