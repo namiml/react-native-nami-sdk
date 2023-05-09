@@ -1,5 +1,4 @@
 export { Nami, NamiConfiguration, NamiLanguageCodes } from "./src/Nami";
-export { NamiAnalytics, NamiAnalyticsActionType } from "./src/NamiAnalytics";
 export { NamiMLManager } from "./src/NamiMLManager";
 export {
   NamiCampaignManager,

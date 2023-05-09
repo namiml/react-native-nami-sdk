@@ -76,7 +76,7 @@ def get_track(service, package_name, edit_id, track_name):
                 message = error["message"]
             else:
                 message = "Unknown error"
-                
+
             printv(f"{status_code}: {message}")
     else:
         printv(f"200: API request was successful")
@@ -120,7 +120,7 @@ if __name__ == "__main__":
         print(help_message)
         sys.exit(2)
 
-    service_credentials = sys.argv[1] 
+    service_credentials = sys.argv[1]
 
     package_name = sys.argv[2]
     track_name = sys.argv[3]
