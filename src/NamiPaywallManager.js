@@ -1,14 +1,11 @@
 import { NativeModules, NativeEventEmitter, Platform } from "react-native";
 
-const { NamiEmitter, NamiPaywallManagerBridge } = NativeModules;
-
-const RNNamiPaywallManager =
-  Platform.OS == "ios" ? NativeModules.RNNamiPaywallManager : {};
+const { NamiEmitter, NamiPaywallManagerBridge, RNNamiPaywallManager } =
+  NativeModules;
 
 export const NamiPaywallManager = {
   emitter: new NativeEventEmitter(NamiEmitter),
-  paywallEmitter:
-    Platform.OS == "ios" ? new NativeEventEmitter(RNNamiPaywallManager) : null,
+  paywallEmitter: new NativeEventEmitter(RNNamiPaywallManager),
   ...RNNamiPaywallManager,
   ...NamiPaywallManagerBridge,
   registerBuySkuHandler(callback) {
@@ -22,15 +19,6 @@ export const NamiPaywallManager = {
       subscription = this.emitter.addListener("RegisterBuySKU", callback);
     }
     RNNamiPaywallManager.registerBuySkuHandler();
-    return subscription.remove;
-  },
-  registerCloseHandler(callback) {
-    var subscription;
-    subscription = this.paywallEmitter.addListener(
-      "BlockingPaywallClosed",
-      callback
-    );
-    RNNamiPaywallManager.registerCloseHandler();
     return subscription.remove;
   },
   registerCloseHandler(blockDismiss, callback) {

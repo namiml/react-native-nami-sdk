@@ -15,7 +15,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     private var blockRaisePaywall: Boolean = false
 
     override fun getName(): String {
-        return "NamiPaywallManagerBridge"
+        return "RNNamiPaywallManager"
     }
 
     @ReactMethod
@@ -35,8 +35,17 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
 
     @ReactMethod
-    fun registerCloseHandler() {
-        NamiPaywallManager.registerCloseHandler { activity -> {} }
+    fun registerCloseHandler(blockDismiss: Boolean) {
+        NamiPaywallManager.registerCloseHandler { activity ->
+            val resultMap = Arguments.createMap()
+            resultMap.putBoolean("blockingPaywallClosed", true)
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("BlockingPaywallClosed", resultMap)
+            if (!blockDismiss) {
+                activity.finish()
+            }
+        }
     }
 
     @ReactMethod
