@@ -28,26 +28,6 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun buySku(skuPlatformID: String, developerPaywallID: String, resultsCallback: Callback) {
-        reactApplicationContext.runOnUiQueueThread {
-            currentActivity?.let {
-                NamiPurchaseManager.buySKU(it, skuPlatformID) {
-
-                    val result: Boolean
-                    if (NamiPurchaseManager.isSKUIDPurchased(skuPlatformID)) {
-                        result = true
-                        Log.i(LOG_TAG, "Purchase complete, result is PURCHASED.")
-                    } else {
-                        result = false
-                        Log.i(LOG_TAG, "Purchase complete, product not purchased.")
-                    }
-                    resultsCallback.invoke(result)
-                }
-            }
-        }
-    }
-
-    @ReactMethod
     fun purchases(resultsCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
             val purchases = NamiPurchaseManager.allPurchases()

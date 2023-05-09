@@ -19,16 +19,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun dismiss(animated: Boolean, callback: Callback) {
-//        NamiPaywallManager.dismiss()
-    }
-
-    @ReactMethod
-    fun displayedViewController() {
-//        NamiPaywallManager.displayedViewController()
-    }
-
-    @ReactMethod
     fun buySkuComplete(purchase: WritableMap, skuRefId: String) {
 //        NamiPaywallManager.buySkuComplete(currentActivity!!, purchase, skuRefId)
     }
