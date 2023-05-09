@@ -40,10 +40,11 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun registerBuySkuHandler() {
-        NamiPaywallManager.registerBuySkuHandler { buySkuHandler, status ->
-//            reactApplicationContext
-//                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-//                    .emit("RegisterBuySKU")
+        NamiPaywallManager.registerBuySkuHandler { activity, sku ->
+            val dictionary = sku.toSkuDict()
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("RegisterBuySKU", dictionary)
         }
     }
 

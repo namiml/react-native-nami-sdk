@@ -2,6 +2,7 @@ package com.nami.reactlibrary
 
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.billing.NamiPurchaseManager
 import com.namiml.paywall.NamiPaywallManager
 
@@ -83,8 +84,27 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun registerPurchasesChangedHandler() {
-        NamiPurchaseManager.registerPurchasesChangedHandler{list, purchaseState,status -> {
+        NamiPurchaseManager.registerPurchasesChangedHandler{purchases, purchaseState, error ->
+            run {
+                val resultPurchases: WritableArray = WritableNativeArray()
 
-        }}
+                for (purchase in purchases) {
+                    resultPurchases.pushMap(purchase.toPurchaseDict())
+                }
+
+                val stateString = purchaseState.toString()
+
+                val payload = Arguments.createMap()
+                payload.putArray("purchases", resultPurchases)
+                payload.putString("purchaseState", stateString)
+                payload.putString("error", error)
+
+                reactApplicationContext
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                        .emit("PurchasesChanged", payload)
+
+
+            }
+        }
     }
 }
