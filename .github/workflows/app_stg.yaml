@@ -65,6 +65,11 @@ jobs:
         env:
           KEYSTORE_BASE64: '${{ secrets.KEY_STORE_BASE64 }}'
 
+      - name: Install test app dependencies
+        run: |
+          yarn install
+        working-directory: source/examples/Basic
+
       - name: Build Android App Bundle
         run: |
           ./gradlew clean bundleStagingRelease
