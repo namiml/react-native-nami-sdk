@@ -126,8 +126,8 @@ class NamiEmitter(reactContext: ReactApplicationContext) :
         }
 
         // Populate paywall metadata map
-        val paywallMap: WritableMap = namiPaywall.toNamiPaywallDict()
-        map.putMap("paywallMetadata", paywallMap)
+        // val paywallMap: WritableMap = namiPaywall.toNamiPaywallDict()
+        // map.putMap("paywallMetadata", paywallMap)
 
         // Populate SKU details
         val skusArray: WritableArray = Arguments.createArray()

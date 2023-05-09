@@ -15,17 +15,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     private var blockRaisePaywall: Boolean = false
 
     override fun getName(): String {
-        return "NamiPaywallManagerBridge"
-    }
-
-    @ReactMethod
-    fun dismiss(animated: Boolean, callback: Callback) {
-//        NamiPaywallManager.dismiss()
-    }
-
-    @ReactMethod
-    fun displayedViewController() {
-//        NamiPaywallManager.displayedViewController()
+        return "RNNamiPaywallManager"
     }
 
     @ReactMethod
@@ -35,16 +25,26 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
 
     @ReactMethod
-    fun registerCloseHandler() {
-        NamiPaywallManager.registerCloseHandler { activity -> {} }
+    fun registerCloseHandler(blockDismiss: Boolean) {
+        NamiPaywallManager.registerCloseHandler { activity ->
+            val resultMap = Arguments.createMap()
+            resultMap.putBoolean("blockingPaywallClosed", true)
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("BlockingPaywallClosed", resultMap)
+            if (!blockDismiss) {
+                activity.finish()
+            }
+        }
     }
 
     @ReactMethod
     fun registerBuySkuHandler() {
-        NamiPaywallManager.registerBuySkuHandler { buySkuHandler, status ->
-//            reactApplicationContext
-//                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-//                    .emit("RegisterBuySKU")
+        NamiPaywallManager.registerBuySkuHandler { activity, sku ->
+            val dictionary = sku.toSkuDict()
+            reactApplicationContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("RegisterBuySKU", dictionary)
         }
     }
 

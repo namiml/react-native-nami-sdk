@@ -1,36 +1,17 @@
-import { NativeModules, NativeEventEmitter, Platform } from "react-native";
+import { NativeModules, NativeEventEmitter } from "react-native";
 
-const { NamiEmitter, NamiPaywallManagerBridge } = NativeModules;
-
-const RNNamiPaywallManager =
-  Platform.OS == "ios" ? NativeModules.RNNamiPaywallManager : {};
+const { NamiPaywallManagerBridge, RNNamiPaywallManager } = NativeModules;
 
 export const NamiPaywallManager = {
-  emitter: new NativeEventEmitter(NamiEmitter),
-  paywallEmitter:
-    Platform.OS == "ios" ? new NativeEventEmitter(RNNamiPaywallManager) : null,
+  paywallEmitter: new NativeEventEmitter(RNNamiPaywallManager),
   ...RNNamiPaywallManager,
   ...NamiPaywallManagerBridge,
   registerBuySkuHandler(callback) {
-    var subscription;
-    if (Platform.OS == "ios") {
-      subscription = this.paywallEmitter.addListener(
-        "RegisterBuySKU",
-        callback
-      );
-    } else {
-      subscription = this.emitter.addListener("RegisterBuySKU", callback);
-    }
-    RNNamiPaywallManager.registerBuySkuHandler();
-    return subscription.remove;
-  },
-  registerCloseHandler(callback) {
-    var subscription;
-    subscription = this.paywallEmitter.addListener(
-      "BlockingPaywallClosed",
+    var subscription = this.paywallEmitter.addListener(
+      "RegisterBuySKU",
       callback
     );
-    RNNamiPaywallManager.registerCloseHandler();
+    RNNamiPaywallManager.registerBuySkuHandler();
     return subscription.remove;
   },
   registerCloseHandler(blockDismiss, callback) {
