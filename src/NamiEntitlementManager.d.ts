@@ -5,7 +5,9 @@ import { NamiSKU } from "./types";
 export const NamiEntitlementManager: {
   active: () => Promise<Array<NamiEntitlement>>;
   isEntitlementActive: (label?: string) => boolean;
-  refresh: () => void;
+  refresh: (
+    resultCallback?: (entitlements?: NamiEntitlement[]) => void
+  ) => void;
   registerActiveEntitlementsHandler: (
     callback: (activeEntitlements: NamiEntitlement[]) => void
   ) => EmitterSubscription["remove"];
