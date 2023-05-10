@@ -22,7 +22,7 @@ export function getConfigObject() {
         logLevel: 'DEBUG',
         developmentMode: false,
         bypassStore: false,
-        namiCommands: ['useStagingAPI'],
+        namiCommands: ['useStagingAPI', 'logHTTPTraffic'],
       };
   }
 }
