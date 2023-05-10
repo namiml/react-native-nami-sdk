@@ -18,7 +18,6 @@ export const NamiPaywallManager = {
     var subscription;
     subscription = this.paywallEmitter.addListener(
       "BlockingPaywallClosed",
-      callback,
       () => {
         subscription.remove();
         callback();
