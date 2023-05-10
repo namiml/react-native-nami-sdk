@@ -131,32 +131,23 @@ fun NamiSKU.toSkuDict(): WritableMap {
 fun NamiPurchase.toPurchaseDict(): WritableMap {
     val purchaseMap = WritableNativeMap()
 
-//    val purchaseSource = when (purchaseSource) {
-//        NamiPurchaseSource.NAMI_PAYWALL -> {
-//            "nami_rules"
-//        }
-//        NamiPurchaseSource.APPLICATION -> {
-//            "user"
-//        }
-//        else -> {
-//            "unknown"
-//        }
-//    }
-//    purchaseMap.putString("purchaseSource", purchaseSource)
+    val purchaseSource = purchaseSource.toString()
+    purchaseMap.putString("purchaseSource", purchaseSource)
+
+    val skuDict = namiSku?.toSkuDict()
+    purchaseMap.putMap("sku", skuDict)
 
     purchaseMap.putString("transactionIdentifier", transactionIdentifier.orEmpty())
-    purchaseMap.putString("skuIdentifier", skuId)
+    purchaseMap.putString("skuId", skuId)
 
     expires?.let {
-        purchaseMap.putString("subscriptionExpirationDate", it.toJavascriptDate())
+        purchaseMap.putString("expires", it.toJavascriptDate())
     }
-
-    // Removed, not sure why, should add back in when possible
-    //    val initiatedTimestamp = purchase.purchaseInitiatedTimestamp
-    //    val dt = Instant.ofEpochSecond(initiatedTimestamp)
-    //            .atZone(ZoneId.systemDefault())
-    //            .toLocalDateTime()
-    //    purchaseMap.putString("purchaseInitiatedTimestamp", purchase.purchaseInitiatedTimestamp ?: "")
+    val initiatedTimestamp = purchaseInitiatedTimestamp
+    val purchaseInitiatedDate = Date(initiatedTimestamp)
+    purchaseInitiatedDate.let {
+        purchaseMap.putString("purchaseInitiatedTimestamp", it.toJavascriptDate())
+    }
 
     // TODO: map kotlin dictionary into arbitrary map?
     purchaseMap.putMap("platformMetadata", WritableNativeMap())
@@ -186,7 +177,7 @@ fun CustomerJourneyState?.toDict(): WritableMap {
 
 fun NamiEntitlement.toEntitlementDict(): WritableMap? {
     val resultMap: WritableMap = WritableNativeMap()
-    resultMap.putString("referenceID", referenceId)
+    resultMap.putString("referenceId", referenceId)
 
     Log.i(LOG_TAG, "Processing entitlement into Javascript Map with referenceID $referenceId")
 
@@ -195,7 +186,7 @@ fun NamiEntitlement.toEntitlementDict(): WritableMap? {
         return null
     }
 
-    resultMap.putString("namiID", namiId.orEmpty())
+    resultMap.putString("namiId", namiId.orEmpty())
     resultMap.putString("desc", desc.orEmpty())
     resultMap.putString("name", name.orEmpty())
 
@@ -209,13 +200,13 @@ fun NamiEntitlement.toEntitlementDict(): WritableMap? {
     for (sku in purchasedSKUs) {
         purchasedSKUsArray.pushMap(sku.toSkuDict())
     }
-    resultMap.putArray("purchasedSKUs", purchasedSKUsArray)
+    resultMap.putArray("purchasedSkus", purchasedSKUsArray)
 
     val relatedSKUsArray: WritableArray = WritableNativeArray()
     for (sku in relatedSKUs) {
         relatedSKUsArray.pushMap(sku.toSkuDict())
     }
-    resultMap.putArray("relatedSKUs", relatedSKUsArray)
+    resultMap.putArray("relatedSkus", relatedSKUsArray)
 
     // For react, provide the most recent active purchase and sku from the arrays
 
@@ -233,7 +224,7 @@ fun NamiEntitlement.toEntitlementDict(): WritableMap? {
 
 // Convert Java Date to ISO860 UTC date to pass to Javascript
 fun Date.toJavascriptDate(): String {
-    val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.getDefault()).apply {
+    val df: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
     return df.format(this)

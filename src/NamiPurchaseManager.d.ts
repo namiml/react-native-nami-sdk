@@ -32,6 +32,7 @@ export type NamiPurchase = {
   transactionIdentifier?: string;
   expires?: Date;
   purchaseInitiatedTimestamp: Date;
+  purchaseSource?: "CAMPAIGN" | "MARKETPLACE" | "UNKNOWN";
 };
 
 export enum NamiPurchaseState {
