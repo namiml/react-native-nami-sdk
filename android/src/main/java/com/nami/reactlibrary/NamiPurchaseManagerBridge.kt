@@ -10,7 +10,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
-        return "NamiPurchaseManagerBridge"
+        return "RNNamiPurchaseManager"
     }
 
     @ReactMethod

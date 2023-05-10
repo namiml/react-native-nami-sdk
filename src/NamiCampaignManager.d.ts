@@ -7,7 +7,7 @@ export const NamiCampaignManager: {
   isCampaignAvailable: (label?: string) => boolean;
   launch: (
     label?: string,
-    resultCallback?: (success: boolean, error?: string) => void,
+    resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: (
       action: NamiPaywallAction,
       skuId?: string,

@@ -31,7 +31,9 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
   };
 
   const onRefreshPress = () => {
-    NamiEntitlementManager.refresh();
+    NamiEntitlementManager.refresh((newEtitlements) => {
+      console.log('newEtitlements', newEtitlements);
+    });
   };
 
   useEffect(() => {

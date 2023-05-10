@@ -1,14 +1,11 @@
 import { NativeModules, NativeEventEmitter, Platform } from "react-native";
 
-const { NamiPurchaseManagerBridge, NamiEmitter } = NativeModules;
-
-const RNNamiPurchaseManager =
-  Platform.OS == "ios" ? NativeModules.RNNamiPurchaseManager : {};
+const { NamiPurchaseManagerBridge, RNNamiPurchaseManager } = NativeModules;
 
 export const NamiPurchaseManager = {
-  emitter: new NativeEventEmitter(NamiEmitter),
-  ...RNNamiPurchaseManager,
+  emitter: new NativeEventEmitter(RNNamiPurchaseManager),
   ...NamiPurchaseManagerBridge,
+  ...RNNamiPurchaseManager,
   registerPurchasesChangedHandler(callback) {
     const subscription = this.emitter.addListener(
       "PurchasesChanged",
@@ -23,16 +20,18 @@ export const NamiPurchaseManager = {
     return subscription.remove;
   },
   registerRestorePurchasesHandler(callback) {
-    const subscription = this.emitter.addListener(
-      "RestorePurchasesStateChanged",
-      (body) => {
-        var state = body.state.toLowerCase();
-        var newPurchases = body.newPurchases;
-        var oldPurchases = body.oldPurchases;
-        callback(state, newPurchases, oldPurchases);
-      }
-    );
-    RNNamiPurchaseManager.registerRestorePurchasesHandler();
-    return subscription.remove;
+    if (Platform.OS === "ios") {
+      const subscription = this.emitter.addListener(
+        "RestorePurchasesStateChanged",
+        (body) => {
+          var state = body.state.toLowerCase();
+          var newPurchases = body.newPurchases;
+          var oldPurchases = body.oldPurchases;
+          callback(state, newPurchases, oldPurchases);
+        }
+      );
+      RNNamiPurchaseManager.registerRestorePurchasesHandler();
+      return subscription.remove;
+    }
   },
 };
