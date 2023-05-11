@@ -95,36 +95,6 @@ RCT_EXPORT_METHOD(performNamiCommand: (NSString *)command) {
     [NamiCommand performCommand:command];
 }
 
-RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier completion: (RCTResponseSenderBlock) completion) {
-    [NamiCustomerManager loginWithId:externalIdentifier loginCompleteHandler:^(BOOL success, NSError * _Nullable error) {
-        if (error) {
-            completion(@[error]);
-        }
-        completion(nil);
-    }];
-}
-
-RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
-{
-    NSString *externalIdentifier = [NamiCustomerManager loggedInId];
-
-    if (externalIdentifier == NULL || [externalIdentifier length] == 0) {
-        completion(@[]);
-    } else {
-        completion(@[externalIdentifier]);
-    }
-}
-
-RCT_EXPORT_METHOD(clearExternalIdentifier:(RCTResponseSenderBlock)completion) {
-    NSLog(@"NamiBridge: Clearing external identifier.");
-    [NamiCustomerManager logoutWithLogoutCompleteHandler:^(BOOL success, NSError * _Nullable error) {
-        if (error) {
-            completion(@[error]);
-        }
-        completion(nil);
-    }];
-}
-
 @end
 
 @implementation NamiBridge
