@@ -1,48 +1,22 @@
 package com.nami.reactlibrary
 
 import android.util.Log
-import com.facebook.react.bridge.Callback
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableArray
-import com.facebook.react.bridge.ReadableType
-import com.facebook.react.bridge.WritableArray
-import com.facebook.react.bridge.WritableNativeArray
-import com.facebook.react.bridge.WritableNativeMap
+import com.facebook.react.bridge.*
+import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.billing.NamiPurchaseManager
+import com.namiml.paywall.NamiPaywallManager
 
 class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
-        return "NamiPurchaseManagerBridge"
+        return "RNNamiPurchaseManager"
     }
 
     @ReactMethod
     fun clearBypassStorePurchases() {
         reactApplicationContext.runOnUiQueueThread {
             NamiPurchaseManager.clearBypassStorePurchases()
-        }
-    }
-
-    @ReactMethod
-    fun buySKU(skuPlatformID: String, developerPaywallID: String, resultsCallback: Callback) {
-        reactApplicationContext.runOnUiQueueThread {
-            currentActivity?.let {
-                NamiPurchaseManager.buySKU(it, skuPlatformID) {
-
-                    val result: Boolean
-                    if (NamiPurchaseManager.isSKUIDPurchased(skuPlatformID)) {
-                        result = true
-                        Log.i(LOG_TAG, "Purchase complete, result is PURCHASED.")
-                    } else {
-                        result = false
-                        Log.i(LOG_TAG, "Purchase complete, product not purchased.")
-                    }
-                    resultsCallback.invoke(result)
-                }
-            }
         }
     }
 
@@ -63,22 +37,20 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun isSKUIDPurchased(skuID: String, resultsCallback: Callback) {
-        reactApplicationContext.runOnUiQueueThread {
-            val isPurchased = NamiPurchaseManager.isSKUIDPurchased(skuID)
-            resultsCallback.invoke(isPurchased)
-        }
+    fun skuPurchased(skuID: String, promise: Promise) {
+        val isPurchased = NamiPurchaseManager.isSKUIDPurchased(skuID)
+        promise.resolve(isPurchased)
     }
 
     @ReactMethod
-    fun consumePurchasedSKU(skuRefId: String) {
+    fun consumePurchasedSku(skuRefId: String) {
         reactApplicationContext.runOnUiQueueThread {
             NamiPurchaseManager.consumePurchasedSKU(skuRefId)
         }
     }
 
     @ReactMethod
-    fun anySKUIDPurchased(skuIDs: ReadableArray, resultsCallback: Callback) {
+    fun anySkuPurchased(skuIDs: ReadableArray, promise: Promise) {
         reactApplicationContext.runOnUiQueueThread {
             val checkArray: MutableList<String> = mutableListOf()
             for (x in 0 until skuIDs.size()) {
@@ -92,7 +64,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
 
             val anyPurchased = NamiPurchaseManager.anySKUIDPurchased(checkArray)
 
-            resultsCallback.invoke(anyPurchased)
+            promise.resolve(anyPurchased)
         }
     }
 
@@ -108,5 +80,31 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
             )
         }
         resultsCallback.invoke(resultMap)
+    }
+
+    @ReactMethod
+    fun registerPurchasesChangedHandler() {
+        NamiPurchaseManager.registerPurchasesChangedHandler{purchases, purchaseState, error ->
+            run {
+                val resultPurchases: WritableArray = WritableNativeArray()
+
+                for (purchase in purchases) {
+                    resultPurchases.pushMap(purchase.toPurchaseDict())
+                }
+
+                val stateString = purchaseState.toString()
+
+                val payload = Arguments.createMap()
+                payload.putArray("purchases", resultPurchases)
+                payload.putString("purchaseState", stateString)
+                payload.putString("error", error)
+
+                reactApplicationContext
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                        .emit("PurchasesChanged", payload)
+
+
+            }
+        }
     }
 }

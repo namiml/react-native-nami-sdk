@@ -14,7 +14,6 @@ import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableNativeArray
 import com.namiml.Nami
 import com.namiml.NamiConfiguration
-import com.namiml.NamiExternalIdentifierType
 import com.namiml.NamiLanguageCode
 import com.namiml.NamiLogLevel
 //import com.namiml.NamiApiResponseHandler
@@ -23,7 +22,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
     companion object {
-        private const val CONFIG_MAP_PLATFORM_ID_KEY = "appPlatformID-google"
+        private const val CONFIG_MAP_PLATFORM_ID_KEY = "appPlatformID-android"
         private const val CONFIG_MAP_LOG_LEVEL_KEY = "logLevel"
         private const val CONFIG_MAP_DEVELOPMENT_MODE_KEY = "developmentMode"
         private const val CONFIG_MAP_BYPASS_STORE_KEY = "bypassStore"
@@ -37,7 +36,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun configure(configDict: ReadableMap) {
+    fun configure(configDict: ReadableMap, completion: Callback) {
 
         // Need to be sure we have some valid string.
         val appPlatformID: String = if (configDict.hasKey(CONFIG_MAP_PLATFORM_ID_KEY)) {
@@ -128,7 +127,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             } else {
                 Arguments.createArray()
             }
-        val settingsList = mutableListOf("extendedClientInfo:react-native:2.0.5")
+        val settingsList = mutableListOf("extendedClientInfo:react-native:3.0.0")
         namiCommandsReact?.toArrayList()?.filterIsInstance<String>()?.let { commandsFromReact ->
             settingsList.addAll(commandsFromReact)
         }
@@ -141,52 +140,9 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         reactApplicationContext.runOnUiQueueThread {
             // Configure must be called on main thread
             Nami.configure(builtConfig)
-        }
-    }
-
-    @ReactMethod
-    fun setExternalIdentifier(externalIdentifier: String, externalIDType: String, completion: Callback) {
-
-        Log.i(LOG_TAG, "Setting external identifier $externalIdentifier of type $externalIDType")
-
-        val useType: NamiExternalIdentifierType = if (externalIDType == "sha256") {
-            NamiExternalIdentifierType.SHA_256
-        } else {
-            NamiExternalIdentifierType.UUID
-        }
-
-        reactApplicationContext.runOnUiQueueThread {
-            Nami.setExternalIdentifier(externalIdentifier, useType) { success, error ->
-                if (error != null) {
-                    completion.invoke(error)
-                }
-                completion.invoke(null)
-            }
-        }
-    }
-
-    @ReactMethod
-    fun getExternalIdentifier(successCallback: Callback) {
-        reactApplicationContext.runOnUiQueueThread {
-            val externalIdentifierResult: WritableArray = WritableNativeArray()
-            Nami.getExternalIdentifier()?.let { externalIdentifier ->
-                Log.i(LOG_TAG, "getting external identifier, found $externalIdentifier")
-                externalIdentifierResult.pushString(externalIdentifier)
-            }
-            successCallback.invoke(externalIdentifierResult)
-        }
-    }
-
-    @ReactMethod
-    fun clearExternalIdentifier(completion: Callback) {
-        Log.i(LOG_TAG, "Clearing external identifier.")
-        reactApplicationContext.runOnUiQueueThread {
-            Nami.clearExternalIdentifier()  { success, error ->
-                if (error != null) {
-                    completion.invoke(error)
-                }
-                completion.invoke(null)
-            }
+            val resultMap = Arguments.createMap()
+            resultMap.putBoolean("success", true)
+            completion.invoke(resultMap)
         }
     }
 }

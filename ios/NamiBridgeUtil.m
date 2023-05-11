@@ -2,12 +2,11 @@
 //  NamiBridgeUtil.m
 //  RNNami
 //
-//  Created by Kendall Gelner on 1/9/20.
-//  Copyright © 2020 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <Nami/Nami.h>
+#import <NamiApple/NamiApple.h>
 
 #import "NamiBridgeUtil.h"
 
@@ -17,7 +16,7 @@
     + (NSDictionary<NSString *,NSString *> *) skuToSKUDict:(NamiSKU *)sku {
         NSMutableDictionary<NSString *,NSString *> *productDict = [NSMutableDictionary new];
 
-        productDict[@"skuIdentifier"] = sku.platformID;
+        productDict[@"skuIdentifier"] = sku.platformId;
 
         SKProduct *productInt = sku.product;
         productDict[@"localizedTitle"] = productInt.localizedTitle;
@@ -30,8 +29,8 @@
         productDict[@"priceCurrency"] = productInt.priceLocale.currencyCode;
 
         // Add smart text processed values for sku buttons to sku dictionary
-        productDict[@"displayText"] = [sku namiDisplayText];
-        productDict[@"displaySubText"] = [sku namiSubDisplayText];
+//        productDict[@"displayText"] = [sku localizedDisplayText];
+//        productDict[@"displaySubText"] = [sku localizedSubDisplayText];
 
         if (@available(iOS 12.0, *)) {
             if (productInt != nil && productInt.subscriptionGroupIdentifier != nil) {
@@ -72,7 +71,7 @@
  + (NSDictionary<NSString *,NSString *> *) purchaseToPurchaseDict:(NamiPurchase *)purchase {
      NSMutableDictionary<NSString *,id> *purchaseDict = [NSMutableDictionary new];
 
-     purchaseDict[@"skuIdentifier"] = purchase.skuID;
+     purchaseDict[@"skuIdentifier"] = purchase.skuId;
      purchaseDict[@"transactionIdentifier"] = purchase.transactionIdentifier;
 
      // Removed, not sure why, should add back in when possible.
@@ -123,12 +122,12 @@
 + (NSDictionary<NSString *,NSString *> *) entitlementToEntitlementDict:(NamiEntitlement *)entitlement {
     NSMutableDictionary<NSString *,id> *entitlementDict = [NSMutableDictionary new];
     NSLog(@"Converting entitlement %@", entitlement);
-    entitlementDict[@"referenceID"] = [entitlement referenceID];
-    entitlementDict[@"namiID"] = [entitlement namiID] ? [entitlement namiID] : @"";
+    entitlementDict[@"referenceID"] = [entitlement referenceId];
+    entitlementDict[@"namiID"] = [entitlement namiId] ? [entitlement namiId] : @"";
     entitlementDict[@"desc"] = [entitlement desc] ? [entitlement desc] : @"";
     entitlementDict[@"name"] = [entitlement name] ? [entitlement name] : @"";
 
-    if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceID] length] == 0) {
+    if (entitlementDict[@"referenceID"] == nil || [[entitlement referenceId] length] == 0) {
         NSLog(@"NamiBridge: Bad entitlement in system, empty referenceID.");
         return nil;
     }
@@ -143,7 +142,7 @@
     }
     entitlementDict[@"activePurchases"] = convertedActivePurchases;
 
-    NSArray <NamiSKU *>*purchasedSKUs = [entitlement purchasedSKUs];
+    NSArray <NamiSKU *>*purchasedSKUs = [entitlement purchasedSkus];
        NSMutableArray *convertedPurchasedSKUs = [NSMutableArray array];
        for (NamiSKU *sku in purchasedSKUs) {
            NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
@@ -154,7 +153,7 @@
        entitlementDict[@"purchasedSKUs"] = convertedPurchasedSKUs;
 
 
-    NSArray <NamiSKU *>*relatedSKUs = [entitlement relatedSKUs];
+    NSArray <NamiSKU *>*relatedSKUs = [entitlement relatedSkus];
     NSMutableArray *convertedRelatedSKUs = [NSMutableArray array];
     for (NamiSKU *sku in relatedSKUs) {
         NSDictionary *skuDict = [NamiBridgeUtil skuToSKUDict:sku];
@@ -174,19 +173,19 @@
 //        entitlementDict[@"latestPurchase"] = [NamiBridgeUtil purchaseToPurchaseDict:lastPurchase];
     }
 
-    NSString *lastPurchaseSKUID = [lastPurchase skuID];
+    NSString *lastPurchaseSKUID = [lastPurchase skuId];
 
     NamiSKU *lastPurchasedSKU;
     if (lastPurchaseSKUID != NULL ) {
-        for (NamiSKU *sku in [entitlement purchasedSKUs]) {
-            if ( [[sku platformID] isEqualToString:lastPurchaseSKUID] ) {
+        for (NamiSKU *sku in [entitlement purchasedSkus]) {
+            if ( [[sku platformId] isEqualToString:lastPurchaseSKUID] ) {
                 lastPurchasedSKU = sku;
             }
         }
     }
 
     if (lastPurchasedSKU != NULL) {
-        lastPurchasedSKU = [[entitlement purchasedSKUs] lastObject];
+        lastPurchasedSKU = [[entitlement purchasedSkus] lastObject];
     }
 
     if (lastPurchasedSKU != NULL) {
@@ -207,7 +206,7 @@
 
 
 + (NSDictionary<NSString *,NSString *> *) customerJourneyStateDict {
-    CustomerJourneyState *journeyState = [NamiCustomerManager currentCustomerJourneyState];
+    CustomerJourneyState *journeyState = [NamiCustomerManager journeyState];
 
     BOOL formerSubscriber = [journeyState formerSubscriber];
     BOOL inGracePeriod = [journeyState inGracePeriod];
@@ -227,67 +226,6 @@
                                   @"inAccountHold":@(inAccountHold)
     };
     return journeyDict;
-}
-
-+ (NSDictionary<NSString *,NSString *> *) paywallStylingToPaywallStylingDict:(PaywallStyleData *)styling {
-    NSMutableDictionary<NSString *,id> *stylingDict = [NSMutableDictionary new];
-    if (styling != nil) {
-        stylingDict[@"backgroundColor"] = [NamiBridgeUtil hexStringForColor: styling.backgroundColor];
-
-        stylingDict[@"bodyFontSize"] = @(styling.bodyFontSize);
-        stylingDict[@"bodyTextColor"] = [NamiBridgeUtil hexStringForColor: styling.bodyTextColor];
-        stylingDict[@"bodyShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.bodyShadowColor];
-        stylingDict[@"bodyShadowRadius"] = @(styling.bodyShadowRadius);
-
-        stylingDict[@"titleFontSize"] = @(styling.titleFontSize);
-        stylingDict[@"titleTextColor"] = [NamiBridgeUtil hexStringForColor: styling.titleTextColor];
-        stylingDict[@"titleShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.titleShadowColor];
-        stylingDict[@"titleShadowRadius"] = @(styling.titleShadowRadius);
-
-        stylingDict[@"closeButtonFontSize"] = @(styling.closeButtonFontSize);
-        stylingDict[@"closeButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.closeButtonTextColor];
-        stylingDict[@"closeButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.closeButtonShadowColor];
-        stylingDict[@"closeButtonShadowRadius"] = @(styling.closeButtonShadowRadius);
-
-        stylingDict[@"bottomOverlayColor"] = [NamiBridgeUtil hexStringForColor: styling.bottomOverlayColor];
-        stylingDict[@"bottomOverlayCornerRadius"] = @(styling.bottomOverlayCornerRadius);
-
-        stylingDict[@"skuButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonColor];
-        stylingDict[@"skuButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.skuButtonTextColor];
-
-        stylingDict[@"featuredSkusButtonColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonColor];
-        stylingDict[@"featuredSkusButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.featuredSkusButtonTextColor];
-
-        stylingDict[@"signinButtonFontSize"] = @(styling.signinButtonFontSize);
-        stylingDict[@"signinButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.signinButtonTextColor];
-        stylingDict[@"signinButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.signinButtonShadowColor];
-        stylingDict[@"signinButtonShadowRadius"] = @(styling.signinButtonShadowRadius);
-
-        stylingDict[@"restoreButtonFontSize"] = @(styling.restoreButtonFontSize);
-        stylingDict[@"restoreButtonTextColor"] = [NamiBridgeUtil hexStringForColor: styling.restoreButtonTextColor];
-        stylingDict[@"restoreButtonShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.restoreButtonShadowColor];
-        stylingDict[@"restoreButtonShadowRadius"] = @(styling.restoreButtonShadowRadius);
-
-        stylingDict[@"purchaseTermsFontSize"] = @(styling.purchaseTermsFontSize);
-        stylingDict[@"purchaseTermsTextColor"] = [NamiBridgeUtil hexStringForColor: styling.purchaseTermsTextColor];
-        stylingDict[@"purchaseTermsShadowColor"] = [NamiBridgeUtil hexStringForColor: styling.purchaseTermsShadowColor];
-        stylingDict[@"purchaseTermsShadowRadius"] = @(styling.purchaseTermsShadowRadius);
-
-
-        stylingDict[@"termsLinkColor"] = styling.termsLinkColor;
-    }
-
-    return stylingDict;
-}
-
-+ (NSString *)hexStringForColor:(UIColor *)color {
-    CGFloat r;
-    CGFloat g;
-    CGFloat b;
-    CGFloat a;
-    [color getRed:&r green:&g blue:&b alpha:&a];
-    NSString *hexString=[NSString stringWithFormat:@"#%02X%02X%02X", (int)(r * 255), (int)(g * 255), (int)(b * 255)];
-    return hexString;
 }
 
 @end

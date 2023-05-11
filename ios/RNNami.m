@@ -1,6 +1,6 @@
 
 #import "RNNami.h"
-#import <Nami/Nami.h>
+#import <NamiApple/NamiApple.h>
 
 @implementation RNNami
 

@@ -1,0 +1,93 @@
+//
+//  NamiPaywallManagerBridge.swift
+//  RNNami
+//
+//  Created by macbook on 07.04.2023.
+//  Copyright © 2023 Nami ML INc.. All rights reserved.
+//
+
+import Foundation
+import NamiApple
+import React
+
+@objc(RNNamiPaywallManager)
+class RNNamiPaywallManager: RCTEventEmitter {
+    override func supportedEvents() -> [String]! {
+      return ["RegisterBuySKU", "BlockingPaywallClosed"]
+    }
+
+    @objc(buySkuComplete:)
+    func buySkuComplete(dict: NSDictionary) {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: dict["product"] as Any, options: []) else {
+            print("Error converting dictionary to JSON data")
+            return
+        }
+        do {
+            let decoder = JSONDecoder()
+            let product = try decoder.decode(NamiSKU.self, from: jsonData)
+ 
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = .init(identifier: "en_US_POSIX")
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            
+            if
+            let transactionID = dict["transactionID"] as? String,
+            let originalTransactionID = dict["originalTransactionID"] as? String,
+            let priceDecimal = Decimal(string: dict["price"] as! String),
+            let currencyCode = dict["currencyCode"] as? String,
+            let localeString = dict["locale"] as? String
+            {
+                let expiresDate = Date(timeIntervalSince1970: dict["purchaseDate"] as! Double? ?? 0)
+                let originalPurchaseDate =  Date(timeIntervalSince1970: dict["originalPurchaseDate"] as! Double)
+                let purchaseDate = Date(timeIntervalSince1970: dict["purchaseDate"] as! Double)
+                let locale = Locale(identifier: localeString)
+                let purchaseSuccess = NamiPurchaseSuccess(
+                    product: product,
+                    transactionID: transactionID,
+                    originalTransactionID: originalTransactionID,
+                    originalPurchaseDate: originalPurchaseDate,
+                    purchaseDate: purchaseDate,
+                    expiresDate: expiresDate,
+                    price: priceDecimal,
+                    currencyCode: currencyCode,
+                    locale: locale
+                )
+                NamiPaywallManager.buySkuComplete(purchaseSuccess: purchaseSuccess)
+            }
+        } catch {
+            print("Error decoding JSON: \(error)")
+        }
+    }
+
+    @objc(registerBuySkuHandler)
+    func registerBuySkuHandler() {
+        NamiPaywallManager.registerBuySkuHandler { sku in
+            let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
+            self.sendEvent(withName: "RegisterBuySKU", body: dictionary)
+        }
+    }
+
+    @objc(registerCloseHandler:)
+    func registerCloseHandler(blockDismiss: Bool) {
+        NamiPaywallManager.registerCloseHandler { _ in
+            let dictionary = NSDictionary(dictionary: ["blockingPaywallClosed": true].compactMapValues { $0 })
+            self.sendEvent(withName: "BlockingPaywallClosed", body: dictionary)
+            if (blockDismiss) {
+                return
+            }
+            NamiPaywallManager.dismiss(animated: true, completion: {})
+        }
+    }
+    
+    @objc(dismiss:callback:)
+    func dismiss(animated: Bool, callback: @escaping RCTResponseSenderBlock) {
+        NamiPaywallManager.dismiss(animated: animated) {
+            callback([])
+        }
+    }
+
+    @objc(displayedViewController)
+    func displayedViewController() {
+        _ = NamiPaywallManager.displayedViewController()
+    }
+}

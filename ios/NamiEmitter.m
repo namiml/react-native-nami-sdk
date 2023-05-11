@@ -2,13 +2,12 @@
 //  NamiEmitter.m
 //  namiReactNative
 //
-//  Created by Kendall Helmstetter Gelner on 12/11/19.
 //  Copyright © 2019 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-#import <Nami/Nami.h>
+#import <NamiApple/NamiApple.h>
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
@@ -38,31 +37,25 @@ static NamiEmitter *namiEmitter;
             [self sendEventPurchaseMadeWithPurchases:purchases withState:purchaseState error:error];
         }];
 
-        [NamiEntitlementManager registerEntitlementsChangedHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
+        [NamiEntitlementManager registerActiveEntitlementsHandler:^(NSArray<NamiEntitlement *> * _Nonnull entitlements) {
             [self sendEventEntitlementsChangedWithEntitlements:entitlements];
         }];
 
-
-        [NamiPaywallManager registerSignInHandler:^(UIViewController * _Nullable fromVC, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
-            [self sendSignInActivateFromVC:fromVC forPaywall:developerPaywallID paywallMetadata:paywallMetadata];
+        [NamiPaywallManager registerSignInHandler:^(UIViewController * _Nullable fromVC) {
+            [self sendSignInActivateFromVC:fromVC];
         }];
 
-        [NamiPaywallManager registerPaywallRaiseHandler:^(UIViewController * _Nullable fromVC, NSArray<NamiSKU *> * _Nullable products, NSString * _Nonnull developerPaywallID, NamiPaywall * _Nonnull paywallMetadata) {
-            [self sendPaywallActivatedFromVC:fromVC forPaywall:developerPaywallID withProducts:products paywallMetadata:paywallMetadata];
-        }];
-
-        [NamiPaywallManager registerBlockingPaywallClosedHandler:^{
-            [self sendBlockingPaywallClosed];
-        }];
+//        [NamiPaywallManager registerCloseHandler:^(UIViewController * _Nullable fromVC) {
+//            [self sendBlockingPaywallClosed];
+//        }];
 
         [NamiPurchaseManager registerRestorePurchasesHandlerWithRestorePurchasesStateHandler:^(enum NamiRestorePurchasesState state, NSArray<NamiPurchase *> * _Nonnull newPurchases, NSArray<NamiPurchase *> * _Nonnull oldPurchases, NSError * _Nullable error) {
             [self sendRestorePurchasesStateChanged:state newPurchases:newPurchases oldPurchases:oldPurchases error:error];
         }];
 
-        [NamiCustomerManager registerJourneyStateChangedHandler:^(CustomerJourneyState * _Nonnull journeyState) {
+        [NamiCustomerManager registerJourneyStateHandler:^(CustomerJourneyState * _Nonnull journeyState) {
             [self sendEventCustomerJourneyStateChanged:journeyState];
         }];
-
     }
     namiEmitter = self;
     return self;
@@ -86,7 +79,7 @@ static NamiEmitter *namiEmitter;
     NSArray<NamiPurchase *> *purchases = NamiPurchaseManager.allPurchases;
     NSMutableArray<NSString *> *productIDs = [NSMutableArray new];
     for (NamiPurchase *purchase in purchases) {
-        [productIDs addObject:purchase.skuID];
+        [productIDs addObject:purchase.skuId];
     }
 
     return productIDs;
@@ -157,7 +150,7 @@ bool hasNamiEmitterListeners;
 
         NSMutableArray *convertedEntitlementDicts = [NSMutableArray new];
         for ( NamiEntitlement *entitlementRecord in entitlements ) {
-            if ( entitlementRecord.referenceID != nil ) {
+            if ( entitlementRecord.referenceId != nil ) {
                 NSDictionary *entitlementDict = [NamiBridgeUtil entitlementToEntitlementDict:entitlementRecord];
                 [convertedEntitlementDicts addObject:entitlementDict];
             }
@@ -209,7 +202,7 @@ bool hasNamiEmitterListeners;
 
         NSMutableArray *convertedPurchaseDicts = [NSMutableArray new];
         for ( NamiPurchase *purchaseRecord in purchases ) {
-            if ( purchaseRecord.skuID != nil ) {
+            if ( purchaseRecord.skuId != nil ) {
                 NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
                 [convertedPurchaseDicts addObject:purchaseDict];
             }
@@ -229,56 +222,53 @@ bool hasNamiEmitterListeners;
 }
 
 
-- (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC
-                       forPaywall:(NSString * _Nonnull) developerPaywallID
-                      paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata {
+- (void) sendSignInActivateFromVC:(UIViewController * _Nullable) fromVC {
   if (hasNamiEmitterListeners) {
       // Pass along paywall ID use in sign-in provider.
-      [self sendEventWithName:@"SignInActivate" body:@{ @"developerPaywallID": developerPaywallID }];
+      [self sendEventWithName:@"SignInActivate" body:@{ }];
   }
 }
 
-- (void)sendPaywallActivatedFromVC:(UIViewController * _Nullable) fromVC
-                        forPaywall:(NSString * _Nonnull) developerPaywallID
-                      withProducts:(NSArray<NamiSKU *> * _Nullable) products
-                       paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata  {
-    if (hasNamiEmitterListeners) {
-    NSMutableArray<NSDictionary<NSString *,NSString *> *> *skuDicts = [NSMutableArray new];
-    for (NamiSKU *sku in products) {
-      [skuDicts addObject:[NamiBridgeUtil skuToSKUDict:sku]];
-    }
-
-        NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
-        // This part is really meant to be internally facing, scrub from dictionary
-
-        NSMutableDictionary *marketingContentDictionary = [NSMutableDictionary dictionaryWithDictionary:paywallMeta[@"marketing_content"]];
-
-        // Populated SmartText formatted values in dictioanry to send
-        marketingContentDictionary[@"body"] = [paywallMetadata body];
-        marketingContentDictionary[@"title"] = [paywallMetadata title];
-        paywallMeta[@"marketing_content"] = marketingContentDictionary;
-        paywallMeta[@"purchase_terms"] = [paywallMetadata purchaseTerms];
-
-        // Strip out presention_position from all listed sku items
-        NSArray *cleanedOrderdMetadata = [NamiBridgeUtil stripPresentationPositionFromOrderedMetadataForPaywallMetaDict:paywallMeta];
-        [paywallMeta setObject:cleanedOrderdMetadata  forKey:@"formatted_skus"];
-
-        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
-        [paywallMeta removeObjectForKey:@"skus"];
-
-        NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
-        paywallMeta[@"styleData"] = paywallStylingDict;
-
-        // remove keys that are inconsistent with android
-        [paywallMeta removeObjectForKey:@"body"];
-        [paywallMeta removeObjectForKey:@"title"];
-        [paywallMeta removeObjectForKey:@"style"];
-
-        [self sendEventWithName:@"AppPaywallActivate" body:@{ @"namiSkus": skuDicts,
-                                                            @"developerPaywallID": developerPaywallID,
-                                                            @"paywallMetadata": paywallMeta }];
-  }
-}
+//- (void)sendPaywallActivatedForPaywall:(NSString * _Nonnull) developerPaywallID
+//                      withProducts:(NSArray<NamiSKU *> * _Nullable) products
+//                       paywallMetadata:(NamiPaywall * _Nonnull) paywallMetadata  {
+//    if (hasNamiEmitterListeners) {
+//    NSMutableArray<NSDictionary<NSString *,NSString *> *> *skuDicts = [NSMutableArray new];
+//    for (NamiSKU *sku in products) {
+//      [skuDicts addObject:[NamiBridgeUtil skuToSKUDict:sku]];
+//    }
+//
+//        NSMutableDictionary *paywallMeta = [NSMutableDictionary dictionaryWithDictionary:paywallMetadata.namiPaywallInfoDict];
+//        // This part is really meant to be internally facing, scrub from dictionary
+//
+//        NSMutableDictionary *marketingContentDictionary = [NSMutableDictionary dictionaryWithDictionary:paywallMeta[@"marketing_content"]];
+//
+//        // Populated SmartText formatted values in dictioanry to send
+//        marketingContentDictionary[@"body"] = [paywallMetadata body];
+//        marketingContentDictionary[@"title"] = [paywallMetadata title];
+//        paywallMeta[@"marketing_content"] = marketingContentDictionary;
+//        paywallMeta[@"purchase_terms"] = [paywallMetadata purchaseTerms];
+//
+//        // Strip out presention_position from all listed sku items
+//        NSArray *cleanedOrderdMetadata = [NamiBridgeUtil stripPresentationPositionFromOrderedMetadataForPaywallMetaDict:paywallMeta];
+//        [paywallMeta setObject:cleanedOrderdMetadata  forKey:@"formatted_skus"];
+//
+//        [paywallMeta removeObjectForKey:@"sku_ordered_metadata"];
+//        [paywallMeta removeObjectForKey:@"skus"];
+//
+//        NSDictionary *paywallStylingDict = [NamiBridgeUtil paywallStylingToPaywallStylingDict:[paywallMetadata styleData]];
+//        paywallMeta[@"styleData"] = paywallStylingDict;
+//
+//        // remove keys that are inconsistent with android
+//        [paywallMeta removeObjectForKey:@"body"];
+//        [paywallMeta removeObjectForKey:@"title"];
+//        [paywallMeta removeObjectForKey:@"style"];
+//
+//        [self sendEventWithName:@"AppPaywallActivate" body:@{ @"namiSkus": skuDicts,
+//                                                            @"developerPaywallID": developerPaywallID,
+//                                                            @"paywallMetadata": paywallMeta }];
+//  }
+//}
 
 - (NSDictionary *)buildRestorePurchasesStateChangedDict: (enum NamiRestorePurchasesState) state
                                            newPurchases: (NSArray<NamiPurchase *> * _Nonnull) newPurchases
@@ -297,7 +287,7 @@ bool hasNamiEmitterListeners;
 
     NSMutableArray *newPurchaseDicts = [NSMutableArray array];
     for ( NamiPurchase *purchaseRecord in newPurchases ) {
-        if ( purchaseRecord.skuID == nil ) {
+        if ( purchaseRecord.skuId == nil ) {
         }
         NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
         [newPurchaseDicts addObject:purchaseDict];
@@ -305,7 +295,7 @@ bool hasNamiEmitterListeners;
 
     NSMutableArray *oldPurchaseDicts = [NSMutableArray array];
     for ( NamiPurchase *purchaseRecord in oldPurchases ) {
-        if ( purchaseRecord.skuID == nil ) {
+        if ( purchaseRecord.skuId == nil ) {
         }
         NSDictionary *purchaseDict = [NamiBridgeUtil purchaseToPurchaseDict:purchaseRecord];
         [oldPurchaseDicts addObject:purchaseDict];

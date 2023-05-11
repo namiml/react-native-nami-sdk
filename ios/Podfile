@@ -2,13 +2,13 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11.2'
+platform :ios, '14.0'
 
 source 'https://cdn.cocoapods.org/'
 
 target 'RNNami' do
   config = use_native_modules!
-  pod 'Nami', '2.9.6'
+  pod "Nami", "3.0.8"
 
   use_react_native!(
     :path => config[:reactNativePath],

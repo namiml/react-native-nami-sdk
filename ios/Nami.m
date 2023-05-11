@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Nami/Nami.h>
+#import <NamiApple/NamiApple.h>
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
@@ -19,14 +19,14 @@
 @end
 @implementation NamiBridge (RCTExternModule)
 
-RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
+RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponseSenderBlock) completion) {
     if ([configDict count] == 0 || [configDict[@"logLevel"] isEqual: @"DEBUG"] ) {
         NSLog(@"Configure dictionary is %@", configDict);
     }
     NSString *appID = configDict[@"appPlatformID-apple"];
 
     if ([appID length] > 0 ) {
-        NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformID:appID];
+        NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformId:appID];
 
         NSString *logLevelString = configDict[@"logLevel"];
         if ([logLevelString isEqualToString:@"ERROR" ]) {
@@ -43,11 +43,11 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
         NSString *languageString = configDict[@"namiLanguageCode"];
         if ([logLevelString length] > 0) {
             NSLog(@"Nami language code from config dictionary is %@", languageString);
-            if  ([[NamiLanguageCodes allAvailiableNamiLanguageCodes]
+            if  ([[NamiLanguageCodes allAvailableNamiLanguageCodes]
                   containsObject:[languageString lowercaseString]] ) {
               config.namiLanguageCode = languageString;
             } else {
-                NSLog(@"Warning: Nami language code from config dictionary %@ not found in list of available Nami Language Codes:\n%@", languageString, [NamiLanguageCodes allAvailiableNamiLanguageCodes]);
+                NSLog(@"Warning: Nami language code from config dictionary %@ not found in list of available Nami Language Codes:\n%@", languageString, [NamiLanguageCodes allAvailableNamiLanguageCodes]);
             }
         }
 
@@ -66,23 +66,8 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
             }
         }
 
-        NSObject *developmentModeString = configDict[@"developmentMode"];
-        if ( developmentModeString != NULL )
-        {
-            NSLog(@"bypassStore from dictionary is %@", configDict[@"developmentMode"]);
-            if ([developmentModeString isKindOfClass:[NSNumber class]]) {
-                config.developmentMode = [((NSNumber *)developmentModeString) boolValue];
-            } else if ([developmentModeString isKindOfClass:[NSString class]] ) {
-                if ([[((NSString *)developmentModeString) lowercaseString] hasPrefix:@"t"] )
-                {
-                    // bypass is false by default, so we only worry about checking for enabling bypass
-                    config.developmentMode = true;
-                }
-            }
-        }
-
         // Start commands with header iformation for Nami to let them know this is a React client.
-        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:2.0.5"]];
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.0.0"]];
 
         // Add additional namiCommands app may have sent in.
         NSObject *appCommandStrings = configDict[@"namiCommands"];
@@ -100,53 +85,14 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict) {
         config.namiCommands = namiCommandStrings;
 
 
-        [Nami configureWithNamiConfig:config];
+        [Nami configureWith:config];
+        NSDictionary *dict = @{@"success": @YES};
+        completion(@[dict]);
     }
 }
 
 RCT_EXPORT_METHOD(performNamiCommand: (NSString *)command) {
     [NamiCommand performCommand:command];
-}
-
-RCT_EXPORT_METHOD(setExternalIdentifier: (NSString *)externalIdentifier  type:(NSString *)type completion: (RCTResponseSenderBlock) completion) {
-
-    NamiExternalIdentifierType useType;
-
-    if ( [type isEqualToString:@"sha256"] ) {
-        useType = NamiExternalIdentifierTypeSha256;
-    } else {
-        useType = NamiExternalIdentifierTypeUuid;
-    }
-
-    NSLog(@"NamiBridge: Setting external identifier %@ of type %@", externalIdentifier, type);
-
-    [Nami setExternalIdentifierWithExternalIdentifier:externalIdentifier type:useType completion:^(BOOL success, NSError * _Nullable error) {
-        if (error) {
-            completion(@[error]);
-        }
-        completion(nil);
-    }];
-}
-
-RCT_EXPORT_METHOD(getExternalIdentifier:(RCTResponseSenderBlock)completion)
-{
-    NSString *externalIdentifier = [Nami getExternalIdentifier];
-
-    if (externalIdentifier == NULL || [externalIdentifier length] == 0) {
-        completion(@[]);
-    } else {
-        completion(@[externalIdentifier]);
-    }
-}
-
-RCT_EXPORT_METHOD(clearExternalIdentifier:(RCTResponseSenderBlock)completion) {
-    NSLog(@"NamiBridge: Clearing external identifier.");
-    [Nami clearExternalIdentifierWithCompletion:^(BOOL success, NSError * _Nullable error) {
-        if (error) {
-            completion(@[error]);
-        }
-        completion(nil);
-    }];
 }
 
 @end
