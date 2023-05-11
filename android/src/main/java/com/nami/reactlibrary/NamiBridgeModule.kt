@@ -22,7 +22,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
     companion object {
-        private const val CONFIG_MAP_PLATFORM_ID_KEY = "appPlatformID-google"
+        private const val CONFIG_MAP_PLATFORM_ID_KEY = "appPlatformID-android"
         private const val CONFIG_MAP_LOG_LEVEL_KEY = "logLevel"
         private const val CONFIG_MAP_DEVELOPMENT_MODE_KEY = "developmentMode"
         private const val CONFIG_MAP_BYPASS_STORE_KEY = "bypassStore"
