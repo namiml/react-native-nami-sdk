@@ -17,6 +17,10 @@ RCT_EXTERN_METHOD(clearCustomerAttribute:(NSString *)key)
 
 RCT_EXTERN_METHOD(clearAllCustomerAttributes)
 
+RCT_EXTERN_METHOD(setCustomerDataPlatformId:(NSString *)platformId)
+
+RCT_EXTERN_METHOD(clearCustomerDataPlatformId)
+
 RCT_EXTERN_METHOD(journeyState:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(isLoggedIn:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)

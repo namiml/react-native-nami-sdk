@@ -49,6 +49,16 @@ class RNNamiCustomerManager: RCTEventEmitter {
         NamiCustomerManager.clearAllCustomerAttributes()
     }
 
+    @objc(setCustomerDataPlatformId:)
+    func setCustomerDataPlatformId(platformId: String) {
+        NamiCustomerManager.setCustomerDataPlatformId(with: platformId)
+    }
+    
+    @objc(clearCustomerDataPlatformId)
+    func clearCustomerDataPlatformId() {
+        NamiCustomerManager.clearCustomerDataPlatformId()
+    }
+    
     @objc(journeyState:rejecter:)
     func journeyState(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         if let journeyState = NamiCustomerManager.journeyState() {

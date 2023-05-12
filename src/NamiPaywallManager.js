@@ -6,6 +6,15 @@ export const NamiPaywallManager = {
   paywallEmitter: new NativeEventEmitter(RNNamiPaywallManager),
   ...RNNamiPaywallManager,
   ...NamiPaywallManagerBridge,
+  buySkuCompleteIos(purchaseSuccess) {
+    RNNamiPaywallManager.buySkuComplete(purchaseSuccess);
+  },
+  buySkuCompleteAmazon(purchaseSuccess) {
+    RNNamiPaywallManager.buySkuComplete(purchaseSuccess, "Amazon");
+  },
+  buySkuCompleteGooglePlay(purchaseSuccess) {
+    RNNamiPaywallManager.buySkuComplete(purchaseSuccess, "GooglePlay");
+  },
   registerBuySkuHandler(callback) {
     var subscription = this.paywallEmitter.addListener(
       "RegisterBuySKU",
