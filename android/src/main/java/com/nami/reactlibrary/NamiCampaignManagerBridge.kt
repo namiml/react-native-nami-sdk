@@ -34,21 +34,21 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         reactApplicationContext.runOnUiQueueThread {
             if (label != null) {
                 NamiCampaignManager.launch(currentActivity!!, label,
-                        paywallActionCallback = { campaignId, label, paywallId, action, sku, purchaseError, purchases ->
-                            handlePaywallCallback(campaignId, label, paywallId, action, sku, purchaseError, purchases, actionCallback)
+                        paywallActionCallback = { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases ->
+                            handlePaywallCallback(campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases, actionCallback)
                         }
                 ) { result -> handleResult(result, resultCallback) }
             } else {
                 NamiCampaignManager.launch(currentActivity!!,
-                        paywallActionCallback = { campaignId, label, paywallId, action, sku,purchaseError, purchases  ->
-                            handlePaywallCallback(campaignId, label, paywallId, action, sku, purchaseError, purchases, actionCallback)
+                        paywallActionCallback = { campaignId, campaignLabel, paywallId, action, sku,purchaseError, purchases  ->
+                            handlePaywallCallback(campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases, actionCallback)
                         }
                 ) { result -> handleResult(result, resultCallback) }
             }
         }
     }
 
-    private fun handlePaywallCallback(campaignId: String, label: String?, paywallId: String, action: NamiPaywallAction, sku: NamiSKU?, purchaseError: String?, purchases: List<NamiPurchase>?,  actionCallback: Callback){
+    private fun handlePaywallCallback(campaignId: String, campaignLabel: String?, paywallId: String, action: NamiPaywallAction, sku: NamiSKU?, purchaseError: String?, purchases: List<NamiPurchase>?,  actionCallback: Callback){
         val actionString = action.toString()
         val skuString = sku?.skuId.orEmpty()
         val purchasesArray: WritableArray = WritableNativeArray()
@@ -59,7 +59,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
         val resultMap = Arguments.createMap()
         resultMap.putString("campaignId", campaignId)
-        resultMap.putString("label", label)
+        resultMap.putString("campaignLabel", campaignLabel)
         resultMap.putString("paywallId", paywallId)
         resultMap.putString("action", actionString)
         resultMap.putString("skuId", skuString)

@@ -20,7 +20,18 @@ export const NamiCampaignManager = {
         var skuId = body.skuId;
         var purchaseError = body.purchaseError;
         var purchases = body.purchases;
-        actionCallback(action, skuId, purchaseError, purchases);
+        var campaignId = body.campaignId;
+        var campaignLabel = body.campaignLabel;
+        var paywallId = body.paywallId;
+        actionCallback(
+          action,
+          skuId,
+          purchaseError,
+          purchases,
+          campaignId,
+          campaignLabel,
+          paywallId
+        );
       }
     );
     RNNamiCampaignManager.launch(
