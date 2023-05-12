@@ -13,21 +13,26 @@
 		1324965129F2C3FF00234012 /* SwiftClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3788612790782A00C7E8E3 /* SwiftClass.swift */; };
 		1324965529F2C3FF00234012 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		1324965629F2C3FF00234012 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
-		1324966029F2C90D00234012 /* RNConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1324965F29F2C90D00234012 /* RNConfig.swift */; };
-		1324966129F2C90D00234012 /* RNConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1324965F29F2C90D00234012 /* RNConfig.swift */; };
-		1324966329F2C96E00234012 /* RNConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 1324966229F2C96E00234012 /* RNConfig.m */; };
-		1324966429F2C96E00234012 /* RNConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 1324966229F2C96E00234012 /* RNConfig.m */; };
+		1324966029F2C90D00234012 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		1324966129F2C90D00234012 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		1324966329F2C96E00234012 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		1324966429F2C96E00234012 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		134541272A0E91A0009C6485 /* RNConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 134541262A0E91A0009C6485 /* RNConfig.m */; };
+		134541292A0E91BE009C6485 /* RNConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134541282A0E91BE009C6485 /* RNConfig.swift */; };
+		1345412B2A0E91D4009C6485 /* BasicProductionInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1345412A2A0E91D4009C6485 /* BasicProductionInfo.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		26B0F4C4F8BB15523045EF97 /* libPods-BasicTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB1631B39973CAE330BA3B46 /* libPods-BasicTests.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* BasicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BasicTests.m */; };
-		71B39AA3FFE4FC90F8CB5AFC /* libPods-Basic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ACCD85382C5208A491161E60 /* libPods-Basic.a */; };
-		AD298E80B4D9B70C27CA266F /* libPods-BasicTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47AF03E3EB3DC30B38359F35 /* libPods-BasicTests.a */; };
-		DF1E55BEFECCBC0F11254F1A /* libPods-Basic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ACCD85382C5208A491161E60 /* libPods-Basic.a */; };
+		71B39AA3FFE4FC90F8CB5AFC /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		8B5C27745200E21D88EDC462 /* libPods-Basic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 101715CE5E40E1D7B3AF2FDD /* libPods-Basic.a */; };
+		AD298E80B4D9B70C27CA266F /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		DF1E55BEFECCBC0F11254F1A /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		EB3788622790782A00C7E8E3 /* SwiftClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3788612790782A00C7E8E3 /* SwiftClass.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,8 +58,10 @@
 		00E356EE1AD99517003FC87E /* BasicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BasicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BasicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BasicTests.m; sourceTree = "<group>"; };
-		01D389CE3B3708847E00B705 /* Pods-Basic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Basic.release.xcconfig"; path = "Target Support Files/Pods-Basic/Pods-Basic.release.xcconfig"; sourceTree = "<group>"; };
-		106FCFE6611FA96BA59E6AAC /* libPods-Basic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Basic.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		101715CE5E40E1D7B3AF2FDD /* libPods-Basic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Basic.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		134541262A0E91A0009C6485 /* RNConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNConfig.m; sourceTree = "<group>"; };
+		134541282A0E91BE009C6485 /* RNConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNConfig.swift; sourceTree = "<group>"; };
+		1345412A2A0E91D4009C6485 /* BasicProductionInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BasicProductionInfo.plist; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Basic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Basic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Basic/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Basic/AppDelegate.m; sourceTree = "<group>"; };
@@ -64,8 +71,10 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Basic/main.m; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Basic-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Basic-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Basic-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Basic-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		399E255D0E957A5CE25BC426 /* Pods-Basic.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Basic.debug.xcconfig"; path = "Target Support Files/Pods-Basic/Pods-Basic.debug.xcconfig"; sourceTree = "<group>"; };
+		53E5DF69BAD79033C4EF5EF8 /* Pods-Basic.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Basic.release.xcconfig"; path = "Target Support Files/Pods-Basic/Pods-Basic.release.xcconfig"; sourceTree = "<group>"; };
 		5ACE18B070820FA998BE6215 /* Pods-BasicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicTests.release.xcconfig"; path = "Target Support Files/Pods-BasicTests/Pods-BasicTests.release.xcconfig"; sourceTree = "<group>"; };
-		7DE46E150F7424E00E76C2F0 /* libPods-BasicTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BasicTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB1631B39973CAE330BA3B46 /* libPods-BasicTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BasicTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB3788602790782A00C7E8E3 /* Basic-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Basic-Bridging-Header.h"; sourceTree = "<group>"; };
 		EB3788612790782A00C7E8E3 /* SwiftClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftClass.swift; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -78,7 +87,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD298E80B4D9B70C27CA266F /* libPods-BasicTests.a in Frameworks */,
+				AD298E80B4D9B70C27CA266F /* BuildFile in Frameworks */,
+				26B0F4C4F8BB15523045EF97 /* libPods-BasicTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,8 +103,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71B39AA3FFE4FC90F8CB5AFC /* libPods-Basic.a in Frameworks */,
-				DF1E55BEFECCBC0F11254F1A /* libPods-Basic.a in Frameworks */,
+				71B39AA3FFE4FC90F8CB5AFC /* BuildFile in Frameworks */,
+				DF1E55BEFECCBC0F11254F1A /* BuildFile in Frameworks */,
+				8B5C27745200E21D88EDC462 /* libPods-Basic.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,19 +146,18 @@
 		13B07FAE1A68108700A75B9A /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				1345412A2A0E91D4009C6485 /* BasicProductionInfo.plist */,
+				134541282A0E91BE009C6485 /* RNConfig.swift */,
+				134541262A0E91A0009C6485 /* RNConfig.m */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				1324965E29F2C3FF00234012 /* BasicProductionInfo.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				1324966229F2C96E00234012 /* RNConfig.m */,
-				1324965F29F2C90D00234012 /* RNConfig.swift */,
 				EB3788612790782A00C7E8E3 /* SwiftClass.swift */,
 				EB3788602790782A00C7E8E3 /* Basic-Bridging-Header.h */,
-				ABAC631B29EA00A800CB52DB /* StoreKitSTG.storekit */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -157,8 +167,8 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				ACCD85382C5208A491161E60 /* libPods-Basic.a */,
-				47AF03E3EB3DC30B38359F35 /* libPods-BasicTests.a */,
+				101715CE5E40E1D7B3AF2FDD /* libPods-Basic.a */,
+				DB1631B39973CAE330BA3B46 /* libPods-BasicTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -168,8 +178,8 @@
 			children = (
 				FEF8E807D64CF3E48CD68F7A /* Pods-BasicTests.debug.xcconfig */,
 				5ACE18B070820FA998BE6215 /* Pods-BasicTests.release.xcconfig */,
-				6F08B42D672964472840E90E /* Pods-Basic.debug.xcconfig */,
-				3B0723D3A6AE875E2EDBBC94 /* Pods-Basic.release.xcconfig */,
+				399E255D0E957A5CE25BC426 /* Pods-Basic.debug.xcconfig */,
+				53E5DF69BAD79033C4EF5EF8 /* Pods-Basic.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -203,7 +213,6 @@
 				00E356EE1AD99517003FC87E /* BasicTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* Basic-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* Basic-tvOSTests.xctest */,
-				1324965D29F2C3FF00234012 /* BasicProduction.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -246,7 +255,6 @@
 			);
 			name = BasicProduction;
 			productName = Basic;
-			productReference = 1324965D29F2C3FF00234012 /* BasicProduction.app */;
 			productType = "com.apple.product-type.application";
 		};
 		13B07F861A680F5B00A75B9A /* Basic */ = {
@@ -383,6 +391,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1345412B2A0E91D4009C6485 /* BasicProductionInfo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -604,9 +613,9 @@
 			files = (
 				1324964F29F2C3FF00234012 /* AppDelegate.m in Sources */,
 				1324965029F2C3FF00234012 /* main.m in Sources */,
-				1324966429F2C96E00234012 /* RNConfig.m in Sources */,
+				1324966429F2C96E00234012 /* BuildFile in Sources */,
 				1324965129F2C3FF00234012 /* SwiftClass.swift in Sources */,
-				1324966129F2C90D00234012 /* RNConfig.swift in Sources */,
+				1324966129F2C90D00234012 /* BuildFile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,9 +625,11 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				1324966329F2C96E00234012 /* RNConfig.m in Sources */,
+				1324966329F2C96E00234012 /* BuildFile in Sources */,
+				134541292A0E91BE009C6485 /* RNConfig.swift in Sources */,
+				134541272A0E91A0009C6485 /* RNConfig.m in Sources */,
 				EB3788622790782A00C7E8E3 /* SwiftClass.swift in Sources */,
-				1324966029F2C90D00234012 /* RNConfig.swift in Sources */,
+				1324966029F2C90D00234012 /* BuildFile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -770,7 +781,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6F08B42D672964472840E90E /* Pods-Basic.debug.xcconfig */;
+			baseConfigurationReference = 399E255D0E957A5CE25BC426 /* Pods-Basic.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -800,7 +811,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B0723D3A6AE875E2EDBBC94 /* Pods-Basic.release.xcconfig */;
+			baseConfigurationReference = 53E5DF69BAD79033C4EF5EF8 /* Pods-Basic.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
