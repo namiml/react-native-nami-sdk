@@ -2,7 +2,11 @@ import { EmitterSubscription } from "react-native";
 import { NamiSKU } from "./types";
 
 export const NamiPaywallManager: {
-  buySkuComplete: (purchaseSuccess: PurchaseSuccess) => void;
+  buySkuCompleteIos: (purchaseSuccess: PurchaseSuccessIos) => void;
+  buySkuCompleteAmazon: (purchaseSuccess: PurchaseSuccessAmazon) => void;
+  buySkuCompleteGooglePlay: (
+    purchaseSuccess: PurchaseSuccessGooglePlay
+  ) => void;
   dismiss: (animated: boolean, callback: () => void) => void;
   displayedViewController: () => void;
   renderCustomUiHandler: () => any;
@@ -15,7 +19,7 @@ export const NamiPaywallManager: {
   ) => EmitterSubscription["remove"];
 };
 
-export type PurchaseSuccess = {
+export type PurchaseSuccessIos = {
   product: PurchaseSuccessProduct;
   transactionID: string;
   originalTransactionID: string;
@@ -25,6 +29,26 @@ export type PurchaseSuccess = {
   price: string;
   currencyCode: string;
   locale: string;
+};
+
+export type PurchaseSuccessGooglePlay = {
+  product: PurchaseSuccessProduct;
+  orderId: string;
+  purchaseDate: number;
+  expiresDate?: number;
+  purchaseToken: string;
+  purchaseSource: "CAMPAIGN" | "MARKETPLACE" | "UNKNOWN";
+};
+
+export type PurchaseSuccessAmazon = {
+  product: PurchaseSuccessProduct;
+  purchaseDate: number;
+  expiresDate?: number;
+  purchaseSource: "CAMPAIGN" | "MARKETPLACE" | "UNKNOWN";
+  receiptId: string;
+  localizedPrice: string;
+  userId: string;
+  marketplace: string;
 };
 
 export type PurchaseSuccessProduct = {
