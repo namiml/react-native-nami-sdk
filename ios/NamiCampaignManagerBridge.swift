@@ -34,6 +34,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
         }, paywallActionHandler: { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases in
             let actionString: String
             switch action {
+            case .show_paywall:
+                actionString = "SHOW_PAYWALL"
             case .close_paywall:
                 actionString = "CLOSE_PAYWALL"
             case .restore_purchases:
