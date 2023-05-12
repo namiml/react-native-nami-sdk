@@ -24,6 +24,8 @@ export const NamiCustomerManager: {
       error?: number
     ) => void
   ) => EmitterSubscription["remove"];
+  clearCustomerDataPlatformId: () => void;
+  setCustomerDataPlatformId: (platformId: string) => void;
 };
 
 export type CustomerJourneyState = {
