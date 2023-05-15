@@ -50,8 +50,8 @@ class RNNamiCustomerManager: RCTEventEmitter {
     }
 
     @objc(setCustomerDataPlatformId:)
-    func setCustomerDataPlatformId(platformId: String) {
-        NamiCustomerManager.setCustomerDataPlatformId(with: platformId)
+    func setCustomerDataPlatformId(cdpId: String) {
+        NamiCustomerManager.setCustomerDataPlatformId(with: cdpId)
     }
     
     @objc(clearCustomerDataPlatformId)

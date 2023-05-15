@@ -53,8 +53,8 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun setCustomerDataPlatformId(platformId: String){
-        NamiCustomerManager.setCustomerDataPlatformId(platformId)
+    fun setCustomerDataPlatformId(cdpId: String){
+        NamiCustomerManager.setCustomerDataPlatformId(cdpId)
     }
 
     @ReactMethod
