@@ -15,7 +15,6 @@
 		EB75992124F031E900430D98 /* NamiCustomerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EB75992024F031E900430D98 /* NamiCustomerManager.m */; };
 		EB7B50CE243E314900EBA6B7 /* NamiEntitlementManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EB7B50CD243E314900EBA6B7 /* NamiEntitlementManagerBridge.m */; };
 		EBC59E5D23C5514B008A123A /* Nami.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5C23C5514B008A123A /* Nami.m */; };
-		EBC59E6023C7E2EC008A123A /* NamiAnalyticsEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */; };
 		EBC59E6323C7F634008A123A /* NamiBridgeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = EBC59E6223C7F634008A123A /* NamiBridgeUtil.m */; };
 		EBEEAC10243C29C800E01389 /* NamiMLManagerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */; };
 		FA3AB38529E009F300FD2E8D /* NamiPaywallManagerBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA3AB38429E009F300FD2E8D /* NamiPaywallManagerBridge.swift */; };
@@ -51,7 +50,6 @@
 		EB75992024F031E900430D98 /* NamiCustomerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiCustomerManager.m; sourceTree = "<group>"; };
 		EB7B50CD243E314900EBA6B7 /* NamiEntitlementManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiEntitlementManagerBridge.m; sourceTree = "<group>"; };
 		EBC59E5C23C5514B008A123A /* Nami.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Nami.m; sourceTree = "<group>"; };
-		EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiAnalyticsEmitter.m; sourceTree = "<group>"; };
 		EBC59E6223C7F634008A123A /* NamiBridgeUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiBridgeUtil.m; sourceTree = "<group>"; };
 		EBC59E6423C7F7A0008A123A /* NamiBridgeUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NamiBridgeUtil.h; sourceTree = "<group>"; };
 		EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NamiMLManagerBridge.m; sourceTree = "<group>"; };
@@ -99,7 +97,6 @@
 				B3E7B5891CC2AC0600A0062D /* RNNami.m */,
 				EBC59E5C23C5514B008A123A /* Nami.m */,
 				EB1C9AFA23BE9C5700CAD548 /* NamiEmitter.m */,
-				EBC59E5F23C7E2EC008A123A /* NamiAnalyticsEmitter.m */,
 				EBEEAC0F243C29C800E01389 /* NamiMLManagerBridge.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 				82475599A9F3B58440ACDC6E /* Frameworks */,
@@ -254,7 +251,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA3AB38529E009F300FD2E8D /* NamiPaywallManagerBridge.swift in Sources */,
-				EBC59E6023C7E2EC008A123A /* NamiAnalyticsEmitter.m in Sources */,
 				EBC59E5D23C5514B008A123A /* Nami.m in Sources */,
 				EB1C9AFB23BE9C5700CAD548 /* NamiPurchaseManagerBridge.m in Sources */,
 				EB1C9AFC23BE9C5700CAD548 /* NamiPaywallManagerBridge.m in Sources */,

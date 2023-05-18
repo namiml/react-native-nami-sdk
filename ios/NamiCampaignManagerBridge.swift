@@ -31,7 +31,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
     func launch(label: String?, callback: @escaping RCTResponseSenderBlock, paywallCallback _: @escaping RCTResponseSenderBlock) {
         NamiCampaignManager.launch(label: label, launchHandler: { success, error in
             callback([success, error?._code as Any])
-        }, paywallActionHandler: { action, sku, purchaseError, purchases in
+        }, paywallActionHandler: { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases in
             let actionString: String
             switch action {
             case .show_paywall:
@@ -58,6 +58,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
                 actionString = "PURCHASE_CANCELLED"
             case .purchase_unknown:
                 actionString = "PURCHASE_UNKNOWN"
+            case .show_paywall:
+                actionString = "SHOW_PAYWALL"
             @unknown default:
                 actionString = "PURCHASE_UNKNOWN"
             }
@@ -65,6 +67,9 @@ class RNNamiCampaignManager: RCTEventEmitter {
             let errorSting = purchaseError?.localizedDescription
             let dictionaries = purchases.map { purchase in NamiBridgeUtil.purchase(toPurchaseDict: purchase) }
             let payload: [String: Any?] = [
+                "campaignId": campaignId,
+                "campaignLabel": campaignLabel,
+                "paywallId": paywallId,
                 "action": actionString,
                 "skuId": skuId,
                 "purchaseError": errorSting,

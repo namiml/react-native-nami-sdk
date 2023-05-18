@@ -12,7 +12,10 @@ export const NamiCampaignManager: {
       action: NamiPaywallAction,
       skuId?: string,
       purchaseError?: string,
-      purchases?: NamiPurchase[]
+      purchases?: NamiPurchase[],
+      campaignId?: string,
+      campaignLabel?: string,
+      paywallId?: string
     ) => void
   ) => void;
   refresh: () => void;

@@ -48,14 +48,24 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun clearCustomerDataPlatformId(){
+        NamiCustomerManager.clearCustomerDataPlatformId()
+    }
+
+    @ReactMethod
+    fun setCustomerDataPlatformId(cdpId: String){
+        NamiCustomerManager.setCustomerDataPlatformId(cdpId)
+    }
+
+    @ReactMethod
    fun journeyState(promise: Promise){
      val journeyState = NamiCustomerManager.journeyState()
-       if (journeyState != null) {
-           val handledJourneyState = journeyStateToReadableMap(journeyState)
-           promise.resolve(handledJourneyState)
-       } else {
-           promise.resolve(null)
-       }
+        if (journeyState == null) {
+            promise.resolve(null)
+        } else {
+            val handledJourneyState = journeyStateToReadableMap(journeyState)
+            promise.resolve(handledJourneyState)
+        }
    }
 
     @ReactMethod
