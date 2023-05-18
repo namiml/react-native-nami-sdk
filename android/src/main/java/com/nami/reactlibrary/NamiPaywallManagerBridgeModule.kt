@@ -118,7 +118,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
     }
 
-
     @ReactMethod
     fun registerCloseHandler(blockDismiss: Boolean) {
         NamiPaywallManager.registerCloseHandler { activity ->
