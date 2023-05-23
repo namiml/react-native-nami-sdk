@@ -7,7 +7,11 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {NamiEntitlementManager, NamiEntitlement} from 'react-native-nami-sdk';
+import {
+  NamiEntitlementManager,
+  NamiEntitlement,
+  NamiPaywallManager,
+} from 'react-native-nami-sdk';
 
 import {ViewerTabProps} from '../App';
 
@@ -33,6 +37,77 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
   const onRefreshPress = () => {
     NamiEntitlementManager.refresh((newEtitlements) => {
       console.log('newEtitlements', newEtitlements);
+    });
+  };
+
+  const buySkuIosUsage = () => {
+    NamiPaywallManager.buySkuCompleteIos({
+      product: {
+        id: '12345',
+        platformID: '12345',
+        skuId: '12345',
+        languageCode: 'en-US',
+        name: 'Some name',
+        featured: true,
+        storeId: '12345',
+        type: 1,
+        isFeatured: true,
+        namiID: '12345',
+      },
+      transactionID: '12345',
+      originalTransactionID: '12345',
+      originalPurchaseDate: 1684823428,
+      purchaseDate: 1684823428,
+      expiresDate: 1684823428,
+      price: '120',
+      currencyCode: 'USD',
+      locale: 'US',
+    });
+  };
+
+  const buySkuAmazonUsage = () => {
+    NamiPaywallManager.buySkuCompleteAmazon({
+      product: {
+        id: '12345',
+        platformID: '12345',
+        skuId: '12345',
+        languageCode: 'en-US',
+        name: 'Some name',
+        featured: true,
+        storeId: '12345',
+        type: 1,
+        isFeatured: true,
+        namiID: '12345',
+      },
+      purchaseDate: 1684823428,
+      expiresDate: 1684823428,
+      purchaseSource: 'CAMPAIGN',
+      receiptId: '12345',
+      localizedPrice: '120',
+      userId: '12345',
+      marketplace: '12345',
+    });
+  };
+
+  const buySkuAGooglePlayUsage = () => {
+    NamiPaywallManager.buySkuCompleteGooglePlay({
+      product: {
+        id: '12345',
+        platformID: '12345',
+        skuId: '12345',
+        languageCode: 'en-US',
+        name: 'Some name',
+        featured: true,
+        storeId: '12345',
+        type: 1,
+        isFeatured: true,
+        namiID: '12345',
+      },
+      purchaseDate: 1684823428,
+      expiresDate: 1684823428,
+      purchaseSource: 'CAMPAIGN',
+      purchaseToken: '12345',
+      orderId: '12345',
     });
   };
 
