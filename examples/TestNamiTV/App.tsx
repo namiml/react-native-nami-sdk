@@ -42,10 +42,10 @@ const App = () => {
 
       NamiPaywallManager.dismiss(true);
 
-      if (Platform.OS === "ios" || Platform.isTVOS) {
-        const purchaseSuccess = NamiPurchaseSuccess(sku, "2", "1", Date.now, "2.99", "USD", "en-US");
-        NamiPaywallManager.buySkuCompleteApple(purchaseSuccess);
-      }
+      // if (Platform.OS === "ios" || Platform.isTVOS) {
+      //   const purchaseSuccess = NamiPurchaseSuccess(sku, "2", "1", Date.now, "2.99", "USD", "en-US");
+      //   NamiPaywallManager.buySkuCompleteApple(purchaseSuccess);
+      // }
     },
   ) ;
 
