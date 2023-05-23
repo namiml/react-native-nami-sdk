@@ -2,8 +2,7 @@
 //  NamiPaywallManagerBridge.swift
 //  RNNami
 //
-//  Created by macbook on 07.04.2023.
-//  Copyright © 2023 Nami ML INc.. All rights reserved.
+//  Copyright © 2023 Nami ML Inc. All rights reserved.
 //
 
 import Foundation
@@ -13,7 +12,7 @@ import React
 @objc(RNNamiPaywallManager)
 class RNNamiPaywallManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
-      return ["RegisterBuySKU", "BlockingPaywallClosed"]
+        return ["RegisterBuySKU", "PaywallCloseRequested"]
     }
 
     @objc(buySkuComplete:)
@@ -25,20 +24,20 @@ class RNNamiPaywallManager: RCTEventEmitter {
         do {
             let decoder = JSONDecoder()
             let product = try decoder.decode(NamiSKU.self, from: jsonData)
- 
+
             let dateFormatter = DateFormatter()
             dateFormatter.locale = .init(identifier: "en_US_POSIX")
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            
+
             if
-            let transactionID = dict["transactionID"] as? String,
-            let originalTransactionID = dict["originalTransactionID"] as? String,
-            let priceDecimal = Decimal(string: dict["price"] as! String),
-            let currencyCode = dict["currencyCode"] as? String,
-            let localeString = dict["locale"] as? String
+                let transactionID = dict["transactionID"] as? String,
+                let originalTransactionID = dict["originalTransactionID"] as? String,
+                let priceDecimal = Decimal(string: dict["price"] as! String),
+                let currencyCode = dict["currencyCode"] as? String,
+                let localeString = dict["locale"] as? String
             {
                 let expiresDate = Date(timeIntervalSince1970: dict["purchaseDate"] as! Double? ?? 0)
-                let originalPurchaseDate =  Date(timeIntervalSince1970: dict["originalPurchaseDate"] as! Double)
+                let originalPurchaseDate = Date(timeIntervalSince1970: dict["originalPurchaseDate"] as! Double)
                 let purchaseDate = Date(timeIntervalSince1970: dict["purchaseDate"] as! Double)
                 let locale = Locale(identifier: localeString)
                 let purchaseSuccess = NamiPurchaseSuccess(
@@ -67,27 +66,23 @@ class RNNamiPaywallManager: RCTEventEmitter {
         }
     }
 
-    @objc(registerCloseHandler:)
-    func registerCloseHandler(blockDismiss: Bool) {
+    @objc(registerCloseHandler)
+    func registerCloseHandler() {
         NamiPaywallManager.registerCloseHandler { _ in
-            let dictionary = NSDictionary(dictionary: ["blockingPaywallClosed": true].compactMapValues { $0 })
-            self.sendEvent(withName: "BlockingPaywallClosed", body: dictionary)
-            if (blockDismiss) {
-                return
-            }
-            NamiPaywallManager.dismiss(animated: true, completion: {})
+            let dictionary = NSDictionary(dictionary: ["PaywallCloseRequested": true].compactMapValues { $0 })
+            self.sendEvent(withName: "PaywallCloseRequested", body: dictionary)
         }
     }
-    
-    @objc(dismiss:callback:)
+
+    @objc(dismiss:completion:)
     func dismiss(animated: Bool, callback: @escaping RCTResponseSenderBlock) {
         NamiPaywallManager.dismiss(animated: animated) {
             callback([])
         }
     }
 
-    @objc(displayedViewController)
-    func displayedViewController() {
-        _ = NamiPaywallManager.displayedViewController()
+    @objc(dismiss:)
+    func dismiss(animated: Bool) {
+        NamiPaywallManager.dismiss(animated: animated) {}
     }
 }

@@ -92,16 +92,6 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             builder.developmentMode = true
         }
 
-        val bypassStoreMode = if (configDict.hasKey(CONFIG_MAP_BYPASS_STORE_KEY)) {
-            configDict.getBoolean(CONFIG_MAP_BYPASS_STORE_KEY)
-        } else {
-            false
-        }
-        Log.i(LOG_TAG, "Nami Configuration bypassStoreMode is $bypassStoreMode")
-        if (bypassStoreMode) {
-            builder.bypassStore = true
-        }
-
         val languageCode = if (configDict.hasKey(CONFIG_MAP_LANGUAGE_CODE_KEY)) {
             configDict.getString(CONFIG_MAP_LANGUAGE_CODE_KEY)
         } else {

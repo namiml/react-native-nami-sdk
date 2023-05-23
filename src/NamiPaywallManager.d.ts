@@ -2,25 +2,23 @@ import { EmitterSubscription } from "react-native";
 import { NamiSKU } from "./types";
 
 export const NamiPaywallManager: {
-  buySkuCompleteIos: (purchaseSuccess: PurchaseSuccessIos) => void;
-  buySkuCompleteAmazon: (purchaseSuccess: PurchaseSuccessAmazon) => void;
+  buySkuCompleteApple: (purchaseSuccess: NamiPurchaseSuccessApple) => void;
+  buySkuCompleteAmazon: (purchaseSuccess: NamiPurchaseSuccessAmazon) => void;
   buySkuCompleteGooglePlay: (
-    purchaseSuccess: PurchaseSuccessGooglePlay
+    purchaseSuccess: NamiPurchaseSuccessGooglePlay
   ) => void;
-  dismiss: (animated: boolean, callback: () => void) => void;
-  displayedViewController: () => void;
-  renderCustomUiHandler: () => any;
+  dismiss: (animated: boolean) => void;
+  dismiss: (animated: boolean, callback?: () => void) => void;
   registerBuySkuHandler: (
     callback: (sku: NamiSKU) => void
   ) => EmitterSubscription["remove"];
   registerCloseHandler: (
-    blockDismiss: boolean,
-    callback: (resultObject: { blockingPaywallClosed: boolean }) => void
+    callback: () => void => void
   ) => EmitterSubscription["remove"];
 };
 
-export type PurchaseSuccessIos = {
-  product: PurchaseSuccessProduct;
+export type NamiPurchaseSuccessApple = {
+  product: NamiSKU;
   transactionID: string;
   originalTransactionID: string;
   originalPurchaseDate: number;
@@ -31,8 +29,8 @@ export type PurchaseSuccessIos = {
   locale: string;
 };
 
-export type PurchaseSuccessGooglePlay = {
-  product: PurchaseSuccessProduct;
+export type NamiPurchaseSuccessGooglePlay = {
+  product: NamiSKU;
   orderId: string;
   purchaseDate: number;
   expiresDate?: number;
@@ -40,8 +38,8 @@ export type PurchaseSuccessGooglePlay = {
   purchaseSource: "CAMPAIGN" | "MARKETPLACE" | "UNKNOWN";
 };
 
-export type PurchaseSuccessAmazon = {
-  product: PurchaseSuccessProduct;
+export type NamiPurchaseSuccessAmazon = {
+  product: NamiSKU;
   purchaseDate: number;
   expiresDate?: number;
   purchaseSource: "CAMPAIGN" | "MARKETPLACE" | "UNKNOWN";
@@ -51,18 +49,6 @@ export type PurchaseSuccessAmazon = {
   marketplace: string;
 };
 
-export type PurchaseSuccessProduct = {
-  id: string;
-  platformID: string;
-  skuId: string;
-  languageCode: string;
-  name: string;
-  featured: boolean;
-  storeId: string;
-  type: number;
-  isFeatured: boolean;
-  namiID: string;
-};
 
 export enum NamiPaywallAction {
   BUY_SKU = "BUY_SKU",
@@ -78,5 +64,4 @@ export enum NamiPaywallAction {
   PURCHASE_PENDING = "PURCHASE_PENDING",
   PURCHASE_UNKNOWN = "PURCHASE_UNKNOWN",
   PURCHASE_DEFERRED = "PURCHASE_DEFERRED",
-  SHOW_PAYWALL = "SHOW_PAYWALL",
 }

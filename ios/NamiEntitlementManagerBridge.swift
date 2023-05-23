@@ -40,6 +40,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
         ]
         return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
     }
+
     @objc(isEntitlementActive:resolver:rejecter:)
     func isEntitlementActive(referenceId: String, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let isEntitlementActive = NamiEntitlementManager.isEntitlementActive(referenceId)

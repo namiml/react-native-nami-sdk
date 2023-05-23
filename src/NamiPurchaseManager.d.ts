@@ -1,14 +1,18 @@
 import { EmitterSubscription } from "react-native";
 import { NamiSKU } from "./types";
-import { NamiEntitlement } from "./NamiEntitlementManager";
 
 export const NamiPurchaseManager: {
   allPurchases: () => NamiPurchase[];
   anySkuPurchased: (skuIds: string[]) => boolean;
   consumePurchasedSku: (skuId: string) => void;
-  clearBypassStorePurchases: () => void;
   presentCodeRedemptionSheet: () => void;
-  restorePurchases: () => void;
+  restorePurchases: (
+    callback: (
+      purchaseState: NamiPurchasesState,
+      purchases: NamiPurchase[],
+      error: string
+    ) => void
+  ) => EmitterSubscription["remove"];
   skuPurchased: (skuId: string) => boolean;
   registerPurchasesChangedHandler: (
     callback: (

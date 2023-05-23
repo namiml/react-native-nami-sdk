@@ -2,12 +2,10 @@
 //  NamiMLManagerBridge.m
 //  RNNami
 //
-//  Created by Kendall Gelner on 4/6/20.
 //  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
 //
 #import <Foundation/Foundation.h>
 #import <NamiApple/NamiApple.h>
-#import "NamiBridgeUtil.h"
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>

@@ -14,13 +14,6 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun clearBypassStorePurchases() {
-        reactApplicationContext.runOnUiQueueThread {
-            NamiPurchaseManager.clearBypassStorePurchases()
-        }
-    }
-
-    @ReactMethod
     fun purchases(resultsCallback: Callback) {
         reactApplicationContext.runOnUiQueueThread {
             val purchases = NamiPurchaseManager.allPurchases()
@@ -76,7 +69,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
             putBoolean("success", false)
             putString(
                 "error",
-                "Google Play does not provide an API method to restore purchases.  Deep link users to Play app subscriptions to restore purchases."
+                "Google Play or Amazon Appstore on Android devices do not provide an API method to restore purchases."
             )
         }
         resultsCallback.invoke(resultMap)
