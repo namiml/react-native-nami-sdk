@@ -10,7 +10,6 @@ export type NamiConfiguration = {
   "appPlatformID-android": string;
   logLevel: string;
   namiLanguageCode?: NamiLanguageCodes;
-  bypassStore?: boolean;
 };
 
 export type NamiLanguageCodes =

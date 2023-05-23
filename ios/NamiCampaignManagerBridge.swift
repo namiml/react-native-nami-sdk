@@ -12,7 +12,7 @@ import React
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
     override func supportedEvents() -> [String]! {
-      return ["AvailableCampaignsChanged", "ResultCampaign"]
+        return ["AvailableCampaignsChanged", "ResultCampaign"]
     }
 
     private func campaignInToDictionary(_ campaign: NamiCampaign) -> NSDictionary {
@@ -58,14 +58,13 @@ class RNNamiCampaignManager: RCTEventEmitter {
                 actionString = "PURCHASE_CANCELLED"
             case .purchase_unknown:
                 actionString = "PURCHASE_UNKNOWN"
-            case .show_paywall:
-                actionString = "SHOW_PAYWALL"
             @unknown default:
                 actionString = "PURCHASE_UNKNOWN"
             }
             let skuId = sku?.skuId
             let errorSting = purchaseError?.localizedDescription
-            let dictionaries = purchases.map { purchase in NamiBridgeUtil.purchase(toPurchaseDict: purchase) }
+
+            let dictionaries = purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
             let payload: [String: Any?] = [
                 "campaignId": campaignId,
                 "campaignLabel": campaignLabel,
@@ -73,7 +72,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
                 "action": actionString,
                 "skuId": skuId,
                 "purchaseError": errorSting,
-                "purchases": dictionaries
+                "purchases": dictionaries,
             ]
             self.sendEvent(withName: "ResultCampaign", body: payload)
         })

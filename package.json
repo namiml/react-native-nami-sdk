@@ -1,6 +1,6 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
   "main": "index.js",
   "scripts": {
@@ -41,9 +41,14 @@
     }
   ],
   "license": "SEE LICENSE FILE",
+  "standard": {
+    "ignore": [
+      "/examples"
+    ]
+  },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-native": "^0.65.2"
+    "react": ">=17",
+    "react-native": ">=0.65"
   },
   "devDependencies": {
     "react": "^17.0.2",

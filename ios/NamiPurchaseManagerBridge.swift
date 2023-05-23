@@ -51,8 +51,6 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             "skuId": sku.skuId,
             "type": typeString,
             "product": productDict,
-//            "displayText": sku.localizedDisplayText,
-//            "displaySubText": sku.localizedSubDisplayText,
         ]
 
         return NSDictionary(dictionary: skuDict.compactMapValues { $0 })
@@ -68,6 +66,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let expiresString = dateFormatter.string(from: purchase.expires ?? Date())
         let purchaseInitiatedString = dateFormatter.string(from: purchase.purchaseInitiatedTimestamp)
+
         let purchaseDict: [String: Any?] = [
             "skuId": purchase.skuId,
             "transactionIdentifier": purchase.transactionIdentifier,
@@ -170,5 +169,39 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             ]
             self.sendEvent(withName: "RestorePurchasesStateChanged", body: payload)
         }
+    }
+
+    @objc(restorePurchases)
+    func restorePurchases() {
+        NamiPurchaseManager.restorePurchases { state, newPurchases, oldPurchases, _ in
+            let stateString: String
+            switch state {
+            case .started:
+                stateString = "started"
+            case .finished:
+                stateString = "finished"
+            case .error:
+                stateString = "error"
+            @unknown default:
+                stateString = "error"
+            }
+            let newPurchasesDictionaries = newPurchases.map { purchase in
+                RNNamiPurchaseManager.purchaseToPurchaseDict(purchase)
+            }
+            let oldPurchasesDictionaries = oldPurchases.map { purchase in
+                RNNamiPurchaseManager.purchaseToPurchaseDict(purchase)
+            }
+            let payload: [String: Any?] = [
+                "state": stateString,
+                "newPurchases": newPurchasesDictionaries,
+                "oldPurchases": oldPurchasesDictionaries,
+            ]
+            self.sendEvent(withName: "RestorePurchasesStateChanged", body: payload)
+        }
+    }
+
+    @objc(presentCodeRedemptionSheet)
+    func presentCodeRedemptionSheet() {
+        NamiPurchaseManager.presentCodeRedemptionSheet()
     }
 }
