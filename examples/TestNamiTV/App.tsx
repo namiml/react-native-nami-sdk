@@ -42,12 +42,22 @@ const App = () => {
 
       NamiPaywallManager.dismiss(true);
 
-      // if (Platform.OS === "ios" || Platform.isTVOS) {
-      //   const purchaseSuccess = NamiPurchaseSuccess(sku, "2", "1", Date.now, "2.99", "USD", "en-US");
-      //   NamiPaywallManager.buySkuCompleteApple(purchaseSuccess);
-      // }
+      if (Platform.OS === "ios" || Platform.isTVOS) {
+
+        NamiPaywallManager.buySkuCompleteApple({
+          product: sku,
+          transactionID: '12345',
+          originalTransactionID: '12345',
+          originalPurchaseDate: 1684823428,
+          purchaseDate: 1684823428,
+          price: '120',
+          currencyCode: 'USD',
+          locale: 'US',
+        });
+
+        }
     },
-  ) ;
+  );
 
     NamiCustomerManager.setCustomerDataPlatformId("2135");
     return () => {};
