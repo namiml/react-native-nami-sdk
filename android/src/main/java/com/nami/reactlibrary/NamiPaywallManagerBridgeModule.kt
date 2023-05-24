@@ -120,9 +120,12 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     @ReactMethod
     fun registerCloseHandler() {
         NamiPaywallManager.registerCloseHandler { activity ->
+            val map = Arguments.createMap().apply {
+                putBoolean("paywallCloseRequested", true)
+            }
             reactApplicationContext
                     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("PaywallCloseRequested")
+                    .emit("PaywallCloseRequested", map)
         }
     }
 
@@ -133,6 +136,29 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             reactApplicationContext
                     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                     .emit("RegisterBuySKU", dictionary)
+        }
+    }
+
+    override fun onActivityResult(
+        activity: Activity?,
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        Log.d(LOG_TAG, "Nami Activity result listener activated, code is $requestCode")
+    }
+
+
+    private fun emitPaywallCloseRequested() {
+        val map = Arguments.createMap().apply {
+            putBoolean("blockingPaywallClosed", true)
+        }
+        try {
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("PaywallCloseRequested", map)
+        } catch (e: Exception) {
+            Log.e(LOG_TAG, "Caught Exception: " + e.message)
         }
     }
 
