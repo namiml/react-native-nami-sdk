@@ -65,4 +65,12 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                     .emit("EntitlementsChanged", resultArray)
         }
     }
+
+    @ReactMethod
+    fun addListener(eventName: String?) {
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
+    }
 }

@@ -18,10 +18,12 @@ export const NamiPaywallManager = {
   registerBuySkuHandler(callback) {
     var subscription = this.paywallEmitter.addListener(
       "RegisterBuySKU",
-      callback
+      () => {
+        subscription.remove();
+        callback();
+      }
     );
     RNNamiPaywallManager.registerBuySkuHandler();
-    return subscription.remove;
   },
   registerCloseHandler(callback) {
     var subscription;

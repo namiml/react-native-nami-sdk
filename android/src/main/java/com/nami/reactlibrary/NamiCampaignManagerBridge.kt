@@ -133,4 +133,12 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                     .emit("AvailableCampaignsChanged", array)
         }
     }
+
+    @ReactMethod
+    fun addListener(eventName: String?) {
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
+    }
 }

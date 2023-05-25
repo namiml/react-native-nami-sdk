@@ -100,4 +100,12 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
             }
         }
     }
+
+    @ReactMethod
+    fun addListener(eventName: String?) {
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
+    }
 }

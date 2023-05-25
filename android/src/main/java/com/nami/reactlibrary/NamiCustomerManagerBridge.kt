@@ -118,4 +118,12 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
                     .emit("AccountStateChanged", body)
         }
     }
+
+    @ReactMethod
+    fun addListener(eventName: String?) {
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
+    }
 }

@@ -47,10 +47,10 @@ class RNNamiPurchaseManager: RCTEventEmitter {
         }
 
         let skuDict: [String: Any?] = [
-            "name": sku.name,
+            "id": sku.id,
             "skuId": sku.skuId,
             "type": typeString,
-            "product": productDict,
+            "appleProduct": productDict,
         ]
 
         return NSDictionary(dictionary: skuDict.compactMapValues { $0 })

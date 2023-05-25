@@ -84,45 +84,9 @@ fun Map<*, *>.toWritableMap(): WritableMap {
 fun NamiSKU.toSkuDict(): WritableMap {
     val productDict = Arguments.createMap()
 
-    productDict.putString("skuIdentifier", skuId)
-//    productDict.putString("localizedTitle", skuDetails.title)
-//    productDict.putString("localizedDescription", skuDetails.description)
-//    productDict.putString("localizedPrice", skuDetails.price)
-//    productDict.putString("localizedMultipliedPrice", skuDetails.price)
-    productDict.putBoolean("featured", featured)
-//    productDict.putString("displayText", displayText)
-//    productDict.putString("displaySubText", displaySubText)
-//    productDict.putString("price", skuDetails.getFormattedPrice().toString())
-    productDict.putString("priceLanguage", Locale.getDefault().language)
-    productDict.putString("priceCountry", Locale.getDefault().country)
-//    productDict.putString("priceCurrency", skuDetails.priceCurrencyCode)
-    productDict.putString("numberOfUnits", "1")
-//    val subscriptionPeriod = when (skuDetails.getSubscriptionPeriodEnum()) {
-//        SubscriptionPeriod.MONTHLY -> {
-//            "month"
-//        }
-//        SubscriptionPeriod.HALF_YEAR -> {
-//            "half_year"
-//        }
-//        SubscriptionPeriod.WEEKLY -> {
-//            "week"
-//        }
-//        SubscriptionPeriod.QUARTERLY -> {
-//            "quarter"
-//        }
-//        SubscriptionPeriod.ANNUAL -> {
-//            "year"
-//        }
-//        SubscriptionPeriod.FOUR_WEEKS -> {
-//            "four_weeks"
-//        }
-//        else -> {
-//            null
-//        }
-//    }
-//    if (subscriptionPeriod != null) {
-//        productDict.putString("periodUnit", subscriptionPeriod)
-//    }
+    productDict.putString("skuId", this.skuId)
+    productDict.putString("id", this.id)
+    productDict.putString("type", this.type.toString())
 
     return productDict
 }

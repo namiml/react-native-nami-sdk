@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
+import {Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NamiCustomerManager} from 'react-native-nami-sdk';
 import {NamiPaywallManager} from 'react-native-nami-sdk';
-import NamiPurchaseSuccess from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
@@ -34,7 +34,6 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 const App = () => {
   useEffect(() => {
 
-    console.log('OS detected is ', Platform.OS)
 
     NamiPaywallManager.registerBuySkuHandler(
     (sku) => {
@@ -42,7 +41,7 @@ const App = () => {
 
       NamiPaywallManager.dismiss(true);
 
-      if (Platform.OS === "ios" || Platform.isTVOS) {
+      if (Platform.OS === 'ios' || Platform.isTVOS) {
 
         NamiPaywallManager.buySkuCompleteApple({
           product: sku,
@@ -55,6 +54,26 @@ const App = () => {
           locale: 'US',
         });
 
+        } else if (Platform.OS === 'android') {
+          if (Platform.constants.Manufacturer == 'Amazon') {
+            NamiPaywallManager.buySkuCompleteAmazon({
+              product: sku,
+              purchaseDate: 1684823428,
+              purchaseSource: 'CAMPAIGN',
+              receiptId: '12345',
+              localizedPrice: '120',
+              userId: '12345',
+              marketplace: '12345',
+            });
+          } else {
+            NamiPaywallManager.buySkuCompleteGooglePlay({
+              product: sku,
+              purchaseDate: 1684823428,
+              purchaseSource: 'CAMPAIGN',
+              purchaseToken: 'jolbnkpmojnpnjecgmphbmkc.AO-J1OznE4AIzyUvKFe1RSVkxw4KEtv0WfyL_tkzozOqnlSvIPsyQJBphCN80gwIMaex4EMII95rFCZhMCbVPZDc-y_VVhQU5Ddua1dLn8zV7ms_tdwoDmE',
+              orderId: 'GPA.3317-0284-9993-42221',
+            });
+          }
         }
     },
   );
