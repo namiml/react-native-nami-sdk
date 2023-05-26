@@ -280,7 +280,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
         env:
-          PROVISIONING_CERTIFICATE_BASE64: "${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_STG }}"
+          PROVISIONING_CERTIFICATE_BASE64: "${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_TVOS_STG }}"
 
       - name: Store App Store Private Key
         run: |
@@ -290,7 +290,7 @@ jobs:
       - name: Update ExportOptions.plist
         run: |
           sed -i '' -e "s/APPSTORE_TEAM_ID/${{ secrets.APPSTORE_TEAM_ID }}/" ExportOptions.plist
-          sed -i '' -e "s/APPSTORE_PROVISIONING_PROFILE_UUID/${{ secrets.APPSTORE_PROV_PROFILE_UUID_TEST_REACT_STG }}/g" ExportOptions.plist
+          sed -i '' -e "s/APPSTORE_PROVISIONING_PROFILE_UUID/${{ secrets.APPSTORE_PROV_PROFILE_UUID_TEST_REACT_TVOS_STG }}/g" ExportOptions.plist
         working-directory: source/examples/TestNamiTV/ios
 
       - name: Adjust version & build number
@@ -319,7 +319,7 @@ jobs:
 
       - name: Build xArchive
         run: |
-          xcodebuild -workspace ios/Basic.xcworkspace -scheme Basic-tvOS -configuration Release DEVELOPMENT_TEAM='${{ secrets.APPSTORE_TEAM_ID }}' -sdk 'appletvos' -destination 'generic/platform=tvOS' -archivePath build-output/app-stg.xcarchive PROVISIONING_PROFILE='${{ secrets.APPSTORE_PROV_PROFILE_UUID_TEST_REACT_STG }}' clean archive CODE_SIGN_IDENTITY='${{ secrets.CODE_SIGNING_IDENTITY }}'
+          xcodebuild -workspace ios/Basic.xcworkspace -scheme Basic-tvOS -configuration Release DEVELOPMENT_TEAM='${{ secrets.APPSTORE_TEAM_ID }}' -sdk 'appletvos' -destination 'generic/platform=tvOS' -archivePath build-output/app-stg.xcarchive PROVISIONING_PROFILE='${{ secrets.APPSTORE_PROV_PROFILE_UUID_TEST_REACT_TVOS_STG }}' clean archive CODE_SIGN_IDENTITY='${{ secrets.CODE_SIGNING_IDENTITY }}'
         working-directory: source/examples/TestNamiTV
 
       - name: Export IPA
