@@ -1,7 +1,7 @@
 # Basic Example App
 The folder contains a simple example app that shows how to use the React-Native bridge with the Nami SDK.
 
-## Setup MAC OS
+## Setup macOS
 
 1. Install homebrew `https://brew.sh/`.
 2. Install the packages for `node`, `yarn`, and `watchman`.
@@ -16,7 +16,7 @@ brew install yarn
 
 **iOS Setup**
 
-1. Install CocoaPods -> `sudo gem install cocoapods`
+1. Install CocoaPods -> `sudo brew install cocoapods`
 2. `cd ios && pod update`
 3. Either run `yarn run ios` or `open Basic.xcworkspace` and build in Xcode.
 
@@ -25,4 +25,4 @@ brew install yarn
 1. Requires Android Studio and an emulator to be installed.
 2. Open the the file `android/build.gradle` in Android Studio.
 3. Allow gradle to sync and build the project.
-4. Return to the terminal and run `yarn run android`.
+4. Return to the terminal and run `npx react-native run-android --variant=productionDebug`

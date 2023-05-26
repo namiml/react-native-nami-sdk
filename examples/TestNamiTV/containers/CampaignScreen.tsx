@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {NamiCampaignManager, NamiCampaign, NamiPaywallManager} from 'react-native-nami-sdk';
+import {NamiCampaignManager, NamiCampaign} from 'react-native-nami-sdk';
 
 import {ViewerTabProps} from '../App';
 

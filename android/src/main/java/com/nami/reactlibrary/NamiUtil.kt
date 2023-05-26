@@ -9,20 +9,12 @@ import com.facebook.react.bridge.WritableNativeMap
 import com.namiml.billing.NamiPurchase
 import com.namiml.customer.CustomerJourneyState
 import com.namiml.entitlement.NamiEntitlement
-import com.namiml.paywall.LegalCitations
-import com.namiml.paywall.NamiLocaleConfig
-import com.namiml.paywall.NamiPaywall
-import com.namiml.paywall.NamiPurchaseSource
 import com.namiml.paywall.NamiSKU
-import com.namiml.paywall.SubscriptionPeriod
-import com.namiml.util.extensions.getFormattedPrice
-import com.namiml.util.extensions.getSubscriptionPeriodEnum
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-
 
 fun List<*>.toWritableArray(): WritableArray {
     val convertedArray = Arguments.createArray()

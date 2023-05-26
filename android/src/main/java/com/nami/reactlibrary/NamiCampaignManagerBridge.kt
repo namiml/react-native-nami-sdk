@@ -1,17 +1,16 @@
 package com.nami.reactlibrary
 
+import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.namiml.billing.NamiPurchase
+import com.namiml.campaign.LaunchCampaignResult
 import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
 import com.namiml.paywall.NamiSKU
 import com.namiml.paywall.model.NamiPaywallAction
-import android.app.Activity
-import com.namiml.billing.NamiPurchase
-import com.namiml.billing.NamiPurchaseState
-import com.namiml.campaign.LaunchCampaignResult
 
 class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), ActivityEventListener {
@@ -31,24 +30,35 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun launch(label: String?, resultCallback: Callback, actionCallback: Callback) {
-        reactApplicationContext.runOnUiQueueThread {
-            if (label != null) {
-                NamiCampaignManager.launch(currentActivity!!, label,
+        var theActivity: Activity?
+        if (reactApplicationContext.hasCurrentActivity()) {
+            theActivity = reactApplicationContext.getCurrentActivity()
+        }
+
+        if (theActivity != null) {
+            reactApplicationContext.runOnUiQueueThread {
+                if (label != null) {
+                    NamiCampaignManager.launch(
+                        theActivity,
+                        label,
                         paywallActionCallback = { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases ->
                             handlePaywallCallback(campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases, actionCallback)
-                        }
-                ) { result -> handleResult(result, resultCallback) }
-            } else {
-                NamiCampaignManager.launch(currentActivity!!,
-                        paywallActionCallback = { campaignId, campaignLabel, paywallId, action, sku,purchaseError, purchases  ->
+                        },
+                    ) { result -> handleResult(result, resultCallback) }
+                } else {
+                    NamiCampaignManager.launch(
+                        theActivity,
+                        paywallActionCallback = { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases ->
                             handlePaywallCallback(campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases, actionCallback)
-                        }
-                ) { result -> handleResult(result, resultCallback) }
+                        },
+                    ) { result -> handleResult(result, resultCallback) }
+                }
             }
         }
+
     }
 
-    private fun handlePaywallCallback(campaignId: String, campaignLabel: String?, paywallId: String, action: NamiPaywallAction, sku: NamiSKU?, purchaseError: String?, purchases: List<NamiPurchase>?,  actionCallback: Callback){
+    private fun handlePaywallCallback(campaignId: String, campaignLabel: String?, paywallId: String, action: NamiPaywallAction, sku: NamiSKU?, purchaseError: String?, purchases: List<NamiPurchase>?, actionCallback: Callback) {
         val actionString = action.toString()
         val skuString = sku?.skuId.orEmpty()
         val purchasesArray: WritableArray = WritableNativeArray()
@@ -66,8 +76,8 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         resultMap.putString("purchaseError", purchaseError)
         resultMap.putArray("purchases", purchasesArray)
         reactApplicationContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit("ResultCampaign", resultMap)
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            .emit("ResultCampaign", resultMap)
     }
 
     private fun handleResult(result: LaunchCampaignResult, resultCallback: Callback) {
@@ -83,10 +93,10 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     override fun onActivityResult(
-            activity: Activity?,
-            requestCode: Int,
-            resultCode: Int,
-            intent: Intent?
+        activity: Activity?,
+        requestCode: Int,
+        resultCode: Int,
+        intent: Intent?,
     ) {
         Log.d(LOG_TAG, "Nami Activity result listener activated, code is $requestCode")
     }
@@ -96,7 +106,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun allCampaigns(promise: Promise){
+    fun allCampaigns(promise: Promise) {
         val campaigns = NamiCampaignManager.allCampaigns()
         val array = WritableNativeArray()
         campaigns.forEach { campaign ->
@@ -106,7 +116,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun isCampaignAvailable(label: String?, promise: Promise){
+    fun isCampaignAvailable(label: String?, promise: Promise) {
         val isCampaignAvailable: Boolean
         if (label != null) {
             isCampaignAvailable = NamiCampaignManager.isCampaignAvailable(label)
@@ -117,8 +127,8 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun refresh(){
-        NamiCampaignManager.refresh() {  }
+    fun refresh() {
+        NamiCampaignManager.refresh() { }
     }
 
     @ReactMethod
@@ -129,8 +139,8 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 array.pushMap(campaignToReadableMap(campaign))
             }
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("AvailableCampaignsChanged", array)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("AvailableCampaignsChanged", array)
         }
     }
 

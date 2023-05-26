@@ -37,10 +37,7 @@ export const NamiPaywallManager = {
     RNNamiPaywallManager.registerCloseHandler();
   },
   dismiss(animated, callback) {
-      RNNamiPaywallManager.dismiss(animated, callback ?? (() => {}));
-  },
-  dismiss(animated) {
-      RNNamiPaywallManager.dismiss(animated, (() => {}));
+      RNNamiPaywallManager.dismiss(animated ?? true, callback ?? (() => {}));
   },
 
 };

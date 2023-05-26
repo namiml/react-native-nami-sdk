@@ -12,7 +12,6 @@ import com.namiml.paywall.NamiSKUType
 import com.namiml.paywall.model.NamiPurchaseSuccess
 import java.util.*
 
-
 class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), ActivityEventListener {
 
@@ -50,7 +49,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
 
         if (product != null) {
-
             if (product.hasKey("id")) {
                 productId = product.getString("id")
             }
@@ -71,7 +69,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         if (dict.hasKey("expiresDate")) {
             expiresDateInt = dict.getInt("expiresDate")
             if (expiresDateInt != null) {
-                expiresDate = Date(expiresDateInt * 1000L )
+                expiresDate = Date(expiresDateInt * 1000L)
             }
         }
         if (dict.hasKey("purchaseDate")) {
@@ -113,17 +111,17 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
         if (productId != null && skuId != null && skuType != null) {
             val namiSku = NamiSKU(
-                    skuId = skuId,
-                    skuDetails = null,
-                    amazonProduct = null,
-                    id = productId,
-                    type = skuType,
-                    name = "",
-                    featured = false,
-                    rawDisplayText = null,
-                    rawSubDisplayText = null,
-                    entitlements = emptyList(),
-                    variables = null
+                skuId = skuId,
+                skuDetails = null,
+                amazonProduct = null,
+                id = productId,
+                type = skuType,
+                name = "",
+                featured = false,
+                rawDisplayText = null,
+                rawSubDisplayText = null,
+                entitlements = emptyList(),
+                variables = null,
             )
             var purchaseSuccess: NamiPurchaseSuccess? = null
 
@@ -138,13 +136,13 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
                 if (namiSku != null && purchaseToken != null && orderId != null && purchaseDate != null) {
                     purchaseSuccess = NamiPurchaseSuccess.GooglePlay(
-                            product = namiSku,
-                            expiresDate = expiresDate,
-                            purchaseDate = purchaseDate,
-                            purchaseSource = purchaseSource,
-                            description = null,
-                            orderId = orderId,
-                            purchaseToken = purchaseToken,
+                        product = namiSku,
+                        expiresDate = expiresDate,
+                        purchaseDate = purchaseDate,
+                        purchaseSource = purchaseSource,
+                        description = null,
+                        orderId = orderId,
+                        purchaseToken = purchaseToken,
                     )
                 }
             } else if (storeType == "Amazon") {
@@ -162,15 +160,15 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
                 }
                 if (namiSku != null && receiptId != null && localizedPrice != null && userId != null && marketplace != null && purchaseDate != null) {
                     purchaseSuccess = NamiPurchaseSuccess.Amazon(
-                            product = namiSku,
-                            expiresDate = expiresDate,
-                            purchaseDate = purchaseDate,
-                            purchaseSource = purchaseSource,
-                            description = null,
-                            receiptId = receiptId,
-                            localizedPrice = localizedPrice,
-                            userId = userId,
-                            marketplace = marketplace,
+                        product = namiSku,
+                        expiresDate = expiresDate,
+                        purchaseDate = purchaseDate,
+                        purchaseSource = purchaseSource,
+                        description = null,
+                        receiptId = receiptId,
+                        localizedPrice = localizedPrice,
+                        userId = userId,
+                        marketplace = marketplace,
                     )
                 }
             }
@@ -183,7 +181,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
     }
 
-
     @ReactMethod
     fun registerCloseHandler() {
         NamiPaywallManager.registerCloseHandler { activity ->
@@ -192,14 +189,14 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
                 putBoolean("paywallCloseRequested", true)
             }
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("PaywallCloseRequested", map)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("PaywallCloseRequested", map)
         }
     }
 
     @ReactMethod
     fun dismiss(animated: Boolean) {
-        if (latestPaywallActivity != null)  {
+        if (latestPaywallActivity != null) {
             val paywallActivity = latestPaywallActivity as Activity
             paywallActivity.finish()
         }
@@ -211,8 +208,8 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             latestPaywallActivity = activity
             val dictionary = sku.toSkuDict()
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("RegisterBuySKU", dictionary)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("RegisterBuySKU", dictionary)
         }
     }
 
@@ -228,7 +225,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         activity: Activity?,
         requestCode: Int,
         resultCode: Int,
-        data: Intent?
+        data: Intent?,
     ) {
         Log.d(LOG_TAG, "Nami Activity result listener activated, code is $requestCode")
     }
@@ -236,5 +233,4 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     override fun onNewIntent(intent: Intent?) {
         // do nothing
     }
-
 }
