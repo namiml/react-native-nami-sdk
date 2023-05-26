@@ -133,7 +133,7 @@ android {
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
-        manifestPlaceholders.app_name = "TestReactTV"
+        manifestPlaceholders.app_name = "TestReact"
     }
     flavorDimensions "default", "billing"
     productFlavors {
