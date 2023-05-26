@@ -68,15 +68,11 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
         if (dict.hasKey("expiresDate")) {
             expiresDateInt = dict.getInt("expiresDate")
-            if (expiresDateInt != null) {
-                expiresDate = Date(expiresDateInt * 1000L)
-            }
+            expiresDate = Date(expiresDateInt * 1000L)
         }
         if (dict.hasKey("purchaseDate")) {
             purchaseDateInt = dict.getInt("purchaseDate")
-            if (purchaseDateInt != null) {
-                purchaseDate = Date(purchaseDateInt * 1000L)
-            }
+            purchaseDate = Date(purchaseDateInt * 1000L)
         }
 
         skuType = when (typeString) {

@@ -30,7 +30,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun launch(label: String?, resultCallback: Callback, actionCallback: Callback) {
-        var theActivity: Activity?
+        var theActivity: Activity? = null
         if (reactApplicationContext.hasCurrentActivity()) {
             theActivity = reactApplicationContext.getCurrentActivity()
         }
