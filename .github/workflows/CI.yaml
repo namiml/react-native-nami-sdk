@@ -307,9 +307,9 @@ jobs:
           yarn install
         working-directory: source/examples/TestNamiTV
 
-      - name: Install test iOS dependencies
+      - name: Install test tvOS dependencies
         run: |
-          pod install
+          RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install
         working-directory: source/examples/TestNamiTV/ios
 
       - name: Build resolve Swift dependencies
@@ -386,7 +386,7 @@ jobs:
 
       - name: Build Android App Bundle
         run: |
-          ./gradlew clean bundleStagingRelease
+          ./gradlew clean bundleStagingGoogleRelease
         working-directory: source/examples/TestNamiTV/android
 
       # - name: Sign Android App Bundle
