@@ -322,18 +322,18 @@ jobs:
           xcodebuild -workspace ios/Basic.xcworkspace -scheme Basic-tvOS -configuration Release DEVELOPMENT_TEAM='${{ secrets.APPSTORE_TEAM_ID }}' -sdk 'appletvos' -destination 'generic/platform=tvOS' -archivePath build-output/app-stg.xcarchive PROVISIONING_PROFILE='${{ secrets.APPSTORE_PROV_PROFILE_UUID_TEST_REACT_TVOS_STG }}' clean archive CODE_SIGN_IDENTITY='${{ secrets.CODE_SIGNING_IDENTITY }}'
         working-directory: source/examples/TestNamiTV
 
-      - name: Export IPA
-        run: |
-          xcodebuild -exportArchive -archivePath build-output/app-stg.xcarchive -exportPath build-output/tvos-stg -exportOptionsPlist ios/ExportOptions.plist
-        working-directory: source/examples/TestNamiTV
+      # - name: Export IPA
+      #   run: |
+      #     xcodebuild -exportArchive -archivePath build-output/app-stg.xcarchive -exportPath build-output/tvos-stg -exportOptionsPlist ios/ExportOptions.plist
+      #   working-directory: source/examples/TestNamiTV
 
-      - name: Upload app to TestFlight
-        run: |
-          xcrun altool --upload-app --type tvos --file build-output/tvos-stg/Basic-tvOS.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
-        working-directory: source/examples/Basic
-        env:
-          APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
-          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
+      # - name: Upload app to TestFlight
+      #   run: |
+      #     xcrun altool --upload-app --type tvos --file build-output/tvos-stg/Basic-tvOS.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
+      #   working-directory: source/examples/Basic
+      #   env:
+      #     APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
+      #     APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
   build-androidtv:
     name: Build TestNamiTV Android STG
     permissions:
