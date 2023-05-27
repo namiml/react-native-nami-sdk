@@ -42,7 +42,6 @@
 		101715CE5E40E1D7B3AF2FDD /* libPods-Basic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Basic.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		134541262A0E91A0009C6485 /* RNConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNConfig.m; sourceTree = "<group>"; };
 		134541282A0E91BE009C6485 /* RNConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNConfig.swift; sourceTree = "<group>"; };
-		1345412A2A0E91D4009C6485 /* BasicProductionInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BasicProductionInfo.plist; sourceTree = "<group>"; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Basic/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Basic/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -58,6 +57,8 @@
 		5ACE18B070820FA998BE6215 /* Pods-BasicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BasicTests.release.xcconfig"; path = "Target Support Files/Pods-BasicTests/Pods-BasicTests.release.xcconfig"; sourceTree = "<group>"; };
 		68FF10E957B0DB36D2E8B0B7 /* libPods-Basic-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Basic-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B2CEA65254843244BE56623 /* libPods-Basic-tvOS-PROD.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Basic-tvOS-PROD.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB54B4DB2A2264C200E8D0D0 /* Info-PROD.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-PROD.plist"; sourceTree = SOURCE_ROOT; };
+		AB54B4DC2A2264C200E8D0D0 /* Info-STG.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-STG.plist"; sourceTree = SOURCE_ROOT; };
 		AB6E57392A18300100B60DFB /* StoreKitSTG.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitSTG.storekit; sourceTree = "<group>"; };
 		ABAB36432A21C34E00552A2E /* Basic-tvOS-PROD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Basic-tvOS-PROD.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAB36452A21C57000552A2E /* StoreKitPROD.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitPROD.storekit; sourceTree = "<group>"; };
@@ -105,8 +106,8 @@
 		00E356EF1AD99517003FC87E /* BasicTests */ = {
 			isa = PBXGroup;
 			children = (
+				00E356F11AD99517003FC87E /* Info.plist */,
 				00E356F21AD99517003FC87E /* BasicTests.m */,
-				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
 			path = BasicTests;
 			sourceTree = "<group>";
@@ -114,9 +115,11 @@
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F11AD99517003FC87E /* Info.plist */,
+				AB54B4DB2A2264C200E8D0D0 /* Info-PROD.plist */,
+				AB54B4DC2A2264C200E8D0D0 /* Info-STG.plist */,
 			);
 			name = "Supporting Files";
+			path = BasicTests;
 			sourceTree = "<group>";
 		};
 		13B07FAE1A68108700A75B9A /* Basic */ = {
@@ -124,7 +127,6 @@
 			children = (
 				AB6E57392A18300100B60DFB /* StoreKitSTG.storekit */,
 				ABAB36452A21C57000552A2E /* StoreKitPROD.storekit */,
-				1345412A2A0E91D4009C6485 /* BasicProductionInfo.plist */,
 				134541282A0E91BE009C6485 /* RNConfig.swift */,
 				134541262A0E91A0009C6485 /* RNConfig.m */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -182,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAE1A68108700A75B9A /* Basic */,
+				00E356F01AD99517003FC87E /* Supporting Files */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BasicTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -487,7 +490,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
 		ABAB363E2A21C34E00552A2E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -615,7 +618,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Basic-tvOS/Info.plist";
+				INFOPLIST_FILE = "Info-STG.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = RNTVSTG;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -648,7 +651,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Basic-tvOS/Info.plist";
+				INFOPLIST_FILE = "Info-STG.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = RNTVSTG;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -840,7 +843,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = BasicProductionInfo.plist;
+				INFOPLIST_FILE = "Info-PROD.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = RNTVPROD;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -873,7 +876,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = BasicProductionInfo.plist;
+				INFOPLIST_FILE = "Info-PROD.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = RNTVPROD;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
