@@ -14,14 +14,14 @@ class RNConfig: NSObject {
     @objc
     func constantsToExport() -> [String: Any]! {
         let schemeName = Bundle.main.infoDictionary!["CFBundleExecutable"] as! String
-        var flavor: String?
+        var flavor: String = "production"
         switch schemeName {
-        case "BasicProduction":
+        case "Basic-tvOS-PROD":
             flavor = "production"
-        case "Basic":
+        case "Basic-tvOS":
             flavor = "staging"
         default:
-            flavor = nil
+            flavor = "production"
         }
         return ["FLAVOR": flavor]
     }

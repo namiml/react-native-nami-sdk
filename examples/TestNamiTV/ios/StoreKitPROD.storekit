@@ -9,7 +9,7 @@
   "settings" : {
     "_applicationInternalID" : "6443909774",
     "_developerTeamID" : "K6APTMK8Y8",
-    "_lastSynchronizedDate" : 706856661.65014696
+    "_lastSynchronizedDate" : 706860333.11101103
   },
   "subscriptionGroups" : [
     {
@@ -123,7 +123,7 @@
           "adHocOffers" : [
             {
               "displayPrice" : "1.99",
-              "internalID" : "B29A9825",
+              "internalID" : "116AB3C0",
               "numberOfPeriods" : 3,
               "offerID" : "promo_offer_monthly",
               "paymentMode" : "payAsYouGo",
@@ -140,7 +140,7 @@
           "internalID" : "6449612770",
           "introductoryOffer" : {
             "displayPrice" : "1.99",
-            "internalID" : "D3751A28",
+            "internalID" : "3A8C714D",
             "numberOfPeriods" : 1,
             "paymentMode" : "payUpFront",
             "subscriptionPeriod" : "P1M"

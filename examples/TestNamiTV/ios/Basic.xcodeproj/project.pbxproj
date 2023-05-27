@@ -14,6 +14,10 @@
 		6C8578B4A99B7353A8D03DE9 /* libPods-Basic-tvOS-PROD.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B2CEA65254843244BE56623 /* libPods-Basic-tvOS-PROD.a */; };
 		74861EF3EBAF6D392C118ACA /* libPods-Basic-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52196BC483E9E7AFEAC0C145 /* libPods-Basic-tvOSTests.a */; };
 		854B5D9B6BD22F144D8AD3E4 /* libPods-Basic-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68FF10E957B0DB36D2E8B0B7 /* libPods-Basic-tvOS.a */; };
+		AB54B4D72A21D33300E8D0D0 /* RNConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134541282A0E91BE009C6485 /* RNConfig.swift */; };
+		AB54B4D82A21D33300E8D0D0 /* RNConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 134541262A0E91A0009C6485 /* RNConfig.m */; };
+		AB54B4D92A21D34100E8D0D0 /* RNConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134541282A0E91BE009C6485 /* RNConfig.swift */; };
+		AB54B4DA2A21D34100E8D0D0 /* RNConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 134541262A0E91A0009C6485 /* RNConfig.m */; };
 		ABAB36372A21C34E00552A2E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		ABAB36382A21C34E00552A2E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		ABAB363C2A21C34E00552A2E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -547,6 +551,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB54B4D92A21D34100E8D0D0 /* RNConfig.swift in Sources */,
+				AB54B4DA2A21D34100E8D0D0 /* RNConfig.m in Sources */,
 				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
 				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
 			);
@@ -564,6 +570,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB54B4D72A21D33300E8D0D0 /* RNConfig.swift in Sources */,
+				AB54B4D82A21D33300E8D0D0 /* RNConfig.m in Sources */,
 				ABAB36372A21C34E00552A2E /* main.m in Sources */,
 				ABAB36382A21C34E00552A2E /* AppDelegate.m in Sources */,
 			);
@@ -619,6 +627,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 15.0;
 			};
@@ -651,6 +660,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 15.0;
 			};
@@ -660,6 +670,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 08EC761BC93800B187377EDD /* Pods-Basic-tvOSTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -687,6 +698,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CD892327F79176E923C53187 /* Pods-Basic-tvOSTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -840,6 +852,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 15.0;
 			};
@@ -872,6 +885,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 15.0;
 			};
