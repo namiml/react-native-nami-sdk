@@ -19,24 +19,24 @@ export const NamiPaywallManager = {
     var subscription = this.paywallEmitter.addListener(
       "RegisterBuySKU",
       (sku) => {
-        subscription.remove();
         callback(sku);
       }
     );
     RNNamiPaywallManager.registerBuySkuHandler();
+    return subscription.remove;
   },
   registerCloseHandler(callback) {
     var subscription;
     subscription = this.paywallEmitter.addListener(
       "PaywallCloseRequested",
       (body) => {
-        subscription.remove();
         callback(body);
       }
     );
     RNNamiPaywallManager.registerCloseHandler();
+    return subscription.remove;
   },
-  dismiss(animated, callback) {
-    RNNamiPaywallManager.dismiss(animated ?? true, callback ?? (() => {}));
+  dismiss(animated) {
+    RNNamiPaywallManager.dismiss(animated ?? true);
   },
 };

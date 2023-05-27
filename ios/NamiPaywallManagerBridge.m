@@ -22,7 +22,7 @@ RCT_EXTERN_METHOD(registerBuySkuHandler)
 
 RCT_EXTERN_METHOD(registerCloseHandler)
 
-RCT_EXTERN_METHOD(dismiss:(BOOL)animated completion:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(dismiss:(BOOL)animated)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;

@@ -7,13 +7,11 @@ export const NamiPaywallManager: {
   buySkuCompleteGooglePlay: (
     purchaseSuccess: NamiPurchaseSuccessGooglePlay
   ) => void;
-  dismiss: (animated?: boolean, callback?: () => void) => void;
+  dismiss: (animated?: boolean) => void;
   registerBuySkuHandler: (
     callback: (sku: NamiSKU) => void
   ) => EmitterSubscription["remove"];
-  registerCloseHandler: (
-    callback: () => void
-  ) => EmitterSubscription["remove"];
+  registerCloseHandler: (callback: () => void) => EmitterSubscription["remove"];
 };
 
 export type NamiPurchaseSuccessApple = {
@@ -47,7 +45,6 @@ export type NamiPurchaseSuccessAmazon = {
   userId: string;
   marketplace: string;
 };
-
 
 export enum NamiPaywallAction {
   BUY_SKU = "BUY_SKU",
