@@ -118,6 +118,18 @@ class RNNamiCustomerManager: RCTEventEmitter {
                 actionString = "login"
             case .logout:
                 actionString = "logout"
+            case .customer_data_platform_id_set:
+                actionString = "customer_data_platform_id_set"
+            case .customer_data_platform_id_cleared:
+                actionString = "customer_data_platform_id_cleared"
+            case .advertising_id_set:
+                actionString = "advertising_id_set"
+            case .advertising_id_cleared:
+                actionString = "advertising_id_cleared"
+            case .vendor_id_set:
+                actionString = "vendor_id_set"
+            case .vendor_id_cleared:
+                actionString = "vendor_id_cleared"
             @unknown default:
                 actionString = "unknown"
             }

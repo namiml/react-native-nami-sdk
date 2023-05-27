@@ -6,7 +6,7 @@ export function getConfigObject() {
   switch (flavor) {
     case 'production':
       return {
-        'appPlatformID-apple': '4a2f6dbf-e684-4d65-a4df-0488771c577d',
+        'appPlatformID-apple': 'e1e51d49-5bda-41b2-9367-8408bb374b07',
         'appPlatformID-android': '9cdda53d-fcb1-4d5b-b8b7-575437b6fe34',
         logLevel: 'DEBUG',
       };

@@ -32,7 +32,7 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
   useEffect(() => {
-    NamiCustomerManager.logout();
+    console.log('app');
 
     NamiPaywallManager.registerBuySkuHandler((sku) => {
       console.log(
@@ -77,6 +77,7 @@ const App = () => {
       }
     });
 
+    NamiCustomerManager.setCustomerDataPlatformId('2135');
     return () => {};
   }, []);
 

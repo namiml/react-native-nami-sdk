@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1324964B29F2C3FF00234012"
-               BuildableName = "BasicProduction"
+               BuildableName = "BasicProduction.app"
                BlueprintName = "BasicProduction"
                ReferencedContainer = "container:Basic.xcodeproj">
             </BuildableReference>
@@ -33,21 +33,26 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      disablePerformanceAntipatternChecker = "YES"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1324964B29F2C3FF00234012"
-            BuildableName = "BasicProduction"
+            BuildableName = "BasicProduction.app"
             BlueprintName = "BasicProduction"
             ReferencedContainer = "container:Basic.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
+      <StoreKitConfigurationFileReference
+         identifier = "../StoreKitPROD.storekit">
+      </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -60,20 +65,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1324964B29F2C3FF00234012"
-            BuildableName = "BasicProduction"
+            BuildableName = "BasicProduction.app"
             BlueprintName = "BasicProduction"
             ReferencedContainer = "container:Basic.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1324964B29F2C3FF00234012"
-            BuildableName = "BasicProduction"
-            BlueprintName = "BasicProduction"
-            ReferencedContainer = "container:Basic.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
