@@ -82,13 +82,6 @@ class RNNamiPaywallManager: RCTEventEmitter {
         }
     }
 
-    @objc(dismiss:completion:)
-    func dismiss(animated: Bool, callback: @escaping RCTResponseSenderBlock) {
-        NamiPaywallManager.dismiss(animated: animated) {
-            callback([])
-        }
-    }
-
     @objc(dismiss:)
     func dismiss(animated: Bool) {
         NamiPaywallManager.dismiss(animated: animated) {}

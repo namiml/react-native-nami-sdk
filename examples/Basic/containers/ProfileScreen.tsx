@@ -99,7 +99,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
       subscriptionJourneyStateRemover();
       subscriptionAccountStateRemover();
     };
-  }, [getJourneyState]);
+  }, [getJourneyState, onLoginPress, onLogoutPress]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
