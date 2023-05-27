@@ -11,6 +11,14 @@ import React
 
 @objc(RNNamiPaywallManager)
 class RNNamiPaywallManager: RCTEventEmitter {
+    
+    public static var shared:RNNamiPaywallManager?
+    
+    override init() {
+        super.init()
+        RNNamiPaywallManager.shared = self
+    }
+    
     override func supportedEvents() -> [String]! {
         return ["RegisterBuySKU", "PaywallCloseRequested"]
     }
@@ -62,7 +70,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerBuySkuHandler() {
         NamiPaywallManager.registerBuySkuHandler { sku in
             let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
-            self.sendEvent(withName: "RegisterBuySKU", body: dictionary)
+            RNNamiPaywallManager.shared?.sendEvent(withName: "RegisterBuySKU", body: dictionary)
         }
     }
 
@@ -70,7 +78,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerCloseHandler() {
         NamiPaywallManager.registerCloseHandler { _ in
             let dictionary = NSDictionary(dictionary: ["PaywallCloseRequested": true].compactMapValues { $0 })
-            self.sendEvent(withName: "PaywallCloseRequested", body: dictionary)
+            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallCloseRequested", body: dictionary)
         }
     }
 

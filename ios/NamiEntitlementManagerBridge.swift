@@ -11,6 +11,14 @@ import React
 
 @objc(RNNamiEntitlementManager)
 class RNNamiEntitlementManager: RCTEventEmitter {
+    
+    public static var shared:RNNamiEntitlementManager?
+    
+    override init() {
+        super.init()
+        RNNamiEntitlementManager.shared = self
+    }
+    
     override func supportedEvents() -> [String]! {
         return ["EntitlementsChanged"]
     }
@@ -69,7 +77,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
                 let dictionary = self.entitlementInToDictionary(entitlement)
                 return dictionary
             }
-            self.sendEvent(withName: "EntitlementsChanged", body: dictionaries)
+            RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dictionaries)
         }
     }
 }
