@@ -11,6 +11,14 @@ import React
 
 @objc(RNNamiCustomerManager)
 class RNNamiCustomerManager: RCTEventEmitter {
+    
+    public static var shared:RNNamiCustomerManager?
+    
+    override init() {
+        super.init()
+        RNNamiCustomerManager.shared = self
+    }
+    
     override func supportedEvents() -> [String]! {
         return ["JourneyStateChanged", "AccountStateChanged"]
     }
@@ -105,7 +113,7 @@ class RNNamiCustomerManager: RCTEventEmitter {
     func registerJourneyStateHandler() {
         NamiCustomerManager.registerJourneyStateHandler { journeyState in
             let dictionary = self.journeyStateToDictionary(journeyState)
-            self.sendEvent(withName: "JourneyStateChanged", body: dictionary)
+            RNNamiCustomerManager.shared?.sendEvent(withName: "JourneyStateChanged", body: dictionary)
         }
     }
 
@@ -138,7 +146,7 @@ class RNNamiCustomerManager: RCTEventEmitter {
                 "success": success,
                 "error": error?._code as Any,
             ]
-            self.sendEvent(withName: "AccountStateChanged", body: payload)
+            RNNamiCustomerManager.shared?.sendEvent(withName: "AccountStateChanged", body: payload)
         }
     }
 }
