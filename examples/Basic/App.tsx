@@ -35,13 +35,12 @@ const App = () => {
     console.log('app');
 
     NamiPaywallManager.registerBuySkuHandler((sku) => {
+      console.log('sku', sku);
       console.log(
         'buy sku handler - need to start purchase flow for sku:',
         sku.skuId,
       );
-
       NamiPaywallManager.dismiss(true);
-
       if (Platform.OS === 'ios' || Platform.isTVOS) {
         NamiPaywallManager.buySkuCompleteApple({
           product: sku,
