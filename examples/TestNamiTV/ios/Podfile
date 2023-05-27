@@ -24,6 +24,21 @@ target 'Basic-tvOS' do
   end
 end
 
+target 'Basic-tvOS-PROD' do
+  platform :tvos, '15.0'
+
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false,
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  use_native_modules!
+end
+
 post_install do |installer|
 
   react_native_post_install(installer)

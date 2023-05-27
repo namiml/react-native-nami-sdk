@@ -9,7 +9,7 @@
   "settings" : {
     "_applicationInternalID" : "6443910111",
     "_developerTeamID" : "K6APTMK8Y8",
-    "_lastSynchronizedDate" : 703205737.71292901
+    "_lastSynchronizedDate" : 706856665.414397
   },
   "subscriptionGroups" : [
     {
@@ -80,7 +80,12 @@
           "familyShareable" : false,
           "groupNumber" : 2,
           "internalID" : "6447770869",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "9FE54A0B",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
           "localizations" : [
             {
               "description" : "Monthly Plus Sub",
@@ -105,7 +110,12 @@
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "6447770794",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "CD5178AE",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
           "localizations" : [
             {
               "description" : "VIP Annual Sub",
@@ -155,7 +165,12 @@
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "6447770843",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "A5BF2CBB",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D"
+          },
           "localizations" : [
             {
               "description" : "VIP Monthly Subs",
