@@ -333,7 +333,7 @@ build-ios-prod:
         working-directory: source/examples/Basic
         env:
           APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
-          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"          
+          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
   build-tvos-stg:
     name: Build TestNamiTV tvOS STG
     permissions:
@@ -559,7 +559,7 @@ build-ios-prod:
         working-directory: source/examples/Basic
         env:
           APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
-          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"      
+          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
   build-androidtv-stg:
     name: Build TestNamiTV Android STG
     permissions:

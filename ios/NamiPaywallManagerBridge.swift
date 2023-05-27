@@ -11,14 +11,13 @@ import React
 
 @objc(RNNamiPaywallManager)
 class RNNamiPaywallManager: RCTEventEmitter {
-    
-    public static var shared:RNNamiPaywallManager?
-    
+    public static var shared: RNNamiPaywallManager?
+
     override init() {
         super.init()
         RNNamiPaywallManager.shared = self
     }
-    
+
     override func supportedEvents() -> [String]! {
         return ["RegisterBuySKU", "PaywallCloseRequested"]
     }

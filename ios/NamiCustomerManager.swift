@@ -11,14 +11,13 @@ import React
 
 @objc(RNNamiCustomerManager)
 class RNNamiCustomerManager: RCTEventEmitter {
-    
-    public static var shared:RNNamiCustomerManager?
-    
+    public static var shared: RNNamiCustomerManager?
+
     override init() {
         super.init()
         RNNamiCustomerManager.shared = self
     }
-    
+
     override func supportedEvents() -> [String]! {
         return ["JourneyStateChanged", "AccountStateChanged"]
     }

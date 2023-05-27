@@ -11,14 +11,13 @@ import React
 
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
-    
-    public static var shared:RNNamiCampaignManager?
-    
+    public static var shared: RNNamiCampaignManager?
+
     override init() {
         super.init()
         RNNamiCampaignManager.shared = self
     }
-    
+
     override func supportedEvents() -> [String]! {
         return ["AvailableCampaignsChanged", "ResultCampaign"]
     }

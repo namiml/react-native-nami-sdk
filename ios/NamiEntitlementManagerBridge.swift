@@ -11,14 +11,13 @@ import React
 
 @objc(RNNamiEntitlementManager)
 class RNNamiEntitlementManager: RCTEventEmitter {
-    
-    public static var shared:RNNamiEntitlementManager?
-    
+    public static var shared: RNNamiEntitlementManager?
+
     override init() {
         super.init()
         RNNamiEntitlementManager.shared = self
     }
-    
+
     override func supportedEvents() -> [String]! {
         return ["EntitlementsChanged"]
     }
