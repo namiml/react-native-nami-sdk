@@ -319,7 +319,7 @@ jobs:
 
         - name: Build xArchive
           run: |
-            xcodebuild -workspace ios/Basic.xcworkspace -scheme BasicProduction -configuration Release DEVELOPMENT_TEAM='${{ secrets.APPSTORE_TEAM_ID }}' -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app-stg.xcarchive PROVISIONING_PROFILE='${{ secrets.APPSTORE_PROV_PROFILE_UUID_TEST_REACT_STG }}' clean archive CODE_SIGN_IDENTITY='${{ secrets.CODE_SIGNING_IDENTITY }}'
+            xcodebuild -workspace ios/Basic.xcworkspace -scheme BasicProduction -configuration Release DEVELOPMENT_TEAM='${{ secrets.APPSTORE_TEAM_ID }}' -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app-prod.xcarchive PROVISIONING_PROFILE='${{ secrets.APPSTORE_PROV_PROFILE_UUID_TEST_REACT_PROD }}' clean archive CODE_SIGN_IDENTITY='${{ secrets.CODE_SIGNING_IDENTITY }}'
           working-directory: source/examples/Basic
 
         - name: Export IPA
