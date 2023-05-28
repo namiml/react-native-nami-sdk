@@ -12,7 +12,7 @@
   <dict>
   <key>com.namiml.stg.testreactnative</key>
   <string>APPSTORE_PROVISIONING_PROFILE_UUID</string>
-  <key>com.namiml.stg.testreactnative</key>
+  <key>com.namiml.app.testreactnative</key>
   <string>APPSTORE_PROVISIONING_PROFILE_UUID</string>
   </dict>
   </dict>
