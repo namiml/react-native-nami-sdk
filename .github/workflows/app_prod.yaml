@@ -310,7 +310,7 @@ jobs:
           - name: Upload app to TestFlight
             run: |
               xcrun altool --upload-app --type tvos --file build-output/tvos-prod/Basic-tvOS-PROD.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
-            working-directory: source/examples/Basic
+            working-directory: source/examples/TestNamiTV
             env:
               APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
               APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
