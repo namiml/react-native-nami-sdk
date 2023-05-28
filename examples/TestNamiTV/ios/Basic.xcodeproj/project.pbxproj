@@ -358,7 +358,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "export NODE_BINARY=`which node`\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		4A1C257489F9D1EAE535A591 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -493,7 +493,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "export NODE_BINARY=`which node`\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		ABAB363E2A21C34E00552A2E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
