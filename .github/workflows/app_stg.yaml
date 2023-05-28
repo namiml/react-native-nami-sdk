@@ -240,7 +240,7 @@ jobs:
           pip3 install PyJWT
           echo "1.0" > $RUNNER_TEMP/.current_version
           export CURRENT_VERSION=`cat $RUNNER_TEMP/.current_version`
-          python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --version=$CURRENT_VERSION --platform=TV_OS > $RUNNER_TEMP/.next_build_number
+          python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --platform=TV_OS > $RUNNER_TEMP/.next_build_number
         working-directory: appstoreconnect-build-tools
         env:
           APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
