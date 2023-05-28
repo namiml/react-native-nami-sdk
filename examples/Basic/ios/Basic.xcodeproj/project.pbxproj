@@ -827,11 +827,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconProduction;
 				CLANG_ENABLE_MODULES = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = K6APTMK8Y8;
 				INFOPLIST_FILE = BasicProductionInfo.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Test Nami";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -845,7 +843,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.app.testreactnative;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Test React Native PROD Non-CI";
 				SWIFT_OBJC_BRIDGING_HEADER = "Basic-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

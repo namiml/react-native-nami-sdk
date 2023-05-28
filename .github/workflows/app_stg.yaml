@@ -201,7 +201,7 @@ jobs:
         env:
           APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
           APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
- build-tvos-stg:
+  build-tvos-stg:
     name: Build TestNamiTV tvOS STG
     permissions:
       actions: write
@@ -279,7 +279,7 @@ jobs:
           export BUILD_NUMBER=`cat $RUNNER_TEMP/.next_build_number`
           sed -i '' -e "s/CURRENT_PROJECT_VERSION = 1/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/" ios/Basic.xcodeproj/project.pbxproj
           sed -i '' -e "s/MARKETING_VERSION = 1.0/MARKETING_VERSION = $CURRENT_VERSION/" ios/Basic.xcodeproj/project.pbxproj
-          sed -i '' -e "s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/"  ios/Basic/Info.plist
+          sed -i '' -e "s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/"  ios/Info-STG.plist
         working-directory: source/examples/TestNamiTV
 
       - name: Install test app dependencies
