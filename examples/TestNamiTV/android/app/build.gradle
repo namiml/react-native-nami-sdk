@@ -124,30 +124,41 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
     defaultConfig {
         applicationId "com.namiml.stg.testreactnative"
-        minSdkVersion 26
+        minSdkVersion 25
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders.app_name = "TestReact"
     }
-    flavorDimensions "default"
+    flavorDimensions "default", "billing"
     productFlavors {
         production {
             applicationId "com.namiml.testreact.prod"
-            minSdkVersion 26
+            minSdkVersion 25
             targetSdkVersion 33
-            resValue "string", "app_name", "TestReact Prod"
+            dimension "default"
         }
         staging {
             applicationId "com.namiml.stg.testreactnative"
-            minSdkVersion 26
+            minSdkVersion 25
             targetSdkVersion 33
-            resValue "string", "app_name", "TestReact Stg"
+            dimension "default"
+        }
+        amazon {
+            resValue "string", "NAMI_APP_PLATFORM_ID_ANDROID", "b7232eba-ff1d-4b7f-b8d0-55593b66c1d5"
+            dimension "billing"
+        }
+        google {
+            resValue "string", "NAMI_APP_PLATFORM_ID_ANDROID", "d5256425-e827-4ae4-970e-66d027dc1108"
+            dimension "billing"
         }
     }
+
     dexOptions {
         javaMaxHeapSize "4g"
     }
@@ -213,6 +224,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
 }
 
 // Run this once to be able to run the application with BUCK

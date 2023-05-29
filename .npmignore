@@ -1,4 +1,4 @@
-/examples
+examples/*
 yarn.lock
 .codeclimate.yml
 gh-release-command.sh

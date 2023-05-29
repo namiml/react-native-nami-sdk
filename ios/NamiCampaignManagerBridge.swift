@@ -11,6 +11,13 @@ import React
 
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
+    public static var shared: RNNamiCampaignManager?
+
+    override init() {
+        super.init()
+        RNNamiCampaignManager.shared = self
+    }
+
     override func supportedEvents() -> [String]! {
         return ["AvailableCampaignsChanged", "ResultCampaign"]
     }
@@ -74,7 +81,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
                 "purchaseError": errorSting,
                 "purchases": dictionaries,
             ]
-            self.sendEvent(withName: "ResultCampaign", body: payload)
+            RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
         })
     }
 
@@ -105,7 +112,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
     func registerForAvailableCampaigns() {
         NamiCampaignManager.registerAvailableCampaignsHandler { availableCampaigns in
             let dictionaries = availableCampaigns.map { campaign in self.campaignInToDictionary(campaign) }
-            self.sendEvent(withName: "AvailableCampaignsChanged", body: dictionaries)
+            RNNamiCampaignManager.shared?.sendEvent(withName: "AvailableCampaignsChanged", body: dictionaries)
         }
     }
 }

@@ -18,7 +18,9 @@ export const NamiPaywallManager = {
   registerBuySkuHandler(callback) {
     var subscription = this.paywallEmitter.addListener(
       "RegisterBuySKU",
-      callback
+      (sku) => {
+        callback(sku);
+      }
     );
     RNNamiPaywallManager.registerBuySkuHandler();
     return subscription.remove;
@@ -27,18 +29,14 @@ export const NamiPaywallManager = {
     var subscription;
     subscription = this.paywallEmitter.addListener(
       "PaywallCloseRequested",
-      () => {
-        subscription.remove();
-        callback();
+      (body) => {
+        callback(body);
       }
     );
     RNNamiPaywallManager.registerCloseHandler();
-  },
-  dismiss(animated, callback) {
-      RNNamiPaywallManager.dismiss(animated, callback ?? (() => {}));
+    return subscription.remove;
   },
   dismiss(animated) {
-      RNNamiPaywallManager.dismiss(animated, (() => {}));
+    RNNamiPaywallManager.dismiss(animated ?? true);
   },
-
 };

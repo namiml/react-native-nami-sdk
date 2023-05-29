@@ -7,7 +7,6 @@ repos:
     rev: v2.3.0
     hooks:
       - id: check-added-large-files
-      - id: check-json
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-yaml

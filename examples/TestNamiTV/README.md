@@ -1,4 +1,4 @@
-# Basic Example App - Connected TV
+# Example App - Connected TV
 The folder contains a simple example app that shows how to use the React-Native bridge with the Nami SDK.
 
 ## Setup macOS
@@ -11,15 +11,15 @@ brew install watchman
 brew install yarn
 ```
 3. Clone the project -> `git clone https://github.com/namiml/react-native-nami-sdk.git`.
-4. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/Basic`.
+4. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/TestNamiTV`.
 5. Install Dependencies -> `yarn install`.
 
 **tvOS Setup**
 
 1. Install CocoaPods -> `sudo gem install cocoapods`
-2. `cd ios && pod update`
+2. `cd ios && RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install`
 3. Either run `yarn run ios` or `open Basic.xcworkspace` and build in Xcode.
-4. Build the Basic-tvOS target
+4. Build the Basic-tvOS-PROD target
 
 **Android Setup**
 

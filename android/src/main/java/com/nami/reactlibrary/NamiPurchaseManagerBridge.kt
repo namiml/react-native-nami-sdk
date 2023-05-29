@@ -4,7 +4,6 @@ import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.billing.NamiPurchaseManager
-import com.namiml.paywall.NamiPaywallManager
 
 class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
@@ -69,7 +68,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
             putBoolean("success", false)
             putString(
                 "error",
-                "Google Play or Amazon Appstore on Android devices do not provide an API method to restore purchases."
+                "Google Play or Amazon Appstore on Android devices do not provide an API method to restore purchases.",
             )
         }
         resultsCallback.invoke(resultMap)
@@ -77,7 +76,7 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun registerPurchasesChangedHandler() {
-        NamiPurchaseManager.registerPurchasesChangedHandler{purchases, purchaseState, error ->
+        NamiPurchaseManager.registerPurchasesChangedHandler { purchases, purchaseState, error ->
             run {
                 val resultPurchases: WritableArray = WritableNativeArray()
 
@@ -93,11 +92,17 @@ class NamiPurchaseManagerBridgeModule(reactContext: ReactApplicationContext) :
                 payload.putString("error", error)
 
                 reactApplicationContext
-                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                        .emit("PurchasesChanged", payload)
-
-
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    .emit("PurchasesChanged", payload)
             }
         }
+    }
+
+    @ReactMethod
+    fun addListener(eventName: String?) {
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
     }
 }

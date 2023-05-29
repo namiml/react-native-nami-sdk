@@ -11,6 +11,13 @@ import React
 
 @objc(RNNamiPurchaseManager)
 class RNNamiPurchaseManager: RCTEventEmitter {
+    public static var shared: RNNamiPurchaseManager?
+
+    override init() {
+        super.init()
+        RNNamiPurchaseManager.shared = self
+    }
+
     override func supportedEvents() -> [String]! {
         return ["PurchasesChanged", "RestorePurchasesStateChanged"]
     }
@@ -47,10 +54,10 @@ class RNNamiPurchaseManager: RCTEventEmitter {
         }
 
         let skuDict: [String: Any?] = [
-            "name": sku.name,
+            "id": sku.id,
             "skuId": sku.skuId,
             "type": typeString,
-            "product": productDict,
+            "appleProduct": productDict,
         ]
 
         return NSDictionary(dictionary: skuDict.compactMapValues { $0 })
@@ -167,7 +174,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
                 "newPurchases": newPurchasesDictionaries,
                 "oldPurchases": oldPurchasesDictionaries,
             ]
-            self.sendEvent(withName: "RestorePurchasesStateChanged", body: payload)
+            RNNamiPurchaseManager.shared?.sendEvent(withName: "RestorePurchasesStateChanged", body: payload)
         }
     }
 
@@ -196,7 +203,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
                 "newPurchases": newPurchasesDictionaries,
                 "oldPurchases": oldPurchasesDictionaries,
             ]
-            self.sendEvent(withName: "RestorePurchasesStateChanged", body: payload)
+            RNNamiPurchaseManager.shared?.sendEvent(withName: "RestorePurchasesStateChanged", body: payload)
         }
     }
 
