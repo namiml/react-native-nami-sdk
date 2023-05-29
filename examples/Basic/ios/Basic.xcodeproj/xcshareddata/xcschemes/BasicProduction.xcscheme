@@ -33,7 +33,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      disablePerformanceAntipatternChecker = "YES"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -50,9 +49,6 @@
             ReferencedContainer = "container:Basic.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <StoreKitConfigurationFileReference
-         identifier = "../StoreKitPROD.storekit">
-      </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

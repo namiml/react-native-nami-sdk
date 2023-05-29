@@ -37,8 +37,6 @@ export type AppleProduct = {
   priceLanguage: string;
 };
 
-export type GoogleProduct = {
-};
+export type GoogleProduct = {};
 
-export type AmazonProduct = {
-};
+export type AmazonProduct = {};
