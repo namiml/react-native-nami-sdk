@@ -133,29 +133,29 @@ android {
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
-        manifestPlaceholders.app_name = "TestReact"
+        manifestPlaceholders.app_name = "TestRNTV"
+        manifestPlaceholders.app_icon_round = "@mipmap/ic_launcher_round"
+        manifestPlaceholders.app_icon = "@mipmap/ic_launcher"
     }
-    flavorDimensions "default", "billing"
+    flavorDimensions "default"
     productFlavors {
         production {
             applicationId "com.namiml.testreact.prod"
             minSdkVersion 25
             targetSdkVersion 33
             dimension "default"
+            manifestPlaceholders.app_name = "RNTVProd"
+            manifestPlaceholders.app_icon_round = "@mipmap/ic_launcher_round_prod"
+            manifestPlaceholders.app_icon = "@mipmap/ic_launcher_prod"
         }
         staging {
             applicationId "com.namiml.stg.testreactnative"
             minSdkVersion 25
             targetSdkVersion 33
             dimension "default"
-        }
-        amazon {
-            resValue "string", "NAMI_APP_PLATFORM_ID_ANDROID", "b7232eba-ff1d-4b7f-b8d0-55593b66c1d5"
-            dimension "billing"
-        }
-        google {
-            resValue "string", "NAMI_APP_PLATFORM_ID_ANDROID", "d5256425-e827-4ae4-970e-66d027dc1108"
-            dimension "billing"
+            manifestPlaceholders.app_name = "RNTVStg"
+            manifestPlaceholders.app_icon_round = "@mipmap/ic_launcher_round"
+            manifestPlaceholders.app_icon = "@mipmap/ic_launcher"
         }
     }
 

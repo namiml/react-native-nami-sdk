@@ -33,7 +33,8 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
   useEffect(() => {
-    NamiPaywallManager.registerBuySkuHandler((sku) => {
+
+    const buySkuSubscription = NamiPaywallManager.registerBuySkuHandler((sku) => {
       console.log(
         'buy sku handler - need to start purchase flow for sku:',
         sku.skuId,
@@ -75,6 +76,9 @@ const App = () => {
         }
       }
     });
+    return () => {
+      buySkuSubscription();
+    };
 
     NamiCustomerManager.setCustomerDataPlatformId('2135');
     return () => {};

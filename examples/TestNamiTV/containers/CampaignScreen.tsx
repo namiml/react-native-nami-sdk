@@ -72,6 +72,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     return () => {
       subscriptionRemover();
     };
+
   }, []);
 
   useLayoutEffect(() => {

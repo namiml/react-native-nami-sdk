@@ -1,5 +1,6 @@
 export type NamiSKU = {
-  name: string;
+  id: string;
+  name?: string;
   skuId: string;
   appleProduct?: AppleProduct;
   googleProduct?: GoogleProduct;

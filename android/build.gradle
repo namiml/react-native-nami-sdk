@@ -81,7 +81,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
-    implementation "com.namiml:sdk-android:3.0.10"
+    implementation "com.namiml:sdk-android:3.0.11"
 
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }

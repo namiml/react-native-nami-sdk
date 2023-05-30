@@ -194,7 +194,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     fun dismiss(animated: Boolean) {
         if (latestPaywallActivity != null) {
             val paywallActivity = latestPaywallActivity as Activity
-            paywallActivity.finish()
+            NamiPaywallManager.dismiss(paywallActivity)
         }
     }
 
