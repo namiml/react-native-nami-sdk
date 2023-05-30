@@ -592,7 +592,7 @@ jobs:
 
         - name: Build Android App Bundle
           run: |
-            ./gradlew clean bundleStagingGoogleRelease
+          ./gradlew clean bundleStagingRelease
           working-directory: source/examples/TestNamiTV/android
 
         # - name: Sign Android App Bundle
