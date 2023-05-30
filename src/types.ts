@@ -1,5 +1,6 @@
 export type NamiSKU = {
-  name: string;
+  id: string;
+  name?: string;
   skuId: string;
   appleProduct?: AppleProduct;
   googleProduct?: GoogleProduct;
@@ -37,8 +38,6 @@ export type AppleProduct = {
   priceLanguage: string;
 };
 
-export type GoogleProduct = {
-};
+export type GoogleProduct = {};
 
-export type AmazonProduct = {
-};
+export type AmazonProduct = {};
