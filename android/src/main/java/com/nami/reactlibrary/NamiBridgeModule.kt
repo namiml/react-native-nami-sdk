@@ -10,13 +10,11 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.WritableArray
-import com.facebook.react.bridge.WritableNativeArray
 import com.namiml.Nami
 import com.namiml.NamiConfiguration
 import com.namiml.NamiLanguageCode
 import com.namiml.NamiLogLevel
-//import com.namiml.NamiApiResponseHandler
+// import com.namiml.NamiApiResponseHandler
 
 class NamiBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
@@ -37,7 +35,6 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun configure(configDict: ReadableMap, completion: Callback) {
-
         // Need to be sure we have some valid string.
         val appPlatformID: String = if (configDict.hasKey(CONFIG_MAP_PLATFORM_ID_KEY)) {
             configDict.getString(CONFIG_MAP_PLATFORM_ID_KEY) ?: PLATFORM_ID_ERROR_VALUE
@@ -54,7 +51,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         Log.i(LOG_TAG, "Configure called with (context as Application) $isApplication.")
         Log.i(LOG_TAG, "End Application check ")
 
-        //Application fred = (reactContext as Application);
+        // Application fred = (reactContext as Application);
 
         val builder: NamiConfiguration.Builder =
             NamiConfiguration.Builder(appContext, appPlatformID)
@@ -92,16 +89,6 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             builder.developmentMode = true
         }
 
-        val bypassStoreMode = if (configDict.hasKey(CONFIG_MAP_BYPASS_STORE_KEY)) {
-            configDict.getBoolean(CONFIG_MAP_BYPASS_STORE_KEY)
-        } else {
-            false
-        }
-        Log.i(LOG_TAG, "Nami Configuration bypassStoreMode is $bypassStoreMode")
-        if (bypassStoreMode) {
-            builder.bypassStore = true
-        }
-
         val languageCode = if (configDict.hasKey(CONFIG_MAP_LANGUAGE_CODE_KEY)) {
             configDict.getString(CONFIG_MAP_LANGUAGE_CODE_KEY)
         } else {
@@ -113,7 +100,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
                     Log.w(
                         LOG_TAG,
                         "Nami language code from config dictionary \"$code\" not " +
-                            "found in list of available Nami Language Codes:\n"
+                            "found in list of available Nami Language Codes:\n",
                     )
                 } else {
                     builder.namiLanguageCode = namiLanguageCode
@@ -127,7 +114,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             } else {
                 Arguments.createArray()
             }
-        val settingsList = mutableListOf("extendedClientInfo:react-native:3.0.9")
+        val settingsList = mutableListOf("extendedClientInfo:react-native:3.0.10")
         namiCommandsReact?.toArrayList()?.filterIsInstance<String>()?.let { commandsFromReact ->
             settingsList.addAll(commandsFromReact)
         }

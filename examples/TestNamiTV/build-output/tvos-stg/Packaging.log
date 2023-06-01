@@ -1,0 +1,272 @@
+2023-05-28 03:51:42 +0000 [MT] Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0x133006380; archive(resolved)="<IDEArchive: 0x60000264df20>", distributionTask(resolved)="2", distributionDestination(resolved)="1", distributionMethod(resolved)="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team(resolved)="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	Chain (15, self inclusive):
+	<IDEDistributionProcessingPipelineContext: 0x133006380; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionProcessingPipelineContext: 0x1330044c0; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x1330042a0; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x133004080; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x131eb4450; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x133305280; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x133304500; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x131eb5a20; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x15302d6c0; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x131eb3a90; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x153115050; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x153113ff0; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x153104da0; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="<IDEProvisioningBasicTeam: 0x600000296780; teamID='K6APTMK8Y8', teamName='(null)'>">
+	<IDEDistributionContext: 0x131f04590; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="<IDEDistributionMethodTVOSAppStoreDistribution: 0x6000000cc840>", team="(null)">
+	<IDEDistributionContext: 0x1336041f0; archive = "<IDEArchive: 0x60000264df20>", distributionMethod="(null)", team="(null)">
+</IDEDistributionProcessingPipelineContext: 0x133006380>
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionCreateDestRootStep
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionCopyItemStep
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/ditto '-V' '/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app'
+2023-05-28 03:51:42 +0000  >>> Copying /Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app 
+2023-05-28 03:51:42 +0000  copying file ./_CodeSignature/CodeResources ... 
+2023-05-28 03:51:42 +0000  5378 bytes for ./_CodeSignature/CodeResources
+2023-05-28 03:51:42 +0000  copying file ./AccessibilityResources.bundle/en.lproj/Localizable.strings ... 
+2023-05-28 03:51:42 +0000  518 bytes for ./AccessibilityResources.bundle/en.lproj/Localizable.strings
+2023-05-28 03:51:42 +0000  copying file ./AccessibilityResources.bundle/Info.plist ... 
+2023-05-28 03:51:42 +0000  745 bytes for ./AccessibilityResources.bundle/Info.plist
+2023-05-28 03:51:42 +0000  copying file ./Assets.car ... 
+2023-05-28 03:51:42 +0000  4988991 bytes for ./Assets.car
+2023-05-28 03:51:42 +0000  copying file ./Basic-tvOS-PROD ... 
+2023-05-28 03:51:42 +0000  2631952 bytes for ./Basic-tvOS-PROD
+2023-05-28 03:51:42 +0000  copying file ./main.jsbundle ... 
+2023-05-28 03:51:42 +0000  1777208 bytes for ./main.jsbundle
+2023-05-28 03:51:42 +0000  copying file ./Frameworks/NamiApple.framework/_CodeSignature/CodeResources ... 
+2023-05-28 03:51:42 +0000  1798 bytes for ./Frameworks/NamiApple.framework/_CodeSignature/CodeResources
+2023-05-28 03:51:42 +0000  copying file ./Frameworks/NamiApple.framework/NamiApple ... 
+2023-05-28 03:51:42 +0000  17908320 bytes for ./Frameworks/NamiApple.framework/NamiApple
+2023-05-28 03:51:42 +0000  copying file ./Frameworks/NamiApple.framework/Info.plist ... 
+696 bytes for ./Frameworks/NamiApple.framework/Info.plist
+copying file ./embedded.mobileprovision ... 
+2023-05-28 03:51:42 +0000  12028 bytes for ./embedded.mobileprovision
+2023-05-28 03:51:42 +0000  copying file ./assets/node_modules/@react-navigation/elements/src/assets/back-icon@3x.png ... 
+2023-05-28 03:51:42 +0000  761 bytes for ./assets/node_modules/@react-navigation/elements/src/assets/back-icon@3x.png
+2023-05-28 03:51:42 +0000  copying file ./assets/node_modules/@react-navigation/elements/src/assets/back-icon@2x.png ... 
+2023-05-28 03:51:42 +0000  405 bytes for ./assets/node_modules/@react-navigation/elements/src/assets/back-icon@2x.png
+2023-05-28 03:51:42 +0000  copying file ./assets/node_modules/@react-navigation/elements/src/assets/back-icon.png ... 
+2023-05-28 03:51:42 +0000  290 bytes for ./assets/node_modules/@react-navigation/elements/src/assets/back-icon.png
+2023-05-28 03:51:42 +0000  copying file ./assets/node_modules/@react-navigation/elements/src/assets/back-icon-mask.png ... 
+2023-05-28 03:51:42 +0000  913 bytes for ./assets/node_modules/@react-navigation/elements/src/assets/back-icon-mask.png
+2023-05-28 03:51:42 +0000  copying file ./Info.plist ... 
+2023-05-28 03:51:42 +0000  1387 bytes for ./Info.plist
+2023-05-28 03:51:42 +0000  copying file ./PkgInfo ... 
+2023-05-28 03:51:42 +0000  8 bytes for ./PkgInfo
+2023-05-28 03:51:42 +0000 [MT] /usr/bin/ditto exited with 0
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionEmbedProfileStep
+2023-05-28 03:51:42 +0000 [MT] Skipping profile for item: <IDEDistributionItem: 0x6000026d1fe0; bundleID='ml.nami.Nami', path='<DVTFilePath:0x60000291a840:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000021ca6c0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000035ec420; name='Apple Distribution: Nami ML Inc. (K6APTMK8Y8)', hash='5FD5EA3AB080E5405B3915CFB32763F73D126F20', serialNumber='42260500CEE053D6897447FE3DCBDE77', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2023-04-22 05:33:14 +0000''>', entitlements='(null)', teamID='K6APTMK8Y8', identifier='ml.nami.Nami', executablePath='<DVTFilePath:0x6000029d0cb0:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple'>', hardenedRuntime='0'>'>
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionInfoPlistStep
+2023-05-28 03:51:42 +0000 [MT] Skipping setting DTXcodeBuildDistribution because toolsBuildVersionName was nil.
+2023-05-28 03:51:42 +0000 [MT] Skipping setting DTXcodeBuildDistribution because toolsBuildVersionName was nil.
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionItemRemovalStep
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionAppThinningPlistStep
+2023-05-28 03:51:42 +0000 [MT] Skipping step: IDEDistributionAppThinningPlistStep because it said so
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionCompileBitcodeStep
+2023-05-28 03:51:42 +0000 [MT] Skipping step: IDEDistributionCompileBitcodeStep because it said so
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionCodeSlimmingStep
+2023-05-28 03:51:42 +0000 [MT] Running /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple' '-r' '-keep_cs' '-o' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple'
+2023-05-28 03:51:42 +0000 [MT] /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip exited with 0
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionCopyBCSymbolMapsStep
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionSymbolsStep
+2023-05-28 03:51:42 +0000 [MT] Processing symbols for NamiApple.framework
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/rsync '-8aPhhE' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework' '--link-dest' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU'
+2023-05-28 03:51:42 +0000  building file list ... 
+2023-05-28 03:51:42 +0000   0 files...2023-05-28 03:51:42 +0000  5 files to consider
+2023-05-28 03:51:42 +0000  NamiApple.framework/
+2023-05-28 03:51:42 +0000  NamiApple.framework/_CodeSignature/
+rsync: link "/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/NamiApple.framework/_CodeSignature/CodeResources" => /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/_CodeSignature/CodeResources failed: Operation not permitted (1)
+2023-05-28 03:51:42 +0000  NamiApple.framework/_CodeSignature/CodeResources
+2023-05-28 03:51:42 +0000  
+2023-05-28 03:51:42 +0000  sent 225 bytes  received 38 bytes  526.00 bytes/sec
+total size is 2.69M  speedup is 10726.79
+2023-05-28 03:51:42 +0000 [MT] /usr/bin/rsync exited with 0
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/rsync '-8aPhhE' '/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/dSYMs/' '--link-dest' '/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/dSYMs/' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU'
+2023-05-28 03:51:42 +0000  building file list ... 
+2023-05-28 03:51:42 +0000   0 files...2023-05-28 03:51:42 +0000  10 files to consider
+2023-05-28 03:51:42 +0000  ./
+2023-05-28 03:51:42 +0000  Basic-tvOS-PROD.app.dSYM/
+Basic-tvOS-PROD.app.dSYM/Contents/
+Basic-tvOS-PROD.app.dSYM/Contents/Resources/
+2023-05-28 03:51:42 +0000  Basic-tvOS-PROD.app.dSYM/Contents/Resources/DWARF/
+Basic-tvOS-PROD.app.dSYM/Contents/Resources/Swift/
+Basic-tvOS-PROD.app.dSYM/Contents/Resources/Swift/aarch64/
+2023-05-28 03:51:42 +0000  
+2023-05-28 03:51:42 +0000  sent 364 bytes  received 62 bytes  852.00 bytes/sec
+total size is 29.35M  speedup is 72241.81
+2023-05-28 03:51:42 +0000 [MT] /usr/bin/rsync exited with 0
+2023-05-28 03:51:42 +0000 [MT] Writing /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Symbols/3F2CC035-21DE-3BD3-9620-BF73E3F08A86.symbols
+2023-05-28 03:51:42 +0000 [MT] Processing symbols for Basic-tvOS-PROD.app
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/rsync '-8aPhhE' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app' '--link-dest' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU'
+2023-05-28 03:51:42 +0000  building file list ... 
+2023-05-28 03:51:42 +0000   0 files...2023-05-28 03:51:42 +0000  29 files to consider
+2023-05-28 03:51:42 +0000  Basic-tvOS-PROD.app/
+2023-05-28 03:51:42 +0000  Basic-tvOS-PROD.app/AccessibilityResources.bundle/
+Basic-tvOS-PROD.app/AccessibilityResources.bundle/en.lproj/
+Basic-tvOS-PROD.app/Frameworks/
+2023-05-28 03:51:42 +0000  Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/
+Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/_CodeSignature/
+Basic-tvOS-PROD.app/_CodeSignature/
+Basic-tvOS-PROD.app/assets/
+Basic-tvOS-PROD.app/assets/node_modules/
+Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/
+Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/
+Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/
+Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/assets/
+2023-05-28 03:51:42 +0000  
+2023-05-28 03:51:42 +0000  sent 938 bytes  received 98 bytes  2.02K bytes/sec
+total size is 11.67M  speedup is 11816.34
+2023-05-28 03:51:42 +0000 [MT] /usr/bin/rsync exited with 0
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/rsync '-8aPhhE' '/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/dSYMs/' '--link-dest' '/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/dSYMs/' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU'
+2023-05-28 03:51:42 +0000  building file list ... 
+2023-05-28 03:51:42 +0000   0 files...2023-05-28 03:51:42 +0000  10 files to consider
+2023-05-28 03:51:42 +0000  ./
+2023-05-28 03:51:42 +0000  Basic-tvOS-PROD.app.dSYM/
+Basic-tvOS-PROD.app.dSYM/Contents/
+2023-05-28 03:51:42 +0000  Basic-tvOS-PROD.app.dSYM/Contents/Resources/
+Basic-tvOS-PROD.app.dSYM/Contents/Resources/DWARF/
+Basic-tvOS-PROD.app.dSYM/Contents/Resources/Swift/
+Basic-tvOS-PROD.app.dSYM/Contents/Resources/Swift/aarch64/
+2023-05-28 03:51:42 +0000  
+2023-05-28 03:51:42 +0000  sent 382 bytes  received 80 bytes  924.00 bytes/sec
+total size is 29.35M  speedup is 66612.58
+2023-05-28 03:51:42 +0000 [MT] /usr/bin/rsync exited with 0
+2023-05-28 03:51:42 +0000 [MT] Writing /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Symbols/0AFEA9CB-215D-32B1-8BDE-CE4B4478C52B.symbols
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionCopyAppleProvidedContentStep
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionAppThinningStep
+2023-05-28 03:51:42 +0000 [MT] Skipping step: IDEDistributionAppThinningStep because it said so
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionArchThinningStep
+2023-05-28 03:51:42 +0000 [MT] Running /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple' '-verify_arch' 'arm64e'
+2023-05-28 03:51:42 +0000 [MT] /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo exited with 1
+2023-05-28 03:51:42 +0000 [MT] Skipping architecture thinning for item "NamiApple" because arch "arm64e" wasn't found
+2023-05-28 03:51:42 +0000 [MT] Running /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Basic-tvOS-PROD' '-verify_arch' 'arm64e'
+2023-05-28 03:51:42 +0000 [MT] /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo exited with 1
+2023-05-28 03:51:42 +0000 [MT] Skipping architecture thinning for item "Basic-tvOS-PROD" because arch "arm64e" wasn't found
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionODRStep
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionStripXattrsStep
+2023-05-28 03:51:42 +0000 [MT] Skipping stripping extended attributes of item: <IDEDistributionItem: 0x6000026d1fe0; bundleID='ml.nami.Nami', path='<DVTFilePath:0x60000291a840:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000021ca6c0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000035bc000; name='Apple Distribution: Nami ML Inc. (K6APTMK8Y8)', hash='5FD5EA3AB080E5405B3915CFB32763F73D126F20', serialNumber='42260500CEE053D6897447FE3DCBDE77', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2023-04-22 05:33:14 +0000''>', entitlements='(null)', teamID='K6APTMK8Y8', identifier='ml.nami.Nami', executablePath='<DVTFilePath:0x6000029d0cb0:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple'>', hardenedRuntime='0'>'>
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/xattr '-crs' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app'
+2023-05-28 03:51:42 +0000 [MT] /usr/bin/xattr exited with 0
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionCodesignStep
+2023-05-28 03:51:42 +0000 [MT] Entitlements for <IDEDistributionItem: 0x6000026d1fe0; bundleID='ml.nami.Nami', path='<DVTFilePath:0x60000291a840:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000021ca6c0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000035bc000; name='Apple Distribution: Nami ML Inc. (K6APTMK8Y8)', hash='5FD5EA3AB080E5405B3915CFB32763F73D126F20', serialNumber='42260500CEE053D6897447FE3DCBDE77', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2023-04-22 05:33:14 +0000''>', entitlements='(null)', teamID='K6APTMK8Y8', identifier='ml.nami.Nami', executablePath='<DVTFilePath:0x6000029d0cb0:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple'>', hardenedRuntime='0'>'>: {
+}
+2023-05-28 03:51:42 +0000 [MT] Entitlements for <IDEDistributionItem: 0x6000026d1fe0; bundleID='ml.nami.Nami', path='<DVTFilePath:0x60000291a840:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000021ca6c0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000035bc210; name='Apple Distribution: Nami ML Inc. (K6APTMK8Y8)', hash='5FD5EA3AB080E5405B3915CFB32763F73D126F20', serialNumber='42260500CEE053D6897447FE3DCBDE77', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2023-04-22 05:33:14 +0000''>', entitlements='(null)', teamID='K6APTMK8Y8', identifier='ml.nami.Nami', executablePath='<DVTFilePath:0x6000029d0cb0:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple'>', hardenedRuntime='0'>'> are: {
+}
+2023-05-28 03:51:42 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x6000026d1fe0; bundleID='ml.nami.Nami', path='<DVTFilePath:0x60000291a840:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000021ca6c0; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000035bc370; name='Apple Distribution: Nami ML Inc. (K6APTMK8Y8)', hash='5FD5EA3AB080E5405B3915CFB32763F73D126F20', serialNumber='42260500CEE053D6897447FE3DCBDE77', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2023-04-22 05:33:14 +0000''>', entitlements='(null)', teamID='K6APTMK8Y8', identifier='ml.nami.Nami', executablePath='<DVTFilePath:0x6000029d0cb0:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple'>', hardenedRuntime='0'>'> to: /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/entitlements~~~xzC75h
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '5FD5EA3AB080E5405B3915CFB32763F73D126F20' '--entitlements' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/entitlements~~~xzC75h' '--generate-entitlement-der' '--preserve-metadata=identifier,flags,runtime' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework'
+2023-05-28 03:51:42 +0000  /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework: replacing existing signature
+2023-05-28 03:51:42 +0000  /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework: signed bundle with Mach-O thin (arm64) [ml.nami.Nami]
+2023-05-28 03:51:42 +0000 [MT] /usr/bin/codesign exited with 0
+2023-05-28 03:51:42 +0000 [MT] Entitlements for <IDEDistributionItem: 0x6000026487e0; bundleID='com.namiml.app.testreactnative', path='<DVTFilePath:0x60000297f3a0:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000021ca800; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000035bc000; name='Apple Distribution: Nami ML Inc. (K6APTMK8Y8)', hash='5FD5EA3AB080E5405B3915CFB32763F73D126F20', serialNumber='42260500CEE053D6897447FE3DCBDE77', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2023-04-22 05:33:14 +0000''>', entitlements='{
+    "application-identifier" = "K6APTMK8Y8.com.namiml.app.testreactnative";
+    "beta-reports-active" = 1;
+    "com.apple.developer.team-identifier" = K6APTMK8Y8;
+    "get-task-allow" = 0;
+}', teamID='K6APTMK8Y8', identifier='com.namiml.app.testreactnative', executablePath='<DVTFilePath:0x6000029d1570:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Basic-tvOS-PROD'>', hardenedRuntime='0'>'>: {
+    "application-identifier" = "K6APTMK8Y8.com.namiml.app.testreactnative";
+    "beta-reports-active" = 1;
+    "com.apple.developer.team-identifier" = K6APTMK8Y8;
+    "get-task-allow" = 0;
+}
+2023-05-28 03:51:42 +0000 [MT] Entitlements for <IDEDistributionItem: 0x6000026487e0; bundleID='com.namiml.app.testreactnative', path='<DVTFilePath:0x60000297f3a0:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000021ca800; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000035bc210; name='Apple Distribution: Nami ML Inc. (K6APTMK8Y8)', hash='5FD5EA3AB080E5405B3915CFB32763F73D126F20', serialNumber='42260500CEE053D6897447FE3DCBDE77', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2023-04-22 05:33:14 +0000''>', entitlements='{
+    "application-identifier" = "K6APTMK8Y8.com.namiml.app.testreactnative";
+    "beta-reports-active" = 1;
+    "com.apple.developer.team-identifier" = K6APTMK8Y8;
+    "get-task-allow" = 0;
+}', teamID='K6APTMK8Y8', identifier='com.namiml.app.testreactnative', executablePath='<DVTFilePath:0x6000029d1570:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Basic-tvOS-PROD'>', hardenedRuntime='0'>'> are: {
+    "application-identifier" = "K6APTMK8Y8.com.namiml.app.testreactnative";
+    "beta-reports-active" = 1;
+    "com.apple.developer.team-identifier" = K6APTMK8Y8;
+    "get-task-allow" = 0;
+}
+2023-05-28 03:51:42 +0000 [MT] Writing entitlements for <IDEDistributionItem: 0x6000026487e0; bundleID='com.namiml.app.testreactnative', path='<DVTFilePath:0x60000297f3a0:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x6000021ca800; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000035bc370; name='Apple Distribution: Nami ML Inc. (K6APTMK8Y8)', hash='5FD5EA3AB080E5405B3915CFB32763F73D126F20', serialNumber='42260500CEE053D6897447FE3DCBDE77', certificateKinds='(
+    "1.2.840.113635.100.6.1.7",
+    "1.2.840.113635.100.6.1.4"
+), issueDate='2023-04-22 05:33:14 +0000''>', entitlements='{
+    "application-identifier" = "K6APTMK8Y8.com.namiml.app.testreactnative";
+    "beta-reports-active" = 1;
+    "com.apple.developer.team-identifier" = K6APTMK8Y8;
+    "get-task-allow" = 0;
+}', teamID='K6APTMK8Y8', identifier='com.namiml.app.testreactnative', executablePath='<DVTFilePath:0x6000029d1570:'/Users/dannami/Nami/Source/react-native-nami-sdk/examples/TestNamiTV/build-output/app-prod.xcarchive/Products/Applications/Basic-tvOS-PROD.app/Basic-tvOS-PROD'>', hardenedRuntime='0'>'> to: /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/entitlements~~~nQI9xZ
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/codesign '-vvv' '--force' '--sign' '5FD5EA3AB080E5405B3915CFB32763F73D126F20' '--entitlements' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/entitlements~~~nQI9xZ' '--generate-entitlement-der' '--preserve-metadata=identifier,flags,runtime' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app'
+2023-05-28 03:51:42 +0000  /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app: replacing existing signature
+2023-05-28 03:51:42 +0000  /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app: signed app bundle with Mach-O thin (arm64) [com.namiml.app.testreactnative]
+2023-05-28 03:51:42 +0000 [MT] /usr/bin/codesign exited with 0
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionZipODRItemStep
+2023-05-28 03:51:42 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
+2023-05-28 03:51:42 +0000 [MT] Skipping step: IDEDistributionZipODRItemStep because it said so
+2023-05-28 03:51:42 +0000 [MT] Processing step: IDEDistributionCreateIPAStep
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/rsync '-8aPhhE' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Symbols' '--link-dest' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root'
+2023-05-28 03:51:42 +0000  building file list ... 
+2023-05-28 03:51:42 +0000   0 files...2023-05-28 03:51:42 +0000  3 files to consider
+2023-05-28 03:51:42 +0000  Symbols/
+2023-05-28 03:51:42 +0000  
+2023-05-28 03:51:42 +0000  sent 196 bytes  received 26 bytes  444.00 bytes/sec
+total size is 8.77M  speedup is 41412.97
+2023-05-28 03:51:42 +0000 [MT] /usr/bin/rsync exited with 0
+2023-05-28 03:51:42 +0000 [MT] Running /usr/bin/ditto '-V' '-c' '-k' '--norsrc' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root' '/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Packages/Basic-tvOS-PROD.ipa'
+2023-05-28 03:51:42 +0000  >>> Copying /var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root 
+2023-05-28 03:51:42 +0000  copying file ./Payload/Basic-tvOS-PROD.app/_CodeSignature/CodeResources ... 
+2023-05-28 03:51:42 +0000  5378 bytes for ./Payload/Basic-tvOS-PROD.app/_CodeSignature/CodeResources
+2023-05-28 03:51:42 +0000  copying file ./Payload/Basic-tvOS-PROD.app/AccessibilityResources.bundle/en.lproj/Localizable.strings ... 
+2023-05-28 03:51:42 +0000  518 bytes for ./Payload/Basic-tvOS-PROD.app/AccessibilityResources.bundle/en.lproj/Localizable.strings
+2023-05-28 03:51:42 +0000  copying file ./Payload/Basic-tvOS-PROD.app/AccessibilityResources.bundle/Info.plist ... 
+2023-05-28 03:51:42 +0000  745 bytes for ./Payload/Basic-tvOS-PROD.app/AccessibilityResources.bundle/Info.plist
+2023-05-28 03:51:42 +0000  copying file ./Payload/Basic-tvOS-PROD.app/Assets.car ... 
+2023-05-28 03:51:42 +0000  4988991 bytes for ./Payload/Basic-tvOS-PROD.app/Assets.car
+copying file ./Payload/Basic-tvOS-PROD.app/Basic-tvOS-PROD ... 
+2023-05-28 03:51:43 +0000  2631952 bytes for ./Payload/Basic-tvOS-PROD.app/Basic-tvOS-PROD
+2023-05-28 03:51:43 +0000  copying file ./Payload/Basic-tvOS-PROD.app/main.jsbundle ... 
+2023-05-28 03:51:43 +0000  1777208 bytes for ./Payload/Basic-tvOS-PROD.app/main.jsbundle
+2023-05-28 03:51:43 +0000  copying file ./Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/_CodeSignature/CodeResources ... 
+2023-05-28 03:51:43 +0000  1798 bytes for ./Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/_CodeSignature/CodeResources
+2023-05-28 03:51:43 +0000  copying file ./Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple ... 
+2023-05-28 03:51:43 +0000  2701040 bytes for ./Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/NamiApple
+2023-05-28 03:51:43 +0000  copying file ./Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/Info.plist ... 
+693 bytes for ./Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework/Info.plist
+copying file ./Payload/Basic-tvOS-PROD.app/embedded.mobileprovision ... 
+2023-05-28 03:51:43 +0000  12028 bytes for ./Payload/Basic-tvOS-PROD.app/embedded.mobileprovision
+2023-05-28 03:51:43 +0000  copying file ./Payload/Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/assets/back-icon@3x.png ... 
+2023-05-28 03:51:43 +0000  761 bytes for ./Payload/Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/assets/back-icon@3x.png
+2023-05-28 03:51:43 +0000  copying file ./Payload/Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/assets/back-icon@2x.png ... 
+2023-05-28 03:51:43 +0000  405 bytes for ./Payload/Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/assets/back-icon@2x.png
+copying file ./Payload/Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/assets/back-icon.png ... 
+2023-05-28 03:51:43 +0000  290 bytes for ./Payload/Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/assets/back-icon.png
+copying file ./Payload/Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/assets/back-icon-mask.png ... 
+2023-05-28 03:51:43 +0000  913 bytes for ./Payload/Basic-tvOS-PROD.app/assets/node_modules/@react-navigation/elements/src/assets/back-icon-mask.png
+2023-05-28 03:51:43 +0000  copying file ./Payload/Basic-tvOS-PROD.app/Info.plist ... 
+2023-05-28 03:51:43 +0000  1387 bytes for ./Payload/Basic-tvOS-PROD.app/Info.plist
+2023-05-28 03:51:43 +0000  copying file ./Payload/Basic-tvOS-PROD.app/PkgInfo ... 
+8 bytes for ./Payload/Basic-tvOS-PROD.app/PkgInfo
+2023-05-28 03:51:43 +0000  copying file ./Symbols/0AFEA9CB-215D-32B1-8BDE-CE4B4478C52B.symbols ... 
+2023-05-28 03:51:43 +0000  8188220 bytes for ./Symbols/0AFEA9CB-215D-32B1-8BDE-CE4B4478C52B.symbols
+2023-05-28 03:51:43 +0000  copying file ./Symbols/3F2CC035-21DE-3BD3-9620-BF73E3F08A86.symbols ... 
+2023-05-28 03:51:43 +0000  1005460 bytes for ./Symbols/3F2CC035-21DE-3BD3-9620-BF73E3F08A86.symbols
+2023-05-28 03:51:43 +0000 [MT] /usr/bin/ditto exited with 0
+2023-05-28 03:51:43 +0000 [MT] Processing step: IDEDistributionAppStoreInformationStep
+2023-05-28 03:51:43 +0000 [MT] Skipping step: IDEDistributionAppStoreInformationStep because it said so
+2023-05-28 03:51:43 +0000 [MT] Processing step: IDEDistributionGenerateProcessedDistributionItems
+2023-05-28 03:51:43 +0000 [MT] IDEDistributionItem init <DVTFilePath:0x600002965650:'/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app/Frameworks/NamiApple.framework'>
+2023-05-28 03:51:43 +0000 [MT] IDEDistributionItem init <DVTFilePath:0x600002965340:'/var/folders/p1/kr72jnb977d7wrz5b6yh7t580000gp/T/XcodeDistPipeline.~~~CirBeU/Root/Payload/Basic-tvOS-PROD.app'>
+2023-05-28 03:51:43 +0000 [MT] Processing step: IDEDistributionCreateManifestStep
+2023-05-28 03:51:43 +0000 [MT] Skipping step: IDEDistributionCreateManifestStep because it said so

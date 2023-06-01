@@ -51,23 +51,8 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
             }
         }
 
-        NSObject *bypassString = configDict[@"bypassStore"];
-        if ( bypassString != NULL )
-        {
-            NSLog(@"bypassStore from dictionary is %@", configDict[@"bypassStore"]);
-            if ([bypassString isKindOfClass:[NSNumber class]]) {
-                config.bypassStore = [((NSNumber *)bypassString) boolValue];
-            } else if ([bypassString isKindOfClass:[NSString class]] ) {
-                if ([[((NSString *)bypassString) lowercaseString] hasPrefix:@"t"] )
-                {
-                    // bypass is false by default, so we only worry about checking for enabling bypass
-                    config.bypassStore = true;
-                }
-            }
-        }
-
         // Start commands with header iformation for Nami to let them know this is a React client.
-        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.0.9"]];
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.0.10"]];
 
         // Add additional namiCommands app may have sent in.
         NSObject *appCommandStrings = configDict[@"namiCommands"];
@@ -91,10 +76,6 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
     }
 }
 
-RCT_EXPORT_METHOD(performNamiCommand: (NSString *)command) {
-    [NamiCommand performCommand:command];
-}
-
 @end
 
 @implementation NamiBridge
@@ -102,13 +83,10 @@ RCT_EXPORT_MODULE_NO_LOAD(NamiBridge, NamiBridge)
 
 - (dispatch_queue_t)methodQueue
 {
-  return dispatch_get_main_queue();
+    return dispatch_get_main_queue();
 }
 
 + (BOOL)requiresMainQueueSetup {
-  return YES;
+    return YES;
 }
-
-
-
 @end

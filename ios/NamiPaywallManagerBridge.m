@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <NamiApple/NamiApple.h>
-#import "NamiBridgeUtil.h"
 
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
@@ -21,68 +20,12 @@ RCT_EXTERN_METHOD(buySkuComplete:(NSDictionary)dict)
 
 RCT_EXTERN_METHOD(registerBuySkuHandler)
 
-RCT_EXTERN_METHOD(registerCloseHandler:(BOOL)blockDismiss)
+RCT_EXTERN_METHOD(registerCloseHandler)
 
-RCT_EXTERN_METHOD(dismiss:(BOOL)animated completion:(RCTResponseSenderBlock)callback)
-
-RCT_EXTERN_METHOD(displayedViewController)
+RCT_EXTERN_METHOD(dismiss:(BOOL)animated)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }
-
-@end
-
-@interface NamiEmitter : RCTEventEmitter
-- (void)sendEventPreparePaywallForDisplayFinishedWithResult:(BOOL)success developerPaywallID: (NSString * _Nullable) developerPaywallID error:(NSError * _Nullable) error;
-+ (NamiEmitter *) reactInstance;
-@end
-
-@interface NamiPaywallManagerBridge : NSObject <RCTBridgeModule>
-@property (atomic) BOOL blockPaywallRaise;
-@end
-
-
-@implementation NamiPaywallManagerBridge (RCTExternModule)
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        [self setBlockPaywallRaise:false];
-    }
-    return self;
-}
-
-RCT_EXTERN_METHOD(raisePaywall)
-- (void)raisePaywall {
-    [NamiCampaignManager launch];
-}
-
-RCT_EXPORT_METHOD(raisePaywallByDeveloperPaywallId)
-{
-    [NamiCampaignManager launch];
-}
-
-RCT_EXPORT_METHOD(blockPaywallRaise:(BOOL)blockRaise)
-{
-    [self setBlockPaywallRaise:blockRaise];
-}
-
-@end
-
-@implementation NamiPaywallManagerBridge
-RCT_EXPORT_MODULE_NO_LOAD(NamiPaywallManagerBridge, NamiPaywallManagerBridge)
-
-- (dispatch_queue_t)methodQueue
-{
-  return dispatch_get_main_queue();
-}
-
-+ (BOOL)requiresMainQueueSetup {
-  return YES;
-}
-
-
 
 @end
