@@ -1,12 +1,9 @@
 package com.nami.reactlibrary
 
-import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.campaign.NamiCampaignManager
 import com.namiml.customer.CustomerJourneyState
 import com.namiml.customer.NamiCustomerManager
-
 
 class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
@@ -26,68 +23,69 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
         readableMap.putBoolean("inAccountHold", journeyState.inAccountHold)
         return readableMap
     }
+
     @ReactMethod
-    fun setCustomerAttribute(key: String, value: String){
+    fun setCustomerAttribute(key: String, value: String) {
         NamiCustomerManager.setCustomerAttribute(key, value)
     }
 
     @ReactMethod
-    fun getCustomerAttribute(key: String, promise: Promise){
+    fun getCustomerAttribute(key: String, promise: Promise) {
         val customerAttribute = NamiCustomerManager.getCustomerAttribute(key)
         promise.resolve(customerAttribute)
     }
 
     @ReactMethod
-    fun clearCustomerAttribute(key: String){
+    fun clearCustomerAttribute(key: String) {
         NamiCustomerManager.clearCustomerAttribute(key)
     }
 
     @ReactMethod
-    fun clearAllCustomerAttributes(){
+    fun clearAllCustomerAttributes() {
         NamiCustomerManager.clearAllCustomerAttributes()
     }
 
     @ReactMethod
-    fun clearCustomerDataPlatformId(){
+    fun clearCustomerDataPlatformId() {
         NamiCustomerManager.clearCustomerDataPlatformId()
     }
 
     @ReactMethod
-    fun setCustomerDataPlatformId(cdpId: String){
+    fun setCustomerDataPlatformId(cdpId: String) {
         NamiCustomerManager.setCustomerDataPlatformId(cdpId)
     }
 
     @ReactMethod
-   fun journeyState(promise: Promise){
-     val journeyState = NamiCustomerManager.journeyState()
+    fun journeyState(promise: Promise) {
+        val journeyState = NamiCustomerManager.journeyState()
         if (journeyState == null) {
             promise.resolve(null)
         } else {
             val handledJourneyState = journeyStateToReadableMap(journeyState)
             promise.resolve(handledJourneyState)
         }
-   }
+    }
 
     @ReactMethod
-    fun isLoggedIn(promise: Promise){
+    fun isLoggedIn(promise: Promise) {
         val isLoggedIn = NamiCustomerManager.isLoggedIn()
         promise.resolve(isLoggedIn)
     }
 
     @ReactMethod
-    fun loggedInId(promise: Promise){
+    fun loggedInId(promise: Promise) {
         val id = NamiCustomerManager.loggedInId()
         promise.resolve(id)
     }
 
     @ReactMethod
-    fun deviceId(promise: Promise){
+    fun deviceId(promise: Promise) {
         val id = NamiCustomerManager.deviceId()
         promise.resolve(id)
     }
 
     @ReactMethod
-    fun login(customerId: String){
+    fun login(customerId: String) {
         NamiCustomerManager.login(customerId)
     }
 
@@ -101,8 +99,8 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
         NamiCustomerManager.registerJourneyStateHandler { journeyState ->
             val handledJourneyState = journeyStateToReadableMap(journeyState)
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("JourneyStateChanged", handledJourneyState)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("JourneyStateChanged", handledJourneyState)
         }
     }
 
@@ -114,8 +112,16 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
             body.putBoolean("success", success)
             body.putString("error", error.toString())
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("AccountStateChanged", body)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("AccountStateChanged", body)
         }
+    }
+
+    @ReactMethod
+    fun addListener(eventName: String?) {
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
     }
 }

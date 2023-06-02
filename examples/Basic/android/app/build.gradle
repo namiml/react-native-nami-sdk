@@ -139,13 +139,17 @@ android {
             applicationId "com.namiml.testreact.prod"
             minSdkVersion 26
             targetSdkVersion 33
-            resValue "string", "app_name", "TestReact Prod"
+            manifestPlaceholders.app_name = "TestRNProd"
+            manifestPlaceholders.app_icon = "@mipmap/ic_launcher_prod"
+            manifestPlaceholders.app_icon_round = "@mipmap/ic_launcher_round_prod"
         }
         staging {
             applicationId "com.namiml.stg.testreactnative"
             minSdkVersion 26
             targetSdkVersion 33
-            resValue "string", "app_name", "TestReact Stg"
+            manifestPlaceholders.app_name = "TestRNStg"
+            manifestPlaceholders.app_icon = "@mipmap/ic_launcher"
+            manifestPlaceholders.app_icon_round = "@mipmap/ic_launcher_round"
         }
     }
     dexOptions {
@@ -205,6 +209,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
+    implementation project(':react-native-screens')
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

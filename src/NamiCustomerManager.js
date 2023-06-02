@@ -6,14 +6,14 @@ export const NamiCustomerManager = {
   emitter: new NativeEventEmitter(RNNamiCustomerManager),
   ...RNNamiCustomerManager,
   login: (customerId, callback) => {
-    if (Platform.OS === "ios") {
+    if (Platform.OS === "ios" || Platform.isTVOS) {
       RNNamiCustomerManager.login(customerId, callback ?? (() => {}));
     } else {
       RNNamiCustomerManager.login(customerId);
     }
   },
   logout: (callback) => {
-    if (Platform.OS === "ios") {
+    if (Platform.OS === "ios" || Platform.isTVOS) {
       RNNamiCustomerManager.logout(callback ?? (() => {}));
     } else {
       RNNamiCustomerManager.logout();

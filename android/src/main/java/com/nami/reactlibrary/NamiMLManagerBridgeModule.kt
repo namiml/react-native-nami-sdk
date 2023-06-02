@@ -47,4 +47,12 @@ class NamiMLManagerBridgeModule(reactContext: ReactApplicationContext) :
             NamiMLManager.coreAction(label)
         }
     }
+
+    @ReactMethod
+    fun addListener(eventName: String?) {
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
+    }
 }

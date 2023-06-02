@@ -11,6 +11,13 @@ import React
 
 @objc(RNNamiCustomerManager)
 class RNNamiCustomerManager: RCTEventEmitter {
+    public static var shared: RNNamiCustomerManager?
+
+    override init() {
+        super.init()
+        RNNamiCustomerManager.shared = self
+    }
+
     override func supportedEvents() -> [String]! {
         return ["JourneyStateChanged", "AccountStateChanged"]
     }
@@ -53,12 +60,12 @@ class RNNamiCustomerManager: RCTEventEmitter {
     func setCustomerDataPlatformId(cdpId: String) {
         NamiCustomerManager.setCustomerDataPlatformId(with: cdpId)
     }
-    
+
     @objc(clearCustomerDataPlatformId)
     func clearCustomerDataPlatformId() {
         NamiCustomerManager.clearCustomerDataPlatformId()
     }
-    
+
     @objc(journeyState:rejecter:)
     func journeyState(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         if let journeyState = NamiCustomerManager.journeyState() {
@@ -105,28 +112,40 @@ class RNNamiCustomerManager: RCTEventEmitter {
     func registerJourneyStateHandler() {
         NamiCustomerManager.registerJourneyStateHandler { journeyState in
             let dictionary = self.journeyStateToDictionary(journeyState)
-            self.sendEvent(withName: "JourneyStateChanged", body: dictionary)
+            RNNamiCustomerManager.shared?.sendEvent(withName: "JourneyStateChanged", body: dictionary)
         }
     }
 
     @objc(registerAccountStateHandler)
     func registerAccountStateHandler() {
-        NamiCustomerManager.registerAccountStateHandler({action, success, error in
+        NamiCustomerManager.registerAccountStateHandler { action, success, error in
             let actionString: String
             switch action {
             case .login:
                 actionString = "login"
             case .logout:
                 actionString = "logout"
+            case .customer_data_platform_id_set:
+                actionString = "customer_data_platform_id_set"
+            case .customer_data_platform_id_cleared:
+                actionString = "customer_data_platform_id_cleared"
+            case .advertising_id_set:
+                actionString = "advertising_id_set"
+            case .advertising_id_cleared:
+                actionString = "advertising_id_cleared"
+            case .vendor_id_set:
+                actionString = "vendor_id_set"
+            case .vendor_id_cleared:
+                actionString = "vendor_id_cleared"
             @unknown default:
                 actionString = "unknown"
             }
             let payload: [String: Any?] = [
                 "action": actionString,
                 "success": success,
-                "error": error?._code as Any
+                "error": error?._code as Any,
             ]
-            self.sendEvent(withName: "AccountStateChanged", body: payload)
-        })
+            RNNamiCustomerManager.shared?.sendEvent(withName: "AccountStateChanged", body: payload)
+        }
     }
 }

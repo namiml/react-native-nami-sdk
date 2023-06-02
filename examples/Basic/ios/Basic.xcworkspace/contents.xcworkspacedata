@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Basic.xcodeproj">
+      location = "group:/Users/dannami/Nami/Source/react-native-nami-sdk/examples/Basic/ios/Basic.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Basic.xcodeproj">
    </FileRef>
 </Workspace>

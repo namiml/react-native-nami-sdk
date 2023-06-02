@@ -6,7 +6,7 @@ export const NamiPaywallManager = {
   paywallEmitter: new NativeEventEmitter(RNNamiPaywallManager),
   ...RNNamiPaywallManager,
   ...NamiPaywallManagerBridge,
-  buySkuCompleteIos(purchaseSuccess) {
+  buySkuCompleteApple(purchaseSuccess) {
     RNNamiPaywallManager.buySkuComplete(purchaseSuccess);
   },
   buySkuCompleteAmazon(purchaseSuccess) {
@@ -18,20 +18,25 @@ export const NamiPaywallManager = {
   registerBuySkuHandler(callback) {
     var subscription = this.paywallEmitter.addListener(
       "RegisterBuySKU",
-      callback
+      (sku) => {
+        callback(sku);
+      }
     );
     RNNamiPaywallManager.registerBuySkuHandler();
     return subscription.remove;
   },
-  registerCloseHandler(blockDismiss, callback) {
+  registerCloseHandler(callback) {
     var subscription;
     subscription = this.paywallEmitter.addListener(
-      "BlockingPaywallClosed",
-      () => {
-        subscription.remove();
-        callback();
+      "PaywallCloseRequested",
+      (body) => {
+        callback(body);
       }
     );
-    RNNamiPaywallManager.registerCloseHandler(blockDismiss);
+    RNNamiPaywallManager.registerCloseHandler();
+    return subscription.remove;
+  },
+  dismiss(animated) {
+    RNNamiPaywallManager.dismiss(animated ?? true);
   },
 };

@@ -85,6 +85,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
             setIsUserLogin(success);
             checkId();
           }
+          if (action === 'login' && !success && error === 400) {
+            onLogoutPress();
+            onLoginPress();
+          }
           if (action === 'logout' && success) {
             setIsUserLogin(!success);
             checkId();
@@ -95,7 +99,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
       subscriptionJourneyStateRemover();
       subscriptionAccountStateRemover();
     };
-  }, [getJourneyState]);
+  }, [getJourneyState, onLoginPress, onLogoutPress]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

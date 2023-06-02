@@ -1,0 +1,189 @@
+{
+  "identifier" : "3A458C2A",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6443909774",
+    "_developerTeamID" : "K6APTMK8Y8",
+    "_lastSynchronizedDate" : 706850168.73008394
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21032494",
+      "localizations" : [
+
+      ],
+      "name" : "Sub Group",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "19.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1650507503",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "plus annual rn",
+              "displayName" : "plus annual rn",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "sub_annual_reactnative_prod",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Annual",
+          "subscriptionGroupID" : "21032494",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "9.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1650507619",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "plus six months rn",
+              "displayName" : "plus six months rn",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "sub_sixmonths_reactnative_prod",
+          "recurringSubscriptionPeriod" : "P6M",
+          "referenceName" : "Bi-Annual",
+          "subscriptionGroupID" : "21032494",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "1.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1650507271",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "plus monthly",
+              "displayName" : "plus monthly ",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "sub_monthly_reactnative_prod",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly",
+          "subscriptionGroupID" : "21032494",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "99.99",
+          "familyShareable" : false,
+          "groupNumber" : 4,
+          "internalID" : "6449612915",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "VIP Annual",
+              "displayName" : "VIP Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "vip_annual_reactnative_prod",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "VIP Annual RN",
+          "subscriptionGroupID" : "21032494",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+            {
+              "displayPrice" : "1.99",
+              "internalID" : "3E3C7FEC",
+              "numberOfPeriods" : 3,
+              "offerID" : "promo_offer_monthly",
+              "paymentMode" : "payAsYouGo",
+              "referenceName" : "Test Promo Offer",
+              "subscriptionPeriod" : "P1M"
+            }
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "9.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6449612770",
+          "introductoryOffer" : {
+            "displayPrice" : "1.99",
+            "internalID" : "6F61824B",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "payUpFront",
+            "subscriptionPeriod" : "P1M"
+          },
+          "localizations" : [
+
+          ],
+          "productID" : "vip_monthly_reactnative_prod",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "VIP Monthly",
+          "subscriptionGroupID" : "21032494",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6449612826",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "vip_sixmonths_reactnative_prod",
+              "displayName" : "vip_sixmonths_reactnative_prod",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "vip_sixmonths_reactnative_prod",
+          "recurringSubscriptionPeriod" : "P6M",
+          "referenceName" : "VIP Six Months RN",
+          "subscriptionGroupID" : "21032494",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

@@ -39,7 +39,7 @@ android {
     compileSdkVersion 33
     buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
     defaultConfig {
-        minSdkVersion 22
+        minSdkVersion 25
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
@@ -81,7 +81,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
-    implementation "com.namiml:sdk-android:3.0.9"
+    implementation "com.namiml:sdk-android:3.0.11"
+
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }
 def configureReactNativePom(def pom) {

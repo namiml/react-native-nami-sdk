@@ -1,14 +1,9 @@
 package com.nami.reactlibrary
 
-import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.namiml.entitlement.NamiEntitlement
 import com.namiml.entitlement.NamiEntitlementManager
-//import com.namiml.entitlement.NamiEntitlementSetter
-import com.namiml.entitlement.NamiPlatformType
-import java.util.ArrayList
-import java.util.Date
+// import com.namiml.entitlement.NamiEntitlementSetter
 import com.facebook.react.bridge.Callback
 
 class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) :
@@ -19,25 +14,25 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     }
 
     @ReactMethod
-    fun isEntitlementActive(referenceId: String, promise: Promise){
+    fun isEntitlementActive(referenceId: String, promise: Promise) {
         val isEntitlementActive = NamiEntitlementManager.isEntitlementActive(referenceId)
         promise.resolve(isEntitlementActive)
     }
 
     @ReactMethod
-    fun active(promise: Promise){
+    fun active(promise: Promise) {
         val nativeEntitlements = NamiEntitlementManager.active()
         val resultArray: WritableArray = WritableNativeArray()
         for (entitlement in nativeEntitlements) {
             entitlement.toEntitlementDict()?.let { entitlementDict ->
                 resultArray.pushMap(entitlementDict)
-           }
+            }
         }
         promise.resolve(resultArray)
     }
 
     @ReactMethod
-    fun refresh(callback: Callback){
+    fun refresh(callback: Callback) {
         NamiEntitlementManager.refresh { activeNativeEntitlements ->
             val resultArray: WritableArray = WritableNativeArray()
             if (activeNativeEntitlements != null) {
@@ -61,8 +56,16 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
                 }
             }
             reactApplicationContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    .emit("EntitlementsChanged", resultArray)
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("EntitlementsChanged", resultArray)
         }
+    }
+
+    @ReactMethod
+    fun addListener(eventName: String?) {
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
     }
 }

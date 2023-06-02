@@ -1,7 +1,10 @@
 export type NamiSKU = {
-  name: string;
+  id: string;
+  name?: string;
   skuId: string;
-  product?: SKProduct;
+  appleProduct?: AppleProduct;
+  googleProduct?: GoogleProduct;
+  amazonProduct?: AmazonProduct;
   type: NamiSKUType;
 };
 
@@ -25,7 +28,7 @@ export enum NamiRestorePurchasesState {
 
 export type NamiSKUType = "unknown" | "one_time_purchase" | "subscription";
 
-export type SKProduct = {
+export type AppleProduct = {
   localizedDescription: string;
   localizedMultipliedPrice: string;
   localizedPrice: string;
@@ -34,3 +37,7 @@ export type SKProduct = {
   priceCurrency: string;
   priceLanguage: string;
 };
+
+export type GoogleProduct = {};
+
+export type AmazonProduct = {};
