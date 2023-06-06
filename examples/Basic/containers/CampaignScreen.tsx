@@ -81,19 +81,28 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.headerButton}
             onPress={onRefreshPress}>
-            <Text style={styles.headerButtonText}>Refresh</Text>
+            <Text testID="refresh" style={styles.headerButtonText}>
+              Refresh
+            </Text>
           </TouchableOpacity>
         );
       },
     });
   }, [navigation]);
 
-  const renderCampaigns = ({item}: {item: NamiCampaign}) => {
+  const renderCampaigns = ({
+    item,
+    index,
+  }: {
+    item: NamiCampaign;
+    index: number;
+  }) => {
     if (!item.value) {
       return null;
     }
     return (
       <TouchableOpacity
+        testID={`campaigns_item${index}`}
         onPress={() => onItemPress(item.value ?? undefined)}
         style={styles.item}>
         <Text style={styles.itemText}>{item.value}</Text>
@@ -111,7 +120,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Campaigns</Text>
+      <Text testID="campaigns" style={styles.title}>
+        Campaigns
+      </Text>
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
         {renderDefault()}
@@ -119,6 +130,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
         <FlatList
+          testID="campaigns_list"
           data={campaigns}
           renderItem={renderCampaigns}
           style={styles.list}
