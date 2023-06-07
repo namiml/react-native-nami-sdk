@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* BasicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BasicTests.m */; };
+		0BB52F2A2A30A239000B8365 /* nami_initial_config_apple_stg.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BB52F292A30A239000B8365 /* nami_initial_config_apple_stg.json */; };
+		0BB52F2B2A30A239000B8365 /* nami_initial_config_apple_stg.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BB52F292A30A239000B8365 /* nami_initial_config_apple_stg.json */; };
 		1324964F29F2C3FF00234012 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		1324965029F2C3FF00234012 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1324965129F2C3FF00234012 /* SwiftClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3788612790782A00C7E8E3 /* SwiftClass.swift */; };
@@ -54,6 +56,7 @@
 		00E356EE1AD99517003FC87E /* BasicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BasicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* BasicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BasicTests.m; sourceTree = "<group>"; };
+		0BB52F292A30A239000B8365 /* nami_initial_config_apple_stg.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = nami_initial_config_apple_stg.json; sourceTree = "<group>"; };
 		101715CE5E40E1D7B3AF2FDD /* libPods-Basic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Basic.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		134541262A0E91A0009C6485 /* RNConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNConfig.m; sourceTree = "<group>"; };
 		134541282A0E91BE009C6485 /* RNConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNConfig.swift; sourceTree = "<group>"; };
@@ -146,6 +149,7 @@
 		13B07FAE1A68108700A75B9A /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				0BB52F292A30A239000B8365 /* nami_initial_config_apple_stg.json */,
 				ABAB361D2A21728800552A2E /* BasicProductionInfo.plist */,
 				134541282A0E91BE009C6485 /* RNConfig.swift */,
 				134541262A0E91A0009C6485 /* RNConfig.m */,
@@ -395,6 +399,7 @@
 				ABAB361E2A21728800552A2E /* BasicProductionInfo.plist in Resources */,
 				1324965529F2C3FF00234012 /* Images.xcassets in Resources */,
 				1324965629F2C3FF00234012 /* LaunchScreen.xib in Resources */,
+				0BB52F2B2A30A239000B8365 /* nami_initial_config_apple_stg.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,6 +409,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				0BB52F2A2A30A239000B8365 /* nami_initial_config_apple_stg.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1050,7 +1056,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1104,7 +1110,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

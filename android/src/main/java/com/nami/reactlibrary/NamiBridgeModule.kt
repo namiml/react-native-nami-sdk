@@ -3,6 +3,9 @@ package com.nami.reactlibrary
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
@@ -36,6 +39,13 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
     @ReactMethod
     fun configure(configDict: ReadableMap, completion: Callback) {
         // Need to be sure we have some valid string.
+        val androidInitialConfigPath = "nami_initial_config-android_stg.json"
+        val androidInitialConfigInputStream = reactApplicationContext.assets.open(androidInitialConfigPath)
+        val bufferedReader = BufferedReader(InputStreamReader(androidInitialConfigInputStream))
+        val androidInitialConfigString = bufferedReader.use { it.readText() }
+
+        Log.i(LOG_TAG, "Configure initial json file $androidInitialConfigString")
+
         val appPlatformID: String = if (configDict.hasKey(CONFIG_MAP_PLATFORM_ID_KEY)) {
             configDict.getString(CONFIG_MAP_PLATFORM_ID_KEY) ?: PLATFORM_ID_ERROR_VALUE
         } else {
@@ -55,6 +65,11 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
 
         val builder: NamiConfiguration.Builder =
             NamiConfiguration.Builder(appContext, appPlatformID)
+
+        //added string to config
+        if (androidInitialConfigString.isNotEmpty()) {
+            builder.initialConfig = androidInitialConfigString
+        }
 
         // React native will crash if you request a key from a map that does not exist, so always check key first
         val logLevelString = if (configDict.hasKey(CONFIG_MAP_LOG_LEVEL_KEY)) {

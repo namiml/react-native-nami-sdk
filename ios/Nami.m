@@ -20,6 +20,10 @@
 @implementation NamiBridge (RCTExternModule)
 
 RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponseSenderBlock) completion) {
+    NSString *iOSInitialConfigPath = [[NSBundle mainBundle] pathForResource:@"nami_initial_config_apple_stg" ofType:@"json"];
+    NSError *error = nil;
+    NSString *iOSInitialConfigString = [NSString stringWithContentsOfFile:iOSInitialConfigPath encoding:NSUTF8StringEncoding error:&error];
+
     if ([configDict count] == 0 || [configDict[@"logLevel"] isEqual: @"DEBUG"] ) {
         NSLog(@"Configure dictionary is %@", configDict);
     }
@@ -27,6 +31,10 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
 
     if ([appID length] > 0 ) {
         NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformId:appID];
+
+        if (iOSInitialConfigString) {
+            [config setInitialConfig:iOSInitialConfigString];
+        }
 
         NSString *logLevelString = configDict[@"logLevel"];
         if ([logLevelString isEqualToString:@"ERROR" ]) {
