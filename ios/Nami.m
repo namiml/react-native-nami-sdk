@@ -41,7 +41,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
         }
 
         NSString *languageString = configDict[@"namiLanguageCode"];
-        if ([logLevelString length] > 0) {
+        if ([languageString length] > 0) {
             NSLog(@"Nami language code from config dictionary is %@", languageString);
             if  ([[NamiLanguageCodes allAvailableNamiLanguageCodes]
                   containsObject:[languageString lowercaseString]] ) {
@@ -52,7 +52,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
         }
 
         // Start commands with header iformation for Nami to let them know this is a React client.
-        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.0.11"]];
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.0.12"]];
 
         // Add additional namiCommands app may have sent in.
         NSObject *appCommandStrings = configDict[@"namiCommands"];
@@ -69,6 +69,11 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
 
         config.namiCommands = namiCommandStrings;
 
+        NSString *initialConfigString = configDict[@"initialConfig"];
+        if ([initialConfigString length] > 0) {
+              NSLog(@"Found an initialConfig file to use for Nami SDK setup.");
+              config.initialConfig = initialConfigString;
+        }
 
         [Nami configureWith:config];
         NSDictionary *dict = @{@"success": @YES};
