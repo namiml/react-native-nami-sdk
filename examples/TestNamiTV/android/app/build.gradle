@@ -129,7 +129,7 @@ android {
 
     defaultConfig {
         applicationId "com.namiml.stg.testreactnative"
-        minSdkVersion 25
+        minSdkVersion 22
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -141,7 +141,7 @@ android {
     productFlavors {
         production {
             applicationId "com.namiml.testreact.prod"
-            minSdkVersion 25
+            minSdkVersion 22
             targetSdkVersion 31
             dimension "default"
             manifestPlaceholders.app_name = "RNTVProd"
@@ -150,7 +150,7 @@ android {
         }
         staging {
             applicationId "com.namiml.stg.testreactnative"
-            minSdkVersion 25
+            minSdkVersion 22
             targetSdkVersion 31
             dimension "default"
             manifestPlaceholders.app_name = "RNTVStg"
