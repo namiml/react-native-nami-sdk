@@ -119,7 +119,7 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 32
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -130,7 +130,7 @@ android {
     defaultConfig {
         applicationId "com.namiml.stg.testreactnative"
         minSdkVersion 25
-        targetSdkVersion 33
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         manifestPlaceholders.app_name = "TestRNTV"
@@ -142,7 +142,7 @@ android {
         production {
             applicationId "com.namiml.testreact.prod"
             minSdkVersion 25
-            targetSdkVersion 33
+            targetSdkVersion 31
             dimension "default"
             manifestPlaceholders.app_name = "RNTVProd"
             manifestPlaceholders.app_icon_round = "@mipmap/ic_launcher_round_prod"
@@ -151,7 +151,7 @@ android {
         staging {
             applicationId "com.namiml.stg.testreactnative"
             minSdkVersion 25
-            targetSdkVersion 33
+            targetSdkVersion 31
             dimension "default"
             manifestPlaceholders.app_name = "RNTVStg"
             manifestPlaceholders.app_icon_round = "@mipmap/ic_launcher_round"

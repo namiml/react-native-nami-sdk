@@ -36,11 +36,11 @@ buildscript {
     }
 }
 android {
-    compileSdkVersion 33
+    compileSdkVersion 32
     buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
     defaultConfig {
         minSdkVersion 25
-        targetSdkVersion 33
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
     }
@@ -81,7 +81,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
-    implementation "com.namiml:sdk-android:3.0.12"
+    implementation "com.namiml:sdk-android:3.0.13"
 
     implementation 'com.facebook.react:react-native:+'  // From node_modules
 }
