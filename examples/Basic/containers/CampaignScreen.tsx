@@ -90,19 +90,13 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     });
   }, [navigation]);
 
-  const renderCampaigns = ({
-    item,
-    index,
-  }: {
-    item: NamiCampaign;
-    index: number;
-  }) => {
+  const renderCampaigns = ({item}: {item: NamiCampaign}) => {
     if (!item.value) {
       return null;
     }
     return (
       <TouchableOpacity
-        testID={`campaigns_item${index}`}
+        testID={`list_item-${item.value}`}
         onPress={() => onItemPress(item.value ?? undefined)}
         style={styles.item}>
         <Text style={styles.itemText}>{item.value}</Text>
@@ -112,7 +106,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   const renderDefault = () => {
     return (
-      <TouchableOpacity onPress={() => onItemPress()} style={styles.itemDef}>
+      <TouchableOpacity
+        testID="default_campaigns"
+        onPress={() => onItemPress()}
+        style={styles.itemDef}>
         <Text style={styles.itemText}>default</Text>
       </TouchableOpacity>
     );
@@ -120,10 +117,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text testID="campaigns" style={styles.title}>
+      <Text testID="campaigns_title" style={styles.title}>
         Campaigns
       </Text>
-      <View style={styles.section}>
+      <View testID="unlabeled_campaigns" style={styles.section}>
         <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
         {renderDefault()}
       </View>

@@ -1,4 +1,8 @@
-import {device, element, by, expect} from 'detox';
+import {device, element, by, expect, waitFor} from 'detox';
+
+const data = {
+  campaign: 'lagoon',
+};
 
 describe('Configure Test', () => {
   beforeAll(async () => {
@@ -6,17 +10,20 @@ describe('Configure Test', () => {
   });
 
   it('should have Campaings screen', async () => {
-    await expect(element(by.id('campaigns'))).toBeVisible();
+    await expect(element(by.id('campaigns_title'))).toBeVisible();
   });
 
-  it('should work refresh btn', async () => {
-    await element(by.id('refresh')).tap();
-    await expect(element(by.id('campaigns'))).toBeVisible();
+  it('should unlabeled campaigns have default', async () => {
+    await expect(
+      element(
+        by.id('default_campaigns').withAncestor(by.id('unlabeled_campaigns')),
+      ),
+    ).toBeVisible();
   });
 
-  // it('should have list of items', async () => {
-  //   await expect(
-  //     element(by.id('campaigns').withDescendant(by.id('campaigns_item3'))),
-  //   ).toBeVisible();
-  // });
+  it('should interact with item at index', async () => {
+    await element(by.id('campaigns_list')).scrollTo('top');
+    await waitFor(element(by.text(`${data.campaign}`))).toBeVisible();
+    await element(by.text(`${data.campaign}`)).tap();
+  });
 });
