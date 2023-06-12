@@ -17,8 +17,14 @@ import {ViewerTabProps} from '../App';
 
 import theme from '../theme';
 
-const Dot = (props: {value?: boolean}) => {
-  return <View style={[styles.cir, props.value && styles.active]} />;
+const Dot = (props: {value?: boolean; testId?: string}) => {
+  return (
+    <View
+      testID={props.testId}
+      accessibilityValue={{text: `${props.value}`}}
+      style={[styles.cir, props.value && styles.active]}
+    />
+  );
 };
 
 interface ProfileScreenProps extends ViewerTabProps<'Profile'> {}
@@ -108,7 +114,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.headerButton}
             onPress={isUserLogin ? onLogoutPress : onLoginPress}>
-            <Text style={styles.headerButtonText}>
+            <Text testID="login_btn" style={styles.headerButtonText}>
               {isUserLogin ? 'Logout' : 'Login'}
             </Text>
           </TouchableOpacity>
@@ -119,13 +125,15 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
+      <Text testID="profile_title" style={styles.title}>
+        Profile
+      </Text>
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>
           {isUserLogin ? 'REGISTERED_USER' : 'ANONYMOUS USER'}
         </Text>
         <View style={styles.idSection}>
-          <Text style={styles.idLabel}>
+          <Text testID="user_id" style={styles.idLabel}>
             {isUserLogin ? 'External Id' : 'Device Id'}
           </Text>
           <Text style={styles.id}>
@@ -137,31 +145,46 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
         <Text style={styles.sectionHeader}>JORNEY STATE</Text>
         <View style={styles.block}>
           <View style={styles.item}>
-            <Dot value={journeyState?.inTrialPeriod} />
+            <Dot
+              testId="trial_period_dot"
+              value={journeyState?.inTrialPeriod}
+            />
             <Text style={styles.itemText}>In Trial Period</Text>
           </View>
           <View style={styles.item}>
-            <Dot value={journeyState?.inIntroOfferPeriod} />
+            <Dot
+              testId="offer_period_dot"
+              value={journeyState?.inIntroOfferPeriod}
+            />
             <Text style={styles.itemText}>In Intro Offer Period</Text>
           </View>
           <View style={styles.item}>
-            <Dot value={journeyState?.isCancelled} />
+            <Dot testId="cancelled_dot" value={journeyState?.isCancelled} />
             <Text style={styles.itemText}>Has Cancelled</Text>
           </View>
           <View style={styles.item}>
-            <Dot value={journeyState?.formerSubscriber} />
+            <Dot
+              testId="subscriber_dot"
+              value={journeyState?.formerSubscriber}
+            />
             <Text style={styles.itemText}>Former Subscriber</Text>
           </View>
           <View style={styles.item}>
-            <Dot value={journeyState?.inGracePeriod} />
+            <Dot
+              testId="grace_period_dot"
+              value={journeyState?.inGracePeriod}
+            />
             <Text style={styles.itemText}>In Grace Period</Text>
           </View>
           <View style={styles.item}>
-            <Dot value={journeyState?.inAccountHold} />
-            <Text style={styles.itemText}>In Acount Hold</Text>
+            <Dot
+              testId="account_hold_dot"
+              value={journeyState?.inAccountHold}
+            />
+            <Text style={styles.itemText}>In Account Hold</Text>
           </View>
           <View style={styles.item}>
-            <Dot value={journeyState?.inPause} />
+            <Dot testId="pause_dot" value={journeyState?.inPause} />
             <Text style={styles.itemText}>In Pause</Text>
           </View>
         </View>

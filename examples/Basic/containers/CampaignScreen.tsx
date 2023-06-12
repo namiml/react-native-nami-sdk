@@ -12,11 +12,15 @@ import {NamiCampaignManager, NamiCampaign} from 'react-native-nami-sdk';
 import {ViewerTabProps} from '../App';
 
 import theme from '../theme';
+import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
 
 interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
 
 const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
+  const [campaignsAction, setAction] = useState<NamiPaywallAction | string>(
+    'INITIAL',
+  );
 
   const getAllCampaigns = async () => {
     const allCampaigns = await NamiCampaignManager.allCampaigns();
@@ -45,6 +49,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           paywallId,
         ) => {
           console.log('action', action);
+          setAction(action);
           console.log('skuId', skuId);
           console.log('purchaseError', purchaseError);
           console.log('purchases', purchases);
@@ -81,7 +86,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.headerButton}
             onPress={onRefreshPress}>
-            <Text testID="refresh" style={styles.headerButtonText}>
+            <Text testID="refresh_campaigns" style={styles.headerButtonText}>
               Refresh
             </Text>
           </TouchableOpacity>
@@ -132,6 +137,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           renderItem={renderCampaigns}
           style={styles.list}
         />
+        <Text testID="campaigns_modal_action" style={styles.sectionHeader}>
+          {campaignsAction}
+        </Text>
       </View>
     </SafeAreaView>
   );

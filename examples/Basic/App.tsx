@@ -83,9 +83,21 @@ const App = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
-        <Tab.Screen name="Campaign" component={CampaignScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Entitlements" component={EntitlementsScreen} />
+        <Tab.Screen
+          options={{tabBarTestID: 'campaign_screen'}}
+          name="Campaign"
+          component={CampaignScreen}
+        />
+        <Tab.Screen
+          options={{tabBarTestID: 'profile_screen'}}
+          name="Profile"
+          component={ProfileScreen}
+        />
+        <Tab.Screen
+          options={{tabBarTestID: 'entitlements_screen'}}
+          name="Entitlements"
+          component={EntitlementsScreen}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
