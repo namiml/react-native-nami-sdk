@@ -128,9 +128,9 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             null
         }
         initialConfig?.let { initialConfigString ->
-            Log.w(
+            Log.i(
                 LOG_TAG,
-                "Found an initialConfig file to use for Nami SDK setup.",
+                "Nami Configuration initialConfig found.",
             )
             builder.initialConfig = initialConfigString
         }
