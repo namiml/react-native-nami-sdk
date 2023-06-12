@@ -26,6 +26,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         private const val CONFIG_MAP_BYPASS_STORE_KEY = "bypassStore"
         private const val CONFIG_MAP_NAMI_COMMANDS_KEY = "namiCommands"
         private const val CONFIG_MAP_LANGUAGE_CODE_KEY = "namiLanguageCode"
+        private const val CONFIG_MAP_INITIAL_CONFIG_KEY = "initialConfig"
         private const val PLATFORM_ID_ERROR_VALUE = "APPPLATFORMID_NOT_FOUND"
     }
 
@@ -120,6 +121,19 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         }
         Log.i(LOG_TAG, "Nami Configuration command settings are $settingsList")
         builder.settingsList = settingsList
+
+        val initialConfig = if (configDict.hasKey(CONFIG_MAP_INITIAL_CONFIG_KEY)) {
+            configDict.getString(CONFIG_MAP_INITIAL_CONFIG_KEY)
+        } else {
+            null
+        }
+        initialConfig?.let { initialConfigString ->
+            Log.i(
+                LOG_TAG,
+                "Nami Configuration initialConfig found.",
+            )
+            builder.initialConfig = initialConfigString
+        }
 
         val builtConfig: NamiConfiguration = builder.build()
         Log.i(LOG_TAG, "Nami Configuration object is $builtConfig")
