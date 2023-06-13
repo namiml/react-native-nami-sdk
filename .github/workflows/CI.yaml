@@ -1,4 +1,4 @@
-name: CI Build Test React Apps
+name: CI PR Checks
 
 on: pull_request
 
