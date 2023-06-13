@@ -20,7 +20,7 @@ on:
         required: true
 
 jobs:
-  build-android:
+  build-android-stg:
     name: Generate Play Store STG
     permissions:
       actions: write
@@ -57,6 +57,13 @@ jobs:
           NEW_VERSION_CODE=`cat $RUNNER_TEMP/.new_version_code`
           echo $NEW_VERSION_CODE
           sed -i "s/versionCode 1/versionCode $NEW_VERSION_CODE/" build.gradle
+
+      - name: Update App Platform ID
+        working-directory: source/examples/Basic/config/
+        run: |
+          sed -i "s/ANDROID_STG_APP_PLATFORM_ID/$BASIC_ANDROID_STG_APP_PLATFORM_ID/" index.ts
+        env:
+          BASIC_ANDROID_STG_APP_PLATFORM_ID: '${{ secrets.ANDROID_STG_APP_PLATFORM_ID }}'
 
       - name: Create the Keystore
         run: |
@@ -174,6 +181,13 @@ jobs:
           yarn install
         working-directory: source/examples/Basic
 
+      - name: Update App Platform ID
+        working-directory: source/examples/Basic/config/
+        run: |
+          sed -i "s/APPLE_STG_APP_PLATFORM_ID/$BASIC_APPLE_STG_APP_PLATFORM_ID/" index.ts
+        env:
+          BASIC_APPLE_STG_APP_PLATFORM_ID: '${{ secrets.APPLE_STG_APP_PLATFORM_ID }}'
+
       - name: Install test iOS dependencies
         run: |
           pod install
@@ -286,6 +300,13 @@ jobs:
         run: |
           yarn install
         working-directory: source/examples/TestNamiTV
+
+      - name: Update App Platform ID
+        working-directory: source/examples/TestNamiTV/config/
+        run: |
+          sed -i "s/APPLE_STG_APP_PLATFORM_ID/$TESTNAMITV_APPLE_STG_APP_PLATFORM_ID/" index.ts
+        env:
+          TESTNAMITV_APPLE_STG_APP_PLATFORM_ID: '${{ secrets.APPLE_STG_APP_PLATFORM_ID }}'
 
       - name: Install test tvOS dependencies
         run: |

@@ -20,7 +20,7 @@ on:
         required: true
 
 jobs:
-  build-android:
+  build-android-prod:
     name: Generate Play Store STG
     permissions:
       actions: write
@@ -69,6 +69,13 @@ jobs:
         run: |
           yarn install
         working-directory: source/examples/Basic
+
+      - name: Update App Platform ID
+        working-directory: source/examples/Basic/config/
+        run: |
+          sed -i "s/ANDROID_PROD_APP_PLATFORM_ID/$BASIC_ANDROID_PROD_APP_PLATFORM_ID/" index.ts
+        env:
+          BASIC_ANDROID_PROD_APP_PLATFORM_ID: '${{ secrets.ANDROID_PROD_APP_PLATFORM_ID }}'
 
       - name: Build Android App Bundle
         run: |
@@ -173,6 +180,13 @@ jobs:
           run: |
             yarn install
           working-directory: source/examples/Basic
+
+        - name: Update App Platform ID
+          working-directory: source/examples/Basic/config/
+          run: |
+            sed -i "s/APPLE_PROD_APP_PLATFORM_ID/$BASIC_APPLE_PROD_APP_PLATFORM_ID/" index.ts
+          env:
+            BASIC_APPLE_PROD_APP_PLATFORM_ID: '${{ secrets.APPLE_PROD_APP_PLATFORM_ID }}'
 
         - name: Install test iOS dependencies
           run: |
@@ -286,6 +300,13 @@ jobs:
         run: |
           yarn install
         working-directory: source/examples/TestNamiTV
+
+      - name: Update App Platform ID
+        working-directory: source/examples/TestNamiTV/config/
+        run: |
+          sed -i "s/APPLE_PROD_APP_PLATFORM_ID/$TESTNAMITV_APPLE_PROD_APP_PLATFORM_ID/" index.ts
+        env:
+          TESTNAMITV_APPLE_PROD_APP_PLATFORM_ID: '${{ secrets.APPLE_PROD_APP_PLATFORM_ID }}'
 
       - name: Install test tvOS dependencies
         run: |
