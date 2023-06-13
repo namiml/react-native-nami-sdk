@@ -6,11 +6,12 @@ export function getConfigObject() {
 
   console.log('flavor', flavor);
   switch (flavor) {
-    case 'production':
+    case 'staging':
       return {
         'appPlatformID-apple': 'APPLE_STG_APP_PLATFORM_ID',
         'appPlatformID-android': 'ANDROID_STG_APP_PLATFORM_ID',
         logLevel: 'DEBUG',
+        namiCommands: ['useStagingAPI'],
         initialConfig: getInitialConfig(),
       };
     default:
@@ -18,7 +19,6 @@ export function getConfigObject() {
         'appPlatformID-apple': 'APPLE_PROD_APP_PLATFORM_ID',
         'appPlatformID-android': 'ANDROID_PROD_APP_PLATFORM_ID',
         logLevel: 'DEBUG',
-        namiCommands: ['useStagingAPI'],
         initialConfig: getInitialConfig(),
       };
   }
