@@ -26,7 +26,7 @@ jobs:
           yarn install
         working-directory: source/examples/Basic
 
-      - name: Install Basic app dependencies
+      - name: Linter Basic
         run: |
           npx eslint . --ext .js,.jsx,.ts,.tsx
         working-directory: source/examples/Basic
@@ -36,7 +36,7 @@ jobs:
           yarn install
         working-directory: source/examples/TestNamiTV
 
-      - name: Install TestNamiTV app dependencies
+      - name: Linter TestNamiTV
         run: |
           npx eslint . --ext .js,.jsx,.ts,.tsx
         working-directory: source/examples/TestNamiTV
