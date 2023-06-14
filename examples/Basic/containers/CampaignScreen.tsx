@@ -81,6 +81,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     return () => {
       subscriptionRemover();
     };
+    //Note: not needed in depts
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLayoutEffect(() => {
