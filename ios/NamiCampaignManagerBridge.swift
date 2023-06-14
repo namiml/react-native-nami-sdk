@@ -34,9 +34,26 @@ class RNNamiCampaignManager: RCTEventEmitter {
         return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
     }
 
-    @objc(launch:completion:paywallCompletion:)
-    func launch(label: String?, callback: @escaping RCTResponseSenderBlock, paywallCallback _: @escaping RCTResponseSenderBlock) {
-        NamiCampaignManager.launch(label: label, launchHandler: { success, error in
+    @objc(launch:context:completion:paywallCompletion:)
+    func launch(label: String?, context: NSDictionary?, callback: @escaping RCTResponseSenderBlock, paywallCallback _: @escaping RCTResponseSenderBlock) {
+        var paywallLaunchContext: PaywallLaunchContext?
+
+        var productGroups: [String]?
+        var customAttributes: [String: Any]?
+        if let context = context {
+            if let contextProductGroups = context["productGroups"] as? [String] {
+                productGroups = contextProductGroups
+            }
+            if let contextCustomAttributes = context["customAttributes"] as? [String: Any] {
+                customAttributes = contextCustomAttributes
+            }
+        }
+
+        if productGroups != nil || customAttributes != nil {
+            paywallLaunchContext = PaywallLaunchContext(productGroups: productGroups, customAttributes: customAttributes)
+        }
+
+        NamiCampaignManager.launch(label: label, context: paywallLaunchContext, launchHandler: { success, error in
             callback([success, error?._code as Any])
         }, paywallActionHandler: { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases in
             let actionString: String

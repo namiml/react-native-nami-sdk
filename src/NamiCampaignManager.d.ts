@@ -7,6 +7,7 @@ export const NamiCampaignManager: {
   isCampaignAvailable: (label?: string) => boolean;
   launch: (
     label?: string,
+    context?: PaywallLaunchContext,
     resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: (
       action: NamiPaywallAction,
@@ -54,4 +55,9 @@ export enum LaunchCampaignResultAction {
 
 export type FailureResultObject = {
   error: string;
+};
+
+export type PaywallLaunchContext = {
+  productGroups?: string[];
+  customAttributes: Map<string, string>;
 };

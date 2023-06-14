@@ -11,6 +11,7 @@ import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
 import com.namiml.paywall.NamiSKU
 import com.namiml.paywall.model.NamiPaywallAction
+import com.namiml.paywall.model.PaywallLaunchContext
 
 class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), ActivityEventListener {
@@ -29,10 +30,40 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun launch(label: String?, resultCallback: Callback, actionCallback: Callback) {
+    fun launch(label: String?, context: ReadableMap?, resultCallback: Callback, actionCallback: Callback) {
         var theActivity: Activity? = null
         if (reactApplicationContext.hasCurrentActivity()) {
             theActivity = reactApplicationContext.getCurrentActivity()
+        }
+
+        // TODO: this doesn't work -- need to get the context ReadableMap data into the format native PaywallLaunchContext needs
+        var paywallLaunchContext: PaywallLaunchContext? = null
+        if (context != null) {
+
+            var productGroups: MutableList<String>
+            var customAttributes: Map<String, Any> = emptyMap()
+
+            if (context.hasKey("productGroups")) {
+                val groups = context.getArray("productGroups")
+                for (group in groups.) {
+                    val groupString = group as? String
+                    if (groupString != null) {
+                        productGroups.add(groupString)
+                    }
+
+                }
+                Log.d(LOG_TAG, "productGroups $productGroups")
+            }
+
+            if (context.hasKey("customAttributes")) {
+                val attr = context.getMap("customAttributes")
+                if (attr != null) {
+                    customAttributes = attr.toHashMap().toMap()
+                    Log.d(LOG_TAG, "customAttributes $customAttributes")
+                }
+            }
+
+            paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes)
         }
 
         if (theActivity != null) {
@@ -44,6 +75,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                         paywallActionCallback = { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases ->
                             handlePaywallCallback(campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases, actionCallback)
                         },
+                        paywallLaunchContext,
                     ) { result -> handleResult(result, resultCallback) }
                 } else {
                     NamiCampaignManager.launch(

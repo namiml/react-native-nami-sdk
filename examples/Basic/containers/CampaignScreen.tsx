@@ -29,8 +29,17 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       label,
     );
     if (isCampaignAvailable) {
+
+      const paywallLaunchContext = {
+        productGroups: ['nfl'],
+        customAttributes: {
+          matchupImage: "https://imagecomposer.nfl.com/image/fetch/q_80,f_auto,h_2160,w_3840,c_fit/l_fetch:aHR0cHM6Ly9zdGF0aWMud3d3Lm5mbC5jb20vbGVhZ3VlL2FwcHMvc2hhcmVkL0NMRV9Bd2F5X1ZlcnRpY2FsLnBuZw==,h_2160,w_3840,c_fit,x_0/https:/static.www.nfl.com/league/apps/shared/BAL_Home_Vertical.png"
+        },
+      };
+
       NamiCampaignManager.launch(
         label,
+        paywallLaunchContext,
         (successAction, error) => {
           console.log('successAction', successAction);
           console.log('error', error);
