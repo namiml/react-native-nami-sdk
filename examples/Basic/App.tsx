@@ -9,6 +9,7 @@ import {NamiPaywallManager} from 'react-native-nami-sdk';
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
+import CustomerManagerScreen from './containers/CustomerManagerScreen';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -21,6 +22,7 @@ type ViewerTabNavigatorParams = {
   Campaign: undefined;
   Profile: undefined;
   Entitlements: undefined;
+  CustomerManager: undefined;
 };
 
 export interface ViewerTabProps<
@@ -97,6 +99,11 @@ const App = () => {
           options={{tabBarTestID: 'entitlements_screen'}}
           name="Entitlements"
           component={EntitlementsScreen}
+        />
+        <Tab.Screen
+          options={{tabBarTestID: 'customer_manager_screen'}}
+          name="CustomerManager"
+          component={CustomerManagerScreen}
         />
       </Tab.Navigator>
     </NavigationContainer>

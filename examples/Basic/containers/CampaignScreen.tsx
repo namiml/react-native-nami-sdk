@@ -18,6 +18,7 @@ interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
 
 const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
+  const [refresh, setRefresh] = useState<boolean>(false);
   const [campaignsAction, setAction] = useState<NamiPaywallAction | string>(
     'INITIAL',
   );
@@ -71,6 +72,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       NamiCampaignManager.registerAvailableCampaignsHandler(
         (availableCampaigns) => {
           console.log('availableCampaigns', availableCampaigns);
+          const isEqualList =
+            JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
+          setRefresh(isEqualList ? false : true);
           setCampaigns(availableCampaigns);
         },
       );
@@ -101,10 +105,13 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     }
     return (
       <TouchableOpacity
-        testID={`list_item-${item.value}`}
         onPress={() => onItemPress(item.value ?? undefined)}
         style={styles.item}>
-        <Text style={styles.itemText}>{item.value}</Text>
+        <View
+          testID={`list_item_${item.value}`}
+          accessibilityValue={{text: JSON.stringify(item)}}>
+          <Text style={styles.itemText}>{item.value}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -129,6 +136,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
         {renderDefault()}
       </View>
+      <Text testID="campaigns_modal_action" style={styles.statusText}>
+        Modal Status: {campaignsAction}
+      </Text>
+      <Text testID="refresh_status_text" style={styles.statusText}>
+        Refreshed: {refresh.toString()}
+      </Text>
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
         <FlatList
@@ -137,9 +150,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           renderItem={renderCampaigns}
           style={styles.list}
         />
-        <Text testID="campaigns_modal_action" style={styles.sectionHeader}>
-          {campaignsAction}
-        </Text>
       </View>
     </SafeAreaView>
   );
@@ -190,6 +200,12 @@ const styles = StyleSheet.create({
   },
   list: {
     borderRadius: 8,
+  },
+  statusText: {
+    color: theme.secondaryFont,
+    marginLeft: 15,
+    marginBottom: 5,
+    marginTop: 5,
   },
 });
 
