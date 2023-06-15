@@ -57,7 +57,9 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.headerButton}
             onPress={onRefreshPress}>
-            <Text style={styles.headerButtonText}>Refresh</Text>
+            <Text testID="refresh_entitlements" style={styles.headerButtonText}>
+              Refresh
+            </Text>
           </TouchableOpacity>
         );
       },
@@ -78,10 +80,18 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Entitlements</Text>
+      <Text testID="entitlements_title" style={styles.title}>
+        Entitlements
+      </Text>
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>ACTIVE ENTITLEMENT</Text>
-        <FlatList data={entitlements} renderItem={renderCampaigns} />
+        <Text testID="active_entitlement" style={styles.sectionHeader}>
+          ACTIVE ENTITLEMENT
+        </Text>
+        <FlatList
+          testID="entitlement_list"
+          data={entitlements}
+          renderItem={renderCampaigns}
+        />
       </View>
     </SafeAreaView>
   );
