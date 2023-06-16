@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState, useLayoutEffect} from 'react';
+import React, { FC, useEffect, useState, useLayoutEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,16 +7,19 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {NamiCampaignManager, NamiCampaign} from 'react-native-nami-sdk';
+import {
+  NamiCampaignManager,
+  NamiCampaign,
+  NamiPaywallAction,
+} from 'react-native-nami-sdk';
 
-import {ViewerTabProps} from '../App';
+import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
-import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
 
 interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
 
-const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
+const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [campaignsAction, setAction] = useState<NamiPaywallAction | string>(
@@ -70,7 +73,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     getAllCampaigns();
     const subscriptionRemover =
       NamiCampaignManager.registerAvailableCampaignsHandler(
-        (availableCampaigns) => {
+        availableCampaigns => {
           console.log('availableCampaigns', availableCampaigns);
           const isEqualList =
             JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
@@ -101,7 +104,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     });
   }, [navigation]);
 
-  const renderCampaigns = ({item}: {item: NamiCampaign}) => {
+  const renderCampaigns = ({ item }: { item: NamiCampaign }) => {
     if (!item.value) {
       return null;
     }
@@ -111,7 +114,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         style={styles.item}>
         <View
           testID={`list_item_${item.value}`}
-          accessibilityValue={{text: JSON.stringify(item)}}>
+          accessibilityValue={{ text: JSON.stringify(item) }}>
           <Text style={styles.itemText}>{item.value}</Text>
         </View>
       </TouchableOpacity>

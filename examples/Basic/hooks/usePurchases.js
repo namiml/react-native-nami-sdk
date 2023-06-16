@@ -1,8 +1,8 @@
-import React, {createContext, useState, useContext} from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
 const PurchasesContext = createContext([[], () => {}]);
 
-export const PurchasesContextProvider = ({children}) => {
+export const PurchasesContextProvider = ({ children }) => {
   const [purchases, setPurchases] = useState([]);
   return (
     <PurchasesContext.Provider value={[purchases, setPurchases]}>

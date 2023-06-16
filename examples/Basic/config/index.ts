@@ -1,5 +1,5 @@
-import {NativeModules} from 'react-native';
-import {getInitialConfig} from './getInitialConfig';
+import { NativeModules } from 'react-native';
+import { getInitialConfig } from './getInitialConfig';
 
 export function getConfigObject() {
   let flavor = NativeModules.RNConfig.FLAVOR;
@@ -8,16 +8,16 @@ export function getConfigObject() {
   switch (flavor) {
     case 'staging':
       return {
-        'appPlatformID-apple': 'APPLE_STG_APP_PLATFORM_ID',
-        'appPlatformID-android': 'ANDROID_STG_APP_PLATFORM_ID',
+        'appPlatformID-apple': '4a2f6dbf-e684-4d65-a4df-0488771c577d',
+        'appPlatformID-android': 'b7232eba-ff1d-4b7f-b8d0-55593b66c1d5',
         logLevel: 'DEBUG',
         namiCommands: ['useStagingAPI'],
         initialConfig: getInitialConfig(),
       };
     default:
       return {
-        'appPlatformID-apple': 'APPLE_PROD_APP_PLATFORM_ID',
-        'appPlatformID-android': 'ANDROID_PROD_APP_PLATFORM_ID',
+        'appPlatformID-apple': '4a2f6dbf-e684-4d65-a4df-0488771c577d',
+        'appPlatformID-android': 'b7232eba-ff1d-4b7f-b8d0-55593b66c1d5',
         logLevel: 'DEBUG',
         initialConfig: getInitialConfig(),
       };

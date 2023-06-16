@@ -5,15 +5,4 @@ export { NamiCustomerManager } from './src/NamiCustomerManager';
 export { NamiEntitlementManager } from './src/NamiEntitlementManager';
 export { NamiPurchaseManager } from './src/NamiPurchaseManager';
 export { NamiPaywallManager } from './src/NamiPaywallManager';
-export {
-  NamiCampaign,
-  NamiCampaignRuleType,
-  LaunchCampaignError,
-  NamiLanguageCodes,
-  NamiSKU,
-  NamiPurchase,
-  NamiEntitlement,
-  CustomerJourneyState,
-  AccountStateAction,
-  NamiConfiguration
-} from './src/types';
+export * from './src/types';

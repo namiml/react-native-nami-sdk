@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState, useLayoutEffect} from 'react';
+import React, { FC, useEffect, useState, useLayoutEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,15 +7,15 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {NamiEntitlementManager, NamiEntitlement} from 'react-native-nami-sdk';
+import { NamiEntitlementManager, NamiEntitlement } from 'react-native-nami-sdk';
 
-import {ViewerTabProps} from '../App';
+import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
 interface EntitlementsScreenProps extends ViewerTabProps<'Entitlements'> {}
 
-const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
+const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   const [entitlements, setEntitlements] = useState<NamiEntitlement[]>([]);
 
   const getAllEntitlements = async () => {
@@ -31,7 +31,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
   };
 
   const onRefreshPress = () => {
-    NamiEntitlementManager.refresh((newEtitlements) => {
+    NamiEntitlementManager.refresh(newEtitlements => {
       console.log('newEntitlements', newEtitlements);
     });
   };
@@ -40,7 +40,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
     getAllEntitlements();
     const subscriptionRemover =
       NamiEntitlementManager.registerActiveEntitlementsHandler(
-        (activeEntitlements) => {
+        activeEntitlements => {
           console.log('activeEntitlements', activeEntitlements);
           setEntitlements(activeEntitlements);
         },
@@ -66,7 +66,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
     });
   }, [navigation]);
 
-  const renderCampaigns = ({item}: {item: NamiEntitlement}) => {
+  const renderCampaigns = ({ item }: { item: NamiEntitlement }) => {
     return (
       <TouchableOpacity
         onPress={() => {

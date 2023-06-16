@@ -1,0 +1,77 @@
+import { NativeModules, NativeEventEmitter } from 'react-native';
+import { EmitterSubscription } from 'react-native';
+import {
+  NamiPurchaseSuccessAmazon,
+  NamiPurchaseSuccessApple,
+  NamiPurchaseSuccessGooglePlay,
+  NamiSKU,
+} from './types';
+
+export enum NamiPaywallManagerEvents {
+  RegisterBuySKU = 'RegisterBuySKU',
+  PaywallCloseRequested = 'PaywallCloseRequested',
+}
+
+export enum ServicesEnum {
+  Amazon = 'Amazon',
+  GooglePlay = 'GooglePlay',
+}
+
+export interface INamiPaywallManager {
+  paywallEmitter: NativeEventEmitter;
+  buySkuCompleteApple: (purchaseSuccess: NamiPurchaseSuccessApple) => void;
+  buySkuCompleteAmazon: (purchaseSuccess: NamiPurchaseSuccessAmazon) => void;
+  buySkuCompleteGooglePlay: (
+    purchaseSuccess: NamiPurchaseSuccessGooglePlay,
+  ) => void;
+  dismiss: (animated?: boolean) => void;
+  registerBuySkuHandler: (
+    callback: (sku: NamiSKU) => void,
+  ) => EmitterSubscription['remove'];
+  registerCloseHandler: (callback: () => void) => EmitterSubscription['remove'];
+}
+
+const { NamiPaywallManagerBridge, RNNamiPaywallManager } = NativeModules;
+
+export const NamiPaywallManager: INamiPaywallManager = {
+  paywallEmitter: new NativeEventEmitter(RNNamiPaywallManager),
+  ...RNNamiPaywallManager,
+  ...NamiPaywallManagerBridge,
+  buySkuCompleteApple: (purchaseSuccess: NamiPurchaseSuccessApple) => {
+    RNNamiPaywallManager.buySkuComplete(purchaseSuccess);
+  },
+  buySkuCompleteAmazon: (purchaseSuccess: NamiPurchaseSuccessAmazon) => {
+    RNNamiPaywallManager.buySkuComplete(purchaseSuccess, ServicesEnum.Amazon);
+  },
+  buySkuCompleteGooglePlay: (
+    purchaseSuccess: NamiPurchaseSuccessGooglePlay,
+  ) => {
+    RNNamiPaywallManager.buySkuComplete(
+      purchaseSuccess,
+      ServicesEnum.GooglePlay,
+    );
+  },
+  registerBuySkuHandler: (callback: (sku: NamiSKU) => void) => {
+    const subscription = NamiPaywallManager.paywallEmitter.addListener(
+      NamiPaywallManagerEvents.RegisterBuySKU,
+      sku => {
+        callback(sku);
+      },
+    );
+    RNNamiPaywallManager.registerBuySkuHandler();
+    return subscription.remove;
+  },
+  registerCloseHandler: (callback: (body: any) => void) => {
+    const subscription = NamiPaywallManager.paywallEmitter.addListener(
+      NamiPaywallManagerEvents.PaywallCloseRequested,
+      body => {
+        callback(body);
+      },
+    );
+    RNNamiPaywallManager.registerCloseHandler();
+    return subscription.remove;
+  },
+  dismiss: (animated?: boolean) => {
+    RNNamiPaywallManager.dismiss(animated ?? true);
+  },
+};

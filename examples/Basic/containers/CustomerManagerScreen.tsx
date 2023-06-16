@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, { FC, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {NamiCustomerManager} from 'react-native-nami-sdk';
+import { NamiCustomerManager } from 'react-native-nami-sdk';
 
-import {ViewerTabProps} from '../App';
+import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 

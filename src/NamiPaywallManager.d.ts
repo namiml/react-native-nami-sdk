@@ -1,17 +1,17 @@
-import { EmitterSubscription } from "react-native";
-import { NamiSKU } from "./types";
+import { EmitterSubscription } from 'react-native';
+import { NamiSKU } from './types';
 
 export const NamiPaywallManager: {
   buySkuCompleteApple: (purchaseSuccess: NamiPurchaseSuccessApple) => void;
   buySkuCompleteAmazon: (purchaseSuccess: NamiPurchaseSuccessAmazon) => void;
   buySkuCompleteGooglePlay: (
-    purchaseSuccess: NamiPurchaseSuccessGooglePlay
+    purchaseSuccess: NamiPurchaseSuccessGooglePlay,
   ) => void;
   dismiss: (animated?: boolean) => void;
   registerBuySkuHandler: (
-    callback: (sku: NamiSKU) => void
-  ) => EmitterSubscription["remove"];
-  registerCloseHandler: (callback: () => void) => EmitterSubscription["remove"];
+    callback: (sku: NamiSKU) => void,
+  ) => EmitterSubscription['remove'];
+  registerCloseHandler: (callback: () => void) => EmitterSubscription['remove'];
 };
 
 export type NamiPurchaseSuccessApple = {
@@ -32,14 +32,14 @@ export type NamiPurchaseSuccessGooglePlay = {
   purchaseDate: number;
   expiresDate?: number;
   purchaseToken: string;
-  purchaseSource: "CAMPAIGN" | "MARKETPLACE" | "UNKNOWN";
+  purchaseSource: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
 };
 
 export type NamiPurchaseSuccessAmazon = {
   product: NamiSKU;
   purchaseDate: number;
   expiresDate?: number;
-  purchaseSource: "CAMPAIGN" | "MARKETPLACE" | "UNKNOWN";
+  purchaseSource: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
   receiptId: string;
   localizedPrice: string;
   userId: string;
@@ -47,17 +47,17 @@ export type NamiPurchaseSuccessAmazon = {
 };
 
 export enum NamiPaywallAction {
-  BUY_SKU = "BUY_SKU",
-  SELECT_SKU = "SELECT_SKU",
-  RESTORE_PURCHASES = "RESTORE_PURCHASES",
-  SIGN_IN = "SIGN_IN",
-  CLOSE_PAYWALL = "CLOSE_PAYWALL",
-  SHOW_PAYWALL = "SHOW_PAYWALL",
-  PURCHASE_SELECTED_SKU = "PURCHASE_SELECTED_SKU",
-  PURCHASE_SUCCESS = "PURCHASE_SUCCESS",
-  PURCHASE_FAILED = "PURCHASE_FAILED",
-  PURCHASE_CANCELLED = "PURCHASE_CANCELLED",
-  PURCHASE_PENDING = "PURCHASE_PENDING",
-  PURCHASE_UNKNOWN = "PURCHASE_UNKNOWN",
-  PURCHASE_DEFERRED = "PURCHASE_DEFERRED",
+  BUY_SKU = 'BUY_SKU',
+  SELECT_SKU = 'SELECT_SKU',
+  RESTORE_PURCHASES = 'RESTORE_PURCHASES',
+  SIGN_IN = 'SIGN_IN',
+  CLOSE_PAYWALL = 'CLOSE_PAYWALL',
+  SHOW_PAYWALL = 'SHOW_PAYWALL',
+  PURCHASE_SELECTED_SKU = 'PURCHASE_SELECTED_SKU',
+  PURCHASE_SUCCESS = 'PURCHASE_SUCCESS',
+  PURCHASE_FAILED = 'PURCHASE_FAILED',
+  PURCHASE_CANCELLED = 'PURCHASE_CANCELLED',
+  PURCHASE_PENDING = 'PURCHASE_PENDING',
+  PURCHASE_UNKNOWN = 'PURCHASE_UNKNOWN',
+  PURCHASE_DEFERRED = 'PURCHASE_DEFERRED',
 }

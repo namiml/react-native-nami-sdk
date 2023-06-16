@@ -1,4 +1,4 @@
-import { EmitterSubscription } from "react-native";
+import { EmitterSubscription } from 'react-native';
 
 export const NamiCustomerManager: {
   setCustomerAttribute: (key: string, value: string) => void;
@@ -11,19 +11,19 @@ export const NamiCustomerManager: {
   deviceId: () => Promise<string>;
   login: (
     customerId: string,
-    callback?: (success: boolean, error?: number) => void
+    callback?: (success: boolean, error?: number) => void,
   ) => void;
   logout: (callback?: (success: boolean, error?: number) => void) => void;
   registerJourneyStateHandler: (
-    callback: (journeyState: CustomerJourneyState) => void
-  ) => EmitterSubscription["remove"];
+    callback: (journeyState: CustomerJourneyState) => void,
+  ) => EmitterSubscription['remove'];
   registerAccountStateHandler: (
     callback: (
       action: AccountStateAction,
       success: boolean,
-      error?: number
-    ) => void
-  ) => EmitterSubscription["remove"];
+      error?: number,
+    ) => void,
+  ) => EmitterSubscription['remove'];
   clearCustomerDataPlatformId: () => void;
   setCustomerDataPlatformId: (platformId: string) => void;
 };
@@ -38,4 +38,4 @@ export type CustomerJourneyState = {
   inAccountHold: boolean;
 };
 
-export type AccountStateAction = "login" | "logout";
+export type AccountStateAction = 'login' | 'logout';

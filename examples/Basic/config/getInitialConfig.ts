@@ -1,4 +1,4 @@
-import {NativeModules, Platform} from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 import initAppleStageConfig from '../nami_initial_config_apple_stg.json';
 import initAndroidStageConfig from '../nami_initial_config_android_stg.json';

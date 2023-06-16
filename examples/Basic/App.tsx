@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
-import {Platform} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NamiCustomerManager} from 'react-native-nami-sdk';
-import {NamiPaywallManager} from 'react-native-nami-sdk';
+import React, { useEffect } from 'react';
+import { Platform } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NamiCustomerManager } from 'react-native-nami-sdk';
+import { NamiPaywallManager } from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
@@ -15,7 +15,7 @@ export const UNTITLED_HEADER_OPTIONS = {
   title: '',
   headerBackTitleVisible: false,
   headerShadowVisible: false,
-  headerStyle: {backgroundColor: 'transparent'},
+  headerStyle: { backgroundColor: 'transparent' },
 };
 
 type ViewerTabNavigatorParams = {
@@ -35,7 +35,7 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
   useEffect(() => {
-    NamiPaywallManager.registerBuySkuHandler((sku) => {
+    NamiPaywallManager.registerBuySkuHandler(sku => {
       console.log(
         'buy sku handler - need to start purchase flow for sku:',
         sku.skuId,
@@ -43,7 +43,8 @@ const App = () => {
 
       NamiPaywallManager.dismiss(true);
 
-      if (Platform.OS === 'ios' || Platform.isTVOS) {
+      //TODO: isTVOS issue
+      if (Platform.OS === 'ios' || Platform.isTV) {
         NamiPaywallManager.buySkuCompleteApple({
           product: sku,
           transactionID: '12345',
@@ -86,22 +87,22 @@ const App = () => {
     <NavigationContainer>
       <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
         <Tab.Screen
-          options={{tabBarTestID: 'campaign_screen'}}
+          options={{ tabBarTestID: 'campaign_screen' }}
           name="Campaign"
           component={CampaignScreen}
         />
         <Tab.Screen
-          options={{tabBarTestID: 'profile_screen'}}
+          options={{ tabBarTestID: 'profile_screen' }}
           name="Profile"
           component={ProfileScreen}
         />
         <Tab.Screen
-          options={{tabBarTestID: 'entitlements_screen'}}
+          options={{ tabBarTestID: 'entitlements_screen' }}
           name="Entitlements"
           component={EntitlementsScreen}
         />
         <Tab.Screen
-          options={{tabBarTestID: 'customer_manager_screen'}}
+          options={{ tabBarTestID: 'customer_manager_screen' }}
           name="CustomerManager"
           component={CustomerManagerScreen}
         />

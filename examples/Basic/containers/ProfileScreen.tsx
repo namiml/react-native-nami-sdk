@@ -12,16 +12,19 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {NamiCustomerManager, CustomerJourneyState} from 'react-native-nami-sdk';
-import {ViewerTabProps} from '../App';
+import {
+  NamiCustomerManager,
+  CustomerJourneyState,
+} from 'react-native-nami-sdk';
+import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-const Dot = (props: {value?: boolean; testId?: string}) => {
+const Dot = (props: { value?: boolean; testId?: string }) => {
   return (
     <View
       testID={props.testId}
-      accessibilityValue={{text: `${props.value}`}}
+      accessibilityValue={{ text: `${props.value}` }}
       style={[styles.cir, props.value && styles.active]}
     />
   );
@@ -29,7 +32,8 @@ const Dot = (props: {value?: boolean; testId?: string}) => {
 
 interface ProfileScreenProps extends ViewerTabProps<'Profile'> {}
 
-const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
+const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
+  // TODO: Will be fixed
   const [journeyState, setJourneyState] = useState<
     CustomerJourneyState | undefined
   >(undefined);
@@ -79,7 +83,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     getJourneyState();
     checkId();
     const subscriptionJourneyStateRemover =
-      NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
+      NamiCustomerManager.registerJourneyStateHandler(newJourneyState => {
         console.log('newJourneyState', newJourneyState);
         setJourneyState(newJourneyState);
       });
@@ -143,51 +147,53 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>JORNEY STATE</Text>
-        <View style={styles.block}>
-          <View style={styles.item}>
-            <Dot
-              testId="trial_period_dot"
-              value={journeyState?.inTrialPeriod}
-            />
-            <Text style={styles.itemText}>In Trial Period</Text>
+        {journeyState ? (
+          <View style={styles.block}>
+            <View style={styles.item}>
+              <Dot
+                testId="trial_period_dot"
+                value={journeyState!.inTrialPeriod}
+              />
+              <Text style={styles.itemText}>In Trial Period</Text>
+            </View>
+            <View style={styles.item}>
+              <Dot
+                testId="offer_period_dot"
+                value={journeyState!.inIntroOfferPeriod}
+              />
+              <Text style={styles.itemText}>In Intro Offer Period</Text>
+            </View>
+            <View style={styles.item}>
+              <Dot testId="cancelled_dot" value={journeyState!.isCancelled} />
+              <Text style={styles.itemText}>Has Cancelled</Text>
+            </View>
+            <View style={styles.item}>
+              <Dot
+                testId="subscriber_dot"
+                value={journeyState!.formerSubscriber}
+              />
+              <Text style={styles.itemText}>Former Subscriber</Text>
+            </View>
+            <View style={styles.item}>
+              <Dot
+                testId="grace_period_dot"
+                value={journeyState!.inGracePeriod}
+              />
+              <Text style={styles.itemText}>In Grace Period</Text>
+            </View>
+            <View style={styles.item}>
+              <Dot
+                testId="account_hold_dot"
+                value={journeyState!.inAccountHold}
+              />
+              <Text style={styles.itemText}>In Account Hold</Text>
+            </View>
+            <View style={styles.item}>
+              <Dot testId="pause_dot" value={journeyState!.inPause} />
+              <Text style={styles.itemText}>In Pause</Text>
+            </View>
           </View>
-          <View style={styles.item}>
-            <Dot
-              testId="offer_period_dot"
-              value={journeyState?.inIntroOfferPeriod}
-            />
-            <Text style={styles.itemText}>In Intro Offer Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot testId="cancelled_dot" value={journeyState?.isCancelled} />
-            <Text style={styles.itemText}>Has Cancelled</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot
-              testId="subscriber_dot"
-              value={journeyState?.formerSubscriber}
-            />
-            <Text style={styles.itemText}>Former Subscriber</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot
-              testId="grace_period_dot"
-              value={journeyState?.inGracePeriod}
-            />
-            <Text style={styles.itemText}>In Grace Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot
-              testId="account_hold_dot"
-              value={journeyState?.inAccountHold}
-            />
-            <Text style={styles.itemText}>In Account Hold</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot testId="pause_dot" value={journeyState?.inPause} />
-            <Text style={styles.itemText}>In Pause</Text>
-          </View>
-        </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
