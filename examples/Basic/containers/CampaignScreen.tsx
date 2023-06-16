@@ -36,6 +36,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     if (isCampaignAvailable) {
       NamiCampaignManager.launch(
         label,
+        null,
         (successAction, error) => {
           console.log('successAction', successAction);
           console.log('error', error);

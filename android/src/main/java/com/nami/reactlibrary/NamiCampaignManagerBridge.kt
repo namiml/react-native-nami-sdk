@@ -11,6 +11,7 @@ import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
 import com.namiml.paywall.NamiSKU
 import com.namiml.paywall.model.NamiPaywallAction
+import com.namiml.paywall.model.PaywallLaunchContext
 
 class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), ActivityEventListener {
@@ -29,10 +30,45 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun launch(label: String?, resultCallback: Callback, actionCallback: Callback) {
+    fun launch(label: String?, context: ReadableMap?, resultCallback: Callback, actionCallback: Callback) {
         var theActivity: Activity? = null
         if (reactApplicationContext.hasCurrentActivity()) {
             theActivity = reactApplicationContext.getCurrentActivity()
+        }
+
+        var paywallLaunchContext: PaywallLaunchContext? = null
+        if (context != null) {
+
+            val productGroups: MutableList<String> = mutableListOf()
+            val customAttributes: MutableMap<String, String> = mutableMapOf()
+
+            if (context.hasKey("productGroups")) {
+                val groups = context.getArray("productGroups")
+                if (groups != null) {
+                    for (i in 0 until groups.size()) {
+                        val groupString = groups.getString(i)
+                        if (groupString != null) {
+                            productGroups.add(groupString)
+                        }
+
+                    }
+                }
+                Log.d(LOG_TAG, "productGroups $productGroups")
+            }
+
+            if (context.hasKey("customAttributes")) {
+                val attr = context.getMap("customAttributes")
+                if (attr != null) {
+                    val keyIterator = attr.keySetIterator()
+                    while (keyIterator.hasNextKey()) {
+                        val key = keyIterator.nextKey()
+                        customAttributes[key] = attr.getString(key) ?: ""
+                    }
+                    Log.d(LOG_TAG, "customAttributes $customAttributes")
+                }
+            }
+
+            paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes)
         }
 
         if (theActivity != null) {
@@ -44,6 +80,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                         paywallActionCallback = { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases ->
                             handlePaywallCallback(campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases, actionCallback)
                         },
+                        paywallLaunchContext,
                     ) { result -> handleResult(result, resultCallback) }
                 } else {
                     NamiCampaignManager.launch(
