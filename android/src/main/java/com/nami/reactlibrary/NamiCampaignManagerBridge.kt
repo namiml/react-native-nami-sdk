@@ -36,21 +36,22 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             theActivity = reactApplicationContext.getCurrentActivity()
         }
 
-        // TODO: this doesn't work -- need to get the context ReadableMap data into the format native PaywallLaunchContext needs
         var paywallLaunchContext: PaywallLaunchContext? = null
         if (context != null) {
 
-            var productGroups: MutableList<String>
-            var customAttributes: Map<String, Any> = emptyMap()
+            val productGroups: MutableList<String> = mutableListOf()
+            val customAttributes: MutableMap<String, String> = mutableMapOf()
 
             if (context.hasKey("productGroups")) {
                 val groups = context.getArray("productGroups")
-                for (group in groups.) {
-                    val groupString = group as? String
-                    if (groupString != null) {
-                        productGroups.add(groupString)
-                    }
+                if (groups != null) {
+                    for (i in 0 until groups.size()) {
+                        val groupString = groups.getString(i)
+                        if (groupString != null) {
+                            productGroups.add(groupString)
+                        }
 
+                    }
                 }
                 Log.d(LOG_TAG, "productGroups $productGroups")
             }
@@ -58,7 +59,11 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             if (context.hasKey("customAttributes")) {
                 val attr = context.getMap("customAttributes")
                 if (attr != null) {
-                    customAttributes = attr.toHashMap().toMap()
+                    val keyIterator = attr.keySetIterator()
+                    while (keyIterator.hasNextKey()) {
+                        val key = keyIterator.nextKey()
+                        customAttributes[key] = attr.getString(key) ?: ""
+                    }
                     Log.d(LOG_TAG, "customAttributes $customAttributes")
                 }
             }
