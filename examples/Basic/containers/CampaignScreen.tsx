@@ -12,11 +12,16 @@ import {NamiCampaignManager, NamiCampaign} from 'react-native-nami-sdk';
 import {ViewerTabProps} from '../App';
 
 import theme from '../theme';
+import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
 
 interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
 
 const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const [campaignsAction, setAction] = useState<NamiPaywallAction | string>(
+    'INITIAL',
+  );
 
   const getAllCampaigns = async () => {
     const allCampaigns = await NamiCampaignManager.allCampaigns();
@@ -31,6 +36,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     if (isCampaignAvailable) {
       NamiCampaignManager.launch(
         label,
+        null,
         (successAction, error) => {
           console.log('successAction', successAction);
           console.log('error', error);
@@ -45,6 +51,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           paywallId,
         ) => {
           console.log('action', action);
+          setAction(action);
           console.log('skuId', skuId);
           console.log('purchaseError', purchaseError);
           console.log('purchases', purchases);
@@ -66,12 +73,17 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       NamiCampaignManager.registerAvailableCampaignsHandler(
         (availableCampaigns) => {
           console.log('availableCampaigns', availableCampaigns);
+          const isEqualList =
+            JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
+          setRefresh(isEqualList ? false : true);
           setCampaigns(availableCampaigns);
         },
       );
     return () => {
       subscriptionRemover();
     };
+    //Note: not needed in depts
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLayoutEffect(() => {
@@ -81,7 +93,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.headerButton}
             onPress={onRefreshPress}>
-            <Text style={styles.headerButtonText}>Refresh</Text>
+            <Text testID="refresh_campaigns" style={styles.headerButtonText}>
+              Refresh
+            </Text>
           </TouchableOpacity>
         );
       },
@@ -96,14 +110,21 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       <TouchableOpacity
         onPress={() => onItemPress(item.value ?? undefined)}
         style={styles.item}>
-        <Text style={styles.itemText}>{item.value}</Text>
+        <View
+          testID={`list_item_${item.value}`}
+          accessibilityValue={{text: JSON.stringify(item)}}>
+          <Text style={styles.itemText}>{item.value}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
 
   const renderDefault = () => {
     return (
-      <TouchableOpacity onPress={() => onItemPress()} style={styles.itemDef}>
+      <TouchableOpacity
+        testID="default_campaigns"
+        onPress={() => onItemPress()}
+        style={styles.itemDef}>
         <Text style={styles.itemText}>default</Text>
       </TouchableOpacity>
     );
@@ -111,14 +132,23 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Campaigns</Text>
-      <View style={styles.section}>
+      <Text testID="campaigns_title" style={styles.title}>
+        Campaigns
+      </Text>
+      <View testID="unlabeled_campaigns" style={styles.section}>
         <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
         {renderDefault()}
       </View>
+      <Text testID="campaigns_modal_action" style={styles.statusText}>
+        Modal Status: {campaignsAction}
+      </Text>
+      <Text testID="refresh_status_text" style={styles.statusText}>
+        Refreshed: {refresh.toString()}
+      </Text>
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
         <FlatList
+          testID="campaigns_list"
           data={campaigns}
           renderItem={renderCampaigns}
           style={styles.list}
@@ -173,6 +203,12 @@ const styles = StyleSheet.create({
   },
   list: {
     borderRadius: 8,
+  },
+  statusText: {
+    color: theme.secondaryFont,
+    marginLeft: 15,
+    marginBottom: 5,
+    marginTop: 5,
   },
 });
 

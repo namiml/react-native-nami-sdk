@@ -9,6 +9,7 @@ import {NamiPaywallManager} from 'react-native-nami-sdk';
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
+import CustomerManagerScreen from './containers/CustomerManagerScreen';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -21,6 +22,7 @@ type ViewerTabNavigatorParams = {
   Campaign: undefined;
   Profile: undefined;
   Entitlements: undefined;
+  CustomerManager: undefined;
 };
 
 export interface ViewerTabProps<
@@ -83,9 +85,26 @@ const App = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
-        <Tab.Screen name="Campaign" component={CampaignScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Entitlements" component={EntitlementsScreen} />
+        <Tab.Screen
+          options={{tabBarTestID: 'campaign_screen'}}
+          name="Campaign"
+          component={CampaignScreen}
+        />
+        <Tab.Screen
+          options={{tabBarTestID: 'profile_screen'}}
+          name="Profile"
+          component={ProfileScreen}
+        />
+        <Tab.Screen
+          options={{tabBarTestID: 'entitlements_screen'}}
+          name="Entitlements"
+          component={EntitlementsScreen}
+        />
+        <Tab.Screen
+          options={{tabBarTestID: 'customer_manager_screen'}}
+          name="CustomerManager"
+          component={CustomerManagerScreen}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
