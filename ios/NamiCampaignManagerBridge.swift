@@ -55,7 +55,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
 
         NamiCampaignManager.launch(label: label, context: paywallLaunchContext, launchHandler: { success, error in
             callback([success, error?._code as Any])
-        }, paywallActionHandler: { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases in
+        }, paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, paywallLaunchContext, action, sku, purchaseError, purchases, deeplinkUrl in
             let actionString: String
             switch action {
             case .show_paywall:
@@ -82,6 +82,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
                 actionString = "PURCHASE_CANCELLED"
             case .purchase_unknown:
                 actionString = "PURCHASE_UNKNOWN"
+            case .deeplink:
+                actionString = "DEEPLINK"
             @unknown default:
                 actionString = "PURCHASE_UNKNOWN"
             }
