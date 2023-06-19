@@ -1,4 +1,10 @@
-import React, {FC, useEffect, useState, useLayoutEffect} from 'react';
+import React, {
+  FC,
+  useEffect,
+  useState,
+  useLayoutEffect,
+  useCallback,
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,29 +14,39 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {NamiCampaignManager, NamiCampaign} from 'react-native-nami-sdk';
-
 import {ViewerTabProps} from '../App';
-
 import theme from '../theme';
 
 interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
 
+const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
+  <TouchableOpacity style={styles.headerButton} onPress={onRefreshPress}>
+    <Text testID="refresh_campaigns" style={styles.headerButtonText}>
+      Refresh
+    </Text>
+  </TouchableOpacity>
+);
+
 const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
 
-  const getAllCampaigns = async () => {
-    const allCampaigns = await NamiCampaignManager.allCampaigns();
-    console.log('allCampaigns', allCampaigns);
-    setCampaigns(allCampaigns);
-  };
+  const getAllCampaigns = useCallback(async () => {
+    const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
+    const validCampaigns = fetchedCampaigns.filter((campaign) =>
+      Boolean(campaign.value),
+    );
+    setCampaigns(validCampaigns);
+    console.log('validCampaigns', validCampaigns);
+  }, []);
 
-  const onItemPress = async (label?: string) => {
+  const onItemPress = useCallback(async (label?: string) => {
     const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(
       label,
     );
     if (isCampaignAvailable) {
       NamiCampaignManager.launch(
         label,
+        null,
         (successAction, error) => {
           console.log('successAction', successAction);
           console.log('error', error);
@@ -54,11 +70,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         },
       );
     }
-  };
+  }, []);
 
-  const onRefreshPress = () => {
+  const onRefreshPress = useCallback(() => {
     NamiCampaignManager.refresh();
-  };
+  }, []);
 
   useEffect(() => {
     getAllCampaigns();
@@ -72,34 +88,35 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     return () => {
       subscriptionRemover();
     };
+    //Note: not needed in depts
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => {
-        return (
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={onRefreshPress}>
-            <Text style={styles.headerButtonText}>Refresh</Text>
-          </TouchableOpacity>
-        );
-      },
+      headerRight: () => <HeaderRight onRefreshPress={onRefreshPress} />,
     });
-  }, [navigation]);
+  }, [navigation, onRefreshPress]);
 
-  const renderCampaigns = ({item}: {item: NamiCampaign}) => {
-    if (!item.value) {
-      return null;
-    }
+  const renderCampaigns = ({
+    item,
+    index,
+  }: {
+    item: NamiCampaign;
+    index: number;
+  }) => {
+    const lasItem = index === campaigns.length - 1;
+    const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
       <TouchableOpacity
         onPress={() => onItemPress(item.value ?? undefined)}
-        style={styles.item}>
+        style={itemStyle}>
         <Text style={styles.itemText}>{item.value}</Text>
       </TouchableOpacity>
     );
   };
+
+  const SeparatorComponent = () => <View style={styles.separator} />;
 
   const renderDefault = () => {
     return (
@@ -110,17 +127,20 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Campaigns</Text>
-      <View style={styles.section}>
-        <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
-        {renderDefault()}
+    <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
+      <View>
+        <Text style={styles.title}>Campaigns</Text>
+        <View style={styles.marginTop20}>
+          <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
+          {renderDefault()}
+        </View>
       </View>
-      <View style={styles.section}>
+      <View style={styles.bottomContent}>
         <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
         <FlatList
           data={campaigns}
           renderItem={renderCampaigns}
+          ItemSeparatorComponent={SeparatorComponent}
           style={styles.list}
         />
       </View>
@@ -129,24 +149,41 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingHorizontal: 15,
+  },
+  bottomContent: {
+    flex: 1,
+    paddingTop: 20,
+    paddingBottom: 40,
+  },
+  separator: {
+    height: 1,
+    width: '100%',
+    backgroundColor: theme.light,
+  },
+  lastItem: {
+    borderBottomRightRadius: 8,
+    borderBottomLeftRadius: 8,
+  },
   item: {
     backgroundColor: theme.white,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingHorizontal: 25,
+    paddingVertical: 20,
     justifyContent: 'center',
   },
   itemDef: {
     backgroundColor: theme.white,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingHorizontal: 25,
+    paddingVertical: 20,
     justifyContent: 'center',
     borderRadius: 8,
   },
   itemText: {
+    fontSize: 20,
     color: theme.links,
-  },
-  container: {
-    paddingHorizontal: 15,
   },
   title: {
     fontSize: 26,
@@ -157,9 +194,6 @@ const styles = StyleSheet.create({
     color: theme.secondaryFont,
     marginLeft: 15,
     marginBottom: 5,
-  },
-  section: {
-    marginTop: 20,
   },
   headerButton: {
     marginRight: 15,
@@ -173,6 +207,9 @@ const styles = StyleSheet.create({
   },
   list: {
     borderRadius: 8,
+  },
+  marginTop20: {
+    marginTop: 20,
   },
 });
 
