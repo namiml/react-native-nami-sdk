@@ -58,6 +58,10 @@ jobs:
         run: yarn install
         working-directory: source/examples/Basic
 
+      - name: Install Detox CLI
+        run: yarn global add detox-cli
+        working-directory: source/examples/Basic
+
       - name: Install Detox
         run: yarn add --dev detox
         working-directory: source/examples/Basic
@@ -97,6 +101,10 @@ jobs:
 
       - name: Install Yarn dependencies
         run: yarn install
+        working-directory: source/examples/Basic
+
+      - name: Install Detox CLI
+        run: yarn global add detox-cli
         working-directory: source/examples/Basic
 
       - name: Install Detox
