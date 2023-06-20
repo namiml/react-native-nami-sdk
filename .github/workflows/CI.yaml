@@ -65,10 +65,10 @@ jobs:
           brew install applesimutils
 
       - name: Detox build
-        run: detox build --configuration ios.sim.release - build test
+        run: detox build --configuration ios.sim.release
 
       - name: Detox test
-        run: yarn detox test --configuration ios.sim.release --cleanup --headless --record-logs all
+        run: detox test --configuration ios.sim.release --cleanup --headless --record-logs all
 
       - name: Upload artifacts
         if: failure()
