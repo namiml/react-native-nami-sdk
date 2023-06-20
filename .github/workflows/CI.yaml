@@ -69,9 +69,11 @@ jobs:
 
       - name: Detox build
         run: detox build --configuration ios.sim.release
+        working-directory: source/examples/Basic
 
       - name: Detox test
         run: detox test --configuration ios.sim.release --cleanup --headless --record-logs all
+        working-directory: source/examples/Basic
 
       - name: Upload artifacts
         if: failure()
@@ -103,9 +105,11 @@ jobs:
 
       - name: Detox build
         run: detox build --configuration android.emu.release
+        working-directory: source/examples/Basic
 
       - name: Detox test
         run: detox test --configuration android.emu.release --cleanup --headless --record-logs all
+        working-directory: source/examples/Basic
 
       - name: Upload artifacts
         if: failure()
