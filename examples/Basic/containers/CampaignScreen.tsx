@@ -83,6 +83,13 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           campaignId,
           campaignLabel,
           paywallId,
+          campaignName,
+          campaignType,
+          campaignUrl,
+          segmentId,
+          externalSegmentId,
+          paywallName,
+          deeplinkUrl,
         ) => {
           console.log('action', action);
           setAction(action);
@@ -91,7 +98,13 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           console.log('purchases', purchases);
           console.log('campaignId', campaignId);
           console.log('campaignLabel', campaignLabel);
-          console.log('paywallId', paywallId);
+          console.log('campaignName', campaignName);
+          console.log('campaignType', campaignType);
+          console.log('campaignUrl', campaignUrl);
+          console.log('segmentId', segmentId);
+          console.log('externalSegmentId', externalSegmentId);
+          console.log('paywallName', paywallName);
+          console.log('deeplinkUrl', deeplinkUrl);
         },
       );
     }
