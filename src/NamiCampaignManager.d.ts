@@ -10,13 +10,20 @@ export const NamiCampaignManager: {
     context?: PaywallLaunchContext,
     resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: (
+      campaignId: string,
+      paywallId: string,
       action: NamiPaywallAction,
+      campaignName?: string,
+      campaignType?: string,
+      campaignLabel?: string,
+      campaignUrl?: string,
+      paywallName?: string,
+      segmentId?: string,
+      externalSegmentId?: string,
+      deeplinkUrl?: string,
       skuId?: string,
       purchaseError?: string,
       purchases?: NamiPurchase[],
-      campaignId?: string,
-      campaignLabel?: string,
-      paywallId?: string,
     ) => void,
   ) => void;
   refresh: () => void;

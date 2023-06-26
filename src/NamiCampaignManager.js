@@ -1,6 +1,6 @@
-import { NativeModules, NativeEventEmitter } from "react-native";
+import {NativeModules, NativeEventEmitter} from 'react-native';
 
-export const { RNNamiCampaignManager } = NativeModules;
+export const {RNNamiCampaignManager} = NativeModules;
 
 export const NamiCampaignManager = {
   launchSubscription: undefined,
@@ -9,20 +9,28 @@ export const NamiCampaignManager = {
   launch(label, context, resultCallback, actionCallback) {
     this.launchSubscription?.remove();
     this.launchSubscription = this.emitter.addListener(
-      "ResultCampaign",
-      (body) => {
-        var action = body.action;
+      'ResultCampaign',
+      body => {
+        body.action = body.action.startsWith('NAMI_')
+          ? body.action.substring(5, body.action.length)
+          : body.action;
 
-        if (action.startsWith("NAMI_")) {
-          action = action.substring(5, action.length);
-        }
-
-        var skuId = body.skuId;
-        var purchaseError = body.purchaseError;
-        var purchases = body.purchases;
-        var campaignId = body.campaignId;
-        var campaignLabel = body.campaignLabel;
-        var paywallId = body.paywallId;
+        const {
+          action,
+          skuId,
+          purchaseError,
+          purchases,
+          campaignId,
+          campaignLabel,
+          paywallId,
+          campaignName,
+          campaignType,
+          campaignUrl,
+          segmentId,
+          externalSegmentId,
+          paywallName,
+          deeplinkUrl,
+        } = body;
         actionCallback(
           action,
           skuId,
@@ -30,24 +38,32 @@ export const NamiCampaignManager = {
           purchases,
           campaignId,
           campaignLabel,
-          paywallId
+          paywallId,
+          campaignName,
+          campaignType,
+          campaignUrl,
+          segmentId,
+          externalSegmentId,
+          paywallName,
+          deeplinkUrl,
         );
-      }
+      },
     );
+
     RNNamiCampaignManager.launch(
       label ?? null,
       context ?? null,
       resultCallback ?? (() => {}),
-      actionCallback ?? (() => {})
+      actionCallback ?? (() => {}),
     );
   },
-  isCampaignAvailable: (label) => {
+  isCampaignAvailable: label => {
     return RNNamiCampaignManager.isCampaignAvailable(label ?? null);
   },
   registerAvailableCampaignsHandler(callback) {
     const subscription = this.emitter.addListener(
-      "AvailableCampaignsChanged",
-      callback
+      'AvailableCampaignsChanged',
+      callback,
     );
     RNNamiCampaignManager.registerAvailableCampaignsHandler();
     return subscription.remove;
