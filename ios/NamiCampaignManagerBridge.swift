@@ -8,6 +8,7 @@
 import Foundation
 import NamiApple
 import React
+import os
 
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
@@ -34,8 +35,14 @@ class RNNamiCampaignManager: RCTEventEmitter {
         return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
     }
 
-    @objc(launch:context:completion:paywallCompletion:)
-    func launch(label: String?, context: NSDictionary?, callback: @escaping RCTResponseSenderBlock, paywallCallback _: @escaping RCTResponseSenderBlock) {
+    @objc(launch:withUrl:context:completion:paywallCompletion:)
+    func launch(
+        label: String?,
+        withUrl: String?,
+        context: NSDictionary?,
+        callback: @escaping RCTResponseSenderBlock,
+        paywallCallback: @escaping RCTResponseSenderBlock
+    ) {
         var paywallLaunchContext: PaywallLaunchContext?
 
         var productGroups: [String]?
@@ -53,55 +60,146 @@ class RNNamiCampaignManager: RCTEventEmitter {
             paywallLaunchContext = PaywallLaunchContext(productGroups: productGroups, customAttributes: customAttributes)
         }
 
-        NamiCampaignManager.launch(label: label, context: paywallLaunchContext, launchHandler: { success, error in
-            callback([success, error?._code as Any])
-        }, paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, paywallLaunchContext, action, sku, purchaseError, purchases, deeplinkUrl in
-            let actionString: String
-            switch action {
-            case .show_paywall:
-                actionString = "SHOW_PAYWALL"
-            case .close_paywall:
-                actionString = "CLOSE_PAYWALL"
-            case .restore_purchases:
-                actionString = "RESTORE_PURCHASES"
-            case .sign_in:
-                actionString = "SIGN_IN"
-            case .buy_sku:
-                actionString = "BUY_SKU"
-            case .select_sku:
-                actionString = "SELECT_SKU"
-            case .purchase_selected_sku:
-                actionString = "PURCHASE_SELECTED_SKU"
-            case .purchase_success:
-                actionString = "PURCHASE_SUCCESS"
-            case .purchase_deferred:
-                actionString = "PURCHASE_DEFERRED"
-            case .purchase_failed:
-                actionString = "PURCHASE_FAILED"
-            case .purchase_cancelled:
-                actionString = "PURCHASE_CANCELLED"
-            case .purchase_unknown:
-                actionString = "PURCHASE_UNKNOWN"
-            case .deeplink:
-                actionString = "DEEPLINK"
-            @unknown default:
-                actionString = "PURCHASE_UNKNOWN"
-            }
-            let skuId = sku?.skuId
-            let errorSting = purchaseError?.localizedDescription
+        if let urlString = withUrl, let urlObject = URL(string: urlString) {
+            // Use the URL to launch the campaign.
+            
+            //TODO: Delete loggers after implement and tests
+            let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "network")
+            logger.log("url to check is = \(urlObject)")
+            NamiCampaignManager.launch(url: urlObject, context: paywallLaunchContext, launchHandler: { success, error in
+                callback([success, error?._code as Any])
+            }, paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, paywallLaunchContext, action, sku, purchaseError, purchases, deeplinkUrl in
+                let actionString: String
 
-            let dictionaries = purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
-            let payload: [String: Any?] = [
-                "campaignId": campaignId,
-                "campaignLabel": campaignLabel,
-                "paywallId": paywallId,
-                "action": actionString,
-                "skuId": skuId,
-                "purchaseError": errorSting,
-                "purchases": dictionaries,
-            ]
-            RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
-        })
+
+                switch action {
+                case .show_paywall:
+                    actionString = "SHOW_PAYWALL"
+                case .close_paywall:
+                    actionString = "CLOSE_PAYWALL"
+                case .restore_purchases:
+                    actionString = "RESTORE_PURCHASES"
+                case .sign_in:
+                    actionString = "SIGN_IN"
+                case .buy_sku:
+                    actionString = "BUY_SKU"
+                case .select_sku:
+                    actionString = "SELECT_SKU"
+                case .purchase_selected_sku:
+                    actionString = "PURCHASE_SELECTED_SKU"
+                case .purchase_success:
+                    actionString = "PURCHASE_SUCCESS"
+                case .purchase_deferred:
+                    actionString = "PURCHASE_DEFERRED"
+                case .purchase_failed:
+                    actionString = "PURCHASE_FAILED"
+                case .purchase_cancelled:
+                    actionString = "PURCHASE_CANCELLED"
+                case .purchase_unknown:
+                    actionString = "PURCHASE_UNKNOWN"
+                case .deeplink:
+                    actionString = "DEEPLINK"
+                @unknown default:
+                    actionString = "PURCHASE_UNKNOWN"
+                }
+                let skuId = sku?.skuId
+                let errorSting = purchaseError?.localizedDescription
+
+                // TODO: Check dictionary exception due updated values
+                // TODO: DOES WE HAVE SUCH THING FOR ANDROID?
+                // paywallLaunchContext
+
+                let dictionaries = purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
+
+//                let payload: [String: Any?] = [
+//                    "campaignId": campaignId,
+//                    "campaignLabel": campaignLabel,
+//                    "campaignName": campaignName,
+//                    "campaignType": campaignType,
+//                    "campaignUrl": campaignUrl,
+//                    "paywallName": paywallName,
+//                    "segmentId": segmentId,
+//                    "externalSegmentId": externalSegmentId,
+//                    "deeplinkUrl": deeplinkUrl,
+//                    "segmentId": segmentId,
+//                    "paywallId": paywallId,
+//                    "action": actionString,
+//                    "skuId": skuId,
+//                    "purchaseError": errorSting,
+//                    "purchases": dictionaries,
+//                ]
+
+
+                let payload: [String: Any?] = [
+                             "campaignId": campaignId,
+                             "campaignLabel": campaignLabel,
+                             "paywallId": paywallId,
+                             "action": actionString,
+                             "skuId": skuId,
+                             "purchaseError": errorSting,
+                             "purchases": dictionaries,
+                         ]
+
+                RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
+            })
+        } else if let label = label {
+            // Use the label to launch the campaign.
+            NamiCampaignManager.launch(label: label, context: paywallLaunchContext, launchHandler: { success, error in
+                callback([success, error?._code as Any])
+            }, paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, paywallLaunchContext, action, sku, purchaseError, purchases, deeplinkUrl in
+                let actionString: String
+                switch action {
+                case .show_paywall:
+                    actionString = "SHOW_PAYWALL"
+                case .close_paywall:
+                    actionString = "CLOSE_PAYWALL"
+                case .restore_purchases:
+                    actionString = "RESTORE_PURCHASES"
+                case .sign_in:
+                    actionString = "SIGN_IN"
+                case .buy_sku:
+                    actionString = "BUY_SKU"
+                case .select_sku:
+                    actionString = "SELECT_SKU"
+                case .purchase_selected_sku:
+                    actionString = "PURCHASE_SELECTED_SKU"
+                case .purchase_success:
+                    actionString = "PURCHASE_SUCCESS"
+                case .purchase_deferred:
+                    actionString = "PURCHASE_DEFERRED"
+                case .purchase_failed:
+                    actionString = "PURCHASE_FAILED"
+                case .purchase_cancelled:
+                    actionString = "PURCHASE_CANCELLED"
+                case .purchase_unknown:
+                    actionString = "PURCHASE_UNKNOWN"
+                case .deeplink:
+                    actionString = "DEEPLINK"
+                @unknown default:
+                    actionString = "PURCHASE_UNKNOWN"
+                }
+                let skuId = sku?.skuId
+                let errorSting = purchaseError?.localizedDescription
+
+                let dictionaries = purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
+
+                       let payload: [String: Any?] = [
+                                    "campaignId": campaignId,
+                                    "campaignLabel": campaignLabel,
+                                    "paywallId": paywallId,
+                                    "action": actionString,
+                                    "skuId": skuId,
+                                    "purchaseError": errorSting,
+                                    "purchases": dictionaries,
+                                ]
+                RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
+            })
+        } else {
+            // No URL or label provided, handle the error case.
+            // TODO: Will be updated due Android logic to call without args...
+             let error: [String: Any] = ["error": "Neither URL nor label provided."]
+             callback([NSNull(), error])
+        }
     }
 
     @objc(allCampaigns:rejecter:)

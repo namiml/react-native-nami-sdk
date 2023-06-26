@@ -2,6 +2,7 @@ package com.nami.reactlibrary
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
@@ -48,7 +49,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun launch(label: String?, context: ReadableMap?, resultCallback: Callback, actionCallback: Callback) {
+    fun launch(label: String?, withUrl: String?, context: ReadableMap?, resultCallback: Callback, actionCallback: Callback) {
         var theActivity: Activity? = null
         if (reactApplicationContext.hasCurrentActivity()) {
             theActivity = reactApplicationContext.getCurrentActivity()
@@ -124,12 +125,21 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                         actionCallback)
                 }
 
+                val uriObject: Uri? = if (withUrl != null) Uri.parse(withUrl) else null
+
                 if (label != null) {
                     NamiCampaignManager.launch(
                         theActivity,
                         label,
                         paywallActionCallback = paywallActionCallback,
                         paywallLaunchContext,
+                    ) { result -> handleResult(result, resultCallback) }
+                } else if (withUrl != null) {
+                    NamiCampaignManager.launch(
+                        theActivity,
+                        paywallActionCallback = paywallActionCallback,
+                        context = paywallLaunchContext,
+                        uri = uriObject,
                     ) { result -> handleResult(result, resultCallback) }
                 } else {
                     NamiCampaignManager.launch(

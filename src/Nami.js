@@ -1,6 +1,6 @@
-import { NativeModules } from "react-native";
+import {NativeModules} from 'react-native';
 
-export const { NamiBridge } = NativeModules;
+export const {NamiBridge} = NativeModules;
 
 export const Nami = {
   ...NamiBridge,

@@ -6,7 +6,7 @@ export const NamiCampaignManager = {
   launchSubscription: undefined,
   emitter: new NativeEventEmitter(RNNamiCampaignManager),
   ...RNNamiCampaignManager,
-  launch(label, context, resultCallback, actionCallback) {
+  launch(label, withUrl, context, resultCallback, actionCallback) {
     this.launchSubscription?.remove();
     this.launchSubscription = this.emitter.addListener(
       'ResultCampaign',
@@ -51,7 +51,8 @@ export const NamiCampaignManager = {
     );
 
     RNNamiCampaignManager.launch(
-      label ?? null,
+      label,
+      withUrl ?? null,
       context ?? null,
       resultCallback ?? (() => {}),
       actionCallback ?? (() => {}),

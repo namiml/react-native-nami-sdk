@@ -9,7 +9,7 @@
 
 @interface RCT_EXTERN_MODULE(RNNamiCampaignManager, NSObject)
 
-RCT_EXTERN_METHOD(launch:(nullable NSString *)label context:(nullable NSDictionary *)context completion:(RCTResponseSenderBlock)callback paywallCompletion:(RCTResponseSenderBlock)cpaywallCallback)
+RCT_EXTERN_METHOD(launch:(nullable NSString *)label withUrl:(nullable NSString *)withUrl context:(nullable NSDictionary *)context completion:(RCTResponseSenderBlock)callback paywallCompletion:(RCTResponseSenderBlock)paywallCallback);
 
 RCT_EXTERN_METHOD(allCampaigns:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
