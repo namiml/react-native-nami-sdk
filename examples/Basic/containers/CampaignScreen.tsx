@@ -68,9 +68,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       label,
     );
     if (isCampaignAvailable) {
-      const paywallLaunchContext = {
-        productGroups: ['group1'],
-      };
+      // const paywallLaunchContext = {
+      //   productGroups: ['group1'],
+      // };
 
       NamiCampaignManager.launch(
         label,
