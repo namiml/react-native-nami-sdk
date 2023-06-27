@@ -70,6 +70,12 @@ class RNNamiCustomerManager: RCTEventEmitter {
     func setAnonymousMode(anonymousMode: Bool) {
         NamiCustomerManager.setAnonymousMode(anonymousMode)
     }
+    
+    @objc(inAnonymousMode:rejecter:)
+    func inAnonymousMode(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
+        let inAnonymousMode: Bool = NamiCustomerManager.inAnonymousMode()
+        resolve(inAnonymousMode)
+    }
 
     @objc(journeyState:rejecter:)
     func journeyState(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
