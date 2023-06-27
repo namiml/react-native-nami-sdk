@@ -55,7 +55,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
 
         NamiCampaignManager.launch(label: label, context: paywallLaunchContext, launchHandler: { success, error in
             callback([success, error?._code as Any])
-        }, paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, paywallLaunchContext, action, sku, purchaseError, purchases, deeplinkUrl in
+        }, paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl in
             let actionString: String
             switch action {
             case .show_paywall:
@@ -93,12 +93,19 @@ class RNNamiCampaignManager: RCTEventEmitter {
             let dictionaries = purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
             let payload: [String: Any?] = [
                 "campaignId": campaignId,
+                "campaignName": campaignName,
+                "campaignType": campaignType,
                 "campaignLabel": campaignLabel,
+                "campaignUrl": campaignUrl,
                 "paywallId": paywallId,
+                "paywallName": paywallName,
+                "segmentId": segmentId,
+                "externalSegmentId": externalSegmentId,
                 "action": actionString,
                 "skuId": skuId,
                 "purchaseError": errorSting,
                 "purchases": dictionaries,
+                "deeplinkUrl": deeplinkUrl,
             ]
             RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
         })
