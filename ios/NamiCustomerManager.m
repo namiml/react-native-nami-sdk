@@ -21,6 +21,10 @@ RCT_EXTERN_METHOD(setCustomerDataPlatformId:(NSString *)platformId)
 
 RCT_EXTERN_METHOD(clearCustomerDataPlatformId)
 
+RCT_EXTERN_METHOD(setAnonymousMode:(BOOL *)anonymousMode)
+
+RCT_EXTERN_METHOD(inAnonymousMode:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+
 RCT_EXTERN_METHOD(journeyState:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(isLoggedIn:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
