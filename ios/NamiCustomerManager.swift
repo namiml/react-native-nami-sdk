@@ -66,6 +66,11 @@ class RNNamiCustomerManager: RCTEventEmitter {
         NamiCustomerManager.clearCustomerDataPlatformId()
     }
 
+    @objc(setAnonymousMode:)
+    func setAnonymousMode(anonymousMode: Bool) {
+        NamiCustomerManager.setAnonymousMode(anonymousMode)
+    }
+
     @objc(journeyState:rejecter:)
     func journeyState(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         if let journeyState = NamiCustomerManager.journeyState() {
@@ -137,6 +142,14 @@ class RNNamiCustomerManager: RCTEventEmitter {
                 actionString = "vendor_id_set"
             case .vendor_id_cleared:
                 actionString = "vendor_id_cleared"
+            case .nami_device_id_set:
+                actionString = "nami_device_id_set"
+            case .nami_device_id_cleared:
+                actionString = "nami_device_id_cleared"
+            case .anonymous_mode_on:
+                actionString = "anonymous_mode_on"
+            case .anonymous_mode_off:
+                actionString = "anonymous_mode_off"
             @unknown default:
                 actionString = "unknown"
             }
