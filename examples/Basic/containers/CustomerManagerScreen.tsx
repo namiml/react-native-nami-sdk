@@ -45,7 +45,7 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   const handleAnonymousMode = async () => {
     const anonymousMode = await NamiCustomerManager.inAnonymousMode();
     setInAnonymousMode(anonymousMode);
-    console.log('anonymous mode currently: ', inAnonymousMode)
+    console.log('anonymous mode currently: ', inAnonymousMode);
   };
 
   const toggleAnonymousMode = () => {
@@ -54,9 +54,8 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   };
 
   useEffect(() => {
-    handleAnonymousMode()
-    return () => {
-    };
+    handleAnonymousMode();
+    return () => {};
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inAnonymousMode]);
@@ -99,12 +98,15 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
           <Text>Clear Attribute</Text>
         </TouchableOpacity>
 
-
         <TouchableOpacity
           testID="anonymous_mode_btn"
           style={styles.anonBtn}
           onPress={toggleAnonymousMode}>
-          <Text>{inAnonymousMode ? 'Turn Anonymous Mode off' : 'Turn Anonymous Mode on'}</Text>
+          <Text>
+            {inAnonymousMode
+              ? 'Turn Anonymous Mode off'
+              : 'Turn Anonymous Mode on'}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
