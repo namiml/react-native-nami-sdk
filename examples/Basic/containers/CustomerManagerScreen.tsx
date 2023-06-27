@@ -21,6 +21,7 @@ interface CustomerManagerScreenProps
 const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   const [value, onChangeValue] = useState<string>('');
   const [attribute, setAttribute] = useState<string>('');
+  const [inAnonymousMode, setInAnonymousMode] = useState<boolean>(false);
 
   const handleSetAttribute = () => {
     NamiCustomerManager.setCustomerAttribute(TEST_KEY, value);
@@ -39,6 +40,13 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
     console.log('customer attribute', attributeNami);
     setAttribute(attributeNami ? attributeNami : '');
     onChangeValue('');
+  };
+
+  const handleAnonymousMode = () => {
+    const anonymousMode = await NamiCustomerManager.inAnonymousMode();
+    setInAnonymousMode(anonymousMode);
+    console.log('anonymous mode currently: ', inAnonymousMode)
+    NamiCustomerManager.setAnonymousMode(!inAnonymousMode);
   };
 
   return (
@@ -77,6 +85,14 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
           style={styles.clearBtn}
           onPress={handleClearAttribute}>
           <Text>Clear Attribute</Text>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity
+          testID="anonymous_mode_btn"
+          style={styles.anonBtn}
+          onPress={handleAnonymousMode}>
+          <Text>Toggle Anonymous Mode</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -147,6 +163,15 @@ const styles = StyleSheet.create({
     color: theme.primary,
   },
   clearBtn: {
+    alignItems: 'center',
+    backgroundColor: theme.light,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginLeft: 15,
+    marginVertical: 30,
+  },
+  anonBtn: {
     alignItems: 'center',
     backgroundColor: theme.light,
     paddingVertical: 10,
