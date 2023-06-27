@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -42,12 +42,24 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
     onChangeValue('');
   };
 
-  const handleAnonymousMode = () => {
+  const handleAnonymousMode = async () => {
     const anonymousMode = await NamiCustomerManager.inAnonymousMode();
     setInAnonymousMode(anonymousMode);
     console.log('anonymous mode currently: ', inAnonymousMode)
-    NamiCustomerManager.setAnonymousMode(!inAnonymousMode);
   };
+
+  const toggleAnonymousMode = () => {
+    NamiCustomerManager.setAnonymousMode(!inAnonymousMode);
+    handleAnonymousMode();
+  };
+
+  useEffect(() => {
+    handleAnonymousMode()
+    return () => {
+    };
+    //Note: not needed in depts
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inAnonymousMode]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,8 +103,8 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
         <TouchableOpacity
           testID="anonymous_mode_btn"
           style={styles.anonBtn}
-          onPress={handleAnonymousMode}>
-          <Text>Toggle Anonymous Mode</Text>
+          onPress={toggleAnonymousMode}>
+          <Text>{inAnonymousMode ? 'Turn Anonymous Mode off' : 'Turn Anonymous Mode on'}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
