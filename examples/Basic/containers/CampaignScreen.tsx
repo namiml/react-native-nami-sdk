@@ -106,18 +106,21 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     );
   };
 
-  const isCampaignAvailable = async (value?: string | null | undefined) =>
-    await NamiCampaignManager.isCampaignAvailable(value ?? '');
+  const isCampaignAvailable = async (value?: string | null | undefined) => {
+    try {
+      return await NamiCampaignManager.isCampaignAvailable(value ?? '');
+    } catch (error) {
+      console.error(
+        `Failed to check campaign availability in isCampaignAvailable: ${error}`,
+      );
+    }
+  };
 
   const onItemPressPrimary = useCallback(async (item: NamiCampaign) => {
-    try {
-      if (await isCampaignAvailable(item.value)) {
-        item.type === 'label'
-          ? triggerLaunch(item.value, null)
-          : triggerLaunch(null, item.value);
-      }
-    } catch (error) {
-      console.error(`Failed to check campaign availability: ${error}`);
+    if (await isCampaignAvailable(item.value)) {
+      item.type === 'label'
+        ? triggerLaunch(item.value, null)
+        : triggerLaunch(null, item.value);
     }
   }, []);
 

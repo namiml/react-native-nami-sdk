@@ -36,8 +36,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
     }
     
     func isURL(string: String) -> Bool {
-        if let url = URL(string: string) {
-            return UIApplication.shared.canOpenURL(url)
+        if let url = URL(string: string), url.scheme != nil, url.host != nil {
+            return true
         }
         return false
     }
