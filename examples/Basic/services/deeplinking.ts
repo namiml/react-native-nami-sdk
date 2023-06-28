@@ -2,11 +2,15 @@ import {NamiCampaignManager} from 'react-native-nami-sdk';
 
 export const prefixes = ['testnami://'];
 
-export function handleDeepLink(event) {
+export async function handleDeepLink(event) {
   const {url} = event;
   console.log('Received deep link:', url);
 
-  if (url) {
+  const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(
+    url ?? '',
+  );
+  if (isCampaignAvailable && url) {
+    console.log('Calling verified deeplink action using launch:', url);
     NamiCampaignManager.launch(
       undefined,
       url,

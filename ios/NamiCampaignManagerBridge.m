@@ -13,7 +13,7 @@ RCT_EXTERN_METHOD(launch:(nullable NSString *)label withUrl:(nullable NSString *
 
 RCT_EXTERN_METHOD(allCampaigns:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(isCampaignAvailable:(nullable NSString *)label resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(isCampaignAvailable:(nullable NSString *)campaignSource resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(refresh)
 
