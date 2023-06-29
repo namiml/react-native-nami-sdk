@@ -56,6 +56,17 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun setAnonymousMode(anonymousMode: Boolean) {
+        NamiCustomerManager.setAnonymousMode(anonymousMode)
+    }
+
+    @ReactMethod
+    fun inAnonymousMode(promise: Promise) {
+        val anonymousMode = NamiCustomerManager.inAnonymousMode()
+        promise.resolve(anonymousMode)
+    }
+
+    @ReactMethod
     fun journeyState(promise: Promise) {
         val journeyState = NamiCustomerManager.journeyState()
         if (journeyState == null) {

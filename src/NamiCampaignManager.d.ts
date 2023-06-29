@@ -68,5 +68,7 @@ export type FailureResultObject = {
 
 export type PaywallLaunchContext = {
   productGroups?: string[];
-  customAttributes: Map<string, string>;
+  customAttributes?: {
+    [key: string]: string;
+  };
 };

@@ -42,6 +42,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       Boolean(campaign.value),
     );
     setCampaigns(validCampaigns);
+    console.log('validCampaigns', validCampaigns);
     return validCampaigns;
   }, []);
 
@@ -65,6 +66,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   }, []);
 
   const triggerLaunch = (label?: any, url?: any) => {
+    // const paywallLaunchContext = {
+    //   productGroups: ['group1'],
+    // };
     return NamiCampaignManager.launch(
       label,
       url,

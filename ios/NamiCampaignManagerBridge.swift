@@ -34,14 +34,14 @@ class RNNamiCampaignManager: RCTEventEmitter {
         ]
         return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
     }
-    
+
     func isURL(string: String) -> Bool {
         if let url = URL(string: string), url.scheme != nil, url.host != nil {
             return true
         }
         return false
     }
-    
+
     func handlePaywallAction(
         campaignId: String?,
         campaignName: String?,
@@ -91,41 +91,29 @@ class RNNamiCampaignManager: RCTEventEmitter {
         }
         let skuId = sku?.skuId
         let errorSting = purchaseError?.localizedDescription
-        
-        // TODO: Check dictionary exception due updated values
-        //                let payload: [String: Any?] = [
-        //                    "campaignId": campaignId,
-        //                    "campaignLabel": campaignLabel,
-        //                    "campaignName": campaignName,
-        //                    "campaignType": campaignType,
-        //                    "campaignUrl": campaignUrl,
-        //                    "paywallName": paywallName,
-        //                    "segmentId": segmentId,
-        //                    "externalSegmentId": externalSegmentId,
-        //                    "deeplinkUrl": deeplinkUrl,
-        //                    "segmentId": segmentId,
-        //                    "paywallId": paywallId,
-        //                    "action": actionString,
-        //                    "skuId": skuId,
-        //                    "purchaseError": errorSting,
-        //                    "purchases": dictionaries,
-        //                ]
 
         let dictionaries = purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
 
-        let payload: [String: Any?] = [
-            "campaignId": campaignId,
-            "campaignLabel": campaignLabel,
-            "paywallId": paywallId,
-            "action": actionString,
-            "skuId": skuId,
-            "purchaseError": errorSting,
-            "purchases": dictionaries,
-        ]
-        
+            let payload: [String: Any?] = [
+                "campaignId": campaignId,
+                "campaignName": campaignName,
+                "campaignType": campaignType,
+                "campaignLabel": campaignLabel,
+                "campaignUrl": campaignUrl,
+                "paywallId": paywallId,
+                "paywallName": paywallName,
+                "segmentId": segmentId,
+                "externalSegmentId": externalSegmentId,
+                "action": actionString,
+                "skuId": skuId,
+                "purchaseError": errorSting,
+                "purchases": dictionaries,
+                "deeplinkUrl": deeplinkUrl,
+            ]
+
         RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
     }
-    
+
     func handleLaunch(callback: @escaping RCTResponseSenderBlock, success: Bool, error: Error?) {
         callback([success, error?._code as Any])
     }
@@ -155,9 +143,9 @@ class RNNamiCampaignManager: RCTEventEmitter {
         if productGroups != nil || customAttributes != nil {
             paywallLaunchContext = PaywallLaunchContext(productGroups: productGroups, customAttributes: customAttributes)
         }
-        
+
         var launchMethod: (() -> Void)?
-        
+
         if let urlString = withUrl, let urlObject = URL(string: urlString) {
             launchMethod = {
                 NamiCampaignManager.launch(url: urlObject, context: paywallLaunchContext,
@@ -202,7 +190,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
                 )
             }
         }
-        
+
         launchMethod?()
     }
 
