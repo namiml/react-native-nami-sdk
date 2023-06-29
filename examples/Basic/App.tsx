@@ -36,7 +36,6 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
   useEffect(() => {
-    //TODO: Will be expanded for TVs also
     const linkingEvent = Linking.addEventListener('url', handleDeepLink);
     Linking.getInitialURL().then((url) => {
       if (url) {

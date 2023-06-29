@@ -9,6 +9,7 @@ import {NamiCampaign, NamiCampaignManager} from 'react-native-nami-sdk';
 import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
 import {
   FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -41,7 +42,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       Boolean(campaign.value),
     );
     setCampaigns(validCampaigns);
-    console.log('validCampaigns', validCampaigns);
+    return validCampaigns;
   }, []);
 
   useEffect(() => {
@@ -169,6 +170,15 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     );
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getAllCampaigns().then(() => {
+      setRefreshing(false);
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
       <View>
@@ -195,6 +205,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           style={styles.list}
           renderItem={renderItem}
           ItemSeparatorComponent={SeparatorComponent}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     </SafeAreaView>
