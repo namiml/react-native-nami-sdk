@@ -9,6 +9,7 @@ import {NamiCampaign, NamiCampaignManager} from 'react-native-nami-sdk';
 import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
 import {
   FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -42,6 +43,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     );
     setCampaigns(validCampaigns);
     console.log('validCampaigns', validCampaigns);
+    return validCampaigns;
   }, []);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           console.log('availableCampaigns', availableCampaigns);
           const isEqualList =
             JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
-          setRefresh(isEqualList ? false : true);
+          setRefresh(!isEqualList);
           setCampaigns(availableCampaigns);
         },
       );
@@ -63,56 +65,71 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onItemPress = useCallback(async (label?: string) => {
-    const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(
+  const triggerLaunch = (label?: any, url?: any) => {
+    // const paywallLaunchContext = {
+    //   productGroups: ['group1'],
+    // };
+    return NamiCampaignManager.launch(
       label,
+      url,
+      undefined,
+      (successAction, error) => {
+        console.log('successAction', successAction);
+        console.log('error', error);
+      },
+      (
+        action,
+        skuId,
+        purchaseError,
+        purchases,
+        campaignId,
+        campaignLabel,
+        paywallId,
+        campaignName,
+        campaignType,
+        campaignUrl,
+        segmentId,
+        externalSegmentId,
+        paywallName,
+        deeplinkUrl,
+      ) => {
+        console.log('action', action);
+        setAction(action);
+        console.log('skuId', skuId);
+        console.log('purchaseError', purchaseError);
+        console.log('purchases', purchases);
+        console.log('campaignId', campaignId);
+        console.log('campaignLabel', campaignLabel);
+        console.log('campaignName', campaignName);
+        console.log('campaignType', campaignType);
+        console.log('campaignUrl', campaignUrl);
+        console.log('segmentId', segmentId);
+        console.log('externalSegmentId', externalSegmentId);
+        console.log('paywallName', paywallName);
+        console.log('deeplinkUrl', deeplinkUrl);
+      },
     );
-    if (isCampaignAvailable) {
-      // const paywallLaunchContext = {
-      //   productGroups: ['group1'],
-      // };
+  };
 
-      NamiCampaignManager.launch(
-        label,
-        undefined,
-        (successAction, error) => {
-          console.log('successAction', successAction);
-          console.log('error', error);
-        },
-        (
-          action,
-          skuId,
-          purchaseError,
-          purchases,
-          campaignId,
-          campaignLabel,
-          paywallId,
-          campaignName,
-          campaignType,
-          campaignUrl,
-          segmentId,
-          externalSegmentId,
-          paywallName,
-          deeplinkUrl,
-        ) => {
-          console.log('action', action);
-          setAction(action);
-          console.log('skuId', skuId);
-          console.log('purchaseError', purchaseError);
-          console.log('purchases', purchases);
-          console.log('campaignId', campaignId);
-          console.log('campaignLabel', campaignLabel);
-          console.log('campaignName', campaignName);
-          console.log('campaignType', campaignType);
-          console.log('campaignUrl', campaignUrl);
-          console.log('segmentId', segmentId);
-          console.log('externalSegmentId', externalSegmentId);
-          console.log('paywallName', paywallName);
-          console.log('deeplinkUrl', deeplinkUrl);
-        },
+  const isCampaignAvailable = async (value?: string | null | undefined) => {
+    try {
+      return await NamiCampaignManager.isCampaignAvailable(value ?? '');
+    } catch (error) {
+      console.error(
+        `Failed to check campaign availability in isCampaignAvailable: ${error}`,
       );
     }
+  };
+
+  const onItemPressPrimary = useCallback(async (item: NamiCampaign) => {
+    if (await isCampaignAvailable(item.value)) {
+      item.type === 'label'
+        ? triggerLaunch(item.value, null)
+        : triggerLaunch(null, item.value);
+    }
   }, []);
+
+  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
 
   const onRefreshPress = useCallback(() => {
     NamiCampaignManager.refresh();
@@ -129,12 +146,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
       <TouchableOpacity
-        onPress={() => onItemPress(item.value ?? undefined)}
+        onPress={() => onItemPressPrimary(item)}
         style={itemStyle}>
         <View
+          style={styles.viewContainer}
           testID={`list_item_${item.value}`}
           accessibilityValue={{text: JSON.stringify(item)}}>
           <Text style={styles.itemText}>{item.value}</Text>
+          {item.type === 'url' && (
+            <Text style={styles.itemText}>Open as: {item.type}</Text>
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -146,11 +167,20 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     return (
       <TouchableOpacity
         testID="default_campaigns"
-        onPress={() => onItemPress()}
+        onPress={() => onItemPressDefault()}
         style={styles.itemDef}>
         <Text style={styles.itemText}>default</Text>
       </TouchableOpacity>
     );
+  };
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getAllCampaigns().then(() => {
+      setRefreshing(false);
+    });
   };
 
   return (
@@ -179,6 +209,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           style={styles.list}
           renderItem={renderItem}
           ItemSeparatorComponent={SeparatorComponent}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     </SafeAreaView>
@@ -252,6 +285,10 @@ const styles = StyleSheet.create({
   },
   marginTop20: {
     marginTop: 20,
+  },
+  viewContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
