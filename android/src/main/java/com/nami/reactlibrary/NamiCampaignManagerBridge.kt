@@ -251,12 +251,11 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun isCampaignAvailable(label: String?, promise: Promise) {
-        val isCampaignAvailable: Boolean
-        if (label != null) {
-            isCampaignAvailable = NamiCampaignManager.isCampaignAvailable(label)
-        } else {
-            isCampaignAvailable = NamiCampaignManager.isCampaignAvailable()
+    fun isCampaignAvailable(campaignSource: String?, promise: Promise) {
+        val isCampaignAvailable = when {
+            campaignSource == null -> NamiCampaignManager.isCampaignAvailable()
+            Uri.parse(campaignSource)?.scheme != null -> NamiCampaignManager.isCampaignAvailable(Uri.parse(campaignSource))
+            else -> NamiCampaignManager.isCampaignAvailable(campaignSource)
         }
         promise.resolve(isCampaignAvailable)
     }
