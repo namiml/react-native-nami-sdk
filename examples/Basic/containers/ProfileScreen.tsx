@@ -103,6 +103,12 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             setIsUserLogin(!success);
             checkId();
           }
+          if (action == 'nami_device_id_set' && success) {
+            checkId();
+          }
+          if (action == 'nami_device_id_cleared' && success) {
+            checkId();
+          }
         },
       );
     return () => {

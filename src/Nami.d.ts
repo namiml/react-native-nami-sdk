@@ -1,7 +1,7 @@
 export const Nami: {
   configure: (
     config: NamiConfiguration,
-    resultCallback?: (resultObject: { success: boolean }) => void,
+    resultCallback?: (resultObject: {success: boolean}) => void,
   ) => void;
 };
 

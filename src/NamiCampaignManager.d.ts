@@ -1,26 +1,36 @@
-import { EmitterSubscription } from 'react-native';
-import { NamiPurchase, NamiPaywallAction } from './types';
+import { EmitterSubscription } from "react-native";
+import { NamiPurchase } from "./NamiPurchaseManager";
+import { NamiPaywallAction } from "./NamiPaywallManager";
 
 export const NamiCampaignManager: {
   allCampaigns: () => Promise<Array<NamiCampaign>>;
-  isCampaignAvailable: (label?: string) => boolean;
+  isCampaignAvailable(campaignSource: string | null): Promise<boolean>;
   launch: (
     label?: string,
+    withUrl?: string,
+    context?: PaywallLaunchContext,
     resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: (
+      campaignId: string,
+      paywallId: string,
       action: NamiPaywallAction,
+      campaignName?: string,
+      campaignType?: string,
+      campaignLabel?: string,
+      campaignUrl?: string,
+      paywallName?: string,
+      segmentId?: string,
+      externalSegmentId?: string,
+      deeplinkUrl?: string,
       skuId?: string,
       purchaseError?: string,
-      purchases?: NamiPurchase[],
-      campaignId?: string,
-      campaignLabel?: string,
-      paywallId?: string,
-    ) => void,
+      purchases?: NamiPurchase[]
+    ) => void
   ) => void;
   refresh: () => void;
   registerAvailableCampaignsHandler: (
-    callback: (availableCampaigns: NamiCampaign[]) => void,
-  ) => EmitterSubscription['remove'];
+    callback: (availableCampaigns: NamiCampaign[]) => void
+  ) => EmitterSubscription["remove"];
 };
 
 export type NamiCampaign = {
@@ -28,14 +38,15 @@ export type NamiCampaign = {
   rule: string;
   segment: string;
   paywall: string;
-  type: NamiCampaignRuleType;
+  type: NamiCampaignRule;
   value?: string | null;
 };
 
-export enum NamiCampaignRuleType {
-  DEFAULT = 'default',
-  LABEL = 'label',
-  UNKNOWN = 'unknown',
+export enum NamiCampaignRule {
+  DEFAULT = "default",
+  LABEL = "label",
+  UNKNOWN = "unknown",
+  URL = "url",
 }
 
 export enum LaunchCampaignError {
@@ -53,4 +64,11 @@ export enum LaunchCampaignResultAction {
 
 export type FailureResultObject = {
   error: string;
+};
+
+export type PaywallLaunchContext = {
+  productGroups?: string[];
+  customAttributes?: {
+    [key: string]: string;
+  };
 };

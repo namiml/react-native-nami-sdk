@@ -22,6 +22,19 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>RNTVSTG</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>testnami</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -37,6 +50,11 @@
 			</dict>
 		</dict>
 	</dict>
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+      <string>testnami</string>
+  </array>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>

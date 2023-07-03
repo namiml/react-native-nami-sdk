@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
-import { Platform } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NamiCustomerManager } from 'react-native-nami-sdk';
-import { NamiPaywallManager } from 'react-native-nami-sdk';
+import React, {useEffect} from 'react';
+import {Linking, Platform} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NamiCustomerManager} from 'react-native-nami-sdk';
+import {NamiPaywallManager} from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
 import CustomerManagerScreen from './containers/CustomerManagerScreen';
+import {handleDeepLink} from './services/deeplinking';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -35,6 +36,18 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
   useEffect(() => {
+    const linkingEvent = Linking.addEventListener('url', handleDeepLink);
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        handleDeepLink({url});
+      }
+    });
+    return () => {
+      linkingEvent.remove();
+    };
+  }, []);
+
+  useEffect(() => {
     NamiPaywallManager.registerBuySkuHandler(sku => {
       console.log(
         'buy sku handler - need to start purchase flow for sku:',
@@ -43,8 +56,7 @@ const App = () => {
 
       NamiPaywallManager.dismiss(true);
 
-      //TODO: isTVOS issue
-      if (Platform.OS === 'ios' || Platform.isTV) {
+      if (Platform.OS === 'ios' || Platform.isTVOS) {
         NamiPaywallManager.buySkuCompleteApple({
           product: sku,
           transactionID: '12345',

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Platform} from 'react-native';
+import {Platform, Linking} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -8,6 +8,7 @@ import {NamiPaywallManager} from 'react-native-nami-sdk';
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
+import {handleDeepLink} from './services/deeplinking';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -31,6 +32,18 @@ export interface ViewerTabProps<
 const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
+  useEffect(() => {
+    Linking.addEventListener('url', handleDeepLink);
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        handleDeepLink({url});
+      }
+    });
+    return () => {
+      Linking.removeEventListener('url', handleDeepLink);
+    };
+  }, []);
+
   useEffect(() => {
     const buySkuSubscription = NamiPaywallManager.registerBuySkuHandler(
       (sku) => {

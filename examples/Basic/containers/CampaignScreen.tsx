@@ -1,83 +1,60 @@
-import React, { FC, useEffect, useState, useLayoutEffect } from 'react';
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
+import {NamiCampaign, NamiCampaignManager} from 'react-native-nami-sdk';
+import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
 import {
+  FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
-  FlatList,
-  View,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {
-  NamiCampaignManager,
-  NamiCampaign,
-  NamiPaywallAction,
-} from 'react-native-nami-sdk';
-
-import { ViewerTabProps } from '../App';
-
+import {ViewerTabProps} from '../App';
 import theme from '../theme';
 
 interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
 
-const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
+const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
+  <TouchableOpacity style={styles.headerButton} onPress={onRefreshPress}>
+    <Text testID="refresh_campaigns" style={styles.headerButtonText}>
+      Refresh
+    </Text>
+  </TouchableOpacity>
+);
+
+const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [campaignsAction, setAction] = useState<NamiPaywallAction | string>(
     'INITIAL',
   );
 
-  const getAllCampaigns = async () => {
-    const allCampaigns = await NamiCampaignManager.allCampaigns();
-    console.log('allCampaigns', allCampaigns);
-    setCampaigns(allCampaigns);
-  };
-
-  const onItemPress = async (label?: string) => {
-    const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(
-      label,
+  const getAllCampaigns = useCallback(async () => {
+    const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
+    const validCampaigns = fetchedCampaigns.filter((campaign) =>
+      Boolean(campaign.value),
     );
-    if (isCampaignAvailable) {
-      NamiCampaignManager.launch(
-        label,
-        (successAction, error) => {
-          console.log('successAction', successAction);
-          console.log('error', error);
-        },
-        (
-          action,
-          skuId,
-          purchaseError,
-          purchases,
-          campaignId,
-          campaignLabel,
-          paywallId,
-        ) => {
-          console.log('action', action);
-          setAction(action);
-          console.log('skuId', skuId);
-          console.log('purchaseError', purchaseError);
-          console.log('purchases', purchases);
-          console.log('campaignId', campaignId);
-          console.log('campaignLabel', campaignLabel);
-          console.log('paywallId', paywallId);
-        },
-      );
-    }
-  };
-
-  const onRefreshPress = () => {
-    NamiCampaignManager.refresh();
-  };
+    setCampaigns(validCampaigns);
+    console.log('validCampaigns', validCampaigns);
+    return validCampaigns;
+  }, []);
 
   useEffect(() => {
     getAllCampaigns();
     const subscriptionRemover =
       NamiCampaignManager.registerAvailableCampaignsHandler(
-        availableCampaigns => {
+        (availableCampaigns) => {
           console.log('availableCampaigns', availableCampaigns);
           const isEqualList =
             JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
-          setRefresh(isEqualList ? false : true);
+          setRefresh(!isEqualList);
           setCampaigns(availableCampaigns);
         },
       );
@@ -88,72 +65,153 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const triggerLaunch = (label?: any, url?: any) => {
+    // const paywallLaunchContext = {
+    //   productGroups: ['group1'],
+    // };
+    return NamiCampaignManager.launch(
+      label,
+      url,
+      undefined,
+      (successAction, error) => {
+        console.log('successAction', successAction);
+        console.log('error', error);
+      },
+      (
+        action,
+        skuId,
+        purchaseError,
+        purchases,
+        campaignId,
+        campaignLabel,
+        paywallId,
+        campaignName,
+        campaignType,
+        campaignUrl,
+        segmentId,
+        externalSegmentId,
+        paywallName,
+        deeplinkUrl,
+      ) => {
+        console.log('action', action);
+        setAction(action);
+        console.log('skuId', skuId);
+        console.log('purchaseError', purchaseError);
+        console.log('purchases', purchases);
+        console.log('campaignId', campaignId);
+        console.log('campaignLabel', campaignLabel);
+        console.log('campaignName', campaignName);
+        console.log('campaignType', campaignType);
+        console.log('campaignUrl', campaignUrl);
+        console.log('segmentId', segmentId);
+        console.log('externalSegmentId', externalSegmentId);
+        console.log('paywallName', paywallName);
+        console.log('deeplinkUrl', deeplinkUrl);
+      },
+    );
+  };
+
+  const isCampaignAvailable = async (value?: string | null | undefined) => {
+    try {
+      return await NamiCampaignManager.isCampaignAvailable(value ?? '');
+    } catch (error) {
+      console.error(
+        `Failed to check campaign availability in isCampaignAvailable: ${error}`,
+      );
+    }
+  };
+
+  const onItemPressPrimary = useCallback(async (item: NamiCampaign) => {
+    if (await isCampaignAvailable(item.value)) {
+      item.type === 'label'
+        ? triggerLaunch(item.value, null)
+        : triggerLaunch(null, item.value);
+    }
+  }, []);
+
+  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
+
+  const onRefreshPress = useCallback(() => {
+    NamiCampaignManager.refresh();
+  }, []);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => {
-        return (
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={onRefreshPress}>
-            <Text testID="refresh_campaigns" style={styles.headerButtonText}>
-              Refresh
-            </Text>
-          </TouchableOpacity>
-        );
-      },
+      headerRight: () => <HeaderRight onRefreshPress={onRefreshPress} />,
     });
-  }, [navigation]);
+  }, [navigation, onRefreshPress]);
 
-  const renderCampaigns = ({ item }: { item: NamiCampaign }) => {
-    if (!item.value) {
-      return null;
-    }
+  const renderItem = ({item, index}: {item: NamiCampaign; index: number}) => {
+    const lasItem = index === campaigns.length - 1;
+    const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
       <TouchableOpacity
-        onPress={() => onItemPress(item.value ?? undefined)}
-        style={styles.item}>
+        onPress={() => onItemPressPrimary(item)}
+        style={itemStyle}>
         <View
+          style={styles.viewContainer}
           testID={`list_item_${item.value}`}
-          accessibilityValue={{ text: JSON.stringify(item) }}>
+          accessibilityValue={{text: JSON.stringify(item)}}>
           <Text style={styles.itemText}>{item.value}</Text>
+          {item.type === 'url' && (
+            <Text style={styles.itemText}>Open as: {item.type}</Text>
+          )}
         </View>
       </TouchableOpacity>
     );
   };
 
+  const SeparatorComponent = () => <View style={styles.separator} />;
+
   const renderDefault = () => {
     return (
       <TouchableOpacity
         testID="default_campaigns"
-        onPress={() => onItemPress()}
+        onPress={() => onItemPressDefault()}
         style={styles.itemDef}>
         <Text style={styles.itemText}>default</Text>
       </TouchableOpacity>
     );
   };
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getAllCampaigns().then(() => {
+      setRefreshing(false);
+    });
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text testID="campaigns_title" style={styles.title}>
-        Campaigns
-      </Text>
-      <View testID="unlabeled_campaigns" style={styles.section}>
-        <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
-        {renderDefault()}
+    <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
+      <View>
+        <Text testID="campaigns_title" style={styles.title}>
+          Campaigns
+        </Text>
+        <View testID="unlabeled_campaigns" style={styles.marginTop20}>
+          <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
+          {renderDefault()}
+        </View>
+        <Text testID="campaigns_modal_action" style={styles.statusText}>
+          Modal Status: {campaignsAction}
+        </Text>
+        <Text testID="refresh_status_text" style={styles.statusText}>
+          Refreshed: {refresh.toString()}
+        </Text>
       </View>
-      <Text testID="campaigns_modal_action" style={styles.statusText}>
-        Modal Status: {campaignsAction}
-      </Text>
-      <Text testID="refresh_status_text" style={styles.statusText}>
-        Refreshed: {refresh.toString()}
-      </Text>
-      <View style={styles.section}>
+      <View style={styles.bottomContent}>
         <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
         <FlatList
+          showsVerticalScrollIndicator={false}
           testID="campaigns_list"
           data={campaigns}
-          renderItem={renderCampaigns}
           style={styles.list}
+          renderItem={renderItem}
+          ItemSeparatorComponent={SeparatorComponent}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     </SafeAreaView>
@@ -161,11 +219,35 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingHorizontal: 15,
+  },
+  bottomContent: {
+    flex: 1,
+    paddingTop: 20,
+    paddingBottom: 10,
+  },
+  sectionHeader: {
+    color: theme.secondaryFont,
+    marginLeft: 15,
+    marginBottom: 5,
+  },
+  separator: {
+    height: 1,
+    width: '100%',
+    backgroundColor: theme.light,
+  },
   item: {
     backgroundColor: theme.white,
     paddingHorizontal: 15,
     paddingVertical: 10,
     justifyContent: 'center',
+  },
+  lastItem: {
+    borderBottomRightRadius: 8,
+    borderBottomLeftRadius: 8,
   },
   itemDef: {
     backgroundColor: theme.white,
@@ -177,21 +259,10 @@ const styles = StyleSheet.create({
   itemText: {
     color: theme.links,
   },
-  container: {
-    paddingHorizontal: 15,
-  },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
     marginTop: 10,
-  },
-  sectionHeader: {
-    color: theme.secondaryFont,
-    marginLeft: 15,
-    marginBottom: 5,
-  },
-  section: {
-    marginTop: 20,
   },
   headerButton: {
     marginRight: 15,
@@ -211,6 +282,13 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginBottom: 5,
     marginTop: 5,
+  },
+  marginTop20: {
+    marginTop: 20,
+  },
+  viewContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
