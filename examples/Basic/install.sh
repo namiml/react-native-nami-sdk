@@ -10,6 +10,11 @@ function ios_pull() {
     cd ..
 }
 
+function osTv_pull() {
+  cd ios && rm -rf Pods Podfile.lock && RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install
+  cd ..
+}
+
 function default_cmds() {
     rm -rf node_modules && yarn install && rm -rf node_modules/react-native-nami-sdk/examples
 }
@@ -22,6 +27,10 @@ elif [ "$1" == "ios" ]; then
     echo "Running ios install"
     default_cmds
     ios_pull
+elif [ "$1" == "tvOS" ]; then
+    echo "Running tvOs install"
+    default_cmds
+    osTv_pull
 elif [ "$1" == "both" ]; then
     echo "Running both installations"
     default_cmds

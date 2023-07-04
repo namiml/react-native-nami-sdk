@@ -1,13 +1,13 @@
 /**
  * @format
  */
-import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
-import {AppRegistry} from 'react-native';
-import {Nami} from 'react-native-nami-sdk';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { AppRegistry } from 'react-native';
+import { Nami } from 'react-native-nami-sdk';
 import App from './App';
-import {name as appName} from './app.json';
-import {getConfigObject} from './config';
+import { name as appName } from './app.json';
+import { getConfigObject } from './config';
 
 const configDict = getConfigObject();
 console.log('configDict', configDict);
@@ -18,6 +18,7 @@ const Root = () => {
     Nami.configure(configDict, (resultObject) => {
       setIsConfigurationComplete(resultObject.success);
     });
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, []);
 

@@ -13,7 +13,7 @@ import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-interface EntitlementsScreenProps extends ViewerTabProps<'Entitlements'> {}
+type EntitlementsScreenProps = ViewerTabProps<'Entitlements'>
 
 const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   const [entitlements, setEntitlements] = useState<NamiEntitlement[]>([]);
@@ -57,7 +57,9 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
           <TouchableOpacity
             style={styles.headerButton}
             onPress={onRefreshPress}>
-            <Text testID="refresh_entitlements" style={styles.headerButtonText}>
+            <Text
+              testID="refresh_entitlements"
+              style={styles.headerButtonText}>
               Refresh
             </Text>
           </TouchableOpacity>
@@ -80,11 +82,15 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text testID="entitlements_title" style={styles.title}>
+      <Text
+        testID="entitlements_title"
+        style={styles.title}>
         Entitlements
       </Text>
       <View style={styles.section}>
-        <Text testID="active_entitlement" style={styles.sectionHeader}>
+        <Text
+          testID="active_entitlement"
+          style={styles.sectionHeader}>
           ACTIVE ENTITLEMENT
         </Text>
         <FlatList

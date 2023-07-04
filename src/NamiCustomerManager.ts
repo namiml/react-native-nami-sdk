@@ -40,6 +40,8 @@ export interface INamiCustomerManager {
   ) => EmitterSubscription['remove'];
   clearCustomerDataPlatformId: () => void;
   setCustomerDataPlatformId: (platformId: string) => void;
+  setAnonymousMode: (anonymousMode: boolean) => void;
+  inAnonymousMode: () => Promise<boolean>;
 }
 
 export const NamiCustomerManager: INamiCustomerManager = {

@@ -5,8 +5,7 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import {NamiCampaign, NamiCampaignManager} from 'react-native-nami-sdk';
-import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
+import { NamiCampaign, NamiCampaignManager, NamiPaywallAction } from 'react-native-nami-sdk';
 import {
   FlatList,
   RefreshControl,
@@ -16,20 +15,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ViewerTabProps} from '../App';
+import { ViewerTabProps } from '../App';
 import theme from '../theme';
 
-interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
+type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
-const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
-  <TouchableOpacity style={styles.headerButton} onPress={onRefreshPress}>
-    <Text testID="refresh_campaigns" style={styles.headerButtonText}>
-      Refresh
+const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
+  <TouchableOpacity
+    style={styles.headerButton}
+    onPress={onRefreshPress}>
+    <Text
+      testID="refresh_campaigns"
+      style={styles.headerButtonText}>
+        Refresh
     </Text>
   </TouchableOpacity>
 );
 
-const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
+const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [campaignsAction, setAction] = useState<NamiPaywallAction | string>(
@@ -49,15 +52,15 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   useEffect(() => {
     getAllCampaigns();
     const subscriptionRemover =
-      NamiCampaignManager.registerAvailableCampaignsHandler(
-        (availableCampaigns) => {
-          console.log('availableCampaigns', availableCampaigns);
-          const isEqualList =
-            JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
-          setRefresh(!isEqualList);
-          setCampaigns(availableCampaigns);
-        },
-      );
+        NamiCampaignManager.registerAvailableCampaignsHandler(
+          (availableCampaigns) => {
+            console.log('availableCampaigns', availableCampaigns);
+            const isEqualList =
+                  JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
+            setRefresh(!isEqualList);
+            setCampaigns(availableCampaigns);
+          },
+        );
     return () => {
       subscriptionRemover();
     };
@@ -141,7 +144,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     });
   }, [navigation, onRefreshPress]);
 
-  const renderItem = ({item, index}: {item: NamiCampaign; index: number}) => {
+  const renderItem = ({ item, index }: {item: NamiCampaign; index: number}) => {
     const lasItem = index === campaigns.length - 1;
     const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
@@ -151,7 +154,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         <View
           style={styles.viewContainer}
           testID={`list_item_${item.value}`}
-          accessibilityValue={{text: JSON.stringify(item)}}>
+          accessibilityValue={{ text: JSON.stringify(item) }}>
           <Text style={styles.itemText}>{item.value}</Text>
           {item.type === 'url' && (
             <Text style={styles.itemText}>Open as: {item.type}</Text>
@@ -184,20 +187,30 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}>
       <View>
-        <Text testID="campaigns_title" style={styles.title}>
-          Campaigns
+        <Text
+          testID="campaigns_title"
+          style={styles.title}>
+            Campaigns
         </Text>
-        <View testID="unlabeled_campaigns" style={styles.marginTop20}>
+        <View
+          testID="unlabeled_campaigns"
+          style={styles.marginTop20}>
           <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
           {renderDefault()}
         </View>
-        <Text testID="campaigns_modal_action" style={styles.statusText}>
-          Modal Status: {campaignsAction}
+        <Text
+          testID="campaigns_modal_action"
+          style={styles.statusText}>
+            Modal Status: {campaignsAction}
         </Text>
-        <Text testID="refresh_status_text" style={styles.statusText}>
-          Refreshed: {refresh.toString()}
+        <Text
+          testID="refresh_status_text"
+          style={styles.statusText}>
+            Refreshed: {refresh.toString()}
         </Text>
       </View>
       <View style={styles.bottomContent}>
@@ -210,7 +223,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           renderItem={renderItem}
           ItemSeparatorComponent={SeparatorComponent}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh} />
           }
         />
       </View>

@@ -1,9 +1,9 @@
-import {NamiCampaignManager} from 'react-native-nami-sdk';
+import { NamiCampaignManager } from 'react-native-nami-sdk';
 
 export const prefixes = ['testnami://'];
 
 export async function handleDeepLink(event) {
-  const {url} = event;
+  const { url } = event;
   console.log('Received deep link:', url);
 
   const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(
@@ -26,6 +26,13 @@ export async function handleDeepLink(event) {
         campaignId,
         campaignLabel,
         paywallId,
+        campaignName,
+        campaignType,
+        campaignUrl,
+        segmentId,
+        externalSegmentId,
+        paywallName,
+        deeplinkUrl,
       ) => {
         console.log('action', action);
         console.log('skuId', skuId);
@@ -33,7 +40,13 @@ export async function handleDeepLink(event) {
         console.log('purchases', purchases);
         console.log('campaignId', campaignId);
         console.log('campaignLabel', campaignLabel);
-        console.log('paywallId', paywallId);
+        console.log('campaignName', campaignName);
+        console.log('campaignType', campaignType);
+        console.log('campaignUrl', campaignUrl);
+        console.log('segmentId', segmentId);
+        console.log('externalSegmentId', externalSegmentId);
+        console.log('paywallName', paywallName);
+        console.log('deeplinkUrl', deeplinkUrl);
       },
     );
   }

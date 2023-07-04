@@ -1,35 +1,34 @@
 import { EmitterSubscription } from "react-native";
-import { NamiPurchase } from "./NamiPurchaseManager";
-import { NamiPaywallAction } from "./NamiPaywallManager";
+import { NamiPaywallAction, NamiPurchase } from "./types";
 
 export const NamiCampaignManager: {
   allCampaigns: () => Promise<Array<NamiCampaign>>;
   isCampaignAvailable(campaignSource: string | null): Promise<boolean>;
   launch: (
-    label?: string,
-    withUrl?: string,
-    context?: PaywallLaunchContext,
-    resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
-    actionCallback?: (
-      campaignId: string,
-      paywallId: string,
-      action: NamiPaywallAction,
-      campaignName?: string,
-      campaignType?: string,
-      campaignLabel?: string,
-      campaignUrl?: string,
-      paywallName?: string,
-      segmentId?: string,
-      externalSegmentId?: string,
-      deeplinkUrl?: string,
-      skuId?: string,
-      purchaseError?: string,
-      purchases?: NamiPurchase[]
-    ) => void
+      label?: string,
+      withUrl?: string,
+      context?: PaywallLaunchContext,
+      resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
+      actionCallback?: (
+          campaignId: string,
+          paywallId: string,
+          action: NamiPaywallAction,
+          campaignName?: string,
+          campaignType?: string,
+          campaignLabel?: string,
+          campaignUrl?: string,
+          paywallName?: string,
+          segmentId?: string,
+          externalSegmentId?: string,
+          deeplinkUrl?: string,
+          skuId?: string,
+          purchaseError?: string,
+          purchases?: NamiPurchase[]
+      ) => void
   ) => void;
   refresh: () => void;
   registerAvailableCampaignsHandler: (
-    callback: (availableCampaigns: NamiCampaign[]) => void
+      callback: (availableCampaigns: NamiCampaign[]) => void
   ) => EmitterSubscription["remove"];
 };
 
@@ -58,8 +57,8 @@ export enum LaunchCampaignError {
 }
 
 export enum LaunchCampaignResultAction {
-  FAILURE = 'FAILURE',
-  SUCCESS = 'SUCCESS',
+  FAILURE = "FAILURE",
+  SUCCESS = "SUCCESS",
 }
 
 export type FailureResultObject = {

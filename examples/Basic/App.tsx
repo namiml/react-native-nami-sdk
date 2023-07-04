@@ -1,16 +1,16 @@
-import React, {useEffect} from 'react';
-import {Linking, Platform} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NamiCustomerManager} from 'react-native-nami-sdk';
-import {NamiPaywallManager} from 'react-native-nami-sdk';
+import React, { useEffect } from 'react';
+import { Linking, Platform } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NamiCustomerManager } from 'react-native-nami-sdk';
+import { NamiPaywallManager } from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
 import CustomerManagerScreen from './containers/CustomerManagerScreen';
-import {handleDeepLink} from './services/deeplinking';
+import { handleDeepLink } from './services/deeplinking';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -39,7 +39,7 @@ const App = () => {
     const linkingEvent = Linking.addEventListener('url', handleDeepLink);
     Linking.getInitialURL().then((url) => {
       if (url) {
-        handleDeepLink({url});
+        handleDeepLink({ url });
       }
     });
     return () => {
@@ -92,6 +92,7 @@ const App = () => {
     });
 
     NamiCustomerManager.setCustomerDataPlatformId('2135');
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, []);
 

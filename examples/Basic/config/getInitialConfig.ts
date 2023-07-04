@@ -6,7 +6,7 @@ import initAppleProductionConfig from '../nami_initial_config_apple_prod.json';
 import initAndroidProductionConfig from '../nami_initial_config_android_prod.json';
 
 export const getInitialConfig = () => {
-  let flavor = NativeModules.RNConfig.FLAVOR;
+  const flavor = NativeModules.RNConfig.FLAVOR;
 
   switch (Platform.OS) {
     case 'android':

@@ -1,20 +1,20 @@
-import React, {useEffect} from 'react';
-import {Platform, Linking} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NamiPaywallManager} from 'react-native-nami-sdk';
+import React, { useEffect } from 'react';
+import { Platform, Linking } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NamiPaywallManager } from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
-import {handleDeepLink} from './services/deeplinking';
+import { handleDeepLink } from './services/deeplinking';
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
   headerBackTitleVisible: false,
   headerShadowVisible: false,
-  headerStyle: {backgroundColor: 'transparent'},
+  headerStyle: { backgroundColor: 'transparent' },
 };
 
 type ViewerTabNavigatorParams = {
@@ -36,7 +36,7 @@ const App = () => {
     Linking.addEventListener('url', handleDeepLink);
     Linking.getInitialURL().then((url) => {
       if (url) {
-        handleDeepLink({url});
+        handleDeepLink({ url });
       }
     });
     return () => {
@@ -97,9 +97,15 @@ const App = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
-        <Tab.Screen name="Campaign" component={CampaignScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Entitlements" component={EntitlementsScreen} />
+        <Tab.Screen
+          name="Campaign"
+          component={CampaignScreen} />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen} />
+        <Tab.Screen
+          name="Entitlements"
+          component={EntitlementsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

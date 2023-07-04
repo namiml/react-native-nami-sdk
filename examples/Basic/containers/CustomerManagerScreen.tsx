@@ -1,4 +1,4 @@
-import React, {FC, useState, useEffect} from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -15,8 +15,7 @@ import theme from '../theme';
 
 const TEST_KEY = 'key1';
 
-interface CustomerManagerScreenProps
-  extends ViewerTabProps<'CustomerManager'> {}
+type CustomerManagerScreenProps = ViewerTabProps<'CustomerManager'>
 
 const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   const [value, onChangeValue] = useState<string>('');
@@ -55,6 +54,7 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
 
   useEffect(() => {
     handleAnonymousMode();
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,11 +62,15 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text testID="customer_manager_title" style={styles.title}>
+      <Text
+        testID="customer_manager_title"
+        style={styles.title}>
         Customer Manager
       </Text>
       <View style={styles.section}>
-        <Text testID="customer_attribute" style={styles.sectionHeader}>
+        <Text
+          testID="customer_attribute"
+          style={styles.sectionHeader}>
           Set Customer Attribute
         </Text>
         <View style={styles.inputContainer}>
@@ -87,7 +91,9 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
         </View>
 
         <Text style={styles.sectionHeader}>Stored custom attribute value</Text>
-        <Text testID="customer_attribute_text" style={styles.attributeText}>
+        <Text
+          testID="customer_attribute_text"
+          style={styles.attributeText}>
           {attribute}
         </Text>
 

@@ -1,9 +1,14 @@
-import { NativeModules, NativeEventEmitter } from 'react-native';
+import {
+  NativeModules,
+  NativeEventEmitter,
+  EmitterSubscription,
+} from 'react-native';
 import {
   LaunchCampaignError,
   NamiCampaign,
   NamiPaywallAction,
   NamiPurchase,
+  PaywallLaunchContext,
 } from './types';
 
 export const { RNNamiCampaignManager } = NativeModules;
@@ -16,34 +21,43 @@ export enum NamiCampaignManagerEvents {
 const searchString_Nami = 'NAMI_';
 
 interface ICampaignManager {
-  launchSubscription: any;
+  launchSubscription: EmitterSubscription | undefined;
+  emitter: NativeEventEmitter;
   allCampaigns: () => Promise<Array<NamiCampaign>>;
-  isCampaignAvailable: (label?: string) => boolean;
+  isCampaignAvailable(campaignSource: string | null): Promise<boolean>;
   launch: (
     label?: string,
-    //context?: PaywallLaunchContext,
+    withUrl?: string,
+    context?: PaywallLaunchContext,
     resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: (
+      campaignId: string,
+      paywallId: string,
       action: NamiPaywallAction,
+      campaignName?: string,
+      campaignType?: string,
+      campaignLabel?: string,
+      campaignUrl?: string,
+      paywallName?: string,
+      segmentId?: string,
+      externalSegmentId?: string,
+      deeplinkUrl?: string,
       skuId?: string,
       purchaseError?: string,
       purchases?: NamiPurchase[],
-      campaignId?: string,
-      campaignLabel?: string,
-      paywallId?: string,
     ) => void,
   ) => void;
   refresh: () => void;
   registerAvailableCampaignsHandler: (
     callback: (availableCampaigns: NamiCampaign[]) => void,
-  ) => () => void;
+  ) => EmitterSubscription['remove'];
 }
 
 export const NamiCampaignManager: ICampaignManager = {
   launchSubscription: undefined,
   emitter: new NativeEventEmitter(RNNamiCampaignManager),
   ...RNNamiCampaignManager,
-  launch(label, resultCallback, actionCallback) {
+  launch(label, withUrl, context, resultCallback, actionCallback) {
     if (this.launchSubscription) {
       this.launchSubscription.remove();
     }
@@ -78,6 +92,7 @@ export const NamiCampaignManager: ICampaignManager = {
     );
     RNNamiCampaignManager.launch(
       label ?? null,
+      withUrl ?? null,
       context ?? null,
       resultCallback ?? (() => {}),
       actionCallback ?? (() => {}),

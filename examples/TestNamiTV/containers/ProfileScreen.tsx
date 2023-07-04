@@ -12,21 +12,19 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {NamiCustomerManager, CustomerJourneyState} from 'react-native-nami-sdk';
-import {ViewerTabProps} from '../App';
+import { NamiCustomerManager, CustomerJourneyState } from 'react-native-nami-sdk';
+import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-const Dot = (props: {value?: boolean}) => {
-  return <View style={[styles.cir, props.value && styles.active]} />;
-};
+const Dot = ({ isActive = false }) => <View style={[styles.cir, isActive && styles.active]} />;
 
-interface ProfileScreenProps extends ViewerTabProps<'Profile'> {}
+type ProfileScreenProps = ViewerTabProps<'Profile'>
 
-const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
+const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [journeyState, setJourneyState] = useState<
-    CustomerJourneyState | undefined
-  >(undefined);
+      CustomerJourneyState | undefined
+      >(undefined);
   const [isUserLogin, setIsUserLogin] = useState<boolean>(false);
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
@@ -132,34 +130,38 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>JORNEY STATE</Text>
         <View style={styles.block}>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inTrialPeriod} />
-            <Text style={styles.itemText}>In Trial Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inIntroOfferPeriod} />
-            <Text style={styles.itemText}>In Intro Offer Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.isCancelled} />
-            <Text style={styles.itemText}>Has Cancelled</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.formerSubscriber} />
-            <Text style={styles.itemText}>Former Subscriber</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inGracePeriod} />
-            <Text style={styles.itemText}>In Grace Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inAccountHold} />
-            <Text style={styles.itemText}>In Acount Hold</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inPause} />
-            <Text style={styles.itemText}>In Pause</Text>
-          </View>
+          {journeyState && (
+            <>
+              <View style={styles.item}>
+                <Dot isActive={journeyState?.inTrialPeriod} />
+                <Text style={styles.itemText}>In Trial Period</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.inIntroOfferPeriod} />
+                <Text style={styles.itemText}>In Intro Offer Period</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.isCancelled} />
+                <Text style={styles.itemText}>Has Cancelled</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.formerSubscriber} />
+                <Text style={styles.itemText}>Former Subscriber</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.inGracePeriod} />
+                <Text style={styles.itemText}>In Grace Period</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.inAccountHold} />
+                <Text style={styles.itemText}>In Acount Hold</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.inPause} />
+                <Text style={styles.itemText}>In Pause</Text>
+              </View>
+            </>
+          )}
         </View>
       </View>
     </SafeAreaView>

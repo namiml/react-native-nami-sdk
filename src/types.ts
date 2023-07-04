@@ -276,7 +276,7 @@ export type NamiPurchase = {
 export enum NamiPurchaseState {
   PURCHASED = 'PURCHASED',
   FAILED = 'FAILED',
-  CANCELLED = 'CANCELLEDd',
+  CANCELLED = 'CANCELLED',
   PENDING = 'PENDING',
   UNKNOWN = 'UNKNOWN',
 }
