@@ -3,8 +3,7 @@ import { Linking, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NamiCustomerManager } from 'react-native-nami-sdk';
-import { NamiPaywallManager } from 'react-native-nami-sdk';
+import { NamiCustomerManager, NamiPaywallManager } from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
@@ -36,14 +35,14 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
   useEffect(() => {
-    const linkingEvent = Linking.addEventListener('url', handleDeepLink);
+    Linking.addEventListener('url', handleDeepLink);
     Linking.getInitialURL().then((url) => {
       if (url) {
         handleDeepLink({ url });
       }
     });
     return () => {
-      linkingEvent.remove();
+      Linking.removeAllListeners('url');
     };
   }, []);
 

@@ -273,14 +273,6 @@ export type NamiPurchase = {
   purchaseSource?: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
 };
 
-export enum NamiPurchaseState {
-  PURCHASED = 'PURCHASED',
-  FAILED = 'FAILED',
-  CANCELLED = 'CANCELLED',
-  PENDING = 'PENDING',
-  UNKNOWN = 'UNKNOWN',
-}
-
 export type NamiPurchasesState =
   | 'pending'
   | 'purchased'
