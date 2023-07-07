@@ -1,4 +1,4 @@
-import { EmitterSubscription } from "react-native";
+import { EmitterSubscription } from 'react-native';
 
 export const NamiCustomerManager: {
   setCustomerAttribute: (key: string, value: string) => void;
@@ -9,21 +9,18 @@ export const NamiCustomerManager: {
   isLoggedIn: () => Promise<boolean>;
   loggedInId: () => Promise<string | undefined>;
   deviceId: () => Promise<string>;
-  login: (
-    customerId: string,
-    callback?: (success: boolean, error?: number) => void
-  ) => void;
-  logout: (callback?: (success: boolean, error?: number) => void) => void;
+  login: (customerId: string) => void;
+  logout: () => void;
   registerJourneyStateHandler: (
-    callback: (journeyState: CustomerJourneyState) => void
-  ) => EmitterSubscription["remove"];
+    callback: (journeyState: CustomerJourneyState) => void,
+  ) => EmitterSubscription['remove'];
   registerAccountStateHandler: (
     callback: (
       action: AccountStateAction,
       success: boolean,
-      error?: number
-    ) => void
-  ) => EmitterSubscription["remove"];
+      error?: number,
+    ) => void,
+  ) => EmitterSubscription['remove'];
   clearCustomerDataPlatformId: () => void;
   setCustomerDataPlatformId: (platformId: string) => void;
   setAnonymousMode: (anonymousMode: boolean) => void;
@@ -40,4 +37,16 @@ export type CustomerJourneyState = {
   inAccountHold: boolean;
 };
 
-export type AccountStateAction = "login" | "logout" | "advertising_id_set" | "vendor_id_set" | "customer_data_platform_id_set" | "nami_device_id_set" | "advertising_id_cleared" | "vendor_id_cleared" | "customer_data_platform_id_cleared" | "nami_device_id_cleared" | "anonymous_mode_on" | "anonymous_mode_off";
+export type AccountStateAction =
+  | 'login'
+  | 'logout'
+  | 'advertising_id_set'
+  | 'vendor_id_set'
+  | 'customer_data_platform_id_set'
+  | 'nami_device_id_set'
+  | 'advertising_id_cleared'
+  | 'vendor_id_cleared'
+  | 'customer_data_platform_id_cleared'
+  | 'nami_device_id_cleared'
+  | 'anonymous_mode_on'
+  | 'anonymous_mode_off';
