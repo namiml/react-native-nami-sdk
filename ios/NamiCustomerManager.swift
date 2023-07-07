@@ -70,7 +70,7 @@ class RNNamiCustomerManager: RCTEventEmitter {
     func setAnonymousMode(anonymousMode: Bool) {
         NamiCustomerManager.setAnonymousMode(anonymousMode)
     }
-    
+
     @objc(inAnonymousMode:rejecter:)
     func inAnonymousMode(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let inAnonymousMode: Bool = NamiCustomerManager.inAnonymousMode()
@@ -105,18 +105,14 @@ class RNNamiCustomerManager: RCTEventEmitter {
         resolve(id)
     }
 
-    @objc(login:completion:)
-    func login(customerId: String, callback: @escaping RCTResponseSenderBlock) {
-        NamiCustomerManager.login(withId: customerId, loginCompleteHandler: { success, error in
-            callback([success, error?._code as Any])
-        })
+    @objc(login:)
+    func login(customerId: String) {
+        NamiCustomerManager.login(withId: customerId)
     }
 
-    @objc(logout:)
-    func logout(callback: @escaping RCTResponseSenderBlock) {
-        NamiCustomerManager.logout(logoutCompleteHandler: { success, error in
-            callback([success, error?._code as Any])
-        })
+    @objc(logout)
+    func logout() {
+        NamiCustomerManager.logout()
     }
 
     @objc(registerJourneyStateHandler)
