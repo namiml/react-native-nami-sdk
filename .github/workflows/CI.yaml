@@ -26,6 +26,11 @@ jobs:
           yarn install
         working-directory: source/examples/Basic
 
+      - name: Install Basic app pods
+        run: |
+          pod install
+        working-directory: source/examples/Basic/ios
+
       - name: Linter Basic
         run: |
           npx eslint . --ext .js,.jsx,.ts,.tsx
