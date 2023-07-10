@@ -23,11 +23,8 @@ export interface INamiCustomerManager {
   isLoggedIn: () => Promise<boolean>;
   loggedInId: () => Promise<string | undefined>;
   deviceId: () => Promise<string>;
-  login: (
-    customerId: string,
-    callback?: (success: boolean, error?: number) => void,
-  ) => void;
-  logout: (callback?: (success: boolean, error?: number) => void) => void;
+  login: (customerId: string) => void;
+  logout: () => void;
   registerJourneyStateHandler: (
     callback: (journeyState: CustomerJourneyState) => void,
   ) => EmitterSubscription['remove'];
