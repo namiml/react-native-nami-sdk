@@ -129,7 +129,7 @@ jobs:
       - name: Get expected build number
         run: |
           pip3 install requests
-          pip3 install pydantic
+          pip3 install pydantic==1.10.11
           pip3 install cryptography
           pip3 install PyJWT
           echo "1.0" > $RUNNER_TEMP/.current_version
@@ -249,7 +249,7 @@ jobs:
       - name: Get expected build number
         run: |
           pip3 install requests
-          pip3 install pydantic
+          pip3 install pydantic==1.10.11
           pip3 install cryptography
           pip3 install PyJWT
           echo "1.0" > $RUNNER_TEMP/.current_version
