@@ -20,8 +20,7 @@ module.exports = {
       type: 'ios.app',
       binaryPath:
         'ios/build/Build/Products/Release-iphonesimulator/BasicProduction.app',
-      build:
-          'xcodebuild -workspace ios/Basic.xcworkspace -scheme BasicProduction -configuration Release -sdk iphonesimulator -derivedDataPath ios/build',
+      build: "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/Basic.xcworkspace -UseNewBuildSystem=NO -scheme BasicProduction -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
     },
     'android.debug': {
       type: 'android.apk',
