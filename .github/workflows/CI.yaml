@@ -54,12 +54,6 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Setup Ruby and install Bundler
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6 # or whichever Ruby version you're using
-          bundler-cache: true # 'bundle install' will run automatically if a Gemfile exists and is cached
-
       - name: Install Yarn dependencies
         run: |
           rm -rf node_modules
@@ -119,12 +113,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
-
-      - name: Setup Ruby and install Bundler
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6 # or whichever Ruby version you're using
-          bundler-cache: true # 'bundle install' will run automatically if a Gemfile exists and is cached
 
       - name: Install Yarn dependencies
         run: |
