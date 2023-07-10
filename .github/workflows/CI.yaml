@@ -54,12 +54,25 @@ jobs:
         with:
           node-version: "16"
 
+      - name: Setup Ruby and install Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6 # or whichever Ruby version you're using
+          bundler-cache: true # 'bundle install' will run automatically if a Gemfile exists and is cached
+
       - name: Install Yarn dependencies
-        run: yarn install
+        run: |
+          rm -rf node_modules
+          yarn install
+          rm -rf node_modules/react-native-nami-sdk/examples
         working-directory: source/examples/Basic
 
-      - name: Install Basic app pods
-        run: pod install
+      - name: Install iOS pods
+        run: |
+          rm -rf Pods 
+          rm -rf build  
+          bundle exec pod update
+          bundle exec pod install
         working-directory: source/examples/Basic/ios
 
       - name: Install Detox CLI
@@ -107,12 +120,17 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install Yarn dependencies
-        run: yarn install
-        working-directory: source/examples/Basic
+      - name: Setup Ruby and install Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6 # or whichever Ruby version you're using
+          bundler-cache: true # 'bundle install' will run automatically if a Gemfile exists and is cached
 
-      - name: Clean nodes for test app purposes
-        run: rm -rf node_modules/react-native-nami-sdk/examples
+      - name: Install Yarn dependencies
+        run: |
+          rm -rf node_modules
+          yarn install
+          rm -rf node_modules/react-native-nami-sdk/examples
         working-directory: source/examples/Basic
 
       - name: Install React-native CLI
@@ -132,7 +150,7 @@ jobs:
         working-directory: source/examples/Basic
 
       - name: Detox test
-        run: detox test --configuration android.emu.release --cleanup --headless --record-logs all
+        run: detox test --configuration android.emu.release --cleanup --headless --record-logs all
         working-directory: source/examples/Basic
 
       - name: Upload artifacts
