@@ -141,6 +141,15 @@ jobs:
           api-level: 29
           script: echo "Emulator started"
 
+      - name: Wait for emulator to fully boot
+        run: |
+          boot_completed=false
+          until [ "$boot_completed" = "1" ]; do
+            sleep 1
+            boot_completed=$(adb shell getprop sys.boot_completed | tr -d '\r')
+          done
+        shell: bash
+
       - name: Install React-native CLI
         run: yarn global add react-native-cli
         working-directory: source/examples/Basic
