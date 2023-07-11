@@ -136,4 +136,3 @@ jobs:
             profile: pixel
             avd-name: Pixel_API_29_AOSP
             script: bash ${{ github.workspace }}/scripts/run-e2e-android-release.sh
-          working-directory: source/examples/Basic
