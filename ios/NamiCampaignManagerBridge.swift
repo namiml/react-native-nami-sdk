@@ -7,8 +7,8 @@
 
 import Foundation
 import NamiApple
-import React
 import os
+import React
 
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
@@ -94,22 +94,22 @@ class RNNamiCampaignManager: RCTEventEmitter {
 
         let dictionaries = purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
 
-            let payload: [String: Any?] = [
-                "campaignId": campaignId,
-                "campaignName": campaignName,
-                "campaignType": campaignType,
-                "campaignLabel": campaignLabel,
-                "campaignUrl": campaignUrl,
-                "paywallId": paywallId,
-                "paywallName": paywallName,
-                "segmentId": segmentId,
-                "externalSegmentId": externalSegmentId,
-                "action": actionString,
-                "skuId": skuId,
-                "purchaseError": errorSting,
-                "purchases": dictionaries,
-                "deeplinkUrl": deeplinkUrl,
-            ]
+        let payload: [String: Any?] = [
+            "campaignId": campaignId,
+            "campaignName": campaignName,
+            "campaignType": campaignType,
+            "campaignLabel": campaignLabel,
+            "campaignUrl": campaignUrl,
+            "paywallId": paywallId,
+            "paywallName": paywallName,
+            "segmentId": segmentId,
+            "externalSegmentId": externalSegmentId,
+            "action": actionString,
+            "skuId": skuId,
+            "purchaseError": errorSting,
+            "purchases": dictionaries,
+            "deeplinkUrl": deeplinkUrl,
+        ]
 
         RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
     }
@@ -124,7 +124,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
         withUrl: String?,
         context: NSDictionary?,
         callback: @escaping RCTResponseSenderBlock,
-        paywallCallback: @escaping RCTResponseSenderBlock
+        paywallCallback _: @escaping RCTResponseSenderBlock
     ) {
         var paywallLaunchContext: PaywallLaunchContext?
 
@@ -140,58 +140,74 @@ class RNNamiCampaignManager: RCTEventEmitter {
             }
         }
 
-        if productGroups != nil || customAttributes != nil {
-            paywallLaunchContext = PaywallLaunchContext(productGroups: productGroups, customAttributes: customAttributes)
+        DispatchQueue.main.async {
+            let allScenes = UIApplication.shared.connectedScenes
+            let scene = allScenes.first { $0.activationState == .foregroundActive }
+
+            var useNamiWindow = false
+            if let windowScene = scene as? UIWindowScene {
+                if #available(iOS 15.0, tvOS 15.0, *) {
+                    if windowScene.windows.count > 1 {
+                        useNamiWindow = true
+                    }
+                }
+            }
+
+            useNamiWindow = true
+
+            if productGroups != nil || customAttributes != nil {
+                paywallLaunchContext = PaywallLaunchContext(productGroups: productGroups, customAttributes: customAttributes)
+            }
+
+            var launchMethod: (() -> Void)?
+
+            if let urlString = withUrl, let urlObject = URL(string: urlString) {
+                launchMethod = {
+                    NamiCampaignManager.launch(url: urlObject, useNamiWindow: useNamiWindow, context: paywallLaunchContext,
+                                               launchHandler: { success, error in
+                                                   self.handleLaunch(
+                                                       callback: callback,
+                                                       success: success,
+                                                       error: error
+                                                   )
+                                               },
+                                               paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl in
+                                                   self.handlePaywallAction(campaignId: campaignId, campaignName: campaignName, campaignType: campaignType, campaignLabel: campaignLabel, campaignUrl: campaignUrl, paywallId: paywallId, paywallName: paywallName, segmentId: segmentId, externalSegmentId: externalSegmentId, action: action, sku: sku, purchaseError: purchaseError, purchases: purchases, deeplinkUrl: deeplinkUrl)
+                                               })
+                }
+            } else if let label = label {
+                launchMethod = {
+                    NamiCampaignManager.launch(label: label, useNamiWindow: useNamiWindow, context: paywallLaunchContext,
+                                               launchHandler: { success, error in
+                                                   self.handleLaunch(
+                                                       callback: callback,
+                                                       success: success,
+                                                       error: error
+                                                   )
+                                               },
+                                               paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl in
+                                                   self.handlePaywallAction(campaignId: campaignId, campaignName: campaignName, campaignType: campaignType, campaignLabel: campaignLabel, campaignUrl: campaignUrl, paywallId: paywallId, paywallName: paywallName, segmentId: segmentId, externalSegmentId: externalSegmentId, action: action, sku: sku, purchaseError: purchaseError, purchases: purchases, deeplinkUrl: deeplinkUrl)
+                                               })
+                }
+            } else {
+                print("Neither URL nor label provided calling default launch.")
+                launchMethod = {
+                    NamiCampaignManager.launch(context: paywallLaunchContext,
+                                               launchHandler: { success, error in
+                                                   self.handleLaunch(
+                                                       callback: callback,
+                                                       success: success,
+                                                       error: error
+                                                   )
+                                               },
+                                               paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl in
+                                                   self.handlePaywallAction(campaignId: campaignId, campaignName: campaignName, campaignType: campaignType, campaignLabel: campaignLabel, campaignUrl: campaignUrl, paywallId: paywallId, paywallName: paywallName, segmentId: segmentId, externalSegmentId: externalSegmentId, action: action, sku: sku, purchaseError: purchaseError, purchases: purchases, deeplinkUrl: deeplinkUrl)
+                                               })
+                }
+            }
+
+            launchMethod?()
         }
-
-        var launchMethod: (() -> Void)?
-
-        if let urlString = withUrl, let urlObject = URL(string: urlString) {
-            launchMethod = {
-                NamiCampaignManager.launch(url: urlObject, context: paywallLaunchContext,
-                    launchHandler: { (success, error) in
-                    self.handleLaunch(
-                        callback: callback,
-                        success: success,
-                        error: error)
-                    },
-                    paywallActionHandler: { (campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl) in
-                    self.handlePaywallAction(campaignId: campaignId, campaignName: campaignName, campaignType: campaignType, campaignLabel: campaignLabel, campaignUrl: campaignUrl, paywallId: paywallId, paywallName: paywallName, segmentId: segmentId, externalSegmentId: externalSegmentId, action: action, sku: sku, purchaseError: purchaseError, purchases: purchases, deeplinkUrl: deeplinkUrl)
-                    }
-                )
-            }
-        } else if let label = label {
-            launchMethod = {
-                NamiCampaignManager.launch(label: label, context: paywallLaunchContext,
-                    launchHandler: { (success, error) in
-                    self.handleLaunch(
-                        callback: callback,
-                        success: success,
-                        error: error)
-                    },
-                    paywallActionHandler: { (campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl) in
-                    self.handlePaywallAction(campaignId: campaignId, campaignName: campaignName, campaignType: campaignType, campaignLabel: campaignLabel, campaignUrl: campaignUrl, paywallId: paywallId, paywallName: paywallName, segmentId: segmentId, externalSegmentId: externalSegmentId, action: action, sku: sku, purchaseError: purchaseError, purchases: purchases, deeplinkUrl: deeplinkUrl)
-                    }
-                )
-            }
-        } else {
-            print("Neither URL nor label provided calling default launch.")
-            launchMethod = {
-                NamiCampaignManager.launch(context: paywallLaunchContext,
-                    launchHandler: { (success, error) in
-                    self.handleLaunch(
-                        callback:callback,
-                        success: success,
-                        error: error)
-                    },
-                    paywallActionHandler: { (campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl) in
-                    self.handlePaywallAction(campaignId: campaignId, campaignName: campaignName, campaignType: campaignType, campaignLabel: campaignLabel, campaignUrl: campaignUrl, paywallId: paywallId, paywallName: paywallName, segmentId: segmentId, externalSegmentId: externalSegmentId, action: action, sku: sku, purchaseError: purchaseError, purchases: purchases, deeplinkUrl: deeplinkUrl)
-                    }
-                )
-            }
-        }
-
-        launchMethod?()
     }
 
     @objc(allCampaigns:rejecter:)
@@ -205,8 +221,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
     func isCampaignAvailable(
         campaignSource: String?,
         resolve: @escaping RCTPromiseResolveBlock,
-        reject _: @escaping RCTPromiseRejectBlock)
-    {
+        reject _: @escaping RCTPromiseRejectBlock
+    ) {
         var isCampaignAvailable: Bool
         if let source = campaignSource {
             if isURL(string: source), let url = URL(string: source) {
