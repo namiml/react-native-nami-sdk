@@ -12,6 +12,9 @@ export const NamiPaywallManager: {
     callback: (sku: NamiSKU) => void
   ) => EmitterSubscription["remove"];
   registerCloseHandler: (callback: () => void) => EmitterSubscription["remove"];
+  registerSignInHandler: (callback: () => void) => EmitterSubscription["remove"];
+  show: () => void;
+  hide: () => void;
 };
 
 export type NamiPurchaseSuccessApple = {

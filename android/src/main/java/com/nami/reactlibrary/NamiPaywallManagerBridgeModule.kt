@@ -210,6 +210,29 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun registerSignInHandler() {
+        NamiPaywallManager.registerSignInHandler { activity ->
+            latestPaywallActivity = activity
+            val map = Arguments.createMap().apply {
+                putBoolean("paywallSignInRequested", true)
+            }
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("PaywallSignInRequested", map)
+        }
+    }
+
+    @ReactMethod
+    fun show() {
+        // Do nothing on Android side
+    }
+
+    @ReactMethod
+    fun hide() {
+        // Do nothing on Android side
+    }
+
+    @ReactMethod
     fun addListener(eventName: String?) {
     }
 
