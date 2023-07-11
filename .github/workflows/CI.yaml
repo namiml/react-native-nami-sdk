@@ -63,8 +63,6 @@ jobs:
 
       - name: Install iOS pods
         run: |
-          rm -rf Pods 
-          rm -rf build  
           bundle exec pod update
           bundle exec pod install
         working-directory: source/examples/Basic/ios
