@@ -140,7 +140,6 @@ jobs:
         with:
           api-level: 29
           script: echo "Emulator started"
-        working-directory: source/examples/Basic
 
       - name: Install React-native CLI
         run: yarn global add react-native-cli
