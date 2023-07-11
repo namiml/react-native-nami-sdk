@@ -126,14 +126,13 @@ jobs:
               ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
-        working-directory: source/examples/Basic
-
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
         working-directory: source/examples/Basic
 
       - name: Start Android Emulator
