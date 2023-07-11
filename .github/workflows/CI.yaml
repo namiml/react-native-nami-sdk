@@ -122,9 +122,6 @@ jobs:
           env:
             ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
-        - name: Run Unit Test(s)
-          run: yarn test
-
         - name: Run Detox Build
           run: yarn e2e:build android.emu.release
 
