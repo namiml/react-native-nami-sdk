@@ -122,10 +122,10 @@ jobs:
       - name: Cache node_modules and yarn cache
         uses: actions/cache@v2
         with:
-        path: |
+          path: |
               **/node_modules
               ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
         working-directory: source/examples/Basic
 
       - name: Install Dependencies
