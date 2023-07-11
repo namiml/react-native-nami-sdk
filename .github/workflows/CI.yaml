@@ -117,14 +117,6 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install Java JDK
-        uses: joschi/setup-jdk@v1
-        with:
-          java-version: 'openjdk8'
-          architecture: 'x64'
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
         working-directory: source/examples/Basic
