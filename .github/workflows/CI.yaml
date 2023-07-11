@@ -2,9 +2,6 @@ name: CI PR Checks
 
 on: pull_request
 
-strategy:
-  fail-fast: false
-
 jobs:
   eslint:
     name: ESLint
@@ -108,6 +105,8 @@ jobs:
           path: artifacts
   e2e-android:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
 
     steps:
       - name: 'Checkout ${{ inputs.ref }}'
