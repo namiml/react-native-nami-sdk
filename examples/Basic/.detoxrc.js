@@ -23,21 +23,15 @@ module.exports = {
       build: "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/Basic.xcworkspace -UseNewBuildSystem=NO -scheme BasicProduction -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
     },
     'android.debug': {
-      type: "android.emulator",
+      type: 'android.apk',
       binaryPath: 'android/app/build/outputs/apk/debug/app-debug.apk',
-      device: {
-        avdName: "Pixel_API_29_AOSP"
-      },
       build:
         'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug',
       reversePorts: [8081],
     },
     'android.release': {
-      type: "android.emulator",
+      type: 'android.apk',
       binaryPath: 'android/app/build/outputs/apk/release/app-release.apk',
-      device: {
-        avdName: "Pixel_API_29_AOSP"
-      },
       build:
         'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release',
     },
@@ -58,7 +52,7 @@ module.exports = {
     emulator: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_3a_XL_API_30',
+        avdName: "Pixel_API_29_AOSP"
       },
     },
   },
