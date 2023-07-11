@@ -61,6 +61,13 @@ jobs:
           rm -rf node_modules/react-native-nami-sdk/examples
         working-directory: source/examples/Basic
 
+      - name: Install macOS dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+          sudo gem install cocoapods
+          gem install CFPropertyList
+
       - name: Install iOS pods
         run: |
           pod update
@@ -78,15 +85,6 @@ jobs:
       - name: Install Detox
         run: yarn add --dev detox
         working-directory: source/examples/Basic
-
-      - name: Install macOS dependencies
-        run: |
-          brew update
-          brew reinstall cocoapods
-          brew tap wix/brew
-          brew install applesimutils
-          sudo gem install cocoapods
-          gem install CFPropertyList
 
       - name: Detox build
         run: detox build --configuration ios.sim.release
@@ -116,22 +114,40 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install Yarn dependencies
-        run: |
-          rm -rf node_modules
-          yarn install
-          rm -rf node_modules/react-native-nami-sdk/examples
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+        working-directory: source/examples/Basic
+
+      - name: Cache node_modules and yarn cache
+        uses: actions/cache@v2
+        with:
+        path: |
+              **/node_modules
+              ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+        working-directory: source/examples/Basic
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: source/examples/Basic
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+        working-directory: source/examples/Basic
+
+      - name: Start Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: echo "Emulator started"
         working-directory: source/examples/Basic
 
       - name: Install React-native CLI
         run: yarn global add react-native-cli
         working-directory: source/examples/Basic
-
-      - name: Install jetifier
-        run: yarn add jetifier
-
-      - name: Run jetify
-        run: yarn jetify
 
       - name: Install Detox CLI
         run: yarn global add detox-cli
