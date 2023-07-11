@@ -105,7 +105,9 @@ jobs:
           path: artifacts
   e2e-android:
     runs-on: ubuntu-latest
-    fail-fast: false
+    strategy:
+      fail-fast: false
+
     steps:
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v2
