@@ -63,8 +63,8 @@ jobs:
 
       - name: Install iOS pods
         run: |
-          bundle exec pod update
-          bundle exec pod install
+          pod update
+          pod install
         working-directory: source/examples/Basic/ios
 
       - name: Install Detox CLI
