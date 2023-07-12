@@ -59,7 +59,6 @@ jobs:
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
-        working-directory: source/examples/Basic
 
       - name: Cache Pods
         uses: actions/cache@v1
@@ -67,7 +66,6 @@ jobs:
         with:
           path: ios/Pods
           key: pods-${{ hashFiles('**/Podfile.lock') }}
-        working-directory: source/examples/Basic
 
       - name: Rebuild cache detox
         if: steps.cache.outputs.cache-hit == 'true'
