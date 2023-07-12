@@ -128,6 +128,12 @@ jobs:
         with:
           node-version: "16"
 
+      - name: Install ADB
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y android-sdk-platform-tools-common
+#          export ANDROID_SDK_ROOT=~/Library/Android/sdk
+
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
         working-directory: source/examples/Basic
@@ -143,7 +149,6 @@ jobs:
 
       - name: Run ADB
         run: |
-          export ANDROID_SDK_ROOT=~/Library/Android/sdk
           adb kill-server
           adb start-server
 
