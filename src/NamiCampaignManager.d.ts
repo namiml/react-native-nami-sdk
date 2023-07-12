@@ -11,9 +11,9 @@ export const NamiCampaignManager: {
     context?: PaywallLaunchContext,
     resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: (
+      action: NamiPaywallAction,
       campaignId: string,
       paywallId: string,
-      action: NamiPaywallAction,
       campaignName?: string,
       campaignType?: string,
       campaignLabel?: string,
