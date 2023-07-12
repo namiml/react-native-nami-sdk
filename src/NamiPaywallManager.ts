@@ -36,7 +36,7 @@ export interface INamiPaywallManager {
   ) => EmitterSubscription['remove'];
   dismiss: (animated?: boolean) => void;
   show: () => void;
-  logout: () => void;
+  hide: () => void;
 }
 
 const { NamiPaywallManagerBridge, RNNamiPaywallManager } = NativeModules;
@@ -98,7 +98,7 @@ export const NamiPaywallManager: INamiPaywallManager = {
   show: () => {
     RNNamiPaywallManager.show();
   },
-  logout: () => {
+  hide: () => {
     RNNamiPaywallManager.hide();
   },
 };

@@ -9,8 +9,8 @@ import {
   NamiCampaign,
   NamiCampaignManager,
   NamiPaywallManager,
+  NamiPaywallAction,
 } from 'react-native-nami-sdk';
-import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
 import {
   FlatList,
   RefreshControl,
@@ -38,9 +38,13 @@ const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
 );
 
 // For Nami testing purposes only
-const HeaderLeft = ({onButtonPress}: {onButtonPress: () => void}) => (
-  <TouchableOpacity style={styles.headerButton} onPress={onButtonPress}>
-    <Text testID="show_paywall_button" style={styles.headerButtonText}>
+const HeaderLeft = ({ onButtonPress } : { onButtonPress: () => void }) => (
+  <TouchableOpacity
+    style={styles.headerButton}
+    onPress={onButtonPress}>
+    <Text
+      testID="show_paywall_button"
+      style={styles.headerButtonText}>
       Show Paywall
     </Text>
   </TouchableOpacity>
