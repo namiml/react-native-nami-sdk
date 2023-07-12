@@ -46,23 +46,21 @@ jobs:
       DEVELOPER_DIR: source/examples/Basic
 
     steps:
-      - uses: actions/checkout@master
       - uses: actions/setup-node@master
 
+      - name: 'Checkout ${{ inputs.ref }}'
+        uses: actions/checkout@v3
+        with:
+          path: source
+          ref: '${{ inputs.ref }}'
+
+      # Get from cache
       - name: Cache node modules
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         id: cache
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Rebuild detox
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: yarn detox-setup
-
-      - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install
 
       - name: Cache Pods
         uses: actions/cache@v1
@@ -71,16 +69,46 @@ jobs:
           path: ios/Pods
           key: pods-${{ hashFiles('**/Podfile.lock') }}
 
-      - name: Update Pods
+      - name: Rebuild cache detox
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: detox clean-framework-cache && detox build-framework-cache
+
+      - name: Install from cache Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install
+
+      # Installations
+      - name: Install macOS dependencies
         run: |
-          gem update cocoapods xcodeproj
-          pod install
+          brew tap wix/brew
+          brew install applesimutils
+          sudo gem install cocoapods
+          gem install CFPropertyList
+
+      - name: Install iOS pods
+        run: pod install
         working-directory: source/examples/Basic/ios
 
-      - run: brew tap wix/brew
-      - run: brew install applesimutils
-      - run: yarn detox build --configuration ios.sim.release
-      - run: yarn detox test --configuration ios.sim.release --cleanup --headless --record-logs all --debug-synchronization 200
+      - name: Detox build
+        run: detox build --configuration ios.sim.release
+#        working-directory: source/examples/Basic
+
+      - name: Detox test
+        run: |
+          yarn start &
+          METRO_BUNDLER_PID=$!
+          detox test --configuration ios.sim.release --cleanup --headless --record-logs all
+          DETOX_EXIT_CODE=$?
+          kill $METRO_BUNDLER_PID
+          exit $DETOX_EXIT_CODE
+#        working-directory: source/examples/Basic
+
+      - name: Upload artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-artifacts
+          path: artifacts
   e2e-android:
     runs-on: ubuntu-latest
     strategy:
