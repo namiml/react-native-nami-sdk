@@ -1,5 +1,8 @@
-import { NativeModules, NativeEventEmitter } from 'react-native';
-import { EmitterSubscription } from 'react-native';
+import {
+  NativeModules,
+  NativeEventEmitter,
+  EmitterSubscription,
+} from 'react-native';
 import {
   NamiPurchaseSuccessAmazon,
   NamiPurchaseSuccessApple,
@@ -24,11 +27,16 @@ export interface INamiPaywallManager {
   buySkuCompleteGooglePlay: (
     purchaseSuccess: NamiPurchaseSuccessGooglePlay,
   ) => void;
-  dismiss: (animated?: boolean) => void;
   registerBuySkuHandler: (
     callback: (sku: NamiSKU) => void,
   ) => EmitterSubscription['remove'];
   registerCloseHandler: (callback: () => void) => EmitterSubscription['remove'];
+  registerSignInHandler: (
+    callback: () => void,
+  ) => EmitterSubscription['remove'];
+  dismiss: (animated?: boolean) => void;
+  show: () => void;
+  logout: () => void;
 }
 
 const { NamiPaywallManagerBridge, RNNamiPaywallManager } = NativeModules;
@@ -52,7 +60,8 @@ export const NamiPaywallManager: INamiPaywallManager = {
     );
   },
   registerBuySkuHandler: (callback: (sku: NamiSKU) => void) => {
-    const subscription = NamiPaywallManager.paywallEmitter.addListener(
+    let subscription;
+    subscription = NamiPaywallManager.paywallEmitter.addListener(
       NamiPaywallManagerEvents.RegisterBuySKU,
       sku => {
         callback(sku);
@@ -62,7 +71,8 @@ export const NamiPaywallManager: INamiPaywallManager = {
     return subscription.remove;
   },
   registerCloseHandler: (callback: (body: any) => void) => {
-    const subscription = NamiPaywallManager.paywallEmitter.addListener(
+    let subscription;
+    subscription = NamiPaywallManager.paywallEmitter.addListener(
       NamiPaywallManagerEvents.PaywallCloseRequested,
       body => {
         callback(body);
@@ -71,7 +81,24 @@ export const NamiPaywallManager: INamiPaywallManager = {
     RNNamiPaywallManager.registerCloseHandler();
     return subscription.remove;
   },
+  registerSignInHandler(callback) {
+    let subscription;
+    subscription = this.paywallEmitter.addListener(
+      'PaywallSignInRequested',
+      body => {
+        callback(body);
+      },
+    );
+    RNNamiPaywallManager.registerSignInHandler();
+    return subscription.remove;
+  },
   dismiss: (animated?: boolean) => {
     RNNamiPaywallManager.dismiss(animated ?? true);
+  },
+  show: () => {
+    RNNamiPaywallManager.show();
+  },
+  logout: () => {
+    RNNamiPaywallManager.hide();
   },
 };
