@@ -42,8 +42,6 @@ jobs:
         working-directory: source/examples/TestNamiTV
   e2e-ios:
     runs-on: macos-12
-    env:
-      DEVELOPER_DIR: source/examples/Basic
 
     steps:
       - uses: actions/setup-node@master
@@ -61,6 +59,7 @@ jobs:
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
+        working-directory: source/examples/Basic
 
       - name: Cache Pods
         uses: actions/cache@v1
@@ -68,14 +67,17 @@ jobs:
         with:
           path: ios/Pods
           key: pods-${{ hashFiles('**/Podfile.lock') }}
+        working-directory: source/examples/Basic
 
       - name: Rebuild cache detox
         if: steps.cache.outputs.cache-hit == 'true'
         run: detox clean-framework-cache && detox build-framework-cache
+        working-directory: source/examples/Basic
 
       - name: Install from cache Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install
+        working-directory: source/examples/Basic
 
       # Installations
       - name: Install macOS dependencies
@@ -91,7 +93,7 @@ jobs:
 
       - name: Detox build
         run: detox build --configuration ios.sim.release
-#        working-directory: source/examples/Basic
+        working-directory: source/examples/Basic
 
       - name: Detox test
         run: |
@@ -101,7 +103,7 @@ jobs:
           DETOX_EXIT_CODE=$?
           kill $METRO_BUNDLER_PID
           exit $DETOX_EXIT_CODE
-#        working-directory: source/examples/Basic
+        working-directory: source/examples/Basic
 
       - name: Upload artifacts
         if: failure()
