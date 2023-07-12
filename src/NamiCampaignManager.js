@@ -17,35 +17,35 @@ export const NamiCampaignManager = {
 
         const {
           action,
-          skuId,
-          purchaseError,
-          purchases,
           campaignId,
-          campaignLabel,
           paywallId,
+          campaignLabel,
           campaignName,
           campaignType,
           campaignUrl,
+          paywallName,
           segmentId,
           externalSegmentId,
-          paywallName,
           deeplinkUrl,
+          skuId,
+          purchaseError,
+          purchases
         } = body;
         actionCallback(
           action,
-          skuId,
-          purchaseError,
-          purchases,
           campaignId,
-          campaignLabel,
           paywallId,
+          campaignLabel,
           campaignName,
           campaignType,
           campaignUrl,
+          paywallName,
           segmentId,
           externalSegmentId,
-          paywallName,
-          deeplinkUrl
+          deeplinkUrl,
+          skuId,
+          purchaseError,
+          purchases,
         );
       }
     );
