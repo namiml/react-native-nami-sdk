@@ -43,7 +43,7 @@ jobs:
   e2e-ios:
     runs-on: macos-12
     env:
-      DEVELOPER_DIR: /Applications/Xcode_11.2.app
+      DEVELOPER_DIR: source/examples/Basic
 
     steps:
       - uses: actions/checkout@master
