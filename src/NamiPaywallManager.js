@@ -53,7 +53,7 @@ export const NamiPaywallManager = {
   show: () => {
     RNNamiPaywallManager.show();
   },
-  logout: () => {
+  hide: () => {
     RNNamiPaywallManager.hide();
   },
 };
