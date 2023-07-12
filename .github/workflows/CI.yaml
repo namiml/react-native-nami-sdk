@@ -116,11 +116,9 @@ jobs:
           path: artifacts
   e2e-android:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
     steps:
       - name: 'Checkout ${{ inputs.ref }}'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: source
           ref: '${{ inputs.ref }}'
@@ -134,17 +132,8 @@ jobs:
         run: yarn install --frozen-lockfile
         working-directory: source/examples/Basic
 
-      - name: Install React-native CLI
-        run: yarn global add react-native-cli
-        working-directory: source/examples/Basic
-
       - name: Install Detox CLI
         run: yarn global add detox-cli
-        working-directory: source/examples/Basic
-
-      - name: Install Detox
-        run: yarn add --dev detox
-        working-directory: source/examples/Basic
 
       - name: Detox build
         run: |
@@ -170,7 +159,7 @@ jobs:
             cd examples/Basic
             yarn start &
             METRO_BUNDLER_PID=$!
-            detox test --configuration android.emu.release --cleanup --headless --record-logs all
+            detox test --configuration android.emu.release --headless --record-logs all
             DETOX_EXIT_CODE=$?
             kill $METRO_BUNDLER_PID
             exit $DETOX_EXIT_CODE
