@@ -43,9 +43,10 @@ export async function handleDeepLink(event) {
         console.log('campaignName', campaignName);
         console.log('campaignType', campaignType);
         console.log('campaignUrl', campaignUrl);
+        console.log('paywallId', paywallId);
+        console.log('paywallName', paywallName);
         console.log('segmentId', segmentId);
         console.log('externalSegmentId', externalSegmentId);
-        console.log('paywallName', paywallName);
         console.log('deeplinkUrl', deeplinkUrl);
       },
     );

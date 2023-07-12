@@ -2,8 +2,7 @@
 //  NamiPaywallManager.m
 //  namiReactNative
 //
-//  Created by Kendall Gelner on 11/22/19.
-//  Copyright © 2019 Nami ML Inc. All rights reserved.
+//  Copyright © 2023 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -22,7 +21,13 @@ RCT_EXTERN_METHOD(registerBuySkuHandler)
 
 RCT_EXTERN_METHOD(registerCloseHandler)
 
+RCT_EXTERN_METHOD(registerSignInHandler)
+
 RCT_EXTERN_METHOD(dismiss:(BOOL)animated)
+
+RCT_EXTERN_METHOD(show)
+
+RCT_EXTERN_METHOD(hide)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;

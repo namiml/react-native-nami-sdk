@@ -5,7 +5,12 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import { NamiCampaign, NamiCampaignManager, NamiPaywallAction } from 'react-native-nami-sdk';
+import {
+  NamiCampaign,
+  NamiCampaignManager,
+  NamiPaywallManager,
+} from 'react-native-nami-sdk';
+import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
 import {
   FlatList,
   RefreshControl,
@@ -32,6 +37,15 @@ const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
   </TouchableOpacity>
 );
 
+// For Nami testing purposes only
+const HeaderLeft = ({onButtonPress}: {onButtonPress: () => void}) => (
+  <TouchableOpacity style={styles.headerButton} onPress={onButtonPress}>
+    <Text testID="show_paywall_button" style={styles.headerButtonText}>
+      Show Paywall
+    </Text>
+  </TouchableOpacity>
+);
+
 const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -51,6 +65,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     getAllCampaigns();
+    const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
+      () => {
+        console.log('sign in');
+        NamiPaywallManager.hide();
+      },
+    );
     const subscriptionRemover =
         NamiCampaignManager.registerAvailableCampaignsHandler(
           (availableCampaigns) => {
@@ -63,6 +83,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         );
     return () => {
       subscriptionRemover();
+      subscriptionSignInRemover();
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,9 +127,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         console.log('campaignName', campaignName);
         console.log('campaignType', campaignType);
         console.log('campaignUrl', campaignUrl);
+        console.log('paywallId', paywallId);
+        console.log('paywallName', paywallName);
         console.log('segmentId', segmentId);
         console.log('externalSegmentId', externalSegmentId);
-        console.log('paywallName', paywallName);
         console.log('deeplinkUrl', deeplinkUrl);
       },
     );
@@ -138,11 +160,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     NamiCampaignManager.refresh();
   }, []);
 
+  const onButtonPress = useCallback(() => {
+    NamiPaywallManager.show();
+  }, []);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => <HeaderRight onRefreshPress={onRefreshPress} />,
+      headerLeft: () => <HeaderLeft onButtonPress={onButtonPress} />,
     });
-  }, [navigation, onRefreshPress]);
+  }, [navigation, onRefreshPress, onButtonPress]);
 
   const renderItem = ({ item, index }: {item: NamiCampaign; index: number}) => {
     const lasItem = index === campaigns.length - 1;
