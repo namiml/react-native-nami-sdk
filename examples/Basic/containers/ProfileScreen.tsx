@@ -37,35 +37,43 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
 
+  const checkIsLoggedIn = useCallback(() => {
+    // workaround for tests purposes
+    NamiCustomerManager.isLoggedIn().then(() =>
+      setTimeout(() => {
+        NamiCustomerManager.isLoggedIn().then((isLogin) => {
+          setIsUserLogin(isLogin);
+        });
+      }, 500),
+    );
+  }, []);
+
   const onLoginPress = useCallback(() => {
     NamiCustomerManager.login('E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF');
-    setIsUserLogin(true);
-  }, []);
+    checkIsLoggedIn();
+  }, [checkIsLoggedIn]);
 
   const onLogoutPress = useCallback(() => {
     NamiCustomerManager.logout();
-    setIsUserLogin(false);
-  }, []);
+    checkIsLoggedIn();
+  }, [checkIsLoggedIn]);
 
-  const getJourneyState = useCallback(async () => {
-    const myJourneyState = await NamiCustomerManager.journeyState();
-    console.log('myJourneyState', myJourneyState);
-    setJourneyState(myJourneyState);
-  }, []);
+  const getJourneyState = () => {
+    NamiCustomerManager.journeyState().then((myJourneyState) => {
+      console.log('myJourneyState', myJourneyState);
+      setJourneyState(myJourneyState);
+    });
+  };
 
-  const checkIsLoggedIn = useCallback(async () => {
-    const isLoggedIn = await NamiCustomerManager.isLoggedIn();
-    setIsUserLogin(isLoggedIn);
-    console.log('isLoggedIn', isLoggedIn);
-  }, []);
-
-  const checkId = useCallback(async () => {
+  const checkId = useCallback(() => {
     if (isUserLogin) {
-      const loggedId = await NamiCustomerManager.loggedInId();
-      setExternalId(loggedId);
+      NamiCustomerManager.loggedInId().then((loggedId) => {
+        setExternalId(loggedId);
+      });
     } else {
-      const deviceId = await NamiCustomerManager.deviceId();
-      setDisplayedDeviceId(deviceId);
+      NamiCustomerManager.deviceId().then((deviceId) => {
+        setDisplayedDeviceId(deviceId);
+      });
     }
   }, [isUserLogin]);
 
@@ -106,7 +114,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
       subscriptionJourneyStateRemover();
       subscriptionAccountStateRemover();
     };
-  }, [checkId, checkIsLoggedIn, getJourneyState, onLoginPress, onLogoutPress]);
+  }, [checkId, checkIsLoggedIn, onLoginPress, onLogoutPress]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

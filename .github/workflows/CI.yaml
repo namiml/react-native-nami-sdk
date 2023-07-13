@@ -5,6 +5,7 @@ on: pull_request
 jobs:
   eslint:
     name: ESLint
+    using: 'node16'
     permissions:
       actions: write
       contents: write
