@@ -11,7 +11,7 @@ export function getConfigObject() {
         'appPlatformID-apple': 'APPLE_STG_APP_PLATFORM_ID',
         'appPlatformID-android': 'ANDROID_STG_APP_PLATFORM_ID',
         logLevel: 'DEBUG',
-        namiCommands: ['useStagingAPI'],
+        namiCommands: ['useStagingAPI', 'useNamiWindow'],
         initialConfig: getInitialConfig(),
       };
     default:
