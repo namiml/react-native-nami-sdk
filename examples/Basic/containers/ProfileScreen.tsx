@@ -43,6 +43,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     NamiCustomerManager.login(
       'E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF',
       (success, error) => {
+        setIsUserLogin(success);
         console.log('success', success);
         console.log('error', error);
       },
@@ -51,6 +52,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
 
   const onLogoutPress = useCallback(() => {
     NamiCustomerManager.logout((success, error) => {
+      setIsUserLogin(!success);
       console.log('success', success);
       console.log('error', error);
     });
@@ -62,17 +64,21 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     setJourneyState(myJourneyState);
   }, []);
 
-  const checkIsLoggedIn = async () => {
+  const checkIsLoggedIn = useCallback(async () => {
     const isLoggedIn = await NamiCustomerManager.isLoggedIn();
     setIsUserLogin(isLoggedIn);
     console.log('isLoggedIn', isLoggedIn);
-  };
-  const checkId = async () => {
-    const loggedId = await NamiCustomerManager.loggedInId();
-    const deviceId = await NamiCustomerManager.deviceId();
-    setExternalId(loggedId);
-    setDisplayedDeviceId(deviceId);
-  };
+  }, []);
+
+  const checkId = useCallback(async () => {
+    if (isUserLogin) {
+      const loggedId = await NamiCustomerManager.loggedInId();
+      setExternalId(loggedId);
+    } else {
+      const deviceId = await NamiCustomerManager.deviceId();
+      setDisplayedDeviceId(deviceId);
+    }
+  }, [isUserLogin]);
 
   useEffect(() => {
     checkIsLoggedIn();
@@ -105,7 +111,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
       subscriptionJourneyStateRemover();
       subscriptionAccountStateRemover();
     };
-  }, [getJourneyState, onLoginPress, onLogoutPress]);
+  }, [checkId, checkIsLoggedIn, getJourneyState, onLoginPress, onLogoutPress]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -134,7 +140,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
         </Text>
         <View style={styles.idSection}>
           <Text testID="user_id" style={styles.idLabel}>
-            {isUserLogin ? 'External Id' : 'Device Id'}
+            {isUserLogin ? 'Customer Id' : 'Device Id'}
           </Text>
           <Text style={styles.id}>
             {isUserLogin ? externalId : displayedDeviceId}

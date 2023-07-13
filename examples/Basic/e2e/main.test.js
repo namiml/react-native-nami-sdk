@@ -133,7 +133,7 @@ describe('Profile and Entitlements screens Test', () => {
     await element(by.id('login_btn')).tap();
 
     await expect(element(by.id('login_btn'))).toHaveText('Logout');
-    await expect(element(by.id('user_id'))).toHaveText('External Id');
+    await expect(element(by.id('user_id'))).toHaveText('Customer Id');
 
     await element(by.id('login_btn')).tap();
 

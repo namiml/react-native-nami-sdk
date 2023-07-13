@@ -52,7 +52,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           console.log('availableCampaigns', availableCampaigns);
           const isEqualList =
             JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
-          setRefresh(isEqualList ? false : true);
+          setRefresh(!isEqualList);
           setCampaigns(availableCampaigns);
         },
       );
@@ -98,7 +98,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   }, []);
 
   const onRefreshPress = useCallback(() => {
+    getAllCampaigns();
+    setRefresh(!refresh);
     NamiCampaignManager.refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLayoutEffect(() => {
