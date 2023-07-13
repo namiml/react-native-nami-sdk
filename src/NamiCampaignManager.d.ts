@@ -1,28 +1,36 @@
-import {EmitterSubscription} from 'react-native';
-import {NamiPurchase} from './NamiPurchaseManager';
-import {NamiPaywallAction} from './NamiPaywallManager';
+import { EmitterSubscription } from "react-native";
+import { NamiPurchase } from "./NamiPurchaseManager";
+import { NamiPaywallAction } from "./NamiPaywallManager";
 
 export const NamiCampaignManager: {
   allCampaigns: () => Promise<Array<NamiCampaign>>;
-  isCampaignAvailable: (label?: string) => boolean;
+  isCampaignAvailable(campaignSource: string | null): Promise<boolean>;
   launch: (
     label?: string,
+    withUrl?: string,
     context?: PaywallLaunchContext,
     resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: (
       action: NamiPaywallAction,
+      campaignId: string,
+      paywallId: string,
+      campaignName?: string,
+      campaignType?: string,
+      campaignLabel?: string,
+      campaignUrl?: string,
+      paywallName?: string,
+      segmentId?: string,
+      externalSegmentId?: string,
+      deeplinkUrl?: string,
       skuId?: string,
       purchaseError?: string,
-      purchases?: NamiPurchase[],
-      campaignId?: string,
-      campaignLabel?: string,
-      paywallId?: string,
-    ) => void,
+      purchases?: NamiPurchase[]
+    ) => void
   ) => void;
   refresh: () => void;
   registerAvailableCampaignsHandler: (
-    callback: (availableCampaigns: NamiCampaign[]) => void,
-  ) => EmitterSubscription['remove'];
+    callback: (availableCampaigns: NamiCampaign[]) => void
+  ) => EmitterSubscription["remove"];
 };
 
 export type NamiCampaign = {
@@ -35,10 +43,10 @@ export type NamiCampaign = {
 };
 
 export enum NamiCampaignRule {
-  DEFAULT = 'default',
-  LABEL = 'label',
-  UNKNOWN = 'unknown',
-  URL = 'url',
+  DEFAULT = "default",
+  LABEL = "label",
+  UNKNOWN = "unknown",
+  URL = "url",
 }
 
 export enum LaunchCampaignError {
@@ -50,8 +58,8 @@ export enum LaunchCampaignError {
 }
 
 export enum LaunchCampaignResultAction {
-  FAILURE = 'FAILURE',
-  SUCCESS = 'SUCCESS',
+  FAILURE = "FAILURE",
+  SUCCESS = "SUCCESS",
 }
 
 export type FailureResultObject = {
@@ -60,5 +68,7 @@ export type FailureResultObject = {
 
 export type PaywallLaunchContext = {
   productGroups?: string[];
-  customAttributes: Map<string, string>;
+  customAttributes?: {
+    [key: string]: string;
+  };
 };

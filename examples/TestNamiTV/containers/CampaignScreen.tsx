@@ -30,52 +30,6 @@ const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
 const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
 
-  const getAllCampaigns = useCallback(async () => {
-    const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
-    const validCampaigns = fetchedCampaigns.filter((campaign) =>
-      Boolean(campaign.value),
-    );
-    setCampaigns(validCampaigns);
-    console.log('validCampaigns', validCampaigns);
-  }, []);
-
-  const onItemPress = useCallback(async (label?: string) => {
-    const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(
-      label,
-    );
-    if (isCampaignAvailable) {
-      NamiCampaignManager.launch(
-        label,
-        null,
-        (successAction, error) => {
-          console.log('successAction', successAction);
-          console.log('error', error);
-        },
-        (
-          action,
-          skuId,
-          purchaseError,
-          purchases,
-          campaignId,
-          campaignLabel,
-          paywallId,
-        ) => {
-          console.log('action', action);
-          console.log('skuId', skuId);
-          console.log('purchaseError', purchaseError);
-          console.log('purchases', purchases);
-          console.log('campaignId', campaignId);
-          console.log('campaignLabel', campaignLabel);
-          console.log('paywallId', paywallId);
-        },
-      );
-    }
-  }, []);
-
-  const onRefreshPress = useCallback(() => {
-    NamiCampaignManager.refresh();
-  }, []);
-
   useEffect(() => {
     getAllCampaigns();
     const subscriptionRemover =
@@ -90,6 +44,82 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getAllCampaigns = useCallback(async () => {
+    const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
+    const validCampaigns = fetchedCampaigns.filter((campaign) =>
+      Boolean(campaign.value),
+    );
+    setCampaigns(validCampaigns);
+    console.log('validCampaigns', validCampaigns);
+  }, []);
+
+  const triggerLaunch = (label?: any, url?: any) => {
+    return NamiCampaignManager.launch(
+      label,
+      url,
+      undefined,
+      (successAction, error) => {
+        console.log('successAction', successAction);
+        console.log('error', error);
+      },
+      (
+        action,
+        campaignId,
+        paywallId,
+        campaignLabel,
+        campaignName,
+        campaignType,
+        campaignUrl,
+        segmentId,
+        externalSegmentId,
+        paywallName,
+        deeplinkUrl,
+        skuId,
+        purchaseError,
+        purchases,
+      ) => {
+        console.log('action', action);
+        console.log('campaignId', campaignId);
+        console.log('paywallId', paywallId);
+        console.log('campaignLabel', campaignLabel);
+        console.log('campaignName', campaignName);
+        console.log('campaignType', campaignType);
+        console.log('campaignUrl', campaignUrl);
+        console.log('paywallName', paywallName);
+        console.log('segmentId', segmentId);
+        console.log('externalSegmentId', externalSegmentId);
+        console.log('deeplinkUrl', deeplinkUrl);
+        console.log('skuId', skuId);
+        console.log('purchaseError', purchaseError);
+        console.log('purchases', purchases);
+      },
+    );
+  };
+
+  const isCampaignAvailable = async (value?: string | null | undefined) => {
+    try {
+      return await NamiCampaignManager.isCampaignAvailable(value ?? '');
+    } catch (error) {
+      console.error(
+        `Failed to check campaign availability in isCampaignAvailable TVOS: ${error}`,
+      );
+    }
+  };
+
+  const onItemPressPrimary = useCallback(async (item: NamiCampaign) => {
+    if (await isCampaignAvailable(item.value)) {
+      item.type === 'label'
+        ? triggerLaunch(item.value, null)
+        : triggerLaunch(null, item.value);
+    }
+  }, []);
+
+  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
+
+  const onRefreshPress = useCallback(() => {
+    NamiCampaignManager.refresh();
   }, []);
 
   useLayoutEffect(() => {
@@ -109,9 +139,14 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
       <TouchableOpacity
-        onPress={() => onItemPress(item.value ?? undefined)}
+        onPress={() => onItemPressPrimary(item)}
         style={itemStyle}>
-        <Text style={styles.itemText}>{item.value}</Text>
+        <View style={styles.viewContainer}>
+          <Text style={styles.itemText}>{item.value}</Text>
+          {item.type === 'url' && (
+            <Text style={styles.itemText}>Open as: {item.type}</Text>
+          )}
+        </View>
       </TouchableOpacity>
     );
   };
@@ -120,7 +155,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   const renderDefault = () => {
     return (
-      <TouchableOpacity onPress={() => onItemPress()} style={styles.itemDef}>
+      <TouchableOpacity
+        onPress={() => onItemPressDefault()}
+        style={styles.itemDef}>
         <Text style={styles.itemText}>default</Text>
       </TouchableOpacity>
     );
@@ -210,6 +247,10 @@ const styles = StyleSheet.create({
   },
   marginTop20: {
     marginTop: 20,
+  },
+  viewContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

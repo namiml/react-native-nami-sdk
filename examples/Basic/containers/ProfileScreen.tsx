@@ -38,24 +38,13 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
 
   const onLoginPress = useCallback(() => {
-    // b909a31c-7a73-11ed-a1eb-0242ac120002
-    // f1851c87-e0ff-4349-a824-cd9b5e5211b9
-    NamiCustomerManager.login(
-      'E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF',
-      (success, error) => {
-        setIsUserLogin(success);
-        console.log('success', success);
-        console.log('error', error);
-      },
-    );
+    NamiCustomerManager.login('E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF');
+    setIsUserLogin(true);
   }, []);
 
   const onLogoutPress = useCallback(() => {
-    NamiCustomerManager.logout((success, error) => {
-      setIsUserLogin(!success);
-      console.log('success', success);
-      console.log('error', error);
-    });
+    NamiCustomerManager.logout();
+    setIsUserLogin(false);
   }, []);
 
   const getJourneyState = useCallback(async () => {
@@ -103,6 +92,12 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
           }
           if (action === 'logout' && success) {
             setIsUserLogin(!success);
+            checkId();
+          }
+          if (action === 'nami_device_id_set' && success) {
+            checkId();
+          }
+          if (action === 'nami_device_id_cleared' && success) {
             checkId();
           }
         },

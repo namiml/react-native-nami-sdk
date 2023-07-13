@@ -5,10 +5,15 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import {NamiCampaign, NamiCampaignManager} from 'react-native-nami-sdk';
+import {
+  NamiCampaign,
+  NamiCampaignManager,
+  NamiPaywallManager,
+} from 'react-native-nami-sdk';
 import {NamiPaywallAction} from 'react-native-nami-sdk/src/NamiPaywallManager';
 import {
   FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -28,6 +33,15 @@ const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
   </TouchableOpacity>
 );
 
+// For Nami testing purposes only
+const HeaderLeft = ({onButtonPress}: {onButtonPress: () => void}) => (
+  <TouchableOpacity style={styles.headerButton} onPress={onButtonPress}>
+    <Text testID="show_paywall_button" style={styles.headerButtonText}>
+      Show Paywall
+    </Text>
+  </TouchableOpacity>
+);
+
 const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -42,10 +56,17 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     );
     setCampaigns(validCampaigns);
     console.log('validCampaigns', validCampaigns);
+    return validCampaigns;
   }, []);
 
   useEffect(() => {
     getAllCampaigns();
+    const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
+      () => {
+        console.log('sign in');
+        NamiPaywallManager.hide();
+      },
+    );
     const subscriptionRemover =
       NamiCampaignManager.registerAvailableCampaignsHandler(
         (availableCampaigns) => {
@@ -58,44 +79,78 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
       );
     return () => {
       subscriptionRemover();
+      subscriptionSignInRemover();
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onItemPress = useCallback(async (label?: string) => {
-    const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(
+  const triggerLaunch = (label?: any, url?: any) => {
+    // const paywallLaunchContext = {
+    //   productGroups: ['group1'],
+    // };
+    return NamiCampaignManager.launch(
       label,
+      url,
+      undefined,
+      (successAction, error) => {
+        console.log('successAction', successAction);
+        console.log('error', error);
+      },
+      (
+        action,
+        campaignId,
+        paywallId,
+        campaignLabel,
+        campaignName,
+        campaignType,
+        campaignUrl,
+        segmentId,
+        externalSegmentId,
+        paywallName,
+        deeplinkUrl,
+        skuId,
+        purchaseError,
+        purchases,
+      ) => {
+        console.log('action', action);
+        setAction(action);
+        console.log('campaignId', campaignId);
+        console.log('paywallId', paywallId);
+        console.log('campaignLabel', campaignLabel);
+        console.log('campaignName', campaignName);
+        console.log('campaignType', campaignType);
+        console.log('campaignUrl', campaignUrl);
+        console.log('paywallName', paywallName);
+        console.log('segmentId', segmentId);
+        console.log('externalSegmentId', externalSegmentId);
+        console.log('deeplinkUrl', deeplinkUrl);
+        console.log('skuId', skuId);
+        console.log('purchaseError', purchaseError);
+        console.log('purchases', purchases);
+      },
     );
-    if (isCampaignAvailable) {
-      NamiCampaignManager.launch(
-        label,
-        null,
-        (successAction, error) => {
-          console.log('successAction', successAction);
-          console.log('error', error);
-        },
-        (
-          action,
-          skuId,
-          purchaseError,
-          purchases,
-          campaignId,
-          campaignLabel,
-          paywallId,
-        ) => {
-          console.log('action', action);
-          setAction(action);
-          console.log('skuId', skuId);
-          console.log('purchaseError', purchaseError);
-          console.log('purchases', purchases);
-          console.log('campaignId', campaignId);
-          console.log('campaignLabel', campaignLabel);
-          console.log('paywallId', paywallId);
-        },
+  };
+
+  const isCampaignAvailable = async (value?: string | null | undefined) => {
+    try {
+      return await NamiCampaignManager.isCampaignAvailable(value ?? '');
+    } catch (error) {
+      console.error(
+        `Failed to check campaign availability in isCampaignAvailable: ${error}`,
       );
     }
+  };
+
+  const onItemPressPrimary = useCallback(async (item: NamiCampaign) => {
+    if (await isCampaignAvailable(item.value)) {
+      item.type === 'label'
+        ? triggerLaunch(item.value, null)
+        : triggerLaunch(null, item.value);
+    }
   }, []);
+
+  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
 
   const onRefreshPress = useCallback(() => {
     getAllCampaigns();
@@ -104,23 +159,32 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onButtonPress = useCallback(() => {
+    NamiPaywallManager.show();
+  }, []);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => <HeaderRight onRefreshPress={onRefreshPress} />,
+      headerLeft: () => <HeaderLeft onButtonPress={onButtonPress} />,
     });
-  }, [navigation, onRefreshPress]);
+  }, [navigation, onRefreshPress, onButtonPress]);
 
   const renderItem = ({item, index}: {item: NamiCampaign; index: number}) => {
     const lasItem = index === campaigns.length - 1;
     const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
       <TouchableOpacity
-        onPress={() => onItemPress(item.value ?? undefined)}
+        onPress={() => onItemPressPrimary(item)}
         style={itemStyle}>
         <View
+          style={styles.viewContainer}
           testID={`list_item_${item.value}`}
           accessibilityValue={{text: JSON.stringify(item)}}>
           <Text style={styles.itemText}>{item.value}</Text>
+          {item.type === 'url' && (
+            <Text style={styles.itemText}>Open as: {item.type}</Text>
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -132,11 +196,20 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     return (
       <TouchableOpacity
         testID="default_campaigns"
-        onPress={() => onItemPress()}
+        onPress={() => onItemPressDefault()}
         style={styles.itemDef}>
         <Text style={styles.itemText}>default</Text>
       </TouchableOpacity>
     );
+  };
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    getAllCampaigns().then(() => {
+      setRefreshing(false);
+    });
   };
 
   return (
@@ -165,6 +238,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           style={styles.list}
           renderItem={renderItem}
           ItemSeparatorComponent={SeparatorComponent}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     </SafeAreaView>
@@ -238,6 +314,10 @@ const styles = StyleSheet.create({
   },
   marginTop20: {
     marginTop: 20,
+  },
+  viewContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

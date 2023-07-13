@@ -2,6 +2,7 @@ package com.nami.reactlibrary
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
@@ -15,6 +16,24 @@ import com.namiml.paywall.model.PaywallLaunchContext
 
 class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), ActivityEventListener {
+    // handlePaywallCallback metadata
+    companion object {
+        const val CAMPAIGN_ID = "campaignId"
+        const val CAMPAIGN_LABEL = "campaignLabel"
+        const val PAYWALL_ID = "paywallId"
+        const val ACTION = "action"
+        const val SKU_ID = "skuId"
+        const val PURCHASE_ERROR = "purchaseError"
+        const val PURCHASES = "purchases"
+        const val CAMPAIGN_NAME = "campaignName"
+        const val CAMPAIGN_TYPE = "campaignType"
+        const val CAMPAIGN_URL = "campaignUrl"
+        const val PAYWALL_NAME = "paywallName"
+        const val SEGMENT_ID = "segmentId"
+        const val EXTERNAL_SEGMENT_ID = "externalSegmentId"
+        const val DEEP_LINK_URL = "deeplinkUrl"
+        const val _RESULT_CAMPAIGN = "ResultCampaign"
+    }
 
     override fun getName(): String {
         return "RNNamiCampaignManager"
@@ -30,7 +49,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun launch(label: String?, context: ReadableMap?, resultCallback: Callback, actionCallback: Callback) {
+    fun launch(label: String?, withUrl: String?, context: ReadableMap?, resultCallback: Callback, actionCallback: Callback) {
         var theActivity: Activity? = null
         if (reactApplicationContext.hasCurrentActivity()) {
             theActivity = reactApplicationContext.getCurrentActivity()
@@ -73,21 +92,59 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
 
         if (theActivity != null) {
             reactApplicationContext.runOnUiQueueThread {
+                val paywallActionCallback = {
+                        campaignId: String,
+                        campaignName: String?,
+                        campaignType: String?,
+                        campaignLabel: String?,
+                        campaignUrl: String?,
+                        paywallId: String,
+                        paywallName: String?,
+                        segmentId: String?,
+                        externalSegmentId: String?,
+                        action: NamiPaywallAction,
+                        sku: NamiSKU?,
+                        purchaseError: String?,
+                        purchases: List<NamiPurchase>?,
+                        deeplinkUrl: String? ->
+                    handlePaywallCallback(
+                        campaignId,
+                        campaignName,
+                        campaignType,
+                        campaignLabel,
+                        campaignUrl,
+                        paywallId,
+                        paywallName,
+                        segmentId,
+                        externalSegmentId,
+                        action,
+                        sku,
+                        purchaseError,
+                        purchases,
+                        deeplinkUrl,
+                        actionCallback)
+                }
+
+                val uriObject: Uri? = if (withUrl != null) Uri.parse(withUrl) else null
+
                 if (label != null) {
                     NamiCampaignManager.launch(
                         theActivity,
                         label,
-                        paywallActionCallback = { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases ->
-                            handlePaywallCallback(campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases, actionCallback)
-                        },
+                        paywallActionCallback = paywallActionCallback,
                         paywallLaunchContext,
+                    ) { result -> handleResult(result, resultCallback) }
+                } else if (withUrl != null) {
+                    NamiCampaignManager.launch(
+                        theActivity,
+                        paywallActionCallback = paywallActionCallback,
+                        context = paywallLaunchContext,
+                        uri = uriObject,
                     ) { result -> handleResult(result, resultCallback) }
                 } else {
                     NamiCampaignManager.launch(
                         theActivity,
-                        paywallActionCallback = { campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases ->
-                            handlePaywallCallback(campaignId, campaignLabel, paywallId, action, sku, purchaseError, purchases, actionCallback)
-                        },
+                        paywallActionCallback = paywallActionCallback,
                     ) { result -> handleResult(result, resultCallback) }
                 }
             }
@@ -95,26 +152,67 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     }
 
-    private fun handlePaywallCallback(campaignId: String, campaignLabel: String?, paywallId: String, action: NamiPaywallAction, sku: NamiSKU?, purchaseError: String?, purchases: List<NamiPurchase>?, actionCallback: Callback) {
+    private fun handlePaywallCallback(
+        campaignId: String,
+        campaignName: String?,
+        campaignType: String?,
+        campaignLabel: String?,
+        campaignUrl: String?,
+        paywallId: String,
+        paywallName: String?,
+        segmentId: String?,
+        externalSegmentId: String?,
+        action: NamiPaywallAction,
+        sku: NamiSKU?,
+        purchaseError: String?,
+        purchases: List<NamiPurchase>?,
+        deeplinkUrl: String?,
+        actionCallback: Callback
+    ) {
         val actionString = action.toString()
-        val skuString = sku?.skuId.orEmpty()
-        val purchasesArray: WritableArray = WritableNativeArray()
-        if (purchases != null) {
-            for (purchase in purchases) {
-                purchasesArray.pushMap(purchase.toPurchaseDict())
+        val skuString = sku?.skuId ?: ""
+
+        val purchasesArray = createPurchaseArray(purchases)
+
+        val resultMap = Arguments.createMap().apply {
+            putString(CAMPAIGN_ID, campaignId)
+            putString(CAMPAIGN_LABEL, campaignLabel ?: "")
+            putString(PAYWALL_ID, paywallId)
+            putString(ACTION, actionString)
+            putString(SKU_ID, skuString)
+            putString(PURCHASE_ERROR, purchaseError ?: "")
+            putArray(PURCHASES, purchasesArray)
+            putString(CAMPAIGN_NAME, campaignName ?: "")
+            putString(CAMPAIGN_TYPE, campaignType ?: "")
+            putString(CAMPAIGN_URL, campaignUrl ?: "")
+            putString(PAYWALL_NAME, paywallName ?: "")
+            putString(SEGMENT_ID, segmentId ?: "")
+            putString(EXTERNAL_SEGMENT_ID, externalSegmentId ?: "")
+            putString(DEEP_LINK_URL, deeplinkUrl ?: "")
+        }
+
+        emitEvent(_RESULT_CAMPAIGN, resultMap)
+    }
+
+    private fun createPurchaseArray(purchases: List<NamiPurchase>?): WritableArray {
+        return WritableNativeArray().apply {
+            purchases?.forEach { purchase ->
+                try {
+                    pushMap(purchase.toPurchaseDict())
+                } catch (e: Exception) {
+                    Log.e(LOG_TAG, "Error while converting data in createPurchaseArray to a Map", e)
+                }
             }
         }
-        val resultMap = Arguments.createMap()
-        resultMap.putString("campaignId", campaignId)
-        resultMap.putString("campaignLabel", campaignLabel)
-        resultMap.putString("paywallId", paywallId)
-        resultMap.putString("action", actionString)
-        resultMap.putString("skuId", skuString)
-        resultMap.putString("purchaseError", purchaseError)
-        resultMap.putArray("purchases", purchasesArray)
-        reactApplicationContext
-            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-            .emit("ResultCampaign", resultMap)
+    }
+
+    private fun emitEvent(event: String, map: WritableMap) {
+        val emitter = reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+        if (emitter is DeviceEventManagerModule.RCTDeviceEventEmitter) {
+            emitter.emit(event, map)
+        } else {
+            Log.w(LOG_TAG, "Cannot emit $event event: RCTDeviceEventEmitter instance is null")
+        }
     }
 
     private fun handleResult(result: LaunchCampaignResult, resultCallback: Callback) {
@@ -153,12 +251,11 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun isCampaignAvailable(label: String?, promise: Promise) {
-        val isCampaignAvailable: Boolean
-        if (label != null) {
-            isCampaignAvailable = NamiCampaignManager.isCampaignAvailable(label)
-        } else {
-            isCampaignAvailable = NamiCampaignManager.isCampaignAvailable()
+    fun isCampaignAvailable(campaignSource: String?, promise: Promise) {
+        val isCampaignAvailable = when {
+            campaignSource == null -> NamiCampaignManager.isCampaignAvailable()
+            Uri.parse(campaignSource)?.scheme != null -> NamiCampaignManager.isCampaignAvailable(Uri.parse(campaignSource))
+            else -> NamiCampaignManager.isCampaignAvailable(campaignSource)
         }
         promise.resolve(isCampaignAvailable)
     }
