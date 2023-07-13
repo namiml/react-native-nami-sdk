@@ -175,12 +175,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
       <TouchableOpacity
+        testID={`list_item_${item.value}`}
+        accessibilityValue={{text: JSON.stringify(item)}}
         onPress={() => onItemPressPrimary(item)}
         style={itemStyle}>
-        <View
-          style={styles.viewContainer}
-          testID={`list_item_${item.value}`}
-          accessibilityValue={{text: JSON.stringify(item)}}>
+        <View style={styles.viewContainer}>
           <Text style={styles.itemText}>{item.value}</Text>
           {item.type === 'url' && (
             <Text style={styles.itemText}>Open as: {item.type}</Text>
@@ -222,9 +221,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
           {renderDefault()}
         </View>
-        <Text testID="campaigns_modal_action" style={styles.statusText}>
-          Modal Status: {campaignsAction}
-        </Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.statusText}>Modal Status:</Text>
+          <Text testID="campaigns_modal_action" style={styles.statusText}>
+            {campaignsAction}
+          </Text>
+        </View>
         <Text testID="refresh_status_text" style={styles.statusText}>
           Refreshed: {refresh.toString()}
         </Text>
