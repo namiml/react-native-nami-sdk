@@ -6,7 +6,8 @@ const data = {
 
 describe('Configure Test', () => {
   beforeAll(async () => {
-    await device.launchApp({newInstance: true});
+    await device.launchApp();
+    await device.reloadReactNative();
   });
   afterAll(async () => {
     await device.launchApp({newInstance: true});
