@@ -132,7 +132,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y android-sdk-platform-tools-common
-#          export ANDROID_SDK_ROOT=~/Library/Android/sdk
+          export ANDROID_SDK_ROOT=~/Library/Android/sdk
+
+      - name: Run ADB
+        run: |
+          adb kill-server
+          adb start-server
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
@@ -146,11 +151,6 @@ jobs:
           rm -rf node_modules/react-native-nami-sdk/examples
           detox build --configuration android.emu.release
         working-directory: source/examples/Basic
-
-      - name: Run ADB
-        run: |
-          adb kill-server
-          adb start-server
 
       - name: Run Detox Test(s)
         uses: reactivecircus/android-emulator-runner@v2
