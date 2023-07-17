@@ -144,7 +144,7 @@ jobs:
           id: jdk11
 
       - name: Setup Android SDK
-        uses: actions/android/setup-android@v2
+        uses: android-actions/setup-android@v2
 
       - name: Install AVD files
         run: |
