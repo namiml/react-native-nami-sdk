@@ -151,46 +151,46 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 8
-        script: |
-          # Install AVD files
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
-          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-          # Create emulator
-          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n Pixel_API_29_AOSP -d pixel --package 'system-images;android-29;default;x86_64' --force
-          $ANDROID_HOME/emulator/emulator -list-avds
-          emulator_config=~/.android/avd/Pixel_API_29_AOSP.avd/config.ini
-          # The following madness is to support empty OR populated config.ini files,
-          # the state of which is dependant on the version of the emulator used (which we don't control),
-          # so let's be defensive to be safe.
-          # Replace existing config (NOTE we're on MacOS so sed works differently!)
-          sed -i .bak 's/hw.lcd.density=.*/hw.lcd.density=420/' "$emulator_config"
-          sed -i .bak 's/hw.lcd.height=.*/hw.lcd.height=1920/' "$emulator_config"
-          sed -i .bak 's/hw.lcd.width=.*/hw.lcd.width=1080/' "$emulator_config"
-          # Or, add new config
-          if ! grep -q "hw.lcd.density" "$emulator_config"; then
+          script: |
+            # Install AVD files
+            yes | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
+            yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+            # Create emulator
+            echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n Pixel_API_29_AOSP -d pixel --package 'system-images;android-29;default;x86_64' --force
+            $ANDROID_HOME/emulator/emulator -list-avds
+            emulator_config=~/.android/avd/Pixel_API_29_AOSP.avd/config.ini
+            # The following madness is to support empty OR populated config.ini files,
+            # the state of which is dependant on the version of the emulator used (which we don't control),
+            # so let's be defensive to be safe.
+            # Replace existing config (NOTE we're on MacOS so sed works differently!)
+            sed -i .bak 's/hw.lcd.density=.*/hw.lcd.density=420/' "$emulator_config"
+            sed -i .bak 's/hw.lcd.height=.*/hw.lcd.height=1920/' "$emulator_config"
+            sed -i .bak 's/hw.lcd.width=.*/hw.lcd.width=1080/' "$emulator_config"
+            # Or, add new config
+            if ! grep -q "hw.lcd.density" "$emulator_config"; then
             echo "hw.lcd.density=420" >> "$emulator_config"
-          fi
-          if ! grep -q "hw.lcd.height" "$emulator_config"; then
+            fi
+            if ! grep -q "hw.lcd.height" "$emulator_config"; then
             echo "hw.lcd.height=1920" >> "$emulator_config"
-          fi
-          if ! grep -q "hw.lcd.width" "$emulator_config"; then
+            fi
+            if ! grep -q "hw.lcd.width" "$emulator_config"; then
             echo "hw.lcd.width=1080" >> "$emulator_config"
-          fi
-          echo "Emulator settings ($emulator_config)"
-          cat "$emulator_config"
+            fi
+            echo "Emulator settings ($emulator_config)"
+            cat "$emulator_config"
 
       - name: Start Android emulator
         uses: actions/setup-java@v2
         with:
          distribution: 'adopt'
          java-version: 8
-        script: |
-          echo "${{ steps.jdk8.outputs.path }}/bin" >> $GITHUB_PATH
-          echo "Starting emulator and waiting for boot to complete..."
-          nohup $ANDROID_HOME/emulator/emulator -avd Pixel_API_29_AOSP -no-snapshot -no-window -no-audio -no-boot-anim -camera-back none -camera-front none -qemu -m 2048 > /dev/null 2>&1 &
-          $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
-          echo "Emulator has finished booting"
-          $ANDROID_HOME/platform-tools/adb devices
+         script: |
+            echo "${{ steps.jdk8.outputs.path }}/bin" >> $GITHUB_PATH
+            echo "Starting emulator and waiting for boot to complete..."
+            nohup $ANDROID_HOME/emulator/emulator -avd Pixel_API_29_AOSP -no-snapshot -no-window -no-audio -no-boot-anim -camera-back none -camera-front none -qemu -m 2048 > /dev/null 2>&1 &
+            $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
+            echo "Emulator has finished booting"
+            $ANDROID_HOME/platform-tools/adb devices
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
