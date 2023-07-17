@@ -168,9 +168,8 @@ jobs:
           api-level: 31
           arch: x86_64
           avd-name: ${{ steps.device.outputs.AVD_NAME }}
-          script: |
-            cd examples/Basic
-            yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --headless --record-logs all
+          script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --headless --record-logs all
+          working-directory: source/examples/Basic
 
       - name: Upload artifacts
         if: failure()
