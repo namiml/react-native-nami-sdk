@@ -148,13 +148,16 @@ jobs:
           key: ${{ runner.os }}-detox-build
           restore-keys: |
               ${{ runner.os }}-detox-build
+        working-directory: source/examples/Basic
 
       - name: Detox build
         run: yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
+        working-directory: source/examples/Basic
 
       - name: Get device name
         id: device
         run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator.device.avdName)" >> $GITHUB_OUTPUT
+        working-directory: source/examples/Basic
 
       - name: Detox test
         uses: reactivecircus/android-emulator-runner@v2
@@ -163,6 +166,7 @@ jobs:
           arch: x86_64
           avd-name: ${{ steps.device.outputs.AVD_NAME }}
           script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --headless --record-logs all
+        working-directory: source/examples/Basic
 
       - name: Upload artifacts
         if: failure()
