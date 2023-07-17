@@ -150,7 +150,9 @@ jobs:
               ${{ runner.os }}-detox-build
 
       - name: Detox build
-        run: yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
+        run: |
+          rm -rf node_modules/react-native-nami-sdk/examples
+          yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
         working-directory: source/examples/Basic
 
       - name: Get device name
