@@ -115,7 +115,7 @@ jobs:
           name: detox-artifacts
           path: artifacts
   e2e-android:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v2
@@ -129,25 +129,25 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install Java JDK
-        uses: joschi/setup-jdk@v1
-        with:
-          java-version: 'openjdk8'
-          architecture: 'x64'
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+#      - name: Install Java JDK
+#        uses: joschi/setup-jdk@v1
+#        with:
+#          java-version: 'openjdk8'
+#          architecture: 'x64'
+#        env:
+#          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+#
+#      - name: Setup Android SDK
+#        uses: android-actions/setup-android@v2
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-
-#      - name: Install AVD files
-#        run: |
-#          # Install AVD files
-#          yes | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
-#          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-#          # Create emulator
-#          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n Pixel_API_29_AOSP -d pixel --package 'system-images;android-29;default;x86_64' --force
-#          $ANDROID_HOME/emulator/emulator -list-avds
+      - name: Install AVD files
+        run: |
+          # Install AVD files
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+          # Create emulator
+          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n Pixel_API_29_AOSP -d pixel --package 'system-images;android-29;default;x86_64' --force
+          $ANDROID_HOME/emulator/emulator -list-avds
 #          emulator_config=~/.android/avd/Pixel_API_29_AOSP.avd/config.ini
 #          # The following madness is to support empty OR populated config.ini files,
 #          # the state of which is dependant on the version of the emulator used (which we don't control),
@@ -169,13 +169,13 @@ jobs:
 #          echo "Emulator settings ($emulator_config)"
 #          cat "$emulator_config"
 #
-#      - name: Start Android emulator
-#        run: |
-#          echo "Starting emulator and waiting for boot to complete..."
-#          nohup $ANDROID_HOME/emulator/emulator -avd Pixel_API_29_AOSP -no-snapshot -no-window -no-audio -no-boot-anim -camera-back none -camera-front none -qemu -m 2048 > /dev/null 2>&1 &
-#          $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
-#          echo "Emulator has finished booting"
-#          $ANDROID_HOME/platform-tools/adb devices
+      - name: Start Android emulator
+        run: |
+          echo "Starting emulator and waiting for boot to complete..."
+          nohup $ANDROID_HOME/emulator/emulator -avd Pixel_API_29_AOSP -no-snapshot -no-window -no-audio -no-boot-anim -camera-back none -camera-front none -qemu -m 2048 > /dev/null 2>&1 &
+          $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
+          echo "Emulator has finished booting"
+          $ANDROID_HOME/platform-tools/adb devices
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
