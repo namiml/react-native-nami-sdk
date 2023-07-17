@@ -41,7 +41,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
                     namiSkuType = .unknown
                 }
 
-                let namiSku = NamiSKU(namiId: namiId, storeId: storeId, skuType: namiSkuType)
+                let namiSku = NamiSKU(namiId: namiId, storeId: storeId, skuType: namiSkuType, product: nil)
 
                 do {
                     let dateFormatter = DateFormatter()
