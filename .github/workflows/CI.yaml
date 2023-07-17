@@ -129,6 +129,15 @@ jobs:
         with:
           node-version: "16"
 
+      # - name: Install ADB
+      #   run: |
+      #    sudo apt-get update
+      #    sudo apt-get install -y android-sdk-platform-tools-common
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: source/examples/Basic
+
       - name: Install AVD files
       - run: |
           # Install AVD files
@@ -166,14 +175,15 @@ jobs:
           echo "Emulator has finished booting"
           $ANDROID_HOME/platform-tools/adb devices
 
-      # - name: Install ADB
-      #   run: |
-      #    sudo apt-get update
-      #    sudo apt-get install -y android-sdk-platform-tools-common
-
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
-        working-directory: source/examples/Basic
+#      - name: Android Emulator
+#        timeout-minutes: 10
+#        continue-on-error: true
+#        run: |
+#          echo "Starting emulator"
+#          nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
+#          $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
+#          $ANDROID_HOME/platform-tools/adb devices
+#          echo "Emulator started"
 
       - name: Install Detox CLI
         run: yarn global add detox-cli
@@ -183,16 +193,6 @@ jobs:
           rm -rf node_modules/react-native-nami-sdk/examples
           detox build --configuration android.emu.release
         working-directory: source/examples/Basic
-
-      - name: Android Emulator
-        timeout-minutes: 10
-        continue-on-error: true
-        run: |
-          echo "Starting emulator"
-          nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
-          $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
-          $ANDROID_HOME/platform-tools/adb devices
-          echo "Emulator started"
 
       - name: Run Detox Test(s)
         uses: reactivecircus/android-emulator-runner@v2
