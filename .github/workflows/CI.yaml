@@ -144,8 +144,6 @@ jobs:
           id: setup-jdk11
 
       - name: Install AVD files
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
         run: |
           # Specify version of java
           echo "JAVA_HOME=${{ steps.setup-jdk8.outputs.path }}" >> $GITHUB_ENV
@@ -177,8 +175,6 @@ jobs:
           cat "$emulator_config"
 
       - name: Start Android emulator
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
         run: |
           echo "JAVA_HOME=${{ steps.setup-jdk8.outputs.path }}" >> $GITHUB_ENV
           echo "Starting emulator and waiting for boot to complete..."
