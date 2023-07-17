@@ -174,7 +174,7 @@ jobs:
           echo "Emulator settings ($emulator_config)"
           cat "$emulator_config"
         env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_HOME: /Users/runner/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64/Contents/Home
 
       - name: Start Android emulator
         run: |
@@ -185,7 +185,7 @@ jobs:
           echo "Emulator has finished booting"
           $ANDROID_HOME/platform-tools/adb devices
         env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_HOME: /Users/runner/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64/Contents/Home
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
