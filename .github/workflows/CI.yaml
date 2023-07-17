@@ -138,7 +138,7 @@ jobs:
         with:
           cache: gradle
           distribution: temurin
-          java-version: 17
+          java-version: 11
 
       - name: Cache Detox build
         id: cache-detox-build
@@ -149,13 +149,10 @@ jobs:
           restore-keys: |
               ${{ runner.os }}-detox-build
 
-      - name: Install Detox CLI
-        run: yarn global add detox-cli
-
       - name: Detox build
         run: |
           rm -rf node_modules/react-native-nami-sdk/examples
-          detox build --configuration android.emu.release
+          yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
         working-directory: source/examples/Basic
 
       - name: Get device name
