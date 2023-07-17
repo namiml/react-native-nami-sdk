@@ -129,27 +129,29 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Setup OpenJDK 8
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: 8
-          id: jdk8
-
-      - name: Setup OpenJDK 11
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: 11
-          id: jdk11
+#      - name: Setup OpenJDK 8
+#        uses: actions/setup-java@v2
+#        with:
+#          distribution: 'adopt'
+#          java-version: 8
+#          id: jdk8
+#
+#      - name: Setup OpenJDK 11
+#        uses: actions/setup-java@v2
+#        with:
+#          distribution: 'adopt'
+#          java-version: 11
+#          id: jdk11
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
       - name: Install AVD files
-        run: |
-          # Specify version of java
-          echo "${{ steps.jdk8.outputs.path }}/bin" >> $GITHUB_PATH
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 8
+        script: |
           # Install AVD files
           yes | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
           yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
@@ -176,19 +178,19 @@ jobs:
           fi
           echo "Emulator settings ($emulator_config)"
           cat "$emulator_config"
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Start Android emulator
-        run: |
+        uses: actions/setup-java@v2
+        with:
+         distribution: 'adopt'
+         java-version: 8
+        script: |
           echo "${{ steps.jdk8.outputs.path }}/bin" >> $GITHUB_PATH
           echo "Starting emulator and waiting for boot to complete..."
           nohup $ANDROID_HOME/emulator/emulator -avd Pixel_API_29_AOSP -no-snapshot -no-window -no-audio -no-boot-anim -camera-back none -camera-front none -qemu -m 2048 > /dev/null 2>&1 &
           $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
           echo "Emulator has finished booting"
           $ANDROID_HOME/platform-tools/adb devices
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
