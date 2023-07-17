@@ -144,6 +144,10 @@ jobs:
           id: setup-jdk11
 
       - name: Install AVD files
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 8
         run: |
           # Install AVD files
           yes | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
@@ -172,18 +176,21 @@ jobs:
           echo "Emulator settings ($emulator_config)"
           cat "$emulator_config"
         env:
-          JAVA_HOME: /Users/runner/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64/Contents/Home
           ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Start Android emulator
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 8
         run: |
+          echo "JAVA_HOME=${{ steps.setup-jdk8.outputs.path }}" >> $GITHUB_ENV
           echo "Starting emulator and waiting for boot to complete..."
           nohup $ANDROID_HOME/emulator/emulator -avd Pixel_API_29_AOSP -no-snapshot -no-window -no-audio -no-boot-anim -camera-back none -camera-front none -qemu -m 2048 > /dev/null 2>&1 &
           $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
           echo "Emulator has finished booting"
           $ANDROID_HOME/platform-tools/adb devices
         env:
-          JAVA_HOME: /Users/runner/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64/Contents/Home
           ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Install Dependencies
@@ -194,8 +201,11 @@ jobs:
         run: yarn global add detox-cli
 
       - name: Detox build
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 11
         run: |
-          echo "JAVA_HOME=${{ steps.setup-jdk11.outputs.path }}" >> $GITHUB_ENV
           rm -rf node_modules/react-native-nami-sdk/examples
           detox build --configuration android.emu.release
         working-directory: source/examples/Basic
@@ -205,14 +215,18 @@ jobs:
         with:
           api-level: 29
           script: |
-            echo "JAVA_HOME=${{ steps.setup-jdk11.outputs.path }}" >> $GITHUB_ENV
-            cd examples/Basic
-            yarn start &
-            METRO_BUNDLER_PID=$!
-            detox test --configuration android.emu.release --headless --record-logs all
-            DETOX_EXIT_CODE=$?
-            kill $METRO_BUNDLER_PID
-            exit $DETOX_EXIT_CODE
+            uses: actions/setup-java@v2
+            with:
+              distribution: 'adopt'
+              java-version: 11
+            run: |
+              cd examples/Basic
+              yarn start &
+              METRO_BUNDLER_PID=$!
+              detox test --configuration android.emu.release --headless --record-logs all
+              DETOX_EXIT_CODE=$?
+              kill $METRO_BUNDLER_PID
+              exit $DETOX_EXIT_CODE
 
       - name: Upload artifacts
         if: failure()
