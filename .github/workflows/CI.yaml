@@ -130,7 +130,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version-file: .nvmrc
 
       - name: Install Yarn dependencies
         run: yarn --frozen-lockfile --prefer-offline
