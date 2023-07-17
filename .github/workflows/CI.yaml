@@ -145,8 +145,6 @@ jobs:
 
       - name: Install AVD files
         run: |
-          # Specify version of java
-          echo "JAVA_HOME=${{ steps.setup-jdk8.outputs.path }}" >> $GITHUB_ENV
           # Install AVD files
           yes | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
           yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
@@ -174,18 +172,19 @@ jobs:
           echo "Emulator settings ($emulator_config)"
           cat "$emulator_config"
         env:
-          ANDROID_HOME: /Users/runner/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64/Contents/Home
+          JAVA_HOME: /Users/runner/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64/Contents/Home
+          ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Start Android emulator
         run: |
-          echo "JAVA_HOME=${{ steps.setup-jdk8.outputs.path }}" >> $GITHUB_ENV
           echo "Starting emulator and waiting for boot to complete..."
           nohup $ANDROID_HOME/emulator/emulator -avd Pixel_API_29_AOSP -no-snapshot -no-window -no-audio -no-boot-anim -camera-back none -camera-front none -qemu -m 2048 > /dev/null 2>&1 &
           $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
           echo "Emulator has finished booting"
           $ANDROID_HOME/platform-tools/adb devices
         env:
-          ANDROID_HOME: /Users/runner/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64/Contents/Home
+          JAVA_HOME: /Users/runner/hostedtoolcache/Java_Adopt_jdk/8.0.372-7/x64/Contents/Home
+          ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
