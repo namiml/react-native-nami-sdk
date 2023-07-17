@@ -129,13 +129,6 @@ jobs:
         with:
           node-version: "16"
 
-      ## test different jdk
-      - name: Use specific Java version for sdkmanager to work
-        uses: joschi/setup-jdk@v1
-        with:
-          java-version: 'openjdk8'
-          architecture: 'x64'
-
       - name: Download Android Emulator Image
         run: |
           echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-29;google_apis;x86"
