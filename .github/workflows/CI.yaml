@@ -130,13 +130,15 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
+      - name: Install Java JDK
+        uses: joschi/setup-jdk@v2
         with:
-          distribution: temurin
-          java-version: 17
+          java-version: 'openjdk8'
+          architecture: 'x64'
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
-      #      - name: Install AVD files
+#      - name: Install AVD files
 #        run: |
 #          # Install AVD files
 #          yes | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
