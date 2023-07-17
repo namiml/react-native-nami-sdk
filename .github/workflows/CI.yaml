@@ -173,6 +173,8 @@ jobs:
           fi
           echo "Emulator settings ($emulator_config)"
           cat "$emulator_config"
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Start Android emulator
         run: |
@@ -182,6 +184,8 @@ jobs:
           $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
           echo "Emulator has finished booting"
           $ANDROID_HOME/platform-tools/adb devices
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
