@@ -148,7 +148,6 @@ jobs:
           key: ${{ runner.os }}-detox-build
           restore-keys: |
               ${{ runner.os }}-detox-build
-        working-directory: source/examples/Basic
 
       - name: Detox build
         run: yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
