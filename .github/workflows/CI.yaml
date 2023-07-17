@@ -142,9 +142,12 @@ jobs:
 
       - name: Install AVD files
         run: |
+          # Make licenses directory and accept license
+          mkdir -p $ANDROID_HOME/licenses
+          echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > $ANDROID_HOME/licenses/android-sdk-license
+
           # Install AVD files
           echo -e "\ny" | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
-          echo -e "\ny" | $ANDROID_HOME/tools/bin/sdkmanager --licenses
           # Create emulator
           echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n Pixel_API_29_AOSP -d pixel --package 'system-images;android-29;default;x86_64' --force
           $ANDROID_HOME/emulator/emulator -list-avds
