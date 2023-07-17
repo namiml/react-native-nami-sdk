@@ -140,17 +140,14 @@ jobs:
 #      - name: Setup Android SDK
 #        uses: android-actions/setup-android@v2
 
-      - name: Install AVD files
-        run: |
-          # Make licenses directory and accept license
-          mkdir -p $ANDROID_HOME/licenses
-          echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > $ANDROID_HOME/licenses/android-sdk-license
-
-          # Install AVD files
-          echo -e "\ny" | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
-          # Create emulator
-          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n Pixel_API_29_AOSP -d pixel --package 'system-images;android-29;default;x86_64' --force
-          $ANDROID_HOME/emulator/emulator -list-avds
+#      - name: Install AVD files
+#        run: |
+#          # Install AVD files
+#          yes | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-29;default;x86_64'
+#          yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+#          # Create emulator
+#          echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n Pixel_API_29_AOSP -d pixel --package 'system-images;android-29;default;x86_64' --force
+#          $ANDROID_HOME/emulator/emulator -list-avds
 #          emulator_config=~/.android/avd/Pixel_API_29_AOSP.avd/config.ini
 #          # The following madness is to support empty OR populated config.ini files,
 #          # the state of which is dependant on the version of the emulator used (which we don't control),
