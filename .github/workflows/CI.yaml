@@ -119,10 +119,14 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: 'Checkout ${{ inputs.ref }}'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
         with:
+          fetch-depth: 1
           path: source
           ref: '${{ inputs.ref }}'
+
+      - name: Node
+        uses: actions/setup-node@v1
 
 #      - name: Setup java
 #        uses: actions/setup-java@v3
@@ -130,11 +134,17 @@ jobs:
 #          distribution: 'temurin' # See 'Supported distributions' for available options
 #          java-version: '8'
 #          architecture: 'x64'
+#
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: "16"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Use specific Java version for sdkmanager to work
+        uses: joschi/setup-jdk@v1
         with:
-          node-version: "16"
+          java-version: 'openjdk8'
+          architecture: 'x64'
 
       - name: Install AVD files
         run: |
