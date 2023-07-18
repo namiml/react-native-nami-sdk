@@ -233,7 +233,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun isHidden(promise: Promise): Boolean {
+    fun isHidden(promise: Promise) {
         // Do nothing on Android side
         promise.resolve(false)
     }
