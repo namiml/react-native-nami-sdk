@@ -120,6 +120,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         purchases,
       ) => {
         console.log('action', action);
+        setAction(action);
         console.log('campaignId', campaignId);
         console.log('paywallId', paywallId);
         console.log('campaignLabel', campaignLabel);
