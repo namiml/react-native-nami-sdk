@@ -51,11 +51,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   );
 
   const showPaywallIfHidden = async () => {
-    if (
-      Platform.OS === "ios" &&
-      (await NamiPaywallManager.isHidden())
-     ) {
-        NamiPaywallManager.show();
+    if (Platform.OS === 'ios' && (await NamiPaywallManager.isHidden())) {
+      NamiPaywallManager.show();
     } else {
       console.log('paywall is not hidden');
     }
@@ -167,7 +164,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const onRefreshPress = useCallback(() => {
     NamiCampaignManager.refresh();
   }, []);
-
 
   const onButtonPress = useCallback(() => {
     showPaywallIfHidden();
