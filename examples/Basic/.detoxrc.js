@@ -22,20 +22,20 @@ module.exports = {
         'ios/build/Build/Products/Release-iphonesimulator/BasicProduction.app',
       build: "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/Basic.xcworkspace -UseNewBuildSystem=NO -scheme BasicProduction -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
     },
-    'android.debug': {
+    'staging.android.debug': {
       type: 'android.apk',
       binaryPath: 'android/app/build/outputs/apk/staging/debug/app-staging-debug.apk',
-      testBinaryPath: 'android/app/build/outputs/apk/staging/debug/app-staging-debug.apk',
       build:
-        'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug',
+        'cd android && ./gradlew assembleStagingDebug assembleStagingDebugAndroidTest -DtestBuildType=debug',
       reversePorts: [8081],
     },
-    'android.release': {
+    // TODO: Find a way how to test and configure release build fro android
+    'production.android.release': {
       type: 'android.apk',
-      binaryPath: 'android/app/build/outputs/apk/production/release/app-production-release.apk',
-      testBinaryPath: 'android/app/build/outputs/apk/production/release/app-production-release.apk',
+      binaryPath: 'android/app/build/outputs/apk/production/release/app-production-release-unsigned.apk',
+      testBinaryPath: 'android/app/build/outputs/apk/androidTest/production/release/app-production-release-androidTest.apk',
       build:
-        'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release',
+        'cd android && ./gradlew assembleProductionRelease assembleProductionReleaseAndroidTest -DtestBuildType=release',
     },
   },
   devices: {
@@ -69,19 +69,19 @@ module.exports = {
     },
     'android.att.debug': {
       device: 'attached',
-      app: 'android.debug',
+      app: 'staging.android.debug',
     },
     'android.att.release': {
       device: 'attached',
-      app: 'android.release',
+      app: 'production.android.release',
     },
     'android.emu.debug': {
       device: 'emulator',
-      app: 'android.debug',
+      app: 'staging.android.debug',
     },
     'android.emu.release': {
       device: 'emulator',
-      app: 'android.release',
+      app: 'production.android.release',
     },
   },
 };
