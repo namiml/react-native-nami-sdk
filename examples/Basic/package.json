@@ -9,11 +9,9 @@
     "ios-setup": "cd ios && pod install",
     "ios-clean": "cd ios && rm -rf Pods && rm -rf build",
     "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build  && pod update && pod install",
-    "start": "NODE_OPTIONS=--openssl-legacy-provider react-native start",
+    "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "i": "echo 'Examples: \"yarn i both\"- run all setups, \"yarn i ios\"- run ios' && ./install.sh",
-    "b": "echo 'Examples: \"yarn b ios\", \"yarn b android\"' && ./building.sh"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "@react-native-community/cli-platform-android": "^11.3.1",
