@@ -11,11 +11,13 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Button,
 } from 'react-native';
 import {NamiCustomerManager, CustomerJourneyState} from 'react-native-nami-sdk';
 import {ViewerTabProps} from '../App';
 
 import theme from '../theme';
+import {AppEventEmitter} from '../services/eventEmitter';
 
 const Dot = (props: {value?: boolean; testId?: string}) => {
   return (
@@ -36,6 +38,44 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
   const [isUserLogin, setIsUserLogin] = useState<boolean>(false);
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
+
+  // Basic example on isLogin boolean constant
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [log, setLog] = useState('');
+
+  const ourHandler = useCallback((params) => {
+    console.log('Event triggered!', params);
+    setLog('Event triggered! Params: ' + JSON.stringify(params));
+    NamiCustomerManager.isLoggedIn().then((isLogged) => {
+      console.log(isLogged, 'isLogged');
+    });
+  }, []);
+
+  const toggleSubscription = () => {
+    if (isSubscribed) {
+      AppEventEmitter.removeListener('idEvent1', ourHandler);
+      setIsSubscribed(false);
+      setLog('Subscription removed');
+    } else {
+      AppEventEmitter.addListener('idEvent1', ourHandler);
+      setIsSubscribed(true);
+      setLog('Subscribed to event');
+    }
+  };
+
+  const emitEvent = () => {
+    AppEventEmitter.emit('idEvent1', 'Value that could be passed');
+  };
+
+  // Clean up the listener when the component unmounts
+  useEffect(() => {
+    return () => {
+      if (isSubscribed) {
+        AppEventEmitter.removeListener('idEvent1', ourHandler);
+      }
+    };
+  }, [isSubscribed, ourHandler]);
+  //
 
   const onLoginPress = useCallback(() => {
     NamiCustomerManager.login('E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF');
@@ -183,6 +223,14 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
             <Text style={styles.itemText}>In Pause</Text>
           </View>
         </View>
+      </View>
+      <View style={{alignItems: 'center', paddingTop: 25}}>
+        <Button
+          onPress={toggleSubscription}
+          title={isSubscribed ? 'Unsubscribe' : 'Subscribe'}
+        />
+        <Button onPress={emitEvent} title={'Emit event'} />
+        <Text>{log}</Text>
       </View>
     </SafeAreaView>
   );
