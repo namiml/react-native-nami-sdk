@@ -56,4 +56,7 @@ export const NamiPaywallManager = {
   hide: () => {
     RNNamiPaywallManager.hide();
   },
+  isHidden: () => {
+    return RNNamiPaywallManager.isHidden();
+  },
 };
