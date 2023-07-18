@@ -121,4 +121,10 @@ class RNNamiPaywallManager: RCTEventEmitter {
             NamiPaywallManager.hide()
         }
     }
+
+    @objc(isHidden:rejecter:)
+    func isHidden(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
+        let isHidden = NamiPaywallManager.isHidden()
+        resolve(isHidden)
+    }
 }

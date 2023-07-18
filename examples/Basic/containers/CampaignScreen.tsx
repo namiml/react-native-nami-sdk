@@ -49,6 +49,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     'INITIAL',
   );
 
+  const checkIsHidden = async () => {
+    const isHidden = await NamiPaywallManager.isHidden();
+    console.log('isHidden', isHidden);
+  };
+
   const getAllCampaigns = useCallback(async () => {
     const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
     const validCampaigns = fetchedCampaigns.filter((campaign) =>
@@ -60,6 +65,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   }, []);
 
   useEffect(() => {
+    checkIsHidden();
     getAllCampaigns();
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       () => {
@@ -114,7 +120,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         purchases,
       ) => {
         console.log('action', action);
-        setAction(action);
         console.log('campaignId', campaignId);
         console.log('paywallId', paywallId);
         console.log('campaignLabel', campaignLabel);
