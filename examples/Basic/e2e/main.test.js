@@ -42,10 +42,10 @@ describe('Configure Test', () => {
     await element(by.id('campaigns_list')).scrollTo('top');
     await waitFor(element(by.text(`${data.campaign}`))).toBeVisible();
     await element(by.text(`${data.campaign}`)).tap();
-    // TODO: Issue with SHOW_PAYWALL
-    // await expect(element(by.id('campaigns_modal_action'))).toHaveText(
-    //   'SHOW_PAYWALL',
-    // );
+    // TEST ON TODO: Issue with SHOW_PAYWALL
+    await expect(element(by.id('campaigns_modal_action'))).toHaveText(
+      'SHOW_PAYWALL',
+    );
   });
 });
 
