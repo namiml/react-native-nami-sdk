@@ -19,6 +19,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import {ViewerTabProps} from '../App';
 import theme from '../theme';
@@ -49,9 +50,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     'INITIAL',
   );
 
-  const checkIsHidden = async () => {
-    const isHidden = await NamiPaywallManager.isHidden();
-    console.log('isHidden', isHidden);
+  const showPaywallIfHidden = async () => {
+    if (Platform.OS === 'ios' && (await NamiPaywallManager.isHidden())) {
+      NamiPaywallManager.show();
+    } else {
+      console.log('paywall is not hidden');
+    }
   };
 
   const getAllCampaigns = useCallback(async () => {
@@ -65,7 +69,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   }, []);
 
   useEffect(() => {
-    checkIsHidden();
     getAllCampaigns();
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       () => {
@@ -163,7 +166,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   }, []);
 
   const onButtonPress = useCallback(() => {
-    NamiPaywallManager.show();
+    showPaywallIfHidden();
   }, []);
 
   useLayoutEffect(() => {
