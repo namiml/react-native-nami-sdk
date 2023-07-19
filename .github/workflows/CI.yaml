@@ -91,8 +91,9 @@ jobs:
         id: podcache
         with:
           path: source/examples/Basic/ios/Pods
-          key: pods-${{ hashFiles('**/Podfile.lock') }}
-          #key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+              ${{ runner.os }}-pods-
 
       - name: Install iOS pods
         if: steps.podcache.outputs.cache-hit != 'true'
