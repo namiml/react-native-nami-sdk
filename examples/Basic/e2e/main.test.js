@@ -1,5 +1,6 @@
 import {device, element, by, expect, waitFor, log} from 'detox';
 
+// FYI Could be changed on BE;
 const data = {
   campaign: 'puffin',
 };
@@ -42,7 +43,7 @@ describe('Configure Test', () => {
     await element(by.id('campaigns_list')).scrollTo('top');
     await waitFor(element(by.text(`${data.campaign}`))).toBeVisible();
     await element(by.text(`${data.campaign}`)).tap();
-    // TEST ON TODO: Issue with SHOW_PAYWALL
+    // Comment if on local machine;
     await expect(element(by.id('campaigns_modal_action'))).toHaveText(
       'SHOW_PAYWALL',
     );

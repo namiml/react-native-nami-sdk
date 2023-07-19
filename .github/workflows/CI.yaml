@@ -95,7 +95,6 @@ jobs:
               ${{ runner.os }}-pods-
 
       - name: Install iOS pods
-        if: steps.podcache.outputs.cache-hit != 'true'
         run: pod install
         working-directory: source/examples/Basic/ios
       #Pod install && cache END#
