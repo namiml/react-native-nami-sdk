@@ -167,7 +167,7 @@ jobs:
       - name: Update App Platform ID
         working-directory: source/examples/Basic/config/
         run: |
-          sed -i "s/ANDROID_PROD_APP_PLATFORM_ID/$BASIC_ANDROID_PROD_APP_PLATFORM_ID/" index.ts
+          sed -i '' -e "s/ANDROID_PROD_APP_PLATFORM_ID/${$BASIC_ANDROID_PROD_APP_PLATFORM_ID}/g" index.ts
         env:
           BASIC_ANDROID_PROD_APP_PLATFORM_ID: '${{ secrets.ANDROID_PROD_APP_PLATFORM_ID }}'
 
