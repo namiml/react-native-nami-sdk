@@ -15,7 +15,7 @@ export function getConfigObject() {
       };
     default:
       return {
-        'appPlatformID-apple': 'e1e51d49-5bda-41b2-9367-8408bb374b07',
+        'appPlatformID-apple': 'APPLE_PROD_APP_PLATFORM_ID',
         'appPlatformID-android': 'ANDROID_PROD_APP_PLATFORM_ID',
         logLevel: 'DEBUG',
         initialConfig: getInitialConfig(),

@@ -42,10 +42,12 @@ jobs:
         working-directory: source/examples/TestNamiTV
   e2e-ios:
     runs-on: macos-12
-
+    env:
+      DETOX_CONFIGURATION: ios.sim.release
     steps:
       - uses: actions/setup-node@v3
         with:
+          cache: yarn
           node-version: 16
 
       - name: 'Checkout ${{ inputs.ref }}'
@@ -54,57 +56,74 @@ jobs:
           path: source
           ref: '${{ inputs.ref }}'
 
-      # Get from cache
-      - name: Cache node modules
+      - name: Cache node_modules
         uses: actions/cache@v3
         id: cache
         with:
-          path: node_modules
+          path: source/examples/Basic/node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
-
-      # Check possibility of path
-      - name: Cache Pods
-        uses: actions/cache@v1
-        id: podcache
-        with:
-          path: source/examples/Basic/ios/Pods
-          key: pods-${{ hashFiles('**/Podfile.lock') }}
-
-      - name: Rebuild cache detox
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: detox clean-framework-cache && detox build-framework-cache
-        working-directory: source/examples/Basic
 
       - name: Install Yarn Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install
         working-directory: source/examples/Basic
 
-      # Installations
       - name: Install macOS dependencies
         run: |
           brew tap wix/brew
           brew install applesimutils
           sudo gem install cocoapods
           gem install CFPropertyList
+        env:
+          # Speed up build could be updated 0/1 for full install
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+
+      - name: Update App Platform ID
+        working-directory: source/examples/Basic/config/
+        run: |
+          sed -i '' -e "s/APPLE_PROD_APP_PLATFORM_ID/$BASIC_APPLE_PROD_APP_PLATFORM_ID/" index.ts
+        env:
+          BASIC_APPLE_PROD_APP_PLATFORM_ID: '${{ secrets.APPLE_PROD_APP_PLATFORM_ID }}'
+
+      #Pod install && cache START#
+      - name: Cache Pods
+        uses: actions/cache@v3
+        id: podcache
+        with:
+          path: source/examples/Basic/ios/Pods
+          key: pods-${{ hashFiles('**/Podfile.lock') }}
 
       - name: Install iOS pods
+        if: steps.podcache.outputs.cache-hit != 'true'
         run: pod install
         working-directory: source/examples/Basic/ios
+      #Pod install && cache END#
 
-      - name: Install Detox CLI
-        run: yarn global add detox-cli
+      # Detox cache && build START#
+      - name: Rebuild cache detox
+        run: yarn detox rebuild-framework-cache
         working-directory: source/examples/Basic
+
+      - name: Cache Detox build
+        id: cache-detox-build
+        uses: actions/cache@v3
+        with:
+          path: ios/build
+          key: ${{ runner.os }}-detox-build
+          restore-keys: |
+            ${{ runner.os }}-detox-build
 
       - name: Detox build
-        run: detox build --configuration ios.sim.release
+        run: yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
         working-directory: source/examples/Basic
+      # Detox cache && build END#
 
       - name: Detox test
         run: |
           yarn start &
           METRO_BUNDLER_PID=$!
-          detox test --configuration ios.sim.release --cleanup --headless --record-logs all
+          yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --cleanup --headless --record-logs all
           DETOX_EXIT_CODE=$?
           kill $METRO_BUNDLER_PID
           exit $DETOX_EXIT_CODE
