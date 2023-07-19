@@ -92,6 +92,7 @@ jobs:
         with:
           path: source/examples/Basic/ios/Pods
           key: pods-${{ hashFiles('**/Podfile.lock') }}
+          # key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
 
       - name: Install iOS pods
         if: steps.podcache.outputs.cache-hit != 'true'
@@ -108,7 +109,7 @@ jobs:
         id: cache-detox-build
         uses: actions/cache@v3
         with:
-          path: ios/build
+          path: source/examples/Basic/ios/Pods
           key: ${{ runner.os }}-detox-build
           restore-keys: |
             ${{ runner.os }}-detox-build
