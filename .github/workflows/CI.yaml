@@ -44,7 +44,9 @@ jobs:
     runs-on: macos-12
 
     steps:
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v3
