@@ -57,7 +57,6 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
 
         var paywallLaunchContext: PaywallLaunchContext? = null
         if (context != null) {
-
             val productGroups: MutableList<String> = mutableListOf()
             val customAttributes: MutableMap<String, String> = mutableMapOf()
 
@@ -69,7 +68,6 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                         if (groupString != null) {
                             productGroups.add(groupString)
                         }
-
                     }
                 }
                 Log.d(LOG_TAG, "productGroups $productGroups")
@@ -87,7 +85,12 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 }
             }
 
-            paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes)
+            if (context.hasKey("productGroups")) {
+                paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes)
+            } else {
+                paywallLaunchContext = PaywallLaunchContext(null, customAttributes)
+            }
+
         }
 
         if (theActivity != null) {

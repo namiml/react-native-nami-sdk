@@ -95,13 +95,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   }, []);
 
   const triggerLaunch = (label?: any, url?: any) => {
-    // const paywallLaunchContext = {
-    //   productGroups: ['group1'],
-    // };
     return NamiCampaignManager.launch(
       label,
       url,
-      undefined,
+      {},
       (successAction, error) => {
         console.log('successAction', successAction);
         console.log('error', error);
