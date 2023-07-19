@@ -16,14 +16,13 @@ jobs:
           node-version: "16"
 
       - name: 'Checkout ${{ inputs.ref }}'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: source
           ref: '${{ inputs.ref }}'
 
       - name: Install Basic app dependencies
-        run: |
-          yarn install
+        run: yarn --frozen-lockfile --prefer-offline
         working-directory: source/examples/Basic
 
       - name: Linter Basic
@@ -32,8 +31,7 @@ jobs:
         working-directory: source/examples/Basic
 
       - name: Install TestNamiTV app dependencies
-        run: |
-          yarn install
+        run: yarn --frozen-lockfile --prefer-offline
         working-directory: source/examples/TestNamiTV
 
       - name: Linter TestNamiTV
@@ -44,6 +42,7 @@ jobs:
     runs-on: macos-12
     env:
       DETOX_CONFIGURATION: ios.sim.release
+
     steps:
       - uses: actions/setup-node@v3
         with:
