@@ -47,7 +47,6 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          cache: yarn
           node-version: 16
 
       - name: 'Checkout ${{ inputs.ref }}'
