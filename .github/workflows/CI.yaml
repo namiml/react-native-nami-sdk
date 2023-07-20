@@ -83,19 +83,6 @@ jobs:
         env:
           BASIC_APPLE_PROD_APP_PLATFORM_ID: '${{ secrets.APPLE_PROD_APP_PLATFORM_ID }}'
 
-      - name: Cache Pods
-        uses: actions/cache@v3
-        id: podcache
-        with:
-          path: source/examples/Basic/ios
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-              ${{ runner.os }}-pods-
-
-      - name: Clean node_modules examples
-        run: rm -rf node_modules/react-native-nami-sdk/examples
-        working-directory: source/examples/Basic
-
       - name: Install iOS pods
         run: pod install
         working-directory: source/examples/Basic/ios
