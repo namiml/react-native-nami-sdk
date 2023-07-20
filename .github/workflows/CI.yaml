@@ -62,7 +62,7 @@ jobs:
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install Yarn Dependencies
-        run: yarn --frozen-lockfile --prefer-offline
+        run: yarn install
         working-directory: source/examples/Basic
 
       - name: Install macOS dependencies
@@ -82,6 +82,15 @@ jobs:
           sed -i '' -e "s/APPLE_PROD_APP_PLATFORM_ID/$BASIC_APPLE_PROD_APP_PLATFORM_ID/" index.ts
         env:
           BASIC_APPLE_PROD_APP_PLATFORM_ID: '${{ secrets.APPLE_PROD_APP_PLATFORM_ID }}'
+
+      - name: Cache Pods
+        uses: actions/cache@v3
+        id: podcache
+        with:
+          path: source/examples/Basic/ios
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+              ${{ runner.os }}-pods-
 
       - name: Install iOS pods
         run: pod install
@@ -145,7 +154,7 @@ jobs:
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install Yarn dependencies
-        run: yarn --frozen-lockfile --prefer-offline
+        run: yarn install
         working-directory: source/examples/Basic
 
       - name: Setup Java
