@@ -92,6 +92,10 @@ jobs:
           restore-keys: |
               ${{ runner.os }}-pods-
 
+      - name: Detox build
+        run: rm -rf node_modules/react-native-nami-sdk/examples
+        working-directory: source/examples/Basic
+
       - name: Install iOS pods
         run: pod install
         working-directory: source/examples/Basic/ios
