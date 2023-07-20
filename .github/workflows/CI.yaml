@@ -168,13 +168,6 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - name: Create the Keystore
-        run: |
-          # import keystore from secrets
-          echo $KEYSTORE_BASE64 | base64 -d > $RUNNER_TEMP/my_production.keystore
-        env:
-          KEYSTORE_BASE64: '${{ secrets.KEY_STORE_BASE64 }}'
-
       - name: Update App Platform ID
         working-directory: source/examples/Basic/config/
         run: |
@@ -201,10 +194,27 @@ jobs:
           yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
         working-directory: source/examples/Basic
 
-      - name: Sign Android App Bundle
-        run: |
-          jarsigner -keystore $RUNNER_TEMP/my_production.keystore -storepass '${{ secrets.KEY_STORE_PASSWORD }}' -keypass '${{ secrets.KEY_PASSWORD }}' -sigalg SHA256withRSA -digestalg SHA-256 -signedjar build/outputs/apk/production/release/app-production-release-unsigned.apk build/outputs/apk/production/release/app-production-release-unsigned.apk '${{ secrets.KEY_ALIAS }}'
-        working-directory: source/examples/Basic/android/app
+#      - name: Create the Keystore
+#        run: |
+#          # import keystore from secrets
+#          echo $KEYSTORE_BASE64 | base64 -d > $RUNNER_TEMP/my_production.keystore
+#        env:
+#          KEYSTORE_BASE64: '${{ secrets.KEY_STORE_BASE64 }}'
+
+#      - name: Sign Android App Bundle
+#        run: |
+#          jarsigner -keystore $RUNNER_TEMP/my_production.keystore -storepass '${{ secrets.KEY_STORE_PASSWORD }}' -keypass '${{ secrets.KEY_PASSWORD }}' -sigalg SHA256withRSA -digestalg SHA-256 -signedjar build/outputs/apk/production/release/app-production-release-unsigned.apk build/outputs/apk/production/release/app-production-release-unsigned.apk '${{ secrets.KEY_ALIAS }}'
+#        working-directory: source/examples/Basic/android/app
+
+      - name: Sign APK
+        id: sign_apk
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/production/release
+          signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Get device name
         id: device
@@ -216,7 +226,7 @@ jobs:
         run: brew install tree
 
       - name: Get structure for apk
-        run: tree android/app
+        run: tree android/app/build/outputs
         working-directory: source/examples/Basic
         #Test to see folders end#
 
