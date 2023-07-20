@@ -19,7 +19,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["RegisterBuySKU", "PaywallCloseRequested", "PaywallSignInRequested"]
+        return ["RegisterBuySKU", "PaywallCloseRequested", "PaywallSignInRequested", "PaywallRestoreRequested"]
     }
 
     @objc(buySkuComplete:)
@@ -100,6 +100,14 @@ class RNNamiPaywallManager: RCTEventEmitter {
         NamiPaywallManager.registerSignInHandler { _ in
             let dictionary = NSDictionary(dictionary: ["PaywallSignInRequested": true].compactMapValues { $0 })
             RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallSignInRequested", body: dictionary)
+        }
+    }
+
+    @objc(registerRestoreHandler)
+    func registerRestoreHandler() {
+        NamiPaywallManager.registerRestoreHandler {
+            let dictionary = NSDictionary(dictionary: ["PaywallRestoreRequested": true].compactMapValues { $0 })
+            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallRestoreRequested", body: dictionary)
         }
     }
 

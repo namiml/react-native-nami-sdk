@@ -223,6 +223,19 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun registerRestoreHandler() {
+        NamiPaywallManager.registerRestoreHandler { activity ->
+            latestPaywallActivity = activity
+            val map = Arguments.createMap().apply {
+                putBoolean("paywallRestoreRequested", true)
+            }
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("PaywallRestoreRequested", map)
+        }
+    }
+
+    @ReactMethod
     fun show() {
         // Do nothing on Android side
     }
