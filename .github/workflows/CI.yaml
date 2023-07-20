@@ -93,8 +93,10 @@ jobs:
               ${{ runner.os }}-pods-
 
       - name: Install iOS pods
-        run: pod install
-        working-directory: source/examples/Basic/ios
+        run: |
+          rm -rf node_modules/react-native-nami-sdk/examples
+          cd ios && pod install
+        working-directory: source/examples/Basic
 
       - name: Rebuild cache detox
         run: yarn detox rebuild-framework-cache
