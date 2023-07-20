@@ -73,9 +73,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       () => {
         console.log('sign in');
-        NamiPaywallManager.hide();
+        NamiPaywallManager.dismiss();
       },
     );
+
+    const subscriptionRestoreRemover =
+      NamiPaywallManager.registerRestoreHandler(() => {
+        console.log('restore');
+        NamiPaywallManager.dismiss();
+      });
+
     const subscriptionRemover =
       NamiCampaignManager.registerAvailableCampaignsHandler(
         (availableCampaigns) => {
@@ -89,6 +96,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     return () => {
       subscriptionRemover();
       subscriptionSignInRemover();
+      subscriptionRestoreRemover();
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
