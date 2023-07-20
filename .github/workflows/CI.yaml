@@ -92,11 +92,13 @@ jobs:
           restore-keys: |
               ${{ runner.os }}-pods-
 
-      - name: Install iOS pods
-        run: |
-          rm -rf node_modules/react-native-nami-sdk/examples
-          cd ios && pod install
+      - name: Clean node_modules examples
+        run: rm -rf node_modules/react-native-nami-sdk/examples
         working-directory: source/examples/Basic
+
+      - name: Install iOS pods
+        run: pod install
+        working-directory: source/examples/Basic/ios
 
       - name: Rebuild cache detox
         run: yarn detox rebuild-framework-cache
