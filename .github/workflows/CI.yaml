@@ -83,14 +83,14 @@ jobs:
         env:
           BASIC_APPLE_PROD_APP_PLATFORM_ID: '${{ secrets.APPLE_PROD_APP_PLATFORM_ID }}'
 
-      - name: Cache Pods
-        uses: actions/cache@v3
-        id: podcache
-        with:
-          path: source/examples/Basic/ios
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-          restore-keys: |
-              ${{ runner.os }}-pods-
+#      - name: Cache Pods
+#        uses: actions/cache@v3
+#        id: podcache
+#        with:
+#          path: source/examples/Basic/ios
+#          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+#          restore-keys: |
+#              ${{ runner.os }}-pods-
 
       - name: Clean node_modules tree
         run: rm -rf node_modules/react-native-nami-sdk/examples
@@ -194,11 +194,6 @@ jobs:
           yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
         working-directory: source/examples/Basic
 
-#      - name: Sign Android App Bundle
-#        run: |
-#          jarsigner -keystore $RUNNER_TEMP/my_production.keystore -storepass '${{ secrets.KEY_STORE_PASSWORD }}' -keypass '${{ secrets.KEY_PASSWORD }}' -sigalg SHA256withRSA -digestalg SHA-256 -signedjar source/examples/Basic/android/app/build/outputs/apk/production/release/app-production-release-unsigned-signed.apk source/examples/Basic/android/app/build/outputs/apk/production/release/app-production-release-unsigned-signed.apk '${{ secrets.KEY_ALIAS }}'
-#        working-directory: source/examples/Basic/android/app
-
       - name: Create the Keystore
         run: |
           # import keystore from secrets
@@ -206,20 +201,28 @@ jobs:
         env:
           KEYSTORE_BASE64: '${{ secrets.KEY_STORE_BASE64 }}'
 
-      - name: Re-encode the keystore to base64
-        id: encode_keystore
+      - name: Sign Android APK
         run: |
-          echo "SIGNINGKEYBASE64=$(openssl base64 < $RUNNER_TEMP/my_production.keystore | tr -d '\n')" >> $GITHUB_ENV
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore $RUNNER_TEMP/my_production.keystore -storepass '${{ secrets.KEY_STORE_PASSWORD }}' -keypass '${{ secrets.KEY_PASSWORD }}' -signedjar source/examples/Basic/android/app/build/outputs/apk/production/release/app-production-release-signed.apk source/examples/Basic/android/app/build/outputs/apk/production/release/app-production-release-unsigned.apk '${{ secrets.KEY_ALIAS }}'
 
-      - name: Sign APK
-        id: sign_apk
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: source/examples/Basic/android/app/build/outputs/apk/production/release
-          signingKeyBase64: ${{ env.SIGNINGKEYBASE64 }}
-          alias: ${{ secrets.KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
+      - name: Align Android APK
+        run: |
+          zipalign -v -p 4 source/examples/Basic/android/app/build/outputs/apk/production/release/app-production-release-signed.apk source/examples/Basic/android/app/build/outputs/apk/production/release/app-production-release-signed-aligned.apk
+
+#      - name: Re-encode the keystore to base64
+#        id: encode_keystore
+#        run: |
+#          echo "SIGNINGKEYBASE64=$(openssl base64 < $RUNNER_TEMP/my_production.keystore | tr -d '\n')" >> $GITHUB_ENV
+#
+#      - name: Sign APK
+#        id: sign_apk
+#        uses: r0adkll/sign-android-release@v1
+#        with:
+#          releaseDirectory: source/examples/Basic/android/app/build/outputs/apk/production/release
+#          signingKeyBase64: ${{ env.SIGNINGKEYBASE64 }}
+#          alias: ${{ secrets.KEY_ALIAS }}
+#          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+#          keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Get device name
         id: device

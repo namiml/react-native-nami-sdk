@@ -32,7 +32,7 @@ module.exports = {
     // TODO: Find a way how to test and configure release build fro android
     'production.android.release': {
       type: 'android.apk',
-      binaryPath: 'android/app/build/outputs/apk/production/release/app-production-release-unsigned.apk',
+      binaryPath: "android/app/build/outputs/apk/production/release/app-production-release-signed-aligned.apk",
       testBinaryPath: 'android/app/build/outputs/apk/androidTest/production/release/app-production-release-androidTest.apk',
       build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release'
     },
