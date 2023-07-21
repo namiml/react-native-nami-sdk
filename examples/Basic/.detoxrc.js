@@ -26,15 +26,14 @@ module.exports = {
       type: 'android.apk',
       binaryPath: 'android/app/build/outputs/apk/staging/debug/app-staging-debug.apk',
       build:
-        'cd android && ./gradlew assembleStagingDebug assembleStagingDebugAndroidTest -DtestBuildType=debug',
+        'cd android && ./gradlew assembleStagingDebug assembleStagingDebugAndroidTest -DtestBuildType=debug && cd ..',
       reversePorts: [8081],
     },
-    // TODO: Find a way how to test and configure release build fro android
     'production.android.release': {
       type: 'android.apk',
       binaryPath: "android/app/build/outputs/apk/production/release/app-production-release-unsigned-signed.apk",
-      testBinaryPath: 'android/app/build/outputs/apk/androidTest/production/release/app-production-release-androidTest.apk',
-      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release'
+      testBinaryPath: 'android/app/build/outputs/apk/androidTest/production/release/app-production-release-androidTest-signed.apk',
+      build: 'cd android && ./gradlew assembleProductionRelease assembleProductionReleaseAndroidTest -DtestBuildType=release && cd ..'
     },
   },
   devices: {
