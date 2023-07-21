@@ -31,8 +31,10 @@ module.exports = {
     },
     'production.android.release': {
       type: 'android.apk',
-      binaryPath: "android/app/build/outputs/apk/production/release/app-production-release-unsigned-signed.apk",
-      testBinaryPath: 'android/app/build/outputs/apk/androidTest/production/release/app-production-release-androidTest-signed.apk',
+      binaryPath:
+          'android/app/build/outputs/apk/production/release/app-production-release-unsigned-signed.apk',
+      testBinaryPath:
+          'android/app/build/outputs/apk/androidTest/production/release/app-production-release-androidTest-signed.apk',
       build: 'cd android && ./gradlew assembleProductionRelease assembleProductionReleaseAndroidTest -DtestBuildType=release && cd ..'
     },
   },

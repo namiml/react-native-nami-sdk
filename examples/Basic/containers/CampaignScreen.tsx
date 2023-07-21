@@ -26,10 +26,11 @@ import theme from '../theme';
 interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
 
 const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
-  <TouchableOpacity style={styles.headerButton} onPress={onRefreshPress}>
-    <Text testID="refresh_campaigns" style={styles.headerButtonText}>
-      Refresh
-    </Text>
+  <TouchableOpacity
+    testID="refresh_campaigns"
+    style={styles.headerButton}
+    onPress={onRefreshPress}>
+    <Text style={styles.headerButtonText}>Refresh</Text>
   </TouchableOpacity>
 );
 
