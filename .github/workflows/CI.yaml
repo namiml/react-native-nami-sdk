@@ -225,7 +225,7 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Sign AndroidTest APK for Detox
-        id: sign_apk
+        id: sign_androidTest_apk
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: source/examples/Basic/android/app/build/outputs/apk/androidTest/production/release/
