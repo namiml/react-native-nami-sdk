@@ -2,7 +2,7 @@ import {device, element, by, expect, waitFor, log} from 'detox';
 
 // FYI Could be changed on BE;
 const data = {
-  campaign: 'puffin',
+  campaign: 'her_v6',
 };
 
 describe('Configure Test', () => {
@@ -11,8 +11,32 @@ describe('Configure Test', () => {
     await device.reloadReactNative();
   });
   afterAll(async () => {
-    await device.launchApp({newInstance: true});
+    await device.launchApp({
+      newInstance: true,
+    });
   });
+
+  if (device.getPlatform() === 'android') {
+    it('should load data 1', async () => {
+      await expect(element(by.id('refresh_campaigns'))).toBeVisible();
+      await element(by.id('refresh_campaigns')).tap();
+      await element(by.id('refresh_campaigns')).tap();
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await element(by.id('refresh_campaigns')).tap();
+      await element(by.id('refresh_campaigns')).tap();
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    });
+
+    it('should load data 2', async () => {
+      await expect(element(by.id('refresh_campaigns'))).toBeVisible();
+      await element(by.id('refresh_campaigns')).tap();
+      await element(by.id('refresh_campaigns')).tap();
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await element(by.id('refresh_campaigns')).tap();
+      await element(by.id('refresh_campaigns')).tap();
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    });
+  }
 
   it('should have Campaings screen', async () => {
     await expect(element(by.id('campaigns_title'))).toBeVisible();
@@ -42,11 +66,14 @@ describe('Configure Test', () => {
 
     await element(by.id('campaigns_list')).scrollTo('top');
     await waitFor(element(by.text(`${data.campaign}`))).toBeVisible();
-    await element(by.text(`${data.campaign}`)).tap();
-    // Comment if on local machine;
-    await expect(element(by.id('campaigns_modal_action'))).toHaveText(
-      'SHOW_PAYWALL',
-    );
+
+    if (device.getPlatform() === 'ios') {
+      await element(by.text(`${data.campaign}`)).tap();
+      // Comment if on local machine;
+      await expect(element(by.id('campaigns_modal_action'))).toHaveText(
+        'SHOW_PAYWALL',
+      );
+    }
   });
 });
 

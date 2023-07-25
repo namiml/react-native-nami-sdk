@@ -166,10 +166,18 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <HeaderRight onRefreshPress={onRefreshPress} />,
+      headerRight: () => (
+        <HeaderRight
+          onRefreshPress={() => {
+            getAllCampaigns();
+            setRefresh(!refresh);
+            NamiCampaignManager.refresh();
+          }}
+        />
+      ),
       headerLeft: () => <HeaderLeft onButtonPress={onButtonPress} />,
     });
-  }, [navigation, onRefreshPress, onButtonPress]);
+  }, [navigation, onRefreshPress, onButtonPress, getAllCampaigns, refresh]);
 
   const renderItem = ({item, index}: {item: NamiCampaign; index: number}) => {
     const lasItem = index === campaigns.length - 1;
