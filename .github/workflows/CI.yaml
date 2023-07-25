@@ -234,7 +234,7 @@ jobs:
       - name: Detox test
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 31
           arch: x86_64
           avd-name: ${{ steps.device.outputs.AVD_NAME }}
           script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --headless --record-logs all

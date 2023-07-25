@@ -2,7 +2,8 @@ import {device, element, by, expect, waitFor, log} from 'detox';
 
 // FYI Could be changed on BE;
 const data = {
-  campaign: 'her_v6',
+  campaign: 'puffin',
+  // campaign: 'her_v6',
 };
 
 describe('Configure Test', () => {
