@@ -43,23 +43,10 @@ class RNNamiCampaignManager: RCTEventEmitter {
     }
 
     func handlePaywallAction(
-        campaignId: String?,
-        campaignName: String?,
-        campaignType: String?,
-        campaignLabel: String?,
-        campaignUrl: String?,
-        paywallId: String?,
-        paywallName: String?,
-        segmentId: String?,
-        externalSegmentId: String?,
-        action: NamiApple.NamiPaywallAction,
-        sku: NamiApple.NamiSKU?,
-        purchaseError: Error?,
-        purchases: [NamiApple.NamiPurchase],
-        deeplinkUrl: String?
+        paywallEvent: NamiPaywallEvent,
     ) {
         let actionString: String
-        switch action {
+        switch paywallEvent.action {
         case .show_paywall:
             actionString = "SHOW_PAYWALL"
         case .close_paywall:
@@ -86,29 +73,42 @@ class RNNamiCampaignManager: RCTEventEmitter {
             actionString = "PURCHASE_UNKNOWN"
         case .deeplink:
             actionString = "DEEPLINK"
+        case .toggle_Change:
+            actionString = "TOGGLE_CHANGE"
+        case .page_change:
+            actionString: "PAGE_CHANGE"
+        case .slide_change:
+            actionString: "SLIDE_CHANGE"
+
         @unknown default:
             actionString = "PURCHASE_UNKNOWN"
         }
-        let skuId = sku?.skuId
-        let errorSting = purchaseError?.localizedDescription
+        let errorSting = paywallEvent.purchaseError?.localizedDescription
 
-        let dictionaries = purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
+        let dictionaries = paywallEvent.purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
+
+        var skuDict: NSDictionary?
+        if let sku = paywallEvent.sku {
+            skuDict = RNNamiPurchaseManager.skuToSKUDict(sku)
+        }
 
         let payload: [String: Any?] = [
-            "campaignId": campaignId,
-            "campaignName": campaignName,
-            "campaignType": campaignType,
-            "campaignLabel": campaignLabel,
-            "campaignUrl": campaignUrl,
-            "paywallId": paywallId,
-            "paywallName": paywallName,
-            "segmentId": segmentId,
-            "externalSegmentId": externalSegmentId,
-            "action": actionString,
-            "skuId": skuId,
-            "purchaseError": errorSting,
-            "purchases": dictionaries,
-            "deeplinkUrl": deeplinkUrl,
+            "campaignId": paywallEvent.campaignId,
+            "campaignName": paywallEvent.campaignName,
+            "campaignType": paywallEvent.campaignType,
+            "campaignLabel": paywallEvent.campaignLabel,
+            "campaignUrl": paywallEvent.campaignUrl,
+            "paywallId": paywallEvent.paywallId,
+            "paywallName": paywallEvent.paywallName,
+            "segmentId": paywallEvent.segmentId,
+            "externalSegmentId": paywallEvent.externalSegmentId,
+            "action": paywallEvent.actionString,
+            "sku": skuDict,
+            "purchaseError": paywallEvent.errorSting,
+            "purchases": paywallEvent.dictionaries,
+            "deeplinkUrl": paywallEvent.deeplinkUrl,
+            "componentChangeId": paywallEvent.componentChange?.id,
+            "componentChangeName": paywallEvent.componentChange?.name,
         ]
 
         RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
@@ -156,8 +156,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
                                                    error: error
                                                )
                                            },
-                                           paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl in
-                                               self.handlePaywallAction(campaignId: campaignId, campaignName: campaignName, campaignType: campaignType, campaignLabel: campaignLabel, campaignUrl: campaignUrl, paywallId: paywallId, paywallName: paywallName, segmentId: segmentId, externalSegmentId: externalSegmentId, action: action, sku: sku, purchaseError: purchaseError, purchases: purchases, deeplinkUrl: deeplinkUrl)
+                                           paywallActionHandler: { paywallEvent in
+                                               self.handlePaywallAction(paywallEvent)
                                            })
             }
         } else if let label = label {
@@ -170,8 +170,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
                                                    error: error
                                                )
                                            },
-                                           paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl in
-                                               self.handlePaywallAction(campaignId: campaignId, campaignName: campaignName, campaignType: campaignType, campaignLabel: campaignLabel, campaignUrl: campaignUrl, paywallId: paywallId, paywallName: paywallName, segmentId: segmentId, externalSegmentId: externalSegmentId, action: action, sku: sku, purchaseError: purchaseError, purchases: purchases, deeplinkUrl: deeplinkUrl)
+                                           paywallActionHandler: { paywallEvent in
+                                               self.handlePaywallAction(paywallEvent)
                                            })
             }
         } else {
@@ -185,8 +185,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
                                                    error: error
                                                )
                                            },
-                                           paywallActionHandler: { campaignId, campaignName, campaignType, campaignLabel, campaignUrl, paywallId, paywallName, segmentId, externalSegmentId, _, action, sku, purchaseError, purchases, deeplinkUrl in
-                                               self.handlePaywallAction(campaignId: campaignId, campaignName: campaignName, campaignType: campaignType, campaignLabel: campaignLabel, campaignUrl: campaignUrl, paywallId: paywallId, paywallName: paywallName, segmentId: segmentId, externalSegmentId: externalSegmentId, action: action, sku: sku, purchaseError: purchaseError, purchases: purchases, deeplinkUrl: deeplinkUrl)
+                                           paywallActionHandler: { paywallEvent in
+                                               self.handlePaywallAction(paywallEvent)
                                            })
             }
         }

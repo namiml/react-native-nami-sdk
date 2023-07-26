@@ -123,7 +123,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         externalSegmentId,
         paywallName,
         deeplinkUrl,
-        skuId,
+        sku,
         purchaseError,
         purchases,
       ) => {
@@ -139,7 +139,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         console.log('segmentId', segmentId);
         console.log('externalSegmentId', externalSegmentId);
         console.log('deeplinkUrl', deeplinkUrl);
-        console.log('skuId', skuId);
+        console.log('sku', sku.id);
+        console.log('skuPromoId', sku.promoId);
+        console.log('componentChangeId', componentChangeId);
+        console.log('componentChangeName', componentChangeName);
         console.log('purchaseError', purchaseError);
         console.log('purchases', purchases);
       },

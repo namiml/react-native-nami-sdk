@@ -137,7 +137,7 @@ android {
         manifestPlaceholders.app_icon_round = "@mipmap/ic_launcher_round"
         manifestPlaceholders.app_icon = "@mipmap/ic_launcher"
     }
-    flavorDimensions "default"
+    flavorDimensions "default", "store"
     productFlavors {
         production {
             applicationId "com.namiml.testreact.prod"
@@ -196,6 +196,22 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+    productFlavors {
+        amazon {
+            dimension "store"
+            repositories {
+                maven { url "https://packages.namiml.com/NamiSDK/Amazon/"}
+            }
+        }
+        play {
+            dimension "store"
+            repositories {
+                maven { url "https://packages.namiml.com/NamiSDK/Android/"}
+            }
+        }
+    }
+
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->

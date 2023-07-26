@@ -27,7 +27,9 @@ export const NamiCampaignManager = {
           segmentId,
           externalSegmentId,
           deeplinkUrl,
-          skuId,
+          sku,
+          componentChangeId,
+          componentChangeName,
           purchaseError,
           purchases
         } = body;
@@ -43,7 +45,9 @@ export const NamiCampaignManager = {
           segmentId,
           externalSegmentId,
           deeplinkUrl,
-          skuId,
+          sku,
+          componentChangeId,
+          componentChangeName,
           purchaseError,
           purchases,
         );

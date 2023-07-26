@@ -1,6 +1,7 @@
 import { EmitterSubscription } from "react-native";
 import { NamiPurchase } from "./NamiPurchaseManager";
 import { NamiPaywallAction } from "./NamiPaywallManager";
+import { NamiSKU } from "./types";
 
 export const NamiCampaignManager: {
   allCampaigns: () => Promise<Array<NamiCampaign>>;
@@ -22,7 +23,9 @@ export const NamiCampaignManager: {
       segmentId?: string,
       externalSegmentId?: string,
       deeplinkUrl?: string,
-      skuId?: string,
+      sku?: NamiSKU,
+      componentChangeId?: string,
+      componentChangeName?: string,
       purchaseError?: string,
       purchases?: NamiPurchase[]
     ) => void
@@ -71,4 +74,27 @@ export type PaywallLaunchContext = {
   customAttributes?: {
     [key: string]: string;
   };
+};
+
+export type NamiPaywallEvent = {
+  action: NamiPaywallAction;
+  campaignId?: string;
+  campaignName?: string;
+  campaignType?: string;
+  campaignLabel?: string;
+  campaignUrl?: string;
+  paywallId?: string;
+  paywallName?: string;
+  componentChange?: NamiPaywallComponentChange;
+  segmentId?: string;
+  externalSegmentId?: string;
+  deeplinkUrl?: string;
+  sku?: NamiSKU;
+  purchaseError?: string;
+  purchases?: NamiPurchase[];
+};
+
+export type NamiPaywallComponentChange = {
+  id?: string;
+  name?: string;
 };

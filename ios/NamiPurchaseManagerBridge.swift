@@ -37,7 +37,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
 
     static func skuToSKUDict(_ sku: NamiSKU) -> NSDictionary {
         var productDict: NSDictionary?
-        if let product = sku.product {
+        if let product = sku.product as? SKProduct {
             productDict = productToDict(product)
         }
 
@@ -58,6 +58,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             "skuId": sku.skuId,
             "type": typeString,
             "appleProduct": productDict,
+            "promoId": sku.promoId,
         ]
 
         return NSDictionary(dictionary: skuDict.compactMapValues { $0 })
