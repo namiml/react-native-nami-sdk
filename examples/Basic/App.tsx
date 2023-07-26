@@ -48,51 +48,56 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    NamiPaywallManager.registerBuySkuHandler((sku) => {
-      console.log(
-        'buy sku handler - need to start purchase flow for sku:',
-        sku.skuId,
-      );
+    const subscriptionRemover = NamiPaywallManager.registerBuySkuHandler(
+      (sku) => {
+        console.log(
+          'buy sku handler - need to start purchase flow for sku:',
+          sku.skuId,
+          sku.promoId,
+        );
 
-      NamiPaywallManager.dismiss(true);
+        NamiPaywallManager.dismiss(true);
 
-      if (Platform.OS === 'ios' || Platform.isTVOS) {
-        NamiPaywallManager.buySkuCompleteApple({
-          product: sku,
-          transactionID: '12345',
-          originalTransactionID: '12345',
-          originalPurchaseDate: 1684823428,
-          purchaseDate: 1684823428,
-          price: '120',
-          currencyCode: 'USD',
-          locale: 'US',
-        });
-      } else if (Platform.OS === 'android') {
-        if (Platform.constants.Manufacturer === 'Amazon') {
-          NamiPaywallManager.buySkuCompleteAmazon({
+        if (Platform.OS === 'ios' || Platform.isTVOS) {
+          NamiPaywallManager.buySkuCompleteApple({
             product: sku,
+            transactionID: '12345',
+            originalTransactionID: '12345',
+            originalPurchaseDate: 1684823428,
             purchaseDate: 1684823428,
-            purchaseSource: 'CAMPAIGN',
-            receiptId: '12345',
-            localizedPrice: '120',
-            userId: '12345',
-            marketplace: '12345',
+            price: '120',
+            currencyCode: 'USD',
+            locale: 'US',
           });
-        } else {
-          NamiPaywallManager.buySkuCompleteGooglePlay({
-            product: sku,
-            purchaseDate: 1684823428,
-            purchaseSource: 'CAMPAIGN',
-            purchaseToken:
-              'jolbnkpmojnpnjecgmphbmkc.AO-J1OznE4AIzyUvKFe1RSVkxw4KEtv0WfyL_tkzozOqnlSvIPsyQJBphCN80gwIMaex4EMII95rFCZhMCbVPZDc-y_VVhQU5Ddua1dLn8zV7ms_tdwoDmE',
-            orderId: 'GPA.3317-0284-9993-42221',
-          });
+        } else if (Platform.OS === 'android') {
+          if (Platform.constants.Manufacturer === 'Amazon') {
+            NamiPaywallManager.buySkuCompleteAmazon({
+              product: sku,
+              purchaseDate: 1684823428,
+              purchaseSource: 'CAMPAIGN',
+              receiptId: '12345',
+              localizedPrice: '120',
+              userId: '12345',
+              marketplace: '12345',
+            });
+          } else {
+            NamiPaywallManager.buySkuCompleteGooglePlay({
+              product: sku,
+              purchaseDate: 1684823428,
+              purchaseSource: 'CAMPAIGN',
+              purchaseToken:
+                'jolbnkpmojnpnjecgmphbmkc.AO-J1OznE4AIzyUvKFe1RSVkxw4KEtv0WfyL_tkzozOqnlSvIPsyQJBphCN80gwIMaex4EMII95rFCZhMCbVPZDc-y_VVhQU5Ddua1dLn8zV7ms_tdwoDmE',
+              orderId: 'GPA.3317-0284-9993-42221',
+            });
+          }
         }
-      }
-    });
+      },
+    );
 
     NamiCustomerManager.setCustomerDataPlatformId('2135');
-    return () => {};
+    return () => {
+      subscriptionRemover();
+    };
   }, []);
 
   return (

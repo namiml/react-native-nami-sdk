@@ -115,15 +115,17 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         action,
         campaignId,
         paywallId,
-        campaignLabel,
         campaignName,
         campaignType,
+        campaignLabel,
         campaignUrl,
+        paywallName,
         segmentId,
         externalSegmentId,
-        paywallName,
         deeplinkUrl,
         skuId,
+        componentChangeId,
+        componentChangeName,
         purchaseError,
         purchases,
       ) => {
@@ -131,15 +133,17 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         setAction(action);
         console.log('campaignId', campaignId);
         console.log('paywallId', paywallId);
-        console.log('campaignLabel', campaignLabel);
         console.log('campaignName', campaignName);
         console.log('campaignType', campaignType);
+        console.log('campaignLabel', campaignLabel);
         console.log('campaignUrl', campaignUrl);
         console.log('paywallName', paywallName);
         console.log('segmentId', segmentId);
         console.log('externalSegmentId', externalSegmentId);
         console.log('deeplinkUrl', deeplinkUrl);
         console.log('skuId', skuId);
+        console.log('componentChangeId', componentChangeId);
+        console.log('componentChangeName', componentChangeName);
         console.log('purchaseError', purchaseError);
         console.log('purchases', purchases);
       },

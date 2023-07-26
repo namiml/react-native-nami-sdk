@@ -29,6 +29,8 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         const val CAMPAIGN_TYPE = "campaignType"
         const val CAMPAIGN_URL = "campaignUrl"
         const val PAYWALL_NAME = "paywallName"
+        const val COMPONENT_CHANGE_ID = "componentChangeId"
+        const val COMPONENT_CHANGE_NAME = "componentChangeName"
         const val SEGMENT_ID = "segmentId"
         const val EXTERNAL_SEGMENT_ID = "externalSegmentId"
         const val DEEP_LINK_URL = "deeplinkUrl"
@@ -189,6 +191,8 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             putString(CAMPAIGN_TYPE, campaignType ?: "")
             putString(CAMPAIGN_URL, campaignUrl ?: "")
             putString(PAYWALL_NAME, paywallName ?: "")
+            putString(COMPONENT_CHANGE_ID, "")
+            putString(COMPONENT_CHANGE_NAME, "")
             putString(SEGMENT_ID, segmentId ?: "")
             putString(EXTERNAL_SEGMENT_ID, externalSegmentId ?: "")
             putString(DEEP_LINK_URL, deeplinkUrl ?: "")
