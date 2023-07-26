@@ -26,8 +26,8 @@ class RNNamiPurchaseManager: RCTEventEmitter {
         let productDict: [String: Any?] = [
             "localizedTitle": product.localizedTitle,
             "localizedDescription": product.localizedDescription,
-            "localizedPrice": product.localizedPrice,
-            "localizedMultipliedPrice": product.localizedMultipliedPrice,
+            "localizedPrice": product.price,
+            "localizedMultipliedPrice": "",
             "price": product.price.stringValue,
             "priceLanguage": product.priceLocale.languageCode,
             "priceCurrency": product.priceLocale.currencyCode,

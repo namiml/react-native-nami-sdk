@@ -14,38 +14,38 @@ export function getConfigObject() {
         namiCommands: ['useStagingAPI'],
         initialConfig: getInitialConfig(),
       };
-      case 'stagingAmazon':
-        return {
-          'appPlatformID-apple': 'UNUSED',
-          'appPlatformID-android': 'AMAZON_STAGE_APP_PLATFORM_ID',
-          logLevel: 'DEBUG',
-          namiCommands: ['useStagingAPI'],
-          initialConfig: getInitialConfig(),
-        };
-      case 'stagingGoogle':
-        return {
-          'appPlatformID-apple': 'UNUSED',
-          'appPlatformID-android': 'GOOGLE_PROD_APP_PLATFORM_ID',
-          logLevel: 'DEBUG',
-          namiCommands: ['useStagingAPI'],
-          initialConfig: getInitialConfig(),
-        };
-      case 'productionAmazon':
-        return {
-          'appPlatformID-apple': 'UNUSED',
-          'appPlatformID-android': 'AMAZON_PROD_APP_PLATFORM_ID',
-          logLevel: 'DEBUG',
-          namiCommands: ['useStagingAPI'],
-          initialConfig: getInitialConfig(),
-        };
-        case 'productionGoogle':
-          return {
-            'appPlatformID-apple': 'UNUSED',
-            'appPlatformID-android': 'GOOGLE_PROD_APP_PLATFORM_ID',
-            logLevel: 'DEBUG',
-            namiCommands: ['useStagingAPI'],
-            initialConfig: getInitialConfig(),
-          };
+    case 'stagingAmazon':
+      return {
+        'appPlatformID-apple': 'UNUSED',
+        'appPlatformID-android': 'AMAZON_STAGE_APP_PLATFORM_ID',
+        logLevel: 'DEBUG',
+        namiCommands: ['useStagingAPI'],
+        initialConfig: getInitialConfig(),
+      };
+    case 'stagingGoogle':
+      return {
+        'appPlatformID-apple': 'UNUSED',
+        'appPlatformID-android': 'GOOGLE_PROD_APP_PLATFORM_ID',
+        logLevel: 'DEBUG',
+        namiCommands: ['useStagingAPI'],
+        initialConfig: getInitialConfig(),
+      };
+    case 'productionAmazon':
+      return {
+        'appPlatformID-apple': 'UNUSED',
+        'appPlatformID-android': 'AMAZON_PROD_APP_PLATFORM_ID',
+        logLevel: 'DEBUG',
+        namiCommands: ['useStagingAPI'],
+        initialConfig: getInitialConfig(),
+      };
+    case 'productionGoogle':
+      return {
+        'appPlatformID-apple': 'UNUSED',
+        'appPlatformID-android': 'GOOGLE_PROD_APP_PLATFORM_ID',
+        logLevel: 'DEBUG',
+        namiCommands: ['useStagingAPI'],
+        initialConfig: getInitialConfig(),
+      };
     default:
       return {
         'appPlatformID-apple': 'APPLE_PROD_APP_PLATFORM_ID',

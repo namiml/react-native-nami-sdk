@@ -43,9 +43,9 @@ class RNNamiCampaignManager: RCTEventEmitter {
     }
 
     func handlePaywallAction(
-        paywallEvent: NamiPaywallEvent,
+        paywallEvent: NamiPaywallEvent
     ) {
-        let actionString: String
+        var actionString: String
         switch paywallEvent.action {
         case .show_paywall:
             actionString = "SHOW_PAYWALL"
@@ -73,12 +73,12 @@ class RNNamiCampaignManager: RCTEventEmitter {
             actionString = "PURCHASE_UNKNOWN"
         case .deeplink:
             actionString = "DEEPLINK"
-        case .toggle_Change:
+        case .toggle_change:
             actionString = "TOGGLE_CHANGE"
         case .page_change:
-            actionString: "PAGE_CHANGE"
+            actionString = "PAGE_CHANGE"
         case .slide_change:
-            actionString: "SLIDE_CHANGE"
+            actionString = "SLIDE_CHANGE"
 
         @unknown default:
             actionString = "PURCHASE_UNKNOWN"
@@ -86,11 +86,6 @@ class RNNamiCampaignManager: RCTEventEmitter {
         let errorSting = paywallEvent.purchaseError?.localizedDescription
 
         let dictionaries = paywallEvent.purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
-
-        // var skuDict: NSDictionary?
-        // if let sku = paywallEvent.sku {
-        //     skuDict = RNNamiPurchaseManager.skuToSKUDict(sku)
-        // }
 
         let payload: [String: Any?] = [
             "campaignId": paywallEvent.campaignId,
@@ -102,11 +97,10 @@ class RNNamiCampaignManager: RCTEventEmitter {
             "paywallName": paywallEvent.paywallName,
             "segmentId": paywallEvent.segmentId,
             "externalSegmentId": paywallEvent.externalSegmentId,
-            "action": paywallEvent.actionString,
-            // "sku": skuDict,
-            "skuId": paywallEvent.sku.id
-            "purchaseError": paywallEvent.errorSting,
-            "purchases": paywallEvent.dictionaries,
+            "action": actionString,
+            "skuId": paywallEvent.sku?.id,
+            "purchaseError": errorSting,
+            "purchases": dictionaries,
             "deeplinkUrl": paywallEvent.deeplinkUrl,
             "componentChangeId": paywallEvent.componentChange?.id,
             "componentChangeName": paywallEvent.componentChange?.name,
@@ -158,7 +152,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
                                                )
                                            },
                                            paywallActionHandler: { paywallEvent in
-                                               self.handlePaywallAction(paywallEvent)
+                                               self.handlePaywallAction(paywallEvent: paywallEvent)
                                            })
             }
         } else if let label = label {
@@ -172,7 +166,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
                                                )
                                            },
                                            paywallActionHandler: { paywallEvent in
-                                               self.handlePaywallAction(paywallEvent)
+                                               self.handlePaywallAction(paywallEvent: paywallEvent)
                                            })
             }
         } else {
@@ -187,7 +181,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
                                                )
                                            },
                                            paywallActionHandler: { paywallEvent in
-                                               self.handlePaywallAction(paywallEvent)
+                                               self.handlePaywallAction(paywallEvent: paywallEvent)
                                            })
             }
         }

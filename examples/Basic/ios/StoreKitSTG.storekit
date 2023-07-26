@@ -9,7 +9,7 @@
   "settings" : {
     "_applicationInternalID" : "6443910111",
     "_developerTeamID" : "K6APTMK8Y8",
-    "_lastSynchronizedDate" : 706849380.87510896
+    "_lastSynchronizedDate" : 712074466.26017404
   },
   "subscriptionGroups" : [
     {
@@ -21,7 +21,15 @@
       "subscriptions" : [
         {
           "adHocOffers" : [
-
+            {
+              "displayPrice" : "4.99",
+              "internalID" : "FD31BD5B",
+              "numberOfPeriods" : 1,
+              "offerID" : "plus_annual_promo_1",
+              "paymentMode" : "payAsYouGo",
+              "referenceName" : "Plus Annual Promo",
+              "subscriptionPeriod" : "P1Y"
+            }
           ],
           "codeOffers" : [
 
@@ -81,7 +89,7 @@
           "groupNumber" : 2,
           "internalID" : "6447770869",
           "introductoryOffer" : {
-            "internalID" : "E5F54037",
+            "internalID" : "832A850B",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
@@ -111,7 +119,7 @@
           "groupNumber" : 1,
           "internalID" : "6447770794",
           "introductoryOffer" : {
-            "internalID" : "6574C3D4",
+            "internalID" : "7985E305",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P1W"
@@ -166,7 +174,7 @@
           "groupNumber" : 1,
           "internalID" : "6447770843",
           "introductoryOffer" : {
-            "internalID" : "B9B4646C",
+            "internalID" : "B3B76E7C",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
