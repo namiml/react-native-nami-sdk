@@ -35,6 +35,7 @@ describe('Configure Test', () => {
       await element(by.id('refresh_campaigns')).tap();
       await element(by.id('refresh_campaigns')).tap();
       await new Promise((resolve) => setTimeout(resolve, 10000));
+      await element(by.id('refresh_campaigns')).tap();
     });
   }
 
@@ -195,7 +196,7 @@ describe('Profile and Entitlements screens Test', () => {
 
     await waitFor(element(by.id('login_btn_text')))
       .toHaveText('Login')
-      .withTimeout(2000);
+      .withTimeout(5000);
 
     await expect(element(by.id('user_id'))).toHaveText('Device Id');
   });

@@ -256,6 +256,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
           script: echo "Generated AVD snapshot for caching"
+          working-directory: source/examples/Basic
 
       - name: Detox test
         uses: reactivecircus/android-emulator-runner@v2
@@ -263,9 +264,14 @@ jobs:
           target: aosp_atd
           api-level: 30
           arch: x86
+          ram-size: 2048M
+          heap-size: 576M
           channel: canary
           profile: pixel
-          avd-name: Pixel_3a_API_30_AOSP
+          force-avd-creation: false
+          disable-animations: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: ${{ steps.device.outputs.AVD_NAME }}
           script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --headless --record-logs all
           working-directory: source/examples/Basic
 
