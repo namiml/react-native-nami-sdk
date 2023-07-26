@@ -241,7 +241,6 @@ jobs:
           heap-size: 576M
           channel: canary
           profile: pixel
-          force-avd-creation: false
           disable-animations: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           avd-name: ${{ steps.device.outputs.AVD_NAME }}
