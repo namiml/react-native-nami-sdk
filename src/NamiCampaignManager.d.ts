@@ -23,7 +23,7 @@ export const NamiCampaignManager: {
       segmentId?: string,
       externalSegmentId?: string,
       deeplinkUrl?: string,
-      sku?: NamiSKU,
+      skuId?: string,
       componentChangeId?: string,
       componentChangeName?: string,
       purchaseError?: string,

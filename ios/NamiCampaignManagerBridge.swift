@@ -87,10 +87,10 @@ class RNNamiCampaignManager: RCTEventEmitter {
 
         let dictionaries = paywallEvent.purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
 
-        var skuDict: NSDictionary?
-        if let sku = paywallEvent.sku {
-            skuDict = RNNamiPurchaseManager.skuToSKUDict(sku)
-        }
+        // var skuDict: NSDictionary?
+        // if let sku = paywallEvent.sku {
+        //     skuDict = RNNamiPurchaseManager.skuToSKUDict(sku)
+        // }
 
         let payload: [String: Any?] = [
             "campaignId": paywallEvent.campaignId,
@@ -103,7 +103,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
             "segmentId": paywallEvent.segmentId,
             "externalSegmentId": paywallEvent.externalSegmentId,
             "action": paywallEvent.actionString,
-            "sku": skuDict,
+            // "sku": skuDict,
+            "skuId": paywallEvent.sku.id
             "purchaseError": paywallEvent.errorSting,
             "purchases": paywallEvent.dictionaries,
             "deeplinkUrl": paywallEvent.deeplinkUrl,
