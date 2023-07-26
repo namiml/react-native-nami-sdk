@@ -231,19 +231,42 @@ jobs:
         run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator.device.avdName)" >> $GITHUB_OUTPUT
         working-directory: source/examples/Basic
 
+      - name: Cache AVD snapshot
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-30-aosp-atd
+
+      - name: Create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          target: aosp_atd
+          api-level: 30
+          arch: x86
+          channel: canary
+          profile: pixel
+          ram-size: 2048M
+          heapSize: 576M
+          # avd-name: ${{ steps.device.outputs.AVD_NAME }}
+          avd-name: Pixel_3a_API_30_AOSP
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching"
+
       - name: Detox test
         uses: reactivecircus/android-emulator-runner@v2
         with:
           target: aosp_atd
           api-level: 30
           arch: x86
-          ram-size: 2048M
-          heap-size: 576M
           channel: canary
           profile: pixel
-          disable-animations: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          avd-name: ${{ steps.device.outputs.AVD_NAME }}
+          avd-name: Pixel_3a_API_30_AOSP
           script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --headless --record-logs all
           working-directory: source/examples/Basic
 
