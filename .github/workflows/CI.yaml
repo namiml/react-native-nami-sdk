@@ -250,9 +250,8 @@ jobs:
           channel: canary
           profile: pixel
           ram-size: 2048M
-          heapSize: 576M
-          # avd-name: ${{ steps.device.outputs.AVD_NAME }}
-          avd-name: Pixel_3a_API_30_AOSP
+          heap-size: 576M
+          avd-name: ${{ steps.device.outputs.AVD_NAME }}
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
