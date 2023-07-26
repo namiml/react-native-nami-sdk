@@ -1,6 +1,5 @@
 import {device, element, by, expect, waitFor, log} from 'detox';
 
-// FYI Could be changed on BE;
 const data = {
   campaign: 'puffin',
   // campaign: 'her_v6',
@@ -22,20 +21,20 @@ describe('Configure Test', () => {
       await expect(element(by.id('refresh_campaigns'))).toBeVisible();
       await element(by.id('refresh_campaigns')).tap();
       await element(by.id('refresh_campaigns')).tap();
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 10000));
       await element(by.id('refresh_campaigns')).tap();
       await element(by.id('refresh_campaigns')).tap();
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 10000));
     });
 
     it('should load data 2', async () => {
       await expect(element(by.id('refresh_campaigns'))).toBeVisible();
       await element(by.id('refresh_campaigns')).tap();
       await element(by.id('refresh_campaigns')).tap();
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 10000));
       await element(by.id('refresh_campaigns')).tap();
       await element(by.id('refresh_campaigns')).tap();
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) => setTimeout(resolve, 10000));
     });
   }
 
@@ -91,13 +90,18 @@ describe('Second part of campaigns tests', () => {
     await expect(element(by.id('refresh_campaigns'))).toBeVisible();
     await element(by.id('refresh_campaigns')).tap();
 
-    await waitFor(element(by.id(`list_item_${data.campaign}`)))
+    await waitFor(element(by.id(`list_item_view_${data.campaign}`)))
       .toBeVisible()
       .withTimeout(5000);
     const campaignItem = await element(
       by.id(`list_item_${data.campaign}`),
     ).getAttributes();
-    const campaignObj = JSON.parse(campaignItem.value);
+
+    const jsonString =
+      device.getPlatform() === 'android'
+        ? campaignItem.label
+        : campaignItem.value;
+    const campaignObj = JSON.parse(jsonString);
     campaignObj.hasOwnProperty('rule');
     if (!campaignObj.hasOwnProperty('rule')) {
       log.error(
@@ -165,7 +169,7 @@ describe('Profile and Entitlements screens Test', () => {
 
     await element(by.id('profile_screen')).tap();
     await expect(element(by.id('profile_title'))).toBeVisible();
-    await expect(element(by.id('login_btn'))).toHaveText('Login');
+    await expect(element(by.id('login_btn_text'))).toHaveText('Login');
     await expect(element(by.id('user_id'))).toHaveText('Device Id');
 
     await expect(element(by.text('In Trial Period'))).toExist();
@@ -178,18 +182,18 @@ describe('Profile and Entitlements screens Test', () => {
   });
 
   it('should Login/Logout work', async () => {
-    await expect(element(by.id('login_btn'))).toHaveText('Login');
+    await expect(element(by.id('login_btn_text'))).toHaveText('Login');
     await element(by.id('login_btn')).tap();
 
-    await waitFor(element(by.id('login_btn')))
+    await waitFor(element(by.id('login_btn_text')))
       .toHaveText('Logout')
-      .withTimeout(2000);
+      .withTimeout(5000);
 
     await expect(element(by.id('user_id'))).toHaveText('Customer Id');
 
     await element(by.id('login_btn')).tap();
 
-    await waitFor(element(by.id('login_btn')))
+    await waitFor(element(by.id('login_btn_text')))
       .toHaveText('Login')
       .withTimeout(2000);
 

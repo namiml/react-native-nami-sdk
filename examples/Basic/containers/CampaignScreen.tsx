@@ -188,7 +188,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         accessibilityValue={{text: JSON.stringify(item)}}
         onPress={() => onItemPressPrimary(item)}
         style={itemStyle}>
-        <View style={styles.viewContainer}>
+        <View
+          testID={`list_item_view_${item.value}`}
+          accessibilityValue={{text: JSON.stringify(item)}}
+          style={styles.viewContainer}>
           <Text style={styles.itemText}>{item.value}</Text>
           {item.type === 'url' && (
             <Text style={styles.itemText}>Open as: {item.type}</Text>

@@ -121,9 +121,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
       headerRight: () => {
         return (
           <TouchableOpacity
+            testID="login_btn"
             style={styles.headerButton}
             onPress={isUserLogin ? onLogoutPress : onLoginPress}>
-            <Text testID="login_btn" style={styles.headerButtonText}>
+            <Text testID="login_btn_text" style={styles.headerButtonText}>
               {isUserLogin ? 'Logout' : 'Login'}
             </Text>
           </TouchableOpacity>
