@@ -59,6 +59,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             "type": typeString,
             "appleProduct": productDict,
             "promoId": sku.promoId,
+            "promoToken": "",
         ]
 
         return NSDictionary(dictionary: skuDict.compactMapValues { $0 })
