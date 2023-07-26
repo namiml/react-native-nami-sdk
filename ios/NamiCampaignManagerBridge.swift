@@ -79,9 +79,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
             actionString = "PAGE_CHANGE"
         case .slide_change:
             actionString = "SLIDE_CHANGE"
-
-        @unknown default:
-            actionString = "PURCHASE_UNKNOWN"
+        default:
+            actionString = "UNKNOWN"
         }
         let errorSting = paywallEvent.purchaseError?.localizedDescription
 
