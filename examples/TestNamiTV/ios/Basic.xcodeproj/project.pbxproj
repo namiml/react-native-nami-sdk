@@ -390,12 +390,10 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic-tvOS/Pods-Basic-tvOS-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
-				"${PODS_ROOT}/../../node_modules/react-native-theoplayer/ios/style.css",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/style.css",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -410,12 +408,10 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic-tvOS/Pods-Basic-tvOS-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Nami/NamiApple.framework/NamiApple",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/THEOplayerSDK-core/THEOplayerSDK.framework/THEOplayerSDK",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NamiApple.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THEOplayerSDK.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -507,12 +503,10 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic-tvOS-PROD/Pods-Basic-tvOS-PROD-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
-				"${PODS_ROOT}/../../node_modules/react-native-theoplayer/ios/style.css",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/style.css",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -527,12 +521,10 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic-tvOS-PROD/Pods-Basic-tvOS-PROD-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/Nami/NamiApple.framework/NamiApple",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/THEOplayerSDK-core/THEOplayerSDK.framework/THEOplayerSDK",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NamiApple.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/THEOplayerSDK.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
