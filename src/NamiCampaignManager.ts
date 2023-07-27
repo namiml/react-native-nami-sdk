@@ -31,9 +31,9 @@ interface ICampaignManager {
     context?: PaywallLaunchContext,
     resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: (
+      action: NamiPaywallAction,
       campaignId: string,
       paywallId: string,
-      action: NamiPaywallAction,
       campaignName?: string,
       campaignType?: string,
       campaignLabel?: string,
@@ -43,6 +43,8 @@ interface ICampaignManager {
       externalSegmentId?: string,
       deeplinkUrl?: string,
       skuId?: string,
+      componentChangeId?: string,
+      componentChangeName?: string,
       purchaseError?: string,
       purchases?: NamiPurchase[],
     ) => void,
@@ -65,29 +67,48 @@ export const NamiCampaignManager: ICampaignManager = {
     this.launchSubscription = this.emitter.addListener(
       NamiCampaignManagerEvents.ResultCampaign,
       body => {
+        body.action = body.action.startsWith(searchString_Nami)
+          ? body.action.substring(5, body.action.length)
+          : body.action;
+
         const {
-          action: rawAction,
-          skuId,
-          purchaseError,
-          purchases,
-          campaignId,
-          campaignLabel,
-          paywallId,
-        } = body;
-
-        const action = rawAction.startsWith(searchString_Nami)
-          ? rawAction.substring(5, rawAction.length)
-          : rawAction;
-
-        actionCallback?.(
           action,
+          campaignId,
+          paywallId,
+          campaignName,
+          campaignType,
+          campaignLabel,
+          campaignUrl,
+          paywallName,
+          segmentId,
+          externalSegmentId,
+          deeplinkUrl,
           skuId,
+          componentChangeId,
+          componentChangeName,
           purchaseError,
           purchases,
-          campaignId,
-          campaignLabel,
-          paywallId,
-        );
+        } = body;
+        if (actionCallback) {
+          actionCallback(
+            action,
+            campaignId,
+            paywallId,
+            campaignName,
+            campaignType,
+            campaignLabel,
+            campaignUrl,
+            paywallName,
+            segmentId,
+            externalSegmentId,
+            deeplinkUrl,
+            skuId,
+            componentChangeId,
+            componentChangeName,
+            purchaseError,
+            purchases,
+          );
+        }
       },
     );
     RNNamiCampaignManager.launch(
@@ -99,8 +120,8 @@ export const NamiCampaignManager: ICampaignManager = {
     );
   },
 
-  isCampaignAvailable: label => {
-    return RNNamiCampaignManager.isCampaignAvailable(label ?? null);
+  isCampaignAvailable: campaignSource => {
+    return RNNamiCampaignManager.isCampaignAvailable(campaignSource ?? null);
   },
 
   registerAvailableCampaignsHandler(callback) {

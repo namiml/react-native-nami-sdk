@@ -13,6 +13,8 @@ import {
 export enum NamiPaywallManagerEvents {
   RegisterBuySKU = 'RegisterBuySKU',
   PaywallCloseRequested = 'PaywallCloseRequested',
+  PaywallSignInRequested = 'PaywallSignInRequested',
+  PaywallRestoreRequested = 'PaywallRestoreRequested',
 }
 
 export enum ServicesEnum {
@@ -32,6 +34,9 @@ export interface INamiPaywallManager {
   ) => EmitterSubscription['remove'];
   registerCloseHandler: (callback: () => void) => EmitterSubscription['remove'];
   registerSignInHandler: (
+    callback: () => void,
+  ) => EmitterSubscription['remove'];
+  registerRestoreHandler: (
     callback: () => void,
   ) => EmitterSubscription['remove'];
   dismiss: (animated?: boolean) => void;
@@ -84,12 +89,23 @@ export const NamiPaywallManager: INamiPaywallManager = {
   registerSignInHandler(callback) {
     let subscription;
     subscription = this.paywallEmitter.addListener(
-      'PaywallSignInRequested',
+      NamiPaywallManagerEvents.PaywallSignInRequested,
       body => {
         callback(body);
       },
     );
     RNNamiPaywallManager.registerSignInHandler();
+    return subscription.remove;
+  },
+  registerRestoreHandler(callback) {
+    let subscription;
+    subscription = this.paywallEmitter.addListener(
+      NamiPaywallManagerEvents.PaywallRestoreRequested,
+      body => {
+        callback(body);
+      },
+    );
+    RNNamiPaywallManager.registerRestoreHandler();
     return subscription.remove;
   },
   dismiss: (animated?: boolean) => {
