@@ -11,6 +11,7 @@ import com.namiml.campaign.LaunchCampaignResult
 import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
 import com.namiml.paywall.model.PaywallLaunchContext
+import com.namiml.paywall.model.NamiPaywallEvent
 
 class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), ActivityEventListener {
@@ -135,16 +136,16 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         val actionString = paywallEvent.action.toString()
         val skuString = paywallEvent.sku?.skuId ?: ""
 
-        val purchasesArray = createPurchaseArray(purchases)
+        val purchasesArray = createPurchaseArray(paywallEvent.purchases)
 
         val resultMap = Arguments.createMap().apply {
             putString(CAMPAIGN_ID, paywallEvent.campaignId)
             putString(CAMPAIGN_LABEL, paywallEvent.campaignLabel ?: "")
             putString(PAYWALL_ID, paywallEvent.paywallId)
-            putString(ACTION, paywallEvent.actionString)
+            putString(ACTION, actionString)
             putString(SKU_ID, skuString)
             putString(PURCHASE_ERROR, paywallEvent.purchaseError ?: "")
-            putArray(PURCHASES, paywallEvent.purchasesArray)
+            putArray(PURCHASES, purchasesArray)
             putString(CAMPAIGN_NAME, paywallEvent.campaignName ?: "")
             putString(CAMPAIGN_TYPE, paywallEvent.campaignType ?: "")
             putString(CAMPAIGN_URL, paywallEvent.campaignUrl ?: "")
