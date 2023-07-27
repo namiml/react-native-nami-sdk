@@ -10,8 +10,6 @@ import com.namiml.billing.NamiPurchase
 import com.namiml.campaign.LaunchCampaignResult
 import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
-import com.namiml.paywall.NamiSKU
-import com.namiml.paywall.model.NamiPaywallAction
 import com.namiml.paywall.model.PaywallLaunchContext
 
 class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
@@ -92,42 +90,16 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             } else {
                 paywallLaunchContext = PaywallLaunchContext(null, customAttributes)
             }
-
         }
 
         if (theActivity != null) {
             reactApplicationContext.runOnUiQueueThread {
                 val paywallActionCallback = {
-                        campaignId: String,
-                        campaignName: String?,
-                        campaignType: String?,
-                        campaignLabel: String?,
-                        campaignUrl: String?,
-                        paywallId: String,
-                        paywallName: String?,
-                        segmentId: String?,
-                        externalSegmentId: String?,
-                        action: NamiPaywallAction,
-                        sku: NamiSKU?,
-                        purchaseError: String?,
-                        purchases: List<NamiPurchase>?,
-                        deeplinkUrl: String? ->
+                        paywallEvent: NamiPaywallEvent ->
                     handlePaywallCallback(
-                        campaignId,
-                        campaignName,
-                        campaignType,
-                        campaignLabel,
-                        campaignUrl,
-                        paywallId,
-                        paywallName,
-                        segmentId,
-                        externalSegmentId,
-                        action,
-                        sku,
-                        purchaseError,
-                        purchases,
-                        deeplinkUrl,
-                        actionCallback)
+                        paywallEvent,
+                        actionCallback,
+                    )
                 }
 
                 val uriObject: Uri? = if (withUrl != null) Uri.parse(withUrl) else null
@@ -154,48 +126,34 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 }
             }
         }
-
     }
 
     private fun handlePaywallCallback(
-        campaignId: String,
-        campaignName: String?,
-        campaignType: String?,
-        campaignLabel: String?,
-        campaignUrl: String?,
-        paywallId: String,
-        paywallName: String?,
-        segmentId: String?,
-        externalSegmentId: String?,
-        action: NamiPaywallAction,
-        sku: NamiSKU?,
-        purchaseError: String?,
-        purchases: List<NamiPurchase>?,
-        deeplinkUrl: String?,
-        actionCallback: Callback
+        paywallEvent: NamiPaywallEvent,
+        actionCallback: Callback,
     ) {
-        val actionString = action.toString()
-        val skuString = sku?.skuId ?: ""
+        val actionString = paywallEvent.action.toString()
+        val skuString = paywallEvent.sku?.skuId ?: ""
 
         val purchasesArray = createPurchaseArray(purchases)
 
         val resultMap = Arguments.createMap().apply {
-            putString(CAMPAIGN_ID, campaignId)
-            putString(CAMPAIGN_LABEL, campaignLabel ?: "")
-            putString(PAYWALL_ID, paywallId)
-            putString(ACTION, actionString)
+            putString(CAMPAIGN_ID, paywallEvent.campaignId)
+            putString(CAMPAIGN_LABEL, paywallEvent.campaignLabel ?: "")
+            putString(PAYWALL_ID, paywallEvent.paywallId)
+            putString(ACTION, paywallEvent.actionString)
             putString(SKU_ID, skuString)
-            putString(PURCHASE_ERROR, purchaseError ?: "")
-            putArray(PURCHASES, purchasesArray)
-            putString(CAMPAIGN_NAME, campaignName ?: "")
-            putString(CAMPAIGN_TYPE, campaignType ?: "")
-            putString(CAMPAIGN_URL, campaignUrl ?: "")
-            putString(PAYWALL_NAME, paywallName ?: "")
-            putString(COMPONENT_CHANGE_ID, "")
-            putString(COMPONENT_CHANGE_NAME, "")
-            putString(SEGMENT_ID, segmentId ?: "")
-            putString(EXTERNAL_SEGMENT_ID, externalSegmentId ?: "")
-            putString(DEEP_LINK_URL, deeplinkUrl ?: "")
+            putString(PURCHASE_ERROR, paywallEvent.purchaseError ?: "")
+            putArray(PURCHASES, paywallEvent.purchasesArray)
+            putString(CAMPAIGN_NAME, paywallEvent.campaignName ?: "")
+            putString(CAMPAIGN_TYPE, paywallEvent.campaignType ?: "")
+            putString(CAMPAIGN_URL, paywallEvent.campaignUrl ?: "")
+            putString(PAYWALL_NAME, paywallEvent.paywallName ?: "")
+            putString(COMPONENT_CHANGE_ID, paywallEvent?.componentChange?.id ?: "")
+            putString(COMPONENT_CHANGE_NAME, paywallEvent?.componentChange?.name ?: "")
+            putString(SEGMENT_ID, paywallEvent.segmentId ?: "")
+            putString(EXTERNAL_SEGMENT_ID, paywallEvent.externalSegmentId ?: "")
+            putString(DEEP_LINK_URL, paywallEvent.deeplinkUrl ?: "")
         }
 
         emitEvent(_RESULT_CAMPAIGN, resultMap)
