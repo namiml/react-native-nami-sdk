@@ -108,7 +108,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         if (productId != null && skuId != null && skuType != null) {
             val namiSku = NamiSKU(
                 skuId = skuId,
-                skuDetails = null,
+                productDetails = null,
                 amazonProduct = null,
                 id = productId,
                 type = skuType,
