@@ -16,7 +16,8 @@ export const NamiPaywallManager: {
   registerRestoreHandler: (callback: () => void) => EmitterSubscription["remove"];
   show: () => void;
   hide: () => void;
-  isHidden: () => Promise<boolean>;
+  // isHidden: () => Promise<boolean>;
+  isHidden(): Promise<boolean>;
 };
 
 export type NamiPurchaseSuccessApple = {

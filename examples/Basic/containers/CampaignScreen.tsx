@@ -114,7 +114,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return NamiCampaignManager.launch(
       label,
       url,
-      {},
+      { customAttributes: {}, productGroups: [] },
       (successAction, error) => {
         console.log('successAction', successAction);
         console.log('error', error);
