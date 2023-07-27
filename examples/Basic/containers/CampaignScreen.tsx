@@ -19,6 +19,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import {ViewerTabProps} from '../App';
 import theme from '../theme';
@@ -50,6 +51,14 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     'INITIAL',
   );
 
+  const showPaywallIfHidden = async () => {
+    if (Platform.OS === 'ios' && (await NamiPaywallManager.isHidden())) {
+      NamiPaywallManager.show();
+    } else {
+      console.log('paywall is not hidden');
+    }
+  };
+
   const getAllCampaigns = useCallback(async () => {
     const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
     const validCampaigns = fetchedCampaigns.filter((campaign) =>
@@ -65,9 +74,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       () => {
         console.log('sign in');
-        NamiPaywallManager.hide();
+        NamiPaywallManager.dismiss();
       },
     );
+
+    const subscriptionRestoreRemover =
+      NamiPaywallManager.registerRestoreHandler(() => {
+        console.log('restore');
+        NamiPaywallManager.dismiss();
+      });
+
     const subscriptionRemover =
       NamiCampaignManager.registerAvailableCampaignsHandler(
         (availableCampaigns) => {
@@ -81,19 +97,17 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     return () => {
       subscriptionRemover();
       subscriptionSignInRemover();
+      subscriptionRestoreRemover();
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const triggerLaunch = (label?: any, url?: any) => {
-    // const paywallLaunchContext = {
-    //   productGroups: ['group1'],
-    // };
     return NamiCampaignManager.launch(
       label,
       url,
-      undefined,
+      {},
       (successAction, error) => {
         console.log('successAction', successAction);
         console.log('error', error);
@@ -102,15 +116,17 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         action,
         campaignId,
         paywallId,
-        campaignLabel,
         campaignName,
         campaignType,
+        campaignLabel,
         campaignUrl,
+        paywallName,
         segmentId,
         externalSegmentId,
-        paywallName,
         deeplinkUrl,
         skuId,
+        componentChangeId,
+        componentChangeName,
         purchaseError,
         purchases,
       ) => {
@@ -118,15 +134,17 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
         setAction(action);
         console.log('campaignId', campaignId);
         console.log('paywallId', paywallId);
-        console.log('campaignLabel', campaignLabel);
         console.log('campaignName', campaignName);
         console.log('campaignType', campaignType);
+        console.log('campaignLabel', campaignLabel);
         console.log('campaignUrl', campaignUrl);
         console.log('paywallName', paywallName);
         console.log('segmentId', segmentId);
         console.log('externalSegmentId', externalSegmentId);
         console.log('deeplinkUrl', deeplinkUrl);
         console.log('skuId', skuId);
+        console.log('componentChangeId', componentChangeId);
+        console.log('componentChangeName', componentChangeName);
         console.log('purchaseError', purchaseError);
         console.log('purchases', purchases);
       },
@@ -161,7 +179,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   }, []);
 
   const onButtonPress = useCallback(() => {
-    NamiPaywallManager.show();
+    showPaywallIfHidden();
   }, []);
 
   useLayoutEffect(() => {

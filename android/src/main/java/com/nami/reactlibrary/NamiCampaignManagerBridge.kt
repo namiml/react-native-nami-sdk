@@ -29,6 +29,8 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         const val CAMPAIGN_TYPE = "campaignType"
         const val CAMPAIGN_URL = "campaignUrl"
         const val PAYWALL_NAME = "paywallName"
+        const val COMPONENT_CHANGE_ID = "componentChangeId"
+        const val COMPONENT_CHANGE_NAME = "componentChangeName"
         const val SEGMENT_ID = "segmentId"
         const val EXTERNAL_SEGMENT_ID = "externalSegmentId"
         const val DEEP_LINK_URL = "deeplinkUrl"
@@ -57,7 +59,6 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
 
         var paywallLaunchContext: PaywallLaunchContext? = null
         if (context != null) {
-
             val productGroups: MutableList<String> = mutableListOf()
             val customAttributes: MutableMap<String, String> = mutableMapOf()
 
@@ -69,7 +70,6 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                         if (groupString != null) {
                             productGroups.add(groupString)
                         }
-
                     }
                 }
                 Log.d(LOG_TAG, "productGroups $productGroups")
@@ -87,7 +87,12 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 }
             }
 
-            paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes)
+            if (context.hasKey("productGroups")) {
+                paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes)
+            } else {
+                paywallLaunchContext = PaywallLaunchContext(null, customAttributes)
+            }
+
         }
 
         if (theActivity != null) {
@@ -186,6 +191,8 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             putString(CAMPAIGN_TYPE, campaignType ?: "")
             putString(CAMPAIGN_URL, campaignUrl ?: "")
             putString(PAYWALL_NAME, paywallName ?: "")
+            putString(COMPONENT_CHANGE_ID, "")
+            putString(COMPONENT_CHANGE_NAME, "")
             putString(SEGMENT_ID, segmentId ?: "")
             putString(EXTERNAL_SEGMENT_ID, externalSegmentId ?: "")
             putString(DEEP_LINK_URL, deeplinkUrl ?: "")

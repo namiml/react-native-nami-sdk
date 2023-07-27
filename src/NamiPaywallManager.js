@@ -47,6 +47,17 @@ export const NamiPaywallManager = {
     RNNamiPaywallManager.registerSignInHandler();
     return subscription.remove;
   },
+  registerRestoreHandler(callback) {
+    var subscription;
+    subscription = this.paywallEmitter.addListener(
+      "PaywallRestoreRequested",
+      (body) => {
+        callback(body);
+      }
+    );
+    RNNamiPaywallManager.registerRestoreHandler();
+    return subscription.remove;
+  },
   dismiss(animated) {
     RNNamiPaywallManager.dismiss(animated ?? true);
   },
@@ -55,5 +66,8 @@ export const NamiPaywallManager = {
   },
   hide: () => {
     RNNamiPaywallManager.hide();
+  },
+  isHidden: () => {
+    return RNNamiPaywallManager.isHidden();
   },
 };
