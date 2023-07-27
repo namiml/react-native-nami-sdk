@@ -23,11 +23,15 @@ RCT_EXTERN_METHOD(registerCloseHandler)
 
 RCT_EXTERN_METHOD(registerSignInHandler)
 
+RCT_EXTERN_METHOD(registerRestoreHandler)
+
 RCT_EXTERN_METHOD(dismiss:(BOOL)animated)
 
 RCT_EXTERN_METHOD(show)
 
 RCT_EXTERN_METHOD(hide)
+
+RCT_EXTERN_METHOD(isHidden:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 + (BOOL)requiresMainQueueSetup {
   return YES;

@@ -7,14 +7,16 @@ export const NamiPaywallManager: {
   buySkuCompleteGooglePlay: (
     purchaseSuccess: NamiPurchaseSuccessGooglePlay
   ) => void;
+  dismiss: (animated?: boolean) => void;
   registerBuySkuHandler: (
     callback: (sku: NamiSKU) => void
   ) => EmitterSubscription["remove"];
   registerCloseHandler: (callback: () => void) => EmitterSubscription["remove"];
   registerSignInHandler: (callback: () => void) => EmitterSubscription["remove"];
-  dismiss: (animated?: boolean) => void;
+  registerRestoreHandler: (callback: () => void) => EmitterSubscription["remove"];
   show: () => void;
   hide: () => void;
+  isHidden: () => Promise<boolean>;
 };
 
 export type NamiPurchaseSuccessApple = {
@@ -64,4 +66,8 @@ export enum NamiPaywallAction {
   PURCHASE_UNKNOWN = "PURCHASE_UNKNOWN",
   PURCHASE_DEFERRED = "PURCHASE_DEFERRED",
   DEEPLINK = "DEEPLINK",
+  TOGGLE_CHANGE = "TOGGLE_CHANGE",
+  PAGE_CHANGE = "PAGE_CHANGE",
+  SLIDE_CHANGE = "SLIDE_CHANGE",
+  UNKNOWN = "UNKNOWN"
 }

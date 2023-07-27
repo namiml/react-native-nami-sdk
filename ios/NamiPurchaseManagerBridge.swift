@@ -26,8 +26,8 @@ class RNNamiPurchaseManager: RCTEventEmitter {
         let productDict: [String: Any?] = [
             "localizedTitle": product.localizedTitle,
             "localizedDescription": product.localizedDescription,
-            "localizedPrice": product.localizedPrice,
-            "localizedMultipliedPrice": product.localizedMultipliedPrice,
+            "localizedPrice": product.price,
+            "localizedMultipliedPrice": "",
             "price": product.price.stringValue,
             "priceLanguage": product.priceLocale.languageCode,
             "priceCurrency": product.priceLocale.currencyCode,
@@ -37,7 +37,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
 
     static func skuToSKUDict(_ sku: NamiSKU) -> NSDictionary {
         var productDict: NSDictionary?
-        if let product = sku.product {
+        if let product = sku.product as? SKProduct {
             productDict = productToDict(product)
         }
 
@@ -58,6 +58,8 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             "skuId": sku.skuId,
             "type": typeString,
             "appleProduct": productDict,
+            "promoId": sku.promoId,
+            "promoToken": "",
         ]
 
         return NSDictionary(dictionary: skuDict.compactMapValues { $0 })
