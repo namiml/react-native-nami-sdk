@@ -27,10 +27,11 @@ import theme from '../theme';
 interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
 
 const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
-  <TouchableOpacity style={styles.headerButton} onPress={onRefreshPress}>
-    <Text testID="refresh_campaigns" style={styles.headerButtonText}>
-      Refresh
-    </Text>
+  <TouchableOpacity
+    testID="refresh_campaigns"
+    style={styles.headerButton}
+    onPress={onRefreshPress}>
+    <Text style={styles.headerButtonText}>Refresh</Text>
   </TouchableOpacity>
 );
 
@@ -171,7 +172,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
 
   const onRefreshPress = useCallback(() => {
+    getAllCampaigns();
+    setRefresh(!refresh);
     NamiCampaignManager.refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onButtonPress = useCallback(() => {
@@ -180,22 +184,32 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <HeaderRight onRefreshPress={onRefreshPress} />,
+      headerRight: () => (
+        <HeaderRight
+          onRefreshPress={() => {
+            getAllCampaigns();
+            setRefresh(!refresh);
+            NamiCampaignManager.refresh();
+          }}
+        />
+      ),
       headerLeft: () => <HeaderLeft onButtonPress={onButtonPress} />,
     });
-  }, [navigation, onRefreshPress, onButtonPress]);
+  }, [navigation, onRefreshPress, onButtonPress, getAllCampaigns, refresh]);
 
   const renderItem = ({item, index}: {item: NamiCampaign; index: number}) => {
     const lasItem = index === campaigns.length - 1;
     const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
       <TouchableOpacity
+        testID={`list_item_${item.value}`}
+        accessibilityValue={{text: JSON.stringify(item)}}
         onPress={() => onItemPressPrimary(item)}
         style={itemStyle}>
         <View
-          style={styles.viewContainer}
-          testID={`list_item_${item.value}`}
-          accessibilityValue={{text: JSON.stringify(item)}}>
+          testID={`list_item_view_${item.value}`}
+          accessibilityValue={{text: JSON.stringify(item)}}
+          style={styles.viewContainer}>
           <Text style={styles.itemText}>{item.value}</Text>
           {item.type === 'url' && (
             <Text style={styles.itemText}>Open as: {item.type}</Text>
@@ -237,9 +251,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
           {renderDefault()}
         </View>
-        <Text testID="campaigns_modal_action" style={styles.statusText}>
-          Modal Status: {campaignsAction}
-        </Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.statusText}>Modal Status:</Text>
+          <Text testID="campaigns_modal_action" style={styles.statusText}>
+            {campaignsAction}
+          </Text>
+        </View>
         <Text testID="refresh_status_text" style={styles.statusText}>
           Refreshed: {refresh.toString()}
         </Text>
