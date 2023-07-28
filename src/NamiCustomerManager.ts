@@ -1,7 +1,6 @@
 import {
   NativeModules,
   NativeEventEmitter,
-  Platform,
   EmitterSubscription,
 } from 'react-native';
 import { AccountStateAction, CustomerJourneyState } from './types';
@@ -44,22 +43,11 @@ export interface INamiCustomerManager {
 export const NamiCustomerManager: INamiCustomerManager = {
   ...RNNamiCustomerManager,
   emitter: new NativeEventEmitter(RNNamiCustomerManager),
-  login: (
-    customerId: string,
-    callback?: (success: boolean, error?: number) => void,
-  ): void => {
-    if (Platform.OS === 'ios' || Platform.isTVOS) {
-      RNNamiCustomerManager.login(customerId, callback ?? (() => {}));
-    } else {
-      RNNamiCustomerManager.login(customerId);
-    }
+  login: customerId => {
+    RNNamiCustomerManager.login(customerId);
   },
-  logout: (callback?: (success: boolean, error?: number) => void): void => {
-    if (Platform.OS === 'ios' || Platform.isTVOS) {
-      RNNamiCustomerManager.logout(callback ?? (() => {}));
-    } else {
-      RNNamiCustomerManager.logout();
-    }
+  logout: () => {
+    RNNamiCustomerManager.logout();
   },
   registerJourneyStateHandler: (
     callback: (journeyState: CustomerJourneyState) => void,

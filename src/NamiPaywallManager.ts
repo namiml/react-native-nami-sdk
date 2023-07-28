@@ -42,6 +42,7 @@ export interface INamiPaywallManager {
   dismiss: (animated?: boolean) => void;
   show: () => void;
   hide: () => void;
+  isHidden: () => Promise<void>;
 }
 
 const { NamiPaywallManagerBridge, RNNamiPaywallManager } = NativeModules;

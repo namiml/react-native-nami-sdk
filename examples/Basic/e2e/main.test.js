@@ -1,8 +1,8 @@
-import {device, element, by, expect, waitFor, log} from 'detox';
+import { device, element, by, expect, waitFor, log } from 'detox';
 
 const data = {
-  campaign: 'puffin',
-  // campaign: 'her_v6',
+  // campaign: 'puffin',
+  campaign: 'trident',
 };
 
 describe('Configure Test', () => {
@@ -123,37 +123,37 @@ describe('Second part of campaigns tests', () => {
     campaignObj.hasOwnProperty('rule');
     if (!campaignObj.hasOwnProperty('rule')) {
       log.error(
-        {err: new Error('campaignObj rule')},
+        { err: new Error('campaignObj rule') },
         'campaignObj do not have rule',
       );
     }
     if (!campaignObj.hasOwnProperty('id')) {
       log.error(
-        {err: new Error('campaignObj id')},
+        { err: new Error('campaignObj id') },
         'campaignObj do not have id',
       );
     }
     if (!campaignObj.hasOwnProperty('paywall')) {
       log.error(
-        {err: new Error('campaignObj paywall')},
+        { err: new Error('campaignObj paywall') },
         'campaignObj do not have paywall',
       );
     }
     if (!campaignObj.hasOwnProperty('type')) {
       log.error(
-        {err: new Error('campaignObj type')},
+        { err: new Error('campaignObj type') },
         'campaignObj do not have type',
       );
     }
     if (!campaignObj.hasOwnProperty('segment')) {
       log.error(
-        {err: new Error('campaignObj segment')},
+        { err: new Error('campaignObj segment') },
         'campaignObj do not have segment',
       );
     }
     if (!campaignObj.hasOwnProperty('value')) {
       log.error(
-        {err: new Error('campaignObj value')},
+        { err: new Error('campaignObj value') },
         'campaignObj do not have value',
       );
     }

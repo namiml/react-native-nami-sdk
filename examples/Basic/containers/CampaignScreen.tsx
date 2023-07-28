@@ -26,7 +26,7 @@ import theme from '../theme';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
-const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
+const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
   <TouchableOpacity
     testID="refresh_campaigns"
     style={styles.headerButton}
@@ -207,12 +207,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return (
       <TouchableOpacity
         testID={`list_item_${item.value}`}
-        accessibilityValue={{text: JSON.stringify(item)}}
+        accessibilityValue={{ text: JSON.stringify(item) }}
         onPress={() => onItemPressPrimary(item)}
         style={itemStyle}>
         <View
           testID={`list_item_view_${item.value}`}
-          accessibilityValue={{text: JSON.stringify(item)}}
+          accessibilityValue={{ text: JSON.stringify(item) }}
           style={styles.viewContainer}>
           <Text style={styles.itemText}>{item.value}</Text>
           {item.type === 'url' && (
@@ -261,13 +261,17 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
           <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
           {renderDefault()}
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Text style={styles.statusText}>Modal Status:</Text>
-          <Text testID="campaigns_modal_action" style={styles.statusText}>
+          <Text
+            testID="campaigns_modal_action"
+            style={styles.statusText}>
             {campaignsAction}
           </Text>
         </View>
-        <Text testID="refresh_status_text" style={styles.statusText}>
+        <Text
+          testID="refresh_status_text"
+          style={styles.statusText}>
           Refreshed: {refresh.toString()}
         </Text>
       </View>
