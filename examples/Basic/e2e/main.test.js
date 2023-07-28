@@ -8,6 +8,11 @@ describe('Configure Test', () => {
   beforeAll(async () => {
     await device.launchApp();
     await device.reloadReactNative();
+
+    if (device.getPlatform() === 'ios') {
+      await device.disableSynchronization();
+      // await device.setURLBlacklist([]);
+    }
   });
   afterAll(async () => {
     await device.launchApp({
@@ -48,6 +53,10 @@ describe('Campaign tests after setup', () => {
   beforeAll(async () => {
     await device.launchApp();
     await device.reloadReactNative();
+    if (device.getPlatform() === 'ios') {
+      await device.disableSynchronization();
+      // await device.setURLBlacklist([]);
+    }
   });
   afterAll(async () => {
     await device.launchApp({
@@ -97,6 +106,10 @@ describe('Campaign tests after setup', () => {
 describe('Second part of campaigns tests', () => {
   beforeAll(async () => {
     await device.launchApp();
+    if (device.getPlatform() === 'ios') {
+      await device.disableSynchronization();
+      // await device.setURLBlacklist([]);
+    }
   });
 
   it('should have Campaings screen', async () => {
