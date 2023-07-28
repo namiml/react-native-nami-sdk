@@ -19,7 +19,7 @@ import theme from '../theme';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
-const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
+const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
   <TouchableOpacity
     testID="refresh_campaigns"
     style={styles.headerButton}
