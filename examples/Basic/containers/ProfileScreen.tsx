@@ -74,32 +74,45 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
 
+  const checkIsLoggedIn = useCallback(() => {
+    // workaround for tests purposes
+    NamiCustomerManager.isLoggedIn().then(() =>
+      setTimeout(() => {
+        NamiCustomerManager.isLoggedIn().then((isLogin) => {
+          setIsUserLogin(isLogin);
+        });
+      }, 500),
+    );
+  }, []);
+
   const onLoginPress = useCallback(() => {
     NamiCustomerManager.login('E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF');
-  }, []);
+    checkIsLoggedIn();
+  }, [checkIsLoggedIn]);
 
   const onLogoutPress = useCallback(() => {
     NamiCustomerManager.logout();
-  }, []);
+    checkIsLoggedIn();
+  }, [checkIsLoggedIn]);
 
-  const getJourneyState = useCallback(async () => {
-    const myJourneyState = await NamiCustomerManager.journeyState();
-    console.log('myJourneyState', myJourneyState);
-    setJourneyState(myJourneyState);
-  }, []);
-
-  const checkIsLoggedIn = async () => {
-    const isLoggedIn = await NamiCustomerManager.isLoggedIn();
-    setIsUserLogin(isLoggedIn);
-    console.log('isLoggedIn', isLoggedIn);
+  const getJourneyState = () => {
+    NamiCustomerManager.journeyState().then((myJourneyState) => {
+      console.log('myJourneyState', myJourneyState);
+      setJourneyState(myJourneyState);
+    });
   };
 
-  const checkId = async () => {
-    const loggedId = await NamiCustomerManager.loggedInId();
-    const deviceId = await NamiCustomerManager.deviceId();
-    setExternalId(loggedId);
-    setDisplayedDeviceId(deviceId);
-  };
+  const checkId = useCallback(() => {
+    if (isUserLogin) {
+      NamiCustomerManager.loggedInId().then((loggedId) => {
+        setExternalId(loggedId);
+      });
+    } else {
+      NamiCustomerManager.deviceId().then((deviceId) => {
+        setDisplayedDeviceId(deviceId);
+      });
+    }
+  }, [isUserLogin]);
 
   useEffect(() => {
     checkIsLoggedIn();
@@ -126,10 +139,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             setIsUserLogin(!success);
             checkId();
           }
-          if (action == 'nami_device_id_set' && success) {
+          if (action === 'nami_device_id_set' && success) {
             checkId();
           }
-          if (action == 'nami_device_id_cleared' && success) {
+          if (action === 'nami_device_id_cleared' && success) {
             checkId();
           }
         },
@@ -138,18 +151,17 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       subscriptionJourneyStateRemover();
       subscriptionAccountStateRemover();
     };
-  }, [getJourneyState, onLoginPress, onLogoutPress]);
+  }, [checkId, checkIsLoggedIn, onLoginPress, onLogoutPress]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
         return (
           <TouchableOpacity
+            testID="login_btn"
             style={styles.headerButton}
             onPress={isUserLogin ? onLogoutPress : onLoginPress}>
-            <Text
-              testID="login_btn"
-              style={styles.headerButtonText}>
+            <Text testID="login_btn_text" style={styles.headerButtonText}>
               {isUserLogin ? 'Logout' : 'Login'}
             </Text>
           </TouchableOpacity>
@@ -170,10 +182,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           {isUserLogin ? 'REGISTERED_USER' : 'ANONYMOUS USER'}
         </Text>
         <View style={styles.idSection}>
-          <Text
-            testID="user_id"
-            style={styles.idLabel}>
-            {isUserLogin ? 'External Id' : 'Device Id'}
+          <Text testID="user_id" style={styles.idLabel}>
+            {isUserLogin ? 'Customer Id' : 'Device Id'}
           </Text>
           <Text style={styles.id}>
             {isUserLogin ? externalId : displayedDeviceId}

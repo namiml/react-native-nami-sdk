@@ -79,8 +79,7 @@ fun NamiSKU.toSkuDict(): WritableMap {
     productDict.putString("skuId", this.skuId)
     productDict.putString("id", this.id)
     productDict.putString("type", this.type.toString())
-    productDict.putString("promoId","")
-    productDict.putString("promoToken","")
+    productDict.putString("promoId", this.promoId)
 
     return productDict
 }

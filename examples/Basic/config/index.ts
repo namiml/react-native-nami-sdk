@@ -3,7 +3,6 @@ import { getInitialConfig } from './getInitialConfig';
 
 export function getConfigObject() {
   const flavor = NativeModules.RNConfig.FLAVOR;
-
   console.log('flavor', flavor);
   switch (flavor) {
     case 'staging':
