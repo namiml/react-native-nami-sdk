@@ -1,8 +1,7 @@
 import { device, element, by, expect, waitFor, log } from 'detox';
 
 const data = {
-  campaign: 'puffin',
-  // campaign: 'trident',
+  campaign: 'penguin',
 };
 
 describe('Configure Test', () => {
