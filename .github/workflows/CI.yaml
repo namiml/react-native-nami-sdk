@@ -121,7 +121,7 @@ jobs:
         run: |
           yarn start &
           METRO_BUNDLER_PID=$!
-          yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --cleanup --headless --record-logs all
+          yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} e2e/ios --cleanup --headless --record-logs all
           DETOX_EXIT_CODE=$?
           kill $METRO_BUNDLER_PID
           exit $DETOX_EXIT_CODE
@@ -268,7 +268,7 @@ jobs:
           channel: canary
           profile: pixel
           avd-name: Pixel_3a_API_30_AOSP
-          script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --headless --record-logs all
+          script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} e2e/android --headless --record-logs all
           working-directory: source/examples/Basic
 
       - name: Upload artifacts

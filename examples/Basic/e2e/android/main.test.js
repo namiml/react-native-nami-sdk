@@ -1,18 +1,13 @@
 import { device, element, by, expect, waitFor, log } from 'detox';
 
 const data = {
-  campaign: 'penguin',
+  campaign: 'puffin',
 };
 
-describe('Configure Test', () => {
+describe('Android: Configure Test', () => {
   beforeAll(async () => {
     await device.launchApp();
     await device.reloadReactNative();
-
-    if (device.getPlatform() === 'ios') {
-      await device.disableSynchronization();
-      // await device.setURLBlacklist([]);
-    }
   });
   afterAll(async () => {
     await device.launchApp({
@@ -20,43 +15,34 @@ describe('Configure Test', () => {
     });
   });
 
-  if (device.getPlatform() === 'android') {
-    it('should load data Android 1', async () => {
-      await expect(element(by.id('refresh_campaigns'))).toBeVisible();
-      await element(by.id('refresh_campaigns')).tap();
-      await element(by.id('refresh_campaigns')).tap();
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-      await element(by.id('refresh_campaigns')).tap();
-      await element(by.id('refresh_campaigns')).tap();
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-    });
+  // workaround to load data for android,
+  // we can try to disable sync (!dangerous way!)
+  it('Should load data', async () => {
+    await expect(element(by.id('refresh_campaigns'))).toBeVisible();
+    await element(by.id('refresh_campaigns')).tap();
+    await element(by.id('refresh_campaigns')).tap();
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await element(by.id('refresh_campaigns')).tap();
+    await element(by.id('refresh_campaigns')).tap();
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+  });
 
-    it('should load data Android 2', async () => {
-      await expect(element(by.id('refresh_campaigns'))).toBeVisible();
-      await element(by.id('refresh_campaigns')).tap();
-      await element(by.id('refresh_campaigns')).tap();
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-      await element(by.id('refresh_campaigns')).tap();
-      await element(by.id('refresh_campaigns')).tap();
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-      await element(by.id('refresh_campaigns')).tap();
-    });
-  } else {
-    it('should load data iOS', async () => {
-      await expect(element(by.id('refresh_campaigns'))).toBeVisible();
-      await element(by.id('refresh_campaigns')).tap();
-    });
-  }
+  it('Should load data #2', async () => {
+    await expect(element(by.id('refresh_campaigns'))).toBeVisible();
+    await element(by.id('refresh_campaigns')).tap();
+    await element(by.id('refresh_campaigns')).tap();
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await element(by.id('refresh_campaigns')).tap();
+    await element(by.id('refresh_campaigns')).tap();
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await element(by.id('refresh_campaigns')).tap();
+  });
 });
 
-describe('Campaign tests after setup', () => {
+describe('Android: Campaign tests after setup', () => {
   beforeAll(async () => {
     await device.launchApp();
     await device.reloadReactNative();
-    if (device.getPlatform() === 'ios') {
-      await device.disableSynchronization();
-      // await device.setURLBlacklist([]);
-    }
   });
   afterAll(async () => {
     await device.launchApp({
@@ -64,11 +50,11 @@ describe('Campaign tests after setup', () => {
     });
   });
 
-  it('should have Campaings screen', async () => {
+  it('Should have Campaigns screen', async () => {
     await expect(element(by.id('campaigns_title'))).toBeVisible();
   });
 
-  it('should unlabeled campaigns have default', async () => {
+  it('Should unlabeled campaigns have default', async () => {
     await expect(
       element(
         by.id('default_campaigns').withAncestor(by.id('unlabeled_campaigns')),
@@ -76,7 +62,7 @@ describe('Campaign tests after setup', () => {
     ).toBeVisible();
   });
 
-  it('should interact with item Campaigns', async () => {
+  it('Should interact with item Campaigns', async () => {
     await expect(element(by.id('campaigns_modal_action'))).toHaveText(
       'INITIAL',
     );
@@ -93,6 +79,7 @@ describe('Campaign tests after setup', () => {
     await element(by.id('campaigns_list')).scrollTo('top');
     await waitFor(element(by.text(`${data.campaign}`))).toBeVisible();
 
+    // need to find a way how to handle native paywall action
     if (device.getPlatform() === 'ios') {
       await element(by.text(`${data.campaign}`)).tap();
       // Comment if on local machine;
@@ -103,20 +90,16 @@ describe('Campaign tests after setup', () => {
   });
 });
 
-describe('Second part of campaigns tests', () => {
+describe('Android: Second part of campaigns tests', () => {
   beforeAll(async () => {
     await device.launchApp();
-    if (device.getPlatform() === 'ios') {
-      await device.disableSynchronization();
-      // await device.setURLBlacklist([]);
-    }
   });
 
-  it('should have Campaings screen', async () => {
+  it('Should have Campaigns screen', async () => {
     await expect(element(by.id('campaigns_title'))).toBeVisible();
   });
 
-  it('should interact with item Campaigns #2', async () => {
+  it('Should interact with item Campaigns #2', async () => {
     await expect(element(by.id('refresh_campaigns'))).toBeVisible();
     await element(by.id('refresh_campaigns')).tap();
 
@@ -172,16 +155,16 @@ describe('Second part of campaigns tests', () => {
   });
 });
 
-describe('Profile and Entitlements screens Test', () => {
+describe('Android: Profile and Entitlements screen', () => {
   beforeAll(async () => {
     await device.launchApp();
   });
 
-  it('should have Campaings screen', async () => {
+  it('Should have Campaigns screen', async () => {
     await expect(element(by.id('campaigns_title'))).toBeVisible();
   });
 
-  it('should navigate to the Profile tab screen', async () => {
+  it('Should navigate to the Profile tab screen', async () => {
     await expect(element(by.id('campaign_screen'))).toBeVisible();
     await expect(element(by.id('profile_screen'))).toBeVisible();
     await expect(element(by.id('entitlements_screen'))).toBeVisible();
@@ -190,7 +173,7 @@ describe('Profile and Entitlements screens Test', () => {
     await expect(element(by.id('profile_title'))).toBeVisible();
   });
 
-  it('should Profile screen have data', async () => {
+  it('Should Profile screen have data', async () => {
     await expect(element(by.id('campaign_screen'))).toBeVisible();
     await expect(element(by.id('profile_screen'))).toBeVisible();
     await expect(element(by.id('entitlements_screen'))).toBeVisible();
@@ -211,7 +194,7 @@ describe('Profile and Entitlements screens Test', () => {
     await expect(element(by.text('In Pause'))).toExist();
   });
 
-  it('should Login/Logout work', async () => {
+  it('Should Login && Logout work', async () => {
     await expect(element(by.id('login_btn_text'))).toHaveText('Login');
     await element(by.id('login_btn')).tap();
 
@@ -230,7 +213,7 @@ describe('Profile and Entitlements screens Test', () => {
     await expect(element(by.id('user_id'))).toHaveText('Device Id');
   });
 
-  it('should navigate to the Entitlements tab screen', async () => {
+  it('Should navigate to the Entitlements tab screen', async () => {
     await expect(element(by.id('campaign_screen'))).toBeVisible();
     await expect(element(by.id('profile_screen'))).toBeVisible();
     await expect(element(by.id('entitlements_screen'))).toBeVisible();
@@ -239,7 +222,7 @@ describe('Profile and Entitlements screens Test', () => {
     await expect(element(by.id('entitlements_title'))).toBeVisible();
   });
 
-  it('should Entitlements  screen have data', async () => {
+  it('Should Entitlements  screen have data', async () => {
     await expect(element(by.id('entitlements_title'))).toBeVisible();
     await expect(element(by.id('active_entitlement'))).toBeVisible();
     await expect(element(by.id('refresh_entitlements'))).toExist();
@@ -250,12 +233,12 @@ describe('Profile and Entitlements screens Test', () => {
   });
 });
 
-describe('Customer Manager screen Test', () => {
+describe('Android: Customer Manager screen Test', () => {
   beforeAll(async () => {
     await device.launchApp();
   });
 
-  it('should navigate to the Customer Manager tab screen', async () => {
+  it('Should navigate to the Customer Manager tab screen', async () => {
     await expect(element(by.id('campaign_screen'))).toBeVisible();
     await expect(element(by.id('profile_screen'))).toBeVisible();
     await expect(element(by.id('entitlements_screen'))).toBeVisible();
@@ -265,7 +248,7 @@ describe('Customer Manager screen Test', () => {
     await expect(element(by.id('customer_manager_title'))).toBeVisible();
   });
 
-  it('should Customer Manager screen have data', async () => {
+  it('Should Customer Manager screen have data', async () => {
     await expect(element(by.id('campaign_screen'))).toBeVisible();
     await expect(element(by.id('profile_screen'))).toBeVisible();
     await expect(element(by.id('entitlements_screen'))).toBeVisible();
