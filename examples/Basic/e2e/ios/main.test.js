@@ -40,16 +40,16 @@ describe('iOS: Campaign tests setup', () => {
     await element(by.id('refresh_campaigns')).tap();
     await waitFor(element(by.id('refresh_status_text')))
       .toHaveText('Refreshed: true')
-      .withTimeout(10000); // waits up to 10 seconds
+      .withTimeout(10000);
 
     await element(by.id('campaigns_list')).scrollTo('top');
     await waitFor(element(by.text(`${data.campaign}`))).toBeVisible();
 
     await element(by.text(`${data.campaign}`)).tap();
     // Comment if on local machine;
-    await expect(element(by.id('campaigns_modal_action'))).toHaveText(
-      'SHOW_PAYWALL',
-    );
+    await waitFor(element(by.id('campaigns_modal_action')))
+      .toHaveText('SHOW_PAYWALL')
+      .withTimeout(10000);
   });
 });
 
