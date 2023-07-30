@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Possible commands:
-# yarn detox:
+# yarn d:
 # build ios debug
 # test ios debug
 # build ios release
