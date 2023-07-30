@@ -42,7 +42,7 @@ describe('Android: Configure Test', () => {
 describe('Android: Campaign tests after setup', () => {
   beforeAll(async () => {
     await device.launchApp();
-    // await device.reloadReactNative();
+    await device.reloadReactNative();
   });
   afterAll(async () => {
     await device.launchApp({
@@ -75,7 +75,7 @@ describe('Android: Campaign tests after setup', () => {
     await element(by.id('refresh_campaigns')).tap();
     await waitFor(element(by.id('refresh_status_text')))
       .toHaveText('Refreshed: true')
-      .withTimeout(10000);
+      .withTimeout(5000);
 
     await element(by.id('campaigns_list')).scrollTo('top');
     await waitFor(element(by.text(`${data.campaign}`))).toBeVisible();
