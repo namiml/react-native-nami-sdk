@@ -42,7 +42,7 @@ describe('Android: Configure Test', () => {
 describe('Android: Campaign tests after setup', () => {
   beforeAll(async () => {
     await device.launchApp();
-    await device.reloadReactNative();
+    // await device.reloadReactNative();
   });
   afterAll(async () => {
     await device.launchApp({

@@ -161,7 +161,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             testID="login_btn"
             style={styles.headerButton}
             onPress={isUserLogin ? onLogoutPress : onLoginPress}>
-            <Text testID="login_btn_text" style={styles.headerButtonText}>
+            <Text
+              testID="login_btn_text"
+              style={styles.headerButtonText}>
               {isUserLogin ? 'Logout' : 'Login'}
             </Text>
           </TouchableOpacity>
@@ -182,7 +184,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           {isUserLogin ? 'REGISTERED_USER' : 'ANONYMOUS USER'}
         </Text>
         <View style={styles.idSection}>
-          <Text testID="user_id" style={styles.idLabel}>
+          <Text
+            testID="user_id"
+            style={styles.idLabel}>
             {isUserLogin ? 'Customer Id' : 'Device Id'}
           </Text>
           <Text style={styles.id}>
