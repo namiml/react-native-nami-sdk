@@ -40,10 +40,10 @@ fi
 
 # Based on the platform, set the configuration
 if [[ $platform == "android" ]]; then
-  configuration="android.emu.$config"
+  configuration="android.emu.$config.local"
 else
   configuration="ios.sim.$config"
 fi
 
 # Execute the detox command
-detox "$action" --configuration "$configuration" e2e/"$platform" --cleanup --headless --record-logs all
+detox "$action" --configuration "$configuration" e2e/"$platform"

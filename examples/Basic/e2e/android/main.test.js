@@ -80,7 +80,7 @@ describe('Android: Campaign tests after setup', () => {
     await element(by.id('campaigns_list')).scrollTo('top');
     await waitFor(element(by.text(`${data.campaign}`))).toBeVisible();
 
-    // need to find a way how to handle native paywall action
+    // TODO: need to find a way how to handle native paywall action
     if (device.getPlatform() === 'ios') {
       await element(by.text(`${data.campaign}`)).tap();
       // Comment if on local machine;
