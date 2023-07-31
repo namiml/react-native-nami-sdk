@@ -3,7 +3,7 @@
   "version": "3.0.25",
   "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
   "main": "index.ts",
-  "types": "index.ts",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "android": "react-native run-android",

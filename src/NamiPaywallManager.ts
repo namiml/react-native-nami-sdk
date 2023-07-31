@@ -74,7 +74,11 @@ export const NamiPaywallManager: INamiPaywallManager = {
       },
     );
     RNNamiPaywallManager.registerBuySkuHandler();
-    return subscription.remove;
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
   },
   registerCloseHandler: (callback: (body: any) => void) => {
     let subscription;
@@ -85,7 +89,11 @@ export const NamiPaywallManager: INamiPaywallManager = {
       },
     );
     RNNamiPaywallManager.registerCloseHandler();
-    return subscription.remove;
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
   },
   registerSignInHandler(callback) {
     let subscription;
@@ -96,7 +104,12 @@ export const NamiPaywallManager: INamiPaywallManager = {
       },
     );
     RNNamiPaywallManager.registerSignInHandler();
-    return subscription.remove;
+
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
   },
   registerRestoreHandler(callback) {
     let subscription;
@@ -107,7 +120,11 @@ export const NamiPaywallManager: INamiPaywallManager = {
       },
     );
     RNNamiPaywallManager.registerRestoreHandler();
-    return subscription.remove;
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
   },
   dismiss: (animated?: boolean) => {
     RNNamiPaywallManager.dismiss(animated ?? true);

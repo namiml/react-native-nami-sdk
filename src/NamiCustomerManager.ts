@@ -57,7 +57,11 @@ export const NamiCustomerManager: INamiCustomerManager = {
       callback,
     );
     RNNamiCustomerManager.registerJourneyStateHandler();
-    return subscription.remove;
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
   },
   registerAccountStateHandler: (
     callback: (
@@ -76,6 +80,10 @@ export const NamiCustomerManager: INamiCustomerManager = {
       },
     );
     RNNamiCustomerManager.registerAccountStateHandler();
-    return subscription.remove;
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
   },
 };

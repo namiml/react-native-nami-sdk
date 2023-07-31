@@ -66,7 +66,11 @@ export const NamiPurchaseManager: INamiPurchaseManager = {
       },
     );
     RNNamiPurchaseManager.registerPurchasesChangedHandler();
-    return subscription.remove;
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
   },
   registerRestorePurchasesHandler: (
     callback: (
@@ -86,7 +90,11 @@ export const NamiPurchaseManager: INamiPurchaseManager = {
         },
       );
       RNNamiPurchaseManager.registerRestorePurchasesHandler();
-      return subscription.remove;
+      return () => {
+        if (subscription) {
+          subscription.remove();
+        }
+      };
     }
   },
 };

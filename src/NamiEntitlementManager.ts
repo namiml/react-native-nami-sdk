@@ -43,12 +43,16 @@ export const NamiEntitlementManager: INamiEntitlementManager = {
       activeEntitlements: INamiEntitlementManager['NamiEntitlement'][],
     ) => void,
   ) => {
-    const subscription: EmitterSubscription =
+    let subscription: EmitterSubscription =
       NamiEntitlementManager.emitter.addListener(
         NamiEntitlementManagerEvents.EntitlementsChanged,
         callback,
       );
     RNNamiEntitlementManager.registerActiveEntitlementsHandler();
-    return () => subscription.remove();
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
   },
 };

@@ -102,6 +102,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       subscriptionRemover();
       subscriptionSignInRemover();
       subscriptionRestoreRemover();
+      // Clean up the launch subscription when the component unmounts
+      // For safety reasons
+      if (NamiCampaignManager.launchSubscription) {
+        NamiCampaignManager.launchSubscription.remove();
+      }
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
