@@ -2,7 +2,8 @@
   "name": "react-native-nami-sdk",
   "version": "3.0.25",
   "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
-  "main": "index.js",
+  "main": "index.ts",
+  "types": "index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "android": "react-native run-android",
@@ -53,8 +54,11 @@
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.2.0",
+    "@types/react-native": "^0.72.2",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "eslint": "^8.41.0",
+    "eslint-plugin-jest": "^27.2.2",
+    "@types/jest": "^29.5.2",
     "prettier": "^2.8.7",
     "react": "^17.0.2",
     "react-native": "^0.65.2",

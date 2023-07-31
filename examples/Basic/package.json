@@ -10,9 +10,13 @@
     "ios-clean": "cd ios && rm -rf Pods && rm -rf build",
     "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build  && pod update && pod install",
     "start": "react-native start",
+    "start:legacy": "NODE_OPTIONS=--openssl-legacy-provider react-native start --reset-cache",
     "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test:e2e": "detox test --configuration android.emu.debug",
-    "lint": "eslint ."
+    "i": "echo 'Examples: \"yarn i both\"- run all setups, \"yarn i ios\"- run ios' && ./install.sh",
+    "b": "echo 'Examples: \"yarn b ios\", \"yarn b android\"' && ./building.sh",
+    "d": "./scripts/detox.sh"
   },
   "dependencies": {
     "@react-native-community/cli-platform-android": "^11.3.1",
@@ -33,9 +37,9 @@
     "@babel/runtime": "^7.16.5",
     "@react-native-community/eslint-config": "^3.2.0",
     "@tsconfig/react-native": "^2.0.3",
-    "@types/jest": "^29.5.0",
-    "@types/react": "^18.0.31",
-    "@types/react-native": "^0.71.5",
+    "@types/jest": "^29.5.2",
+    "@types/react": "^18.2.14",
+    "@types/react-native": "^0.72.2",
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
@@ -49,7 +53,7 @@
     "prettier": "^2.8.7",
     "react-native-codegen": "^0.0.12",
     "react-test-renderer": "17.0.2",
-    "typescript": "^5.0.2"
+    "typescript": "^5.1.6"
   },
   "jest": {
     "preset": "react-native"

@@ -1,8 +1,8 @@
-import {NativeModules} from 'react-native';
-import {getInitialConfig} from './getInitialConfig';
+import { NativeModules } from 'react-native';
+import { getInitialConfig } from './getInitialConfig';
 
 export function getConfigObject() {
-  let flavor = NativeModules.RNConfig.FLAVOR;
+  const flavor = NativeModules.RNConfig.FLAVOR;
 
   console.log('flavor', flavor);
   switch (flavor) {

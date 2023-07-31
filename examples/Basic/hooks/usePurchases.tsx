@@ -1,9 +1,10 @@
-import React, {createContext, useState, useContext} from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const PurchasesContext = createContext([[], () => {}]);
 
-export const PurchasesContextProvider = ({children}) => {
-  const [purchases, setPurchases] = useState([]);
+export const PurchasesContextProvider = ({ children }) => {
+  const [purchases, setPurchases] = useState<[] as any>([]);
   return (
     <PurchasesContext.Provider value={[purchases, setPurchases]}>
       {children}

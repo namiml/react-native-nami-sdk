@@ -12,27 +12,64 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {NamiCustomerManager, CustomerJourneyState} from 'react-native-nami-sdk';
-import {ViewerTabProps} from '../App';
+import {
+  NamiCustomerManager,
+  CustomerJourneyState,
+} from 'react-native-nami-sdk';
+import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-const Dot = (props: {value?: boolean; testId?: string}) => {
-  return (
-    <View
-      testID={props.testId}
-      accessibilityValue={{text: `${props.value}`}}
-      style={[styles.cir, props.value && styles.active]}
-    />
-  );
-};
+const DOT_CONFIGS = [
+  {
+    id: 'trial_period_dot',
+    property: 'inTrialPeriod',
+    label: 'In Trial Period'
+  },
+  {
+    id: 'offer_period_dot',
+    property: 'inIntroOfferPeriod',
+    label: 'In Intro Offer Period'
+  },
+  {
+    id: 'cancelled_dot',
+    property: 'isCancelled',
+    label: 'Has Cancelled'
+  },
+  {
+    id: 'subscriber_dot',
+    property: 'formerSubscriber',
+    label: 'Former Subscriber'
+  },
+  {
+    id: 'grace_period_dot',
+    property: 'inGracePeriod',
+    label: 'In Grace Period'
+  },
+  {
+    id: 'account_hold_dot',
+    property: 'inAccountHold',
+    label: 'In Account Hold'
+  },
+  {
+    id: 'pause_dot',
+    property: 'inPause',
+    label: 'In Pause'
+  },
+];
 
-interface ProfileScreenProps extends ViewerTabProps<'Profile'> {}
+const Dot = ({ isActive = false, testId } : { isActive?: boolean, testId?: string }) => (
+  <View
+    testID={testId}
+    accessibilityValue={{ text: `${isActive}` }}
+    style={[styles.cir, isActive && styles.active]}
+  />
+);
 
-const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
-  const [journeyState, setJourneyState] = useState<
-    CustomerJourneyState | undefined
-  >(undefined);
+type ProfileScreenProps = ViewerTabProps<'Profile'>
+
+const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
+  const [journeyState, setJourneyState] = useState<CustomerJourneyState | undefined>(undefined);
   const [isUserLogin, setIsUserLogin] = useState<boolean>(false);
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
@@ -82,7 +119,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     getJourneyState();
     checkId();
     const subscriptionJourneyStateRemover =
-      NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
+      NamiCustomerManager.registerJourneyStateHandler(newJourneyState => {
         console.log('newJourneyState', newJourneyState);
         setJourneyState(newJourneyState);
       });
@@ -124,7 +161,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
             testID="login_btn"
             style={styles.headerButton}
             onPress={isUserLogin ? onLogoutPress : onLoginPress}>
-            <Text testID="login_btn_text" style={styles.headerButtonText}>
+            <Text
+              testID="login_btn_text"
+              style={styles.headerButtonText}>
               {isUserLogin ? 'Logout' : 'Login'}
             </Text>
           </TouchableOpacity>
@@ -135,7 +174,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text testID="profile_title" style={styles.title}>
+      <Text
+        testID="profile_title"
+        style={styles.title}>
         Profile
       </Text>
       <View style={styles.section}>
@@ -143,7 +184,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
           {isUserLogin ? 'REGISTERED_USER' : 'ANONYMOUS USER'}
         </Text>
         <View style={styles.idSection}>
-          <Text testID="user_id" style={styles.idLabel}>
+          <Text
+            testID="user_id"
+            style={styles.idLabel}>
             {isUserLogin ? 'Customer Id' : 'Device Id'}
           </Text>
           <Text style={styles.id}>
@@ -152,52 +195,21 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
         </View>
       </View>
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>JORNEY STATE</Text>
-        <View style={styles.block}>
-          <View style={styles.item}>
-            <Dot
-              testId="trial_period_dot"
-              value={journeyState?.inTrialPeriod}
-            />
-            <Text style={styles.itemText}>In Trial Period</Text>
+        <Text style={styles.sectionHeader}>JOURNEY STATE</Text>
+        {journeyState && (
+          <View style={styles.block}>
+            {DOT_CONFIGS.map(({ id, property, label }) => (
+              <View
+                key={id}
+                style={styles.item}>
+                <Dot
+                  testId={id}
+                  isActive={journeyState?.[property]} />
+                <Text style={styles.itemText}>{label}</Text>
+              </View>
+            ))}
           </View>
-          <View style={styles.item}>
-            <Dot
-              testId="offer_period_dot"
-              value={journeyState?.inIntroOfferPeriod}
-            />
-            <Text style={styles.itemText}>In Intro Offer Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot testId="cancelled_dot" value={journeyState?.isCancelled} />
-            <Text style={styles.itemText}>Has Cancelled</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot
-              testId="subscriber_dot"
-              value={journeyState?.formerSubscriber}
-            />
-            <Text style={styles.itemText}>Former Subscriber</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot
-              testId="grace_period_dot"
-              value={journeyState?.inGracePeriod}
-            />
-            <Text style={styles.itemText}>In Grace Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot
-              testId="account_hold_dot"
-              value={journeyState?.inAccountHold}
-            />
-            <Text style={styles.itemText}>In Account Hold</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot testId="pause_dot" value={journeyState?.inPause} />
-            <Text style={styles.itemText}>In Pause</Text>
-          </View>
-        </View>
+        )}
       </View>
     </SafeAreaView>
   );

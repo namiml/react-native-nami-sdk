@@ -13,13 +13,13 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {NamiCampaignManager, NamiCampaign} from 'react-native-nami-sdk';
-import {ViewerTabProps} from '../App';
+import { NamiCampaignManager, NamiCampaign } from 'react-native-nami-sdk';
+import { ViewerTabProps } from '../App';
 import theme from '../theme';
 
-interface CampaignScreenProps extends ViewerTabProps<'Campaign'> {}
+type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
-const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
+const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
   <TouchableOpacity
     testID="refresh_campaigns"
     style={styles.headerButton}
@@ -28,7 +28,7 @@ const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
   </TouchableOpacity>
 );
 
-const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
+const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
 
   useEffect(() => {
@@ -165,7 +165,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}>
       <View>
         <Text style={styles.title}>Campaigns</Text>
         <View style={styles.marginTop20}>

@@ -12,21 +12,19 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {NamiCustomerManager, CustomerJourneyState} from 'react-native-nami-sdk';
-import {ViewerTabProps} from '../App';
+import { NamiCustomerManager, CustomerJourneyState } from 'react-native-nami-sdk';
+import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-const Dot = (props: {value?: boolean}) => {
-  return <View style={[styles.cir, props.value && styles.active]} />;
-};
+const Dot = ({ isActive = false }) => <View style={[styles.cir, isActive && styles.active]} />;
 
-interface ProfileScreenProps extends ViewerTabProps<'Profile'> {}
+type ProfileScreenProps = ViewerTabProps<'Profile'>
 
-const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
+const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [journeyState, setJourneyState] = useState<
-    CustomerJourneyState | undefined
-  >(undefined);
+      CustomerJourneyState | undefined
+      >(undefined);
   const [isUserLogin, setIsUserLogin] = useState<boolean>(false);
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
@@ -34,20 +32,11 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
   const onLoginPress = useCallback(() => {
     // b909a31c-7a73-11ed-a1eb-0242ac120002
     // f1851c87-e0ff-4349-a824-cd9b5e5211b9
-    NamiCustomerManager.login(
-      'E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF',
-      (success, error) => {
-        console.log('success', success);
-        console.log('error', error);
-      },
-    );
+    NamiCustomerManager.login('E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF');
   }, []);
 
   const onLogoutPress = useCallback(() => {
-    NamiCustomerManager.logout((success, error) => {
-      console.log('success', success);
-      console.log('error', error);
-    });
+    NamiCustomerManager.logout();
   }, []);
 
   const getJourneyState = useCallback(async () => {
@@ -132,34 +121,38 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>JORNEY STATE</Text>
         <View style={styles.block}>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inTrialPeriod} />
-            <Text style={styles.itemText}>In Trial Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inIntroOfferPeriod} />
-            <Text style={styles.itemText}>In Intro Offer Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.isCancelled} />
-            <Text style={styles.itemText}>Has Cancelled</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.formerSubscriber} />
-            <Text style={styles.itemText}>Former Subscriber</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inGracePeriod} />
-            <Text style={styles.itemText}>In Grace Period</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inAccountHold} />
-            <Text style={styles.itemText}>In Acount Hold</Text>
-          </View>
-          <View style={styles.item}>
-            <Dot value={journeyState?.inPause} />
-            <Text style={styles.itemText}>In Pause</Text>
-          </View>
+          {journeyState && (
+            <>
+              <View style={styles.item}>
+                <Dot isActive={journeyState?.inTrialPeriod} />
+                <Text style={styles.itemText}>In Trial Period</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.inIntroOfferPeriod} />
+                <Text style={styles.itemText}>In Intro Offer Period</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.isCancelled} />
+                <Text style={styles.itemText}>Has Cancelled</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.formerSubscriber} />
+                <Text style={styles.itemText}>Former Subscriber</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.inGracePeriod} />
+                <Text style={styles.itemText}>In Grace Period</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.inAccountHold} />
+                <Text style={styles.itemText}>In Acount Hold</Text>
+              </View>
+              <View style={styles.item}>
+                <Dot value={journeyState?.inPause} />
+                <Text style={styles.itemText}>In Pause</Text>
+              </View>
+            </>
+          )}
         </View>
       </View>
     </SafeAreaView>

@@ -1,16 +1,15 @@
-import { EmitterSubscription } from "react-native";
-import { NamiPurchase } from "./NamiPurchaseManager";
-import { NamiSKU } from "./types";
+import { EmitterSubscription } from 'react-native';
+import { NamiPurchase, NamiSKU } from './types';
 
 export const NamiEntitlementManager: {
   active: () => Promise<Array<NamiEntitlement>>;
   isEntitlementActive: (label?: string) => boolean;
   refresh: (
-    resultCallback?: (entitlements?: NamiEntitlement[]) => void
+    resultCallback?: (entitlements?: NamiEntitlement[]) => void,
   ) => void;
   registerActiveEntitlementsHandler: (
-    callback: (activeEntitlements: NamiEntitlement[]) => void
-  ) => EmitterSubscription["remove"];
+    callback: (activeEntitlements: NamiEntitlement[]) => void,
+  ) => EmitterSubscription['remove'];
 };
 
 export type NamiEntitlement = {

@@ -2,6 +2,7 @@ import { EmitterSubscription } from "react-native";
 import { NamiPurchase } from "./NamiPurchaseManager";
 import { NamiPaywallAction } from "./NamiPaywallManager";
 import { NamiSKU } from "./types";
+import { NamiPaywallAction, NamiPurchase } from "./types";
 
 export const NamiCampaignManager: {
   allCampaigns: () => Promise<Array<NamiCampaign>>;
@@ -32,7 +33,7 @@ export const NamiCampaignManager: {
   ) => void;
   refresh: () => void;
   registerAvailableCampaignsHandler: (
-    callback: (availableCampaigns: NamiCampaign[]) => void
+      callback: (availableCampaigns: NamiCampaign[]) => void
   ) => EmitterSubscription["remove"];
 };
 

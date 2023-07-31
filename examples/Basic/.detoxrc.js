@@ -54,7 +54,13 @@ module.exports = {
     emulator: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_3a_API_30_AOSP',
+        avdName: 'Pixel_4_API_30_AOSP',
+      },
+    },
+    emulatorLocal: {
+      type: 'android.emulator',
+      device: {
+        avdName: 'Pixel_4_API_30',
       },
     },
   },
@@ -81,6 +87,14 @@ module.exports = {
     },
     'android.emu.release': {
       device: 'emulator',
+      app: 'production.android.release',
+    },
+    'android.emu.debug.local': {
+      device: 'emulatorLocal',
+      app: 'staging.android.debug',
+    },
+    'android.emu.release.local': {
+      device: 'emulatorLocal',
       app: 'production.android.release',
     },
   },
