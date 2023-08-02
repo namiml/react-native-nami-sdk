@@ -97,7 +97,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
             "segmentId": paywallEvent.segmentId,
             "externalSegmentId": paywallEvent.externalSegmentId,
             "action": actionString,
-            "skuId": paywallEvent.sku?.id,
+            "skuId": paywallEvent.sku?.skuId,
             "purchaseError": errorSting,
             "purchases": dictionaries,
             "deeplinkUrl": paywallEvent.deeplinkUrl,
