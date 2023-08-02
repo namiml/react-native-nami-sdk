@@ -1,6 +1,7 @@
 package com.nami.reactlibrary
 
 import android.util.Log
+import com.android.billingclient.api.ProductDetails
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
@@ -75,14 +76,74 @@ fun Map<*, *>.toWritableMap(): WritableMap {
 
 fun NamiSKU.toSkuDict(): WritableMap {
     val productDict = Arguments.createMap()
-
-    productDict.putString("skuId", this.skuId)
-    productDict.putString("id", this.id)
-    productDict.putString("type", this.type.toString())
-    productDict.putString("promoId", this.promoId)
-
+    fillProductInfo(productDict, this)
+    this.productDetails?.let { fillProductDetails(productDict, it) }
     return productDict
 }
+
+private fun fillProductInfo(productDict: WritableMap, sku: NamiSKU) {
+    productDict.putString("skuId", sku.skuId)
+    productDict.putString("id", sku.id)
+    productDict.putString("type", sku.type.toString())
+    productDict.putString("promoId", sku.promoId)
+}
+
+private fun fillProductDetails(productDict: WritableMap, details: ProductDetails) {
+    val productDetailsMap = Arguments.createMap()
+    productDetailsMap.putString("description", details.getDescription())
+    productDetailsMap.putString("name", details.getName())
+    productDetailsMap.putString("productId", details.getProductId())
+    productDetailsMap.putString("type", details.getProductType())
+    productDetailsMap.putString("title", details.getTitle())
+    productDetailsMap.putString("detailsInString", details.toString())
+
+    details.getOneTimePurchaseOfferDetails()?.let { fillOneTimePurchase(productDetailsMap, it) }
+    details.getSubscriptionOfferDetails()?.let { fillSubscriptionOfferDetails(productDetailsMap, it) }
+
+    productDict.putMap("googleProduct", productDetailsMap)
+}
+
+private fun fillOneTimePurchase(productDetailsMap: WritableMap, oneTimePurchaseDetails: ProductDetails.OneTimePurchaseOfferDetails) {
+    val oneTimePurchaseMap = Arguments.createMap()
+    oneTimePurchaseMap.putDouble("priceAmountMicros", oneTimePurchaseDetails.getPriceAmountMicros().toDouble())
+    oneTimePurchaseMap.putString("formattedPrice", oneTimePurchaseDetails.getFormattedPrice())
+    oneTimePurchaseMap.putString("priceCurrencyCode", oneTimePurchaseDetails.getPriceCurrencyCode())
+    productDetailsMap.putMap("oneTimePurchaseOfferDetails", oneTimePurchaseMap)
+}
+
+private fun fillSubscriptionOfferDetails(productDetailsMap: WritableMap, subscriptionOfferDetails: List<ProductDetails.SubscriptionOfferDetails>) {
+    val subscriptionOfferArray = Arguments.createArray()
+    subscriptionOfferDetails.forEach { offer ->
+        val offerMap = Arguments.createMap()
+        fillPricingPhases(offerMap, offer.getPricingPhases().getPricingPhaseList())
+        offerMap.putString("basePlanId", offer.getBasePlanId())
+        offerMap.putString("offerId", offer.getOfferId())
+        offerMap.putString("offerIdToken", offer.getOfferToken())
+        fillOfferTags(offerMap, offer.getOfferTags())
+        subscriptionOfferArray.pushMap(offerMap)
+    }
+    productDetailsMap.putArray("subscriptionOfferDetails", subscriptionOfferArray)
+}
+
+private fun fillPricingPhases(offerMap: WritableMap, pricingPhases: List<ProductDetails.PricingPhase>) {
+    pricingPhases.forEach { pricingPhase ->
+        val pricingPhasesMap = Arguments.createMap()
+        pricingPhasesMap.putInt("billingCycleCount", pricingPhase.getBillingCycleCount())
+        pricingPhasesMap.putInt("recurrenceMode", pricingPhase.getRecurrenceMode())
+        pricingPhasesMap.putDouble("priceAmountMicros", pricingPhase.getPriceAmountMicros().toDouble())
+        pricingPhasesMap.putString("billingPeriod", pricingPhase.getBillingPeriod())
+        pricingPhasesMap.putString("formattedPrice", pricingPhase.getFormattedPrice())
+        pricingPhasesMap.putString("priceCurrencyCode", pricingPhase.getPriceCurrencyCode())
+        offerMap.putMap("pricingPhases", pricingPhasesMap)
+    }
+}
+
+private fun fillOfferTags(offerMap: WritableMap, offerTags: List<String>) {
+    val offerTagsArray = Arguments.createArray()
+    offerTags.forEach { tag -> offerTagsArray.pushString(tag) }
+    offerMap.putArray("offerTags", offerTagsArray)
+}
+
 
 // Really needs to be a NamiPurchase, when exists...
 fun NamiPurchase.toPurchaseDict(): WritableMap {
@@ -91,6 +152,7 @@ fun NamiPurchase.toPurchaseDict(): WritableMap {
     val purchaseSource = purchaseSource.toString()
     purchaseMap.putString("purchaseSource", purchaseSource)
 
+    Log.i(LOG_TAG, "toPurchaseDict NAMISKU1 $namiSku")
     val skuDict = namiSku?.toSkuDict()
     purchaseMap.putMap("sku", skuDict)
 
@@ -154,15 +216,19 @@ fun NamiEntitlement.toEntitlementDict(): WritableMap? {
     resultMap.putArray("activePurchases", activePurchasesArray)
 
     val purchasedSKUsArray: WritableArray = WritableNativeArray()
+    Log.i(LOG_TAG, "toEntitlementDict purchasedSkusArray $purchasedSKUs")
     for (sku in purchasedSKUs) {
         purchasedSKUsArray.pushMap(sku.toSkuDict())
     }
+    Log.i(LOG_TAG, "toEntitlementDict purchasedSkus $purchasedSKUsArray")
     resultMap.putArray("purchasedSkus", purchasedSKUsArray)
 
     val relatedSKUsArray: WritableArray = WritableNativeArray()
+    Log.i(LOG_TAG, "toEntitlementDict relatedSKUsArray $relatedSKUs")
     for (sku in relatedSKUs) {
         relatedSKUsArray.pushMap(sku.toSkuDict())
     }
+    Log.i(LOG_TAG, "toEntitlementDict relatedSkus $relatedSKUsArray")
     resultMap.putArray("relatedSkus", relatedSKUsArray)
 
     // For react, provide the most recent active purchase and sku from the arrays

@@ -20,7 +20,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
 
   const getAllEntitlements = async () => {
     const allEntitlements = await NamiEntitlementManager.active();
-    console.log('allEntitlements', allEntitlements);
+    console.log('allEntitlements', JSON.stringify(allEntitlements));
     setEntitlements(allEntitlements);
   };
 
@@ -32,7 +32,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
 
   const onRefreshPress = () => {
     NamiEntitlementManager.refresh(newEtitlements => {
-      console.log('newEntitlements', newEtitlements);
+      console.log('newEntitlements', JSON.stringify(newEtitlements));
     });
   };
 

@@ -20,6 +20,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         const val CAMPAIGN_ID = "campaignId"
         const val CAMPAIGN_LABEL = "campaignLabel"
         const val PAYWALL_ID = "paywallId"
+        const val AMAZON_PRODUCT = "amazonProduct"
         const val ACTION = "action"
         const val SKU_ID = "skuId"
         const val PURCHASE_ERROR = "purchaseError"
@@ -150,8 +151,8 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             putString(CAMPAIGN_TYPE, paywallEvent.campaignType ?: "")
             putString(CAMPAIGN_URL, paywallEvent.campaignUrl ?: "")
             putString(PAYWALL_NAME, paywallEvent.paywallName ?: "")
-            putString(COMPONENT_CHANGE_ID, paywallEvent?.componentChange?.id ?: "")
-            putString(COMPONENT_CHANGE_NAME, paywallEvent?.componentChange?.name ?: "")
+            putString(COMPONENT_CHANGE_ID, paywallEvent.componentChange?.id ?: "")
+            putString(COMPONENT_CHANGE_NAME, paywallEvent.componentChange?.name ?: "")
             putString(SEGMENT_ID, paywallEvent.segmentId ?: "")
             putString(EXTERNAL_SEGMENT_ID, paywallEvent.externalSegmentId ?: "")
             putString(DEEP_LINK_URL, paywallEvent.deeplinkUrl ?: "")

@@ -146,7 +146,16 @@ export type AppleProduct = {
   priceLanguage: string;
 };
 
-export type GoogleProduct = {};
+export interface GoogleProduct {
+  description: string;
+  name: string;
+  productId: string;
+  type: string;
+  title: string;
+  detailsInString: string;
+  oneTimePurchaseOfferDetails?: OneTimePurchaseOfferDetails;
+  subscriptionOfferDetails?: SubscriptionOfferDetail[];
+}
 
 export type AmazonProduct = {};
 
@@ -285,3 +294,27 @@ export type NamiPurchasesState =
   | 'failed'
   | 'cancelled'
   | 'unknown';
+
+// GoogleProduct
+interface OneTimePurchaseOfferDetails {
+  priceAmountMicros: number;
+  formattedPrice: string;
+  priceCurrencyCode: string;
+}
+
+interface SubscriptionOfferDetail {
+  pricingPhases: PricingPhase;
+  basePlanId: string;
+  offerId: string;
+  offerIdToken: string;
+  offerTags: string[];
+}
+
+interface PricingPhase {
+  billingCycleCount: number;
+  recurrenceMode: number;
+  priceAmountMicros: number;
+  billingPeriod: string;
+  formattedPrice: string;
+  priceCurrencyCode: string;
+}

@@ -14,8 +14,8 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test:e2e": "detox test --configuration android.emu.debug",
-    "i": "echo 'Examples: \"yarn i both\"- run all setups, \"yarn i ios\"- run ios' && ./install.sh",
-    "b": "echo 'Examples: \"yarn b ios\", \"yarn b android\"' && ./building.sh",
+    "i": "echo 'Examples: \"yarn i both\"- run all setups, \"yarn i ios\"- run ios' && scripts/install.sh",
+    "b": "echo 'Examples: \"yarn b ios\", \"yarn b android\"' && scripts/building.sh",
     "d": "./scripts/detox.sh"
   },
   "dependencies": {
