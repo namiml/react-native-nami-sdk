@@ -99,8 +99,8 @@ export const NamiPaywallManager: INamiPaywallManager = {
     let subscription;
     subscription = NamiPaywallManager.paywallEmitter.addListener(
       NamiPaywallManagerEvents.PaywallSignInRequested,
-      () => {
-        callback();
+      body => {
+        callback(body);
       },
     );
     RNNamiPaywallManager.registerSignInHandler();
@@ -115,8 +115,8 @@ export const NamiPaywallManager: INamiPaywallManager = {
     let subscription;
     subscription = NamiPaywallManager.paywallEmitter.addListener(
       NamiPaywallManagerEvents.PaywallRestoreRequested,
-      () => {
-        callback();
+      body => {
+        callback(body);
       },
     );
     RNNamiPaywallManager.registerRestoreHandler();
