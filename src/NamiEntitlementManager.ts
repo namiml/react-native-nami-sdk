@@ -27,11 +27,7 @@ export interface INamiEntitlementManager {
 export const NamiEntitlementManager: INamiEntitlementManager = {
   ...RNNamiEntitlementManager,
   emitter: new NativeEventEmitter(RNNamiEntitlementManager),
-  refresh: (
-    resultCallback?: (
-      entitlements?: INamiEntitlementManager['NamiEntitlement'][],
-    ) => void,
-  ) => {
+  refresh: (resultCallback?: (entitlements?: NamiEntitlement[]) => void) => {
     if (Platform.OS === 'android') {
       RNNamiEntitlementManager.refresh(resultCallback ?? (() => {}));
     } else {
@@ -39,9 +35,7 @@ export const NamiEntitlementManager: INamiEntitlementManager = {
     }
   },
   registerActiveEntitlementsHandler: (
-    callback: (
-      activeEntitlements: INamiEntitlementManager['NamiEntitlement'][],
-    ) => void,
+    callback: (activeEntitlements: NamiEntitlement[]) => void,
   ) => {
     let subscription: EmitterSubscription =
       NamiEntitlementManager.emitter.addListener(

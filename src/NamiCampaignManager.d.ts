@@ -1,8 +1,5 @@
-import { EmitterSubscription } from "react-native";
-import { NamiPurchase } from "./NamiPurchaseManager";
-import { NamiPaywallAction } from "./NamiPaywallManager";
-import { NamiSKU } from "./types";
-import { NamiPaywallAction, NamiPurchase } from "./types";
+import { EmitterSubscription } from 'react-native';
+import { NamiPaywallAction, NamiPurchase, NamiSKU } from './types';
 
 export const NamiCampaignManager: {
   allCampaigns: () => Promise<Array<NamiCampaign>>;
@@ -28,13 +25,13 @@ export const NamiCampaignManager: {
       componentChangeId?: string,
       componentChangeName?: string,
       purchaseError?: string,
-      purchases?: NamiPurchase[]
-    ) => void
+      purchases?: NamiPurchase[],
+    ) => void,
   ) => void;
   refresh: () => void;
   registerAvailableCampaignsHandler: (
-      callback: (availableCampaigns: NamiCampaign[]) => void
-  ) => EmitterSubscription["remove"];
+    callback: (availableCampaigns: NamiCampaign[]) => void,
+  ) => EmitterSubscription['remove'];
 };
 
 export type NamiCampaign = {
@@ -47,10 +44,10 @@ export type NamiCampaign = {
 };
 
 export enum NamiCampaignRule {
-  DEFAULT = "default",
-  LABEL = "label",
-  UNKNOWN = "unknown",
-  URL = "url",
+  DEFAULT = 'default',
+  LABEL = 'label',
+  UNKNOWN = 'unknown',
+  URL = 'url',
 }
 
 export enum LaunchCampaignError {
@@ -62,8 +59,8 @@ export enum LaunchCampaignError {
 }
 
 export enum LaunchCampaignResultAction {
-  FAILURE = "FAILURE",
-  SUCCESS = "SUCCESS",
+  FAILURE = 'FAILURE',
+  SUCCESS = 'SUCCESS',
 }
 
 export type FailureResultObject = {
