@@ -7,8 +7,8 @@ export function getConfigObject() {
   switch (flavor) {
     case 'staging':
       return {
-        'appPlatformID-apple': 'APPLE_STAGE_APP_PLATFORM_ID',
-        'appPlatformID-android': 'ANDROID_STAGE_APP_PLATFORM_ID',
+        'appPlatformID-apple': 'APPLE_STG_APP_PLATFORM_ID',
+        'appPlatformID-android': 'ANDROID_STG_APP_PLATFORM_ID',
         logLevel: 'DEBUG',
         namiCommands: ['useStagingAPI', 'useNamiWindow'],
         initialConfig: getInitialConfig(),
