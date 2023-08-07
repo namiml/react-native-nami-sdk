@@ -58,8 +58,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   const showPaywallIfHidden = async () => {
     try {
-      await NamiPaywallManager.isHidden()
-      if (Platform.OS === 'ios') {
+      const isHidden = await NamiPaywallManager.isHidden()
+      if (Platform.OS === 'ios' && isHidden) {
         NamiPaywallManager.show();
       } else {
         console.log('paywall is not hidden');
