@@ -6,16 +6,16 @@ import React, {
   useCallback,
 } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   FlatList,
   View,
   Text,
   TouchableOpacity,
 } from 'react-native';
-import { NamiCampaignManager, NamiCampaign } from 'react-native-nami-sdk';
+import { NamiCampaignManager, NamiCampaign, NamiCampaignRuleType } from 'react-native-nami-sdk';
 import { ViewerTabProps } from '../App';
 import theme from '../theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
@@ -144,7 +144,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         style={itemStyle}>
         <View style={styles.viewContainer}>
           <Text style={styles.itemText}>{item.value}</Text>
-          {item.type === 'url' && (
+          {item.type === NamiCampaignRuleType.URL && (
             <Text style={styles.itemText}>Open as: {item.type}</Text>
           )}
         </View>

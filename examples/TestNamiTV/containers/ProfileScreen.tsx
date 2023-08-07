@@ -128,27 +128,27 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
                 <Text style={styles.itemText}>In Trial Period</Text>
               </View>
               <View style={styles.item}>
-                <Dot value={journeyState?.inIntroOfferPeriod} />
+                <Dot isActive={journeyState?.inIntroOfferPeriod} />
                 <Text style={styles.itemText}>In Intro Offer Period</Text>
               </View>
               <View style={styles.item}>
-                <Dot value={journeyState?.isCancelled} />
+                <Dot isActive={journeyState?.isCancelled} />
                 <Text style={styles.itemText}>Has Cancelled</Text>
               </View>
               <View style={styles.item}>
-                <Dot value={journeyState?.formerSubscriber} />
+                <Dot isActive={journeyState?.formerSubscriber} />
                 <Text style={styles.itemText}>Former Subscriber</Text>
               </View>
               <View style={styles.item}>
-                <Dot value={journeyState?.inGracePeriod} />
+                <Dot isActive={journeyState?.inGracePeriod} />
                 <Text style={styles.itemText}>In Grace Period</Text>
               </View>
               <View style={styles.item}>
-                <Dot value={journeyState?.inAccountHold} />
+                <Dot isActive={journeyState?.inAccountHold} />
                 <Text style={styles.itemText}>In Acount Hold</Text>
               </View>
               <View style={styles.item}>
-                <Dot value={journeyState?.inPause} />
+                <Dot isActive={journeyState?.inPause} />
                 <Text style={styles.itemText}>In Pause</Text>
               </View>
             </>
