@@ -164,6 +164,7 @@ export enum NamiCampaignRuleType {
   DEFAULT = 'default',
   LABEL = 'label',
   UNKNOWN = 'unknown',
+  URL = 'url',
 }
 
 export enum LaunchCampaignError {
