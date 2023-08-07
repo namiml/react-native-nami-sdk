@@ -10,11 +10,11 @@ import {
   NamiCampaignManager,
   NamiPaywallManager,
   NamiPaywallAction,
+  NamiCampaignRuleType,
 } from 'react-native-nami-sdk';
 import {
   FlatList,
   RefreshControl,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -23,6 +23,7 @@ import {
 } from 'react-native';
 import { ViewerTabProps } from '../App';
 import theme from '../theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
@@ -56,10 +57,15 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   );
 
   const showPaywallIfHidden = async () => {
-    if (Platform.OS === 'ios' && (await NamiPaywallManager.isHidden())) {
-      NamiPaywallManager.show();
-    } else {
-      console.log('paywall is not hidden');
+    try {
+      await NamiPaywallManager.isHidden()
+      if (Platform.OS === 'ios') {
+        NamiPaywallManager.show();
+      } else {
+        console.log('paywall is not hidden');
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -116,7 +122,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return NamiCampaignManager.launch(
       label,
       url,
-      { customAttributes: {}, productGroups: {} },
+      { customAttributes: {}, productGroups: [] },
       (successAction, error) => {
         console.log('successAction', successAction);
         console.log('error', error);
@@ -220,7 +226,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
           accessibilityValue={{ text: JSON.stringify(item) }}
           style={styles.viewContainer}>
           <Text style={styles.itemText}>{item.value}</Text>
-          {item.type === 'url' && (
+          {item.type === NamiCampaignRuleType.URL && (
             <Text style={styles.itemText}>Open as: {item.type}</Text>
           )}
         </View>

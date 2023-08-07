@@ -57,7 +57,7 @@ const App = () => {
 
         NamiPaywallManager.dismiss(true);
 
-        if (Platform.OS === 'ios' || Platform.isTVOS) {
+        if (Platform.OS === 'ios' || Platform.isTV) {
           NamiPaywallManager.buySkuCompleteApple({
             product: sku,
             transactionID: '12345',

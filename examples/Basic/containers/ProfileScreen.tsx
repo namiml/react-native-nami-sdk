@@ -20,7 +20,13 @@ import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-const DOT_CONFIGS = [
+interface DotConfig {
+  id: string,
+  property: keyof CustomerJourneyState,
+  label: string
+}
+
+const DOT_CONFIGS: DotConfig[] = [
   {
     id: 'trial_period_dot',
     property: 'inTrialPeriod',
