@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig",
+  "exclude": [
+    "**/__tests__/*",
+    "./examples/Basic",
+    "./examples/TestNamiTV",
+    "./examples/basicExpo",
+    "./build-utils",
+    "**/*.spec.*"
+  ]
+}
