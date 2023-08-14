@@ -6,19 +6,10 @@ export function getConfigObject() {
 
   console.log('flavor', flavor);
   switch (flavor) {
-    // case 'staging':
-    //   return {
-    //     'appPlatformID-apple': 'APPLE_STAGE_APP_PLATFORM_ID',
-    //     'appPlatformID-android': 'UNUSED',
-    //     logLevel: 'DEBUG',
-    //     namiCommands: ['useStagingAPI'],
-    //     initialConfig: getInitialConfig(),
-    //   };
     case 'staging':
-      // https://app-staging.namiml.com/integrations/
       return {
-        'appPlatformID-apple': '4a2f6dbf-e684-4d65-a4df-0488771c577d',
-        'appPlatformID-android': 'b7232eba-ff1d-4b7f-b8d0-55593b66c1d5',
+        'appPlatformID-apple': 'APPLE_STAGE_APP_PLATFORM_ID',
+        'appPlatformID-android': 'UNUSED',
         logLevel: 'DEBUG',
         namiCommands: ['useStagingAPI'],
         initialConfig: getInitialConfig(),
