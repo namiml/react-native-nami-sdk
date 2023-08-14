@@ -1,6 +1,6 @@
 // /* eslint-disable import/no-commonjs */
 const escape = require('escape-string-regexp');
-const {getDefaultConfig} = require('metro-config');
+const { getDefaultConfig } = require('metro-config');
 const blacklist = require('metro-config/src/defaults/exclusionList');
 const path = require('path');
 

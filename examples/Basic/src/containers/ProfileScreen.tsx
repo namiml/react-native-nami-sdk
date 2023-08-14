@@ -13,9 +13,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {CustomerJourneyState, NamiCustomerManager} from '../../../../src';
 import theme from '../../theme';
-import {ViewerTabProps} from '../App';
+import { ViewerTabProps } from '../App';
+import { CustomerJourneyState, NamiCustomerManager } from 'react-native-nami-sdk';
 
 interface DotConfig {
   id: string;
@@ -70,14 +70,14 @@ const Dot = ({
 }) => (
   <View
     testID={testId}
-    accessibilityValue={{text: `${isActive}`}}
+    accessibilityValue={{ text: `${isActive}` }}
     style={[styles.cir, isActive && styles.active]}
   />
 );
 
 type ProfileScreenProps = ViewerTabProps<'Profile'>;
 
-const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
+const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [journeyState, setJourneyState] = useState<
     CustomerJourneyState | undefined
   >(undefined);
@@ -90,11 +90,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
     NamiCustomerManager.isLoggedIn()
       .then(() =>
         setTimeout(() => {
-          // eslint-disable-next-line promise/no-nesting
           NamiCustomerManager.isLoggedIn()
             .then(isLogin => {
               setIsUserLogin(isLogin);
-              return null;
             })
             .catch(e => console.warn(e));
         }, 500),
@@ -187,7 +185,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
             testID="login_btn"
             style={styles.headerButton}
             onPress={isUserLogin ? onLogoutPress : onLoginPress}>
-            <Text testID="login_btn_text" style={styles.headerButtonText}>
+            <Text
+              testID="login_btn_text"
+              style={styles.headerButtonText}>
               {isUserLogin ? 'Logout' : 'Login'}
             </Text>
           </TouchableOpacity>
@@ -198,7 +198,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text testID="profile_title" style={styles.title}>
+      <Text
+        testID="profile_title"
+        style={styles.title}>
         Profile
       </Text>
       <View style={styles.section}>
@@ -206,7 +208,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
           {isUserLogin ? 'REGISTERED_USER' : 'ANONYMOUS USER'}
         </Text>
         <View style={styles.idSection}>
-          <Text testID="user_id" style={styles.idLabel}>
+          <Text
+            testID="user_id"
+            style={styles.idLabel}>
             {isUserLogin ? 'Customer Id' : 'Device Id'}
           </Text>
           <Text style={styles.id}>
@@ -218,9 +222,13 @@ const ProfileScreen: FC<ProfileScreenProps> = ({navigation}) => {
         <Text style={styles.sectionHeader}>JOURNEY STATE</Text>
         {journeyState && (
           <View style={styles.block}>
-            {DOT_CONFIGS.map(({id, property, label}) => (
-              <View key={id} style={styles.item}>
-                <Dot testId={id} isActive={journeyState?.[property]} />
+            {DOT_CONFIGS.map(({ id, property, label }) => (
+              <View
+                key={id}
+                style={styles.item}>
+                <Dot
+                  testId={id}
+                  isActive={journeyState?.[property]} />
                 <Text style={styles.itemText}>{label}</Text>
               </View>
             ))}

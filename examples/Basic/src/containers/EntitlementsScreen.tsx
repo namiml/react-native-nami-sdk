@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState, useLayoutEffect} from 'react';
+import React, { FC, useEffect, useState, useLayoutEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {NamiEntitlementManager, NamiEntitlement} from 'react-native-nami-sdk';
+import { NamiEntitlementManager, NamiEntitlement } from 'react-native-nami-sdk';
 
 import theme from '../../theme';
-import {ViewerTabProps} from '../App';
+import { ViewerTabProps } from '../App';
 
 type EntitlementsScreenProps = ViewerTabProps<'Entitlements'>;
 
-const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
+const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   const [entitlements, setEntitlements] = useState<NamiEntitlement[]>([]);
 
   const getAllEntitlements = async () => {
@@ -57,7 +57,9 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.headerButton}
             onPress={onRefreshPress}>
-            <Text testID="refresh_entitlements" style={styles.headerButtonText}>
+            <Text
+              testID="refresh_entitlements"
+              style={styles.headerButtonText}>
               Refresh
             </Text>
           </TouchableOpacity>
@@ -66,7 +68,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
     });
   }, [navigation]);
 
-  const renderCampaigns = ({item}: {item: NamiEntitlement}) => {
+  const renderCampaigns = ({ item }: {item: NamiEntitlement}) => {
     return (
       <TouchableOpacity
         onPress={() => {
@@ -80,11 +82,15 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text testID="entitlements_title" style={styles.title}>
+      <Text
+        testID="entitlements_title"
+        style={styles.title}>
         Entitlements
       </Text>
       <View style={styles.section}>
-        <Text testID="active_entitlement" style={styles.sectionHeader}>
+        <Text
+          testID="active_entitlement"
+          style={styles.sectionHeader}>
           ACTIVE ENTITLEMENT
         </Text>
         <FlatList

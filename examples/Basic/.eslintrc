@@ -1,11 +1,89 @@
 {
-  "extends": "../../.eslintrc",
-
-  "settings": {
-    "import/core-modules": ["react-native-nami-sdk"]
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
-
+  "plugins": ["@typescript-eslint"],
   "rules": {
-    "react/prop-types": "off"
-  }
+    "prettier/prettier": 0,
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "react/prop-types": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unused-vars": [
+      2,
+      {
+        "args": "none",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-use-before-define": [
+      "error",
+      {
+        "variables": false
+      }
+    ],
+    "react/jsx-first-prop-new-line": [
+      1,
+      "multiline"
+    ],
+    "react/jsx-max-props-per-line": [
+      1,
+      {
+        "maximum": 1
+      }
+    ],
+    "no-unused-vars": "off",
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "one-var": "off",
+    "no-multi-assign": "off",
+    "no-nested-ternary": "off",
+    "no-undef": "off",
+    "global-require": "off",
+    "react-native/split-platform-components": "off",
+    "react-native/no-raw-text": "off",
+    "react-native-a11y/has-valid-accessibility-descriptors": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["*.test.js", "*.test.tsx"],
+      "rules": {
+        "local-rules/no-react-forwardref-usage": "off"
+      }
+    }
+  ]
 }
+

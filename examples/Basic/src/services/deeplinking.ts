@@ -1,4 +1,4 @@
-import {NamiCampaignManager} from 'react-native-nami-sdk';
+import { NamiCampaignManager } from 'react-native-nami-sdk';
 
 interface HandleDeepLinkParams {
   url: string;
@@ -7,7 +7,7 @@ interface HandleDeepLinkParams {
 export const prefixes = ['testnami://'];
 
 export async function handleDeepLink(params: HandleDeepLinkParams) {
-  const {url} = params;
+  const { url } = params;
   console.log('Received deep link:', url);
 
   const isCampaignAvailable = await NamiCampaignManager.isCampaignAvailable(

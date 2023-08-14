@@ -1,21 +1,21 @@
-import React, {useEffect} from 'react';
-import {Linking, Platform} from 'react-native';
+import React, { useEffect } from 'react';
+import { Linking, Platform } from 'react-native';
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {NamiCustomerManager, NamiPaywallManager} from 'react-native-nami-sdk';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NamiCustomerManager, NamiPaywallManager } from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import CustomerManagerScreen from './containers/CustomerManagerScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
 import ProfileScreen from './containers/ProfileScreen';
-import {handleDeepLink} from './services/deeplinking';
+import { handleDeepLink } from './services/deeplinking';
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
   headerBackTitleVisible: false,
   headerShadowVisible: false,
-  headerStyle: {backgroundColor: 'transparent'},
+  headerStyle: { backgroundColor: 'transparent' },
 };
 
 type ViewerTabNavigatorParams = {
@@ -39,7 +39,7 @@ const App = () => {
     Linking.getInitialURL()
       .then(url => {
         if (url) {
-          handleDeepLink({url});
+          handleDeepLink({ url });
         }
         return null;
       })
@@ -106,22 +106,22 @@ const App = () => {
     <NavigationContainer>
       <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
         <Tab.Screen
-          options={{tabBarTestID: 'campaign_screen'}}
+          options={{ tabBarTestID: 'campaign_screen' }}
           name="Campaign"
           component={CampaignScreen}
         />
         <Tab.Screen
-          options={{tabBarTestID: 'profile_screen'}}
+          options={{ tabBarTestID: 'profile_screen' }}
           name="Profile"
           component={ProfileScreen}
         />
         <Tab.Screen
-          options={{tabBarTestID: 'entitlements_screen'}}
+          options={{ tabBarTestID: 'entitlements_screen' }}
           name="Entitlements"
           component={EntitlementsScreen}
         />
         <Tab.Screen
-          options={{tabBarTestID: 'customer_manager_screen'}}
+          options={{ tabBarTestID: 'customer_manager_screen' }}
           name="CustomerManager"
           component={CustomerManagerScreen}
         />

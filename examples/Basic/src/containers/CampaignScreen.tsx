@@ -22,14 +22,14 @@ import {
   NamiPaywallAction,
   NamiCampaignRuleType,
 } from 'react-native-nami-sdk';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import theme from '../../theme';
-import {ViewerTabProps} from '../App';
+import { ViewerTabProps } from '../App';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>;
 
-const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
+const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
   <TouchableOpacity
     testID="refresh_campaigns"
     style={styles.headerButton}
@@ -39,15 +39,19 @@ const HeaderRight = ({onRefreshPress}: {onRefreshPress: () => void}) => (
 );
 
 // For Nami testing purposes only
-const HeaderLeft = ({onButtonPress}: {onButtonPress: () => void}) => (
-  <TouchableOpacity style={styles.headerButton} onPress={onButtonPress}>
-    <Text testID="show_paywall_button" style={styles.headerButtonText}>
+const HeaderLeft = ({ onButtonPress }: {onButtonPress: () => void}) => (
+  <TouchableOpacity
+    style={styles.headerButton}
+    onPress={onButtonPress}>
+    <Text
+      testID="show_paywall_button"
+      style={styles.headerButtonText}>
       Show Paywall
     </Text>
   </TouchableOpacity>
 );
 
-const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
+const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const [campaigns, setCampaigns] = useState<NamiCampaign[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [campaignsAction, setAction] = useState<NamiPaywallAction | string>(
@@ -120,7 +124,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     return NamiCampaignManager.launch(
       label,
       url,
-      {customAttributes: {}},
+      { customAttributes: {} },
       (successAction: any, error: any) => {
         console.log('successAction', successAction);
         console.log('error', error);
@@ -210,18 +214,18 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
     });
   }, [navigation, onRefreshPress, onButtonPress, getAllCampaigns, refresh]);
 
-  const renderItem = ({item, index}: {item: NamiCampaign; index: number}) => {
+  const renderItem = ({ item, index }: {item: NamiCampaign; index: number}) => {
     const lasItem = index === campaigns.length - 1;
     const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
       <TouchableOpacity
         testID={`list_item_${item.value}`}
-        accessibilityValue={{text: JSON.stringify(item)}}
+        accessibilityValue={{ text: JSON.stringify(item) }}
         onPress={() => onItemPressPrimary(item)}
         style={itemStyle}>
         <View
           testID={`list_item_view_${item.value}`}
-          accessibilityValue={{text: JSON.stringify(item)}}
+          accessibilityValue={{ text: JSON.stringify(item) }}
           style={styles.viewContainer}>
           <Text style={styles.itemText}>{item.value}</Text>
           {item.type === NamiCampaignRuleType.URL && (
@@ -250,7 +254,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   const onRefresh = () => {
     setRefreshing(true);
     getAllCampaigns()
-      // eslint-disable-next-line promise/always-return
       .then(() => {
         setRefreshing(false);
       })
@@ -258,22 +261,32 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}>
       <View>
-        <Text testID="campaigns_title" style={styles.title}>
+        <Text
+          testID="campaigns_title"
+          style={styles.title}>
           Campaigns
         </Text>
-        <View testID="unlabeled_campaigns" style={styles.marginTop20}>
+        <View
+          testID="unlabeled_campaigns"
+          style={styles.marginTop20}>
           <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
           {renderDefault()}
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Text style={styles.statusText}>Modal Status:</Text>
-          <Text testID="campaigns_modal_action" style={styles.statusText}>
+          <Text
+            testID="campaigns_modal_action"
+            style={styles.statusText}>
             {campaignsAction}
           </Text>
         </View>
-        <Text testID="refresh_status_text" style={styles.statusText}>
+        <Text
+          testID="refresh_status_text"
+          style={styles.statusText}>
           Refreshed: {refresh.toString()}
         </Text>
       </View>
@@ -287,7 +300,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({navigation}) => {
           renderItem={renderItem}
           ItemSeparatorComponent={SeparatorComponent}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh} />
           }
         />
       </View>

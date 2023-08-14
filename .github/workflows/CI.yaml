@@ -77,7 +77,7 @@ jobs:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
       - name: Update App Platform ID
-        working-directory: source/examples/Basic/config/
+        working-directory: source/examples/Basic/src/config/
         run: |
           sed -i '' -e "s/APPLE_PROD_APP_PLATFORM_ID/$BASIC_APPLE_PROD_APP_PLATFORM_ID/" index.ts
         env:
@@ -169,7 +169,7 @@ jobs:
           java-version: 11
 
       - name: Update App Platform ID
-        working-directory: source/examples/Basic/config/
+        working-directory: source/examples/Basic/src/config/
         run: |
           sed -i '' -e "s/ANDROID_PROD_APP_PLATFORM_ID/$BASIC_ANDROID_PROD_APP_PLATFORM_ID/" index.ts
         env:

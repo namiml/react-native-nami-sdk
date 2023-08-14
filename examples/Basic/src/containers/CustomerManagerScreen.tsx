@@ -1,4 +1,4 @@
-import React, {FC, useState, useEffect} from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,10 +8,10 @@ import {
   TextInput,
 } from 'react-native';
 
-import {NamiCustomerManager} from 'react-native-nami-sdk';
+import { NamiCustomerManager } from 'react-native-nami-sdk';
 
 import theme from '../../theme';
-import {ViewerTabProps} from '../App';
+import { ViewerTabProps } from '../App';
 
 const TEST_KEY = 'key1';
 
@@ -62,11 +62,15 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text testID="customer_manager_title" style={styles.title}>
+      <Text
+        testID="customer_manager_title"
+        style={styles.title}>
         Customer Manager
       </Text>
       <View style={styles.section}>
-        <Text testID="customer_attribute" style={styles.sectionHeader}>
+        <Text
+          testID="customer_attribute"
+          style={styles.sectionHeader}>
           Set Customer Attribute
         </Text>
         <View style={styles.inputContainer}>
@@ -87,7 +91,9 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
         </View>
 
         <Text style={styles.sectionHeader}>Stored custom attribute value</Text>
-        <Text testID="customer_attribute_text" style={styles.attributeText}>
+        <Text
+          testID="customer_attribute_text"
+          style={styles.attributeText}>
           {attribute}
         </Text>
 
