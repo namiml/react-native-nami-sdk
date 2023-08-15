@@ -56,7 +56,7 @@ jobs:
 
       - name: Execute update-files script
         run: |
-          bash update-files.sh
+          bash update_files.sh
         working-directory: source/examples/Basic/scripts
 
       - name: Cache node_modules
@@ -157,7 +157,7 @@ jobs:
 
       - name: Execute update-files script
         run: |
-          bash update-files.sh
+          bash update_files.sh
         working-directory: source/examples/Basic/scripts
 
       - name: Cache node_modules
