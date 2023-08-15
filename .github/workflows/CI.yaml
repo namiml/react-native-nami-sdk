@@ -54,6 +54,10 @@ jobs:
           path: source
           ref: '${{ inputs.ref }}'
 
+      - name: Execute update-files script
+        run: ./scripts/update-files.sh
+        working-directory: source/examples/Basic
+
       - name: Cache node_modules
         uses: actions/cache@v3
         id: cache
@@ -149,6 +153,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16"
+
+      - name: Execute update-files script
+        run: ./scripts/update-files.sh
+        working-directory: source/examples/Basic
 
       - name: Cache node_modules
         uses: actions/cache@v3
