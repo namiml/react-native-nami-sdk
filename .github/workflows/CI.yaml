@@ -55,8 +55,9 @@ jobs:
           ref: '${{ inputs.ref }}'
 
       - name: Execute update-files script
-        run: ./scripts/update-files.sh
-        working-directory: source/examples/Basic
+        run: |
+          bash update-files.sh
+        working-directory: source/examples/Basic/scripts
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -155,8 +156,9 @@ jobs:
           node-version: "16"
 
       - name: Execute update-files script
-        run: ./scripts/update-files.sh
-        working-directory: source/examples/Basic
+        run: |
+          bash update-files.sh
+        working-directory: source/examples/Basic/scripts
 
       - name: Cache node_modules
         uses: actions/cache@v3
