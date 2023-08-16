@@ -19,7 +19,7 @@
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
-    "react": "18.0.0",
+    "react": "18.2.0",
     "react-native": "npm:react-native-tvos@0.69.8-2",
     "react-native-nami-sdk": "file:../../",
     "react-native-reanimated": "^2.3.1",
