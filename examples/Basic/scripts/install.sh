@@ -16,7 +16,7 @@ function osTv_pull() {
 }
 
 function default_cmds() {
-    rm -rf node_modules && yarn install && rm -rf node_modules/react-native-nami-sdk/examples
+    rm -rf node_modules && yarn install
 }
 
 if [ "$1" == "android" ]; then

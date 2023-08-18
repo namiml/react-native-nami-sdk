@@ -76,14 +76,6 @@
     "react": {
       "version": "detect"
     }
-  },
-  "overrides": [
-    {
-      "files": ["*.test.js", "*.test.tsx"],
-      "rules": {
-        "local-rules/no-react-forwardref-usage": "off"
-      }
-    }
-  ]
+  }
 }
 
