@@ -236,7 +236,7 @@ describe('Android: Profile and Entitlements screen', () => {
 
 describe('Android: Customer Manager screen Test', () => {
   beforeAll(async () => {
-    await device.launchApp();
+    await device.launchApp({ newInstance: true });
   });
 
   it('Should navigate to the Customer Manager tab screen', async () => {
