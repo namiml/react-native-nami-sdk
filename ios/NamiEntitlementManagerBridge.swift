@@ -39,7 +39,6 @@ class RNNamiEntitlementManager: RCTEventEmitter {
         let dictionary: [String: Any?] = [
             "name": entitlement.name,
             "desc": entitlement.desc,
-            "namiId": entitlement.namiId,
             "referenceId": entitlement.referenceId,
             "activePurchases": activePurchasesDict,
             "relatedSkus": relatedSkusDict,
