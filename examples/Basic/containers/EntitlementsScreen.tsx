@@ -75,7 +75,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
           onItemPress(item.referenceId);
         }}
         style={styles.item}>
-        <Text style={styles.itemText}>{item.name}</Text>
+        <Text style={styles.itemText}>{item.referenceId}</Text>
       </TouchableOpacity>
     );
   };
