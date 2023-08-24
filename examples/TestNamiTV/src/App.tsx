@@ -53,7 +53,7 @@ const App = () => {
 
         NamiPaywallManager.dismiss(true);
 
-        if (Platform.OS === 'ios' || Platform.isTV) {
+        if (Platform.OS === 'ios') {
           NamiPaywallManager.buySkuCompleteApple({
             product: sku,
             transactionID: '12345',
@@ -73,7 +73,7 @@ const App = () => {
               receiptId: '12345',
               localizedPrice: '120',
               userId: '12345',
-              marketplace: '12345',
+              marketplace: 'US',
             });
           } else {
             NamiPaywallManager.buySkuCompleteGooglePlay({

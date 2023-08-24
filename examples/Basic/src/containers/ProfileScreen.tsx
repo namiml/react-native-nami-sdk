@@ -101,7 +101,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }, []);
 
   const onLoginPress = useCallback(() => {
-    NamiCustomerManager.login('E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF');
+    NamiCustomerManager.login('123456');
     checkIsLoggedIn();
   }, [checkIsLoggedIn]);
 

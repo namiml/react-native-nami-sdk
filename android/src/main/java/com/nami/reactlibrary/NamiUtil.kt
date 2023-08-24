@@ -143,7 +143,6 @@ fun NamiEntitlement.toEntitlementDict(): WritableMap? {
         return null
     }
 
-    resultMap.putString("namiId", namiId.orEmpty())
     resultMap.putString("desc", desc.orEmpty())
     resultMap.putString("name", name.orEmpty())
 

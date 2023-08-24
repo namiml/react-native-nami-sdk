@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        default: develop
+        default: main
         description: "Git Tag, Branch or SHA to build"
         required: true
     secrets:
@@ -14,7 +14,7 @@ on:
     types:
       - closed
     branches:
-      - develop
+      - main
     secrets:
       BUILD_USER_PAT:
         required: true
