@@ -194,8 +194,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   const onButtonPress = useCallback(() => {
-    // showPaywallIfHidden();
-    NamiPaywallManager.buySkuCancel();
+    showPaywallIfHidden();
   }, []);
 
   useLayoutEffect(() => {
