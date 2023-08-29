@@ -10,6 +10,7 @@
     "ios-clean": "cd ios && rm -rf Pods && rm -rf build",
     "ios-setup-clean": "cd ios && rm -rf Pods && rm -rf build  && pod update && pod install",
     "start": "react-native start",
+    "start:legacy": "NODE_OPTIONS=--openssl-legacy-provider react-native start --reset-cache",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
