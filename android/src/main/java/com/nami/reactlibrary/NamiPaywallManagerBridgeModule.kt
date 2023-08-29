@@ -252,6 +252,11 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun buySkuCancel() {
+        NamiPaywallManager.buySkuCancel()
+    }
+
+    @ReactMethod
     fun addListener(eventName: String?) {
     }
 

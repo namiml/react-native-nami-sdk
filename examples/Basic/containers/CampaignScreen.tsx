@@ -39,12 +39,12 @@ const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
 // For Nami testing purposes only
 const HeaderLeft = ({ onButtonPress } : { onButtonPress: () => void }) => (
   <TouchableOpacity
-    style={styles.headerButton}
+    style={styles.headerButtonLeft}
     onPress={onButtonPress}>
     <Text
       testID="show_paywall_button"
       style={styles.headerButtonText}>
-      Show Paywall
+      Show
     </Text>
   </TouchableOpacity>
 );
@@ -354,6 +354,12 @@ const styles = StyleSheet.create({
   },
   headerButton: {
     marginRight: 15,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerButtonLeft: {
+    marginLeft: 15,
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',

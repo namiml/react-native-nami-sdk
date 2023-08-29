@@ -22,6 +22,7 @@ export interface INamiEntitlementManager {
   registerActiveEntitlementsHandler: (
     callback: (activeEntitlements: NamiEntitlement[]) => void,
   ) => EmitterSubscription['remove'];
+  clearProvisionalEntitlementGrants: () => void;
 }
 
 export const NamiEntitlementManager: INamiEntitlementManager = {

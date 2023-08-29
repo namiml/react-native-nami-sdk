@@ -130,6 +130,13 @@ class RNNamiPaywallManager: RCTEventEmitter {
         }
     }
 
+    @objc(buySkuCancel)
+    func buySkuCancel() {
+        DispatchQueue.main.async {
+            NamiPaywallManager.buySkuCancel()
+        }
+    }
+
     @objc(isHidden:rejecter:)
     func isHidden(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
