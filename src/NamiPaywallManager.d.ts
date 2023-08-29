@@ -20,6 +20,7 @@ export const NamiPaywallManager: {
   ) => EmitterSubscription['remove'];
   show: () => void;
   hide: () => void;
+  buySkuCancel: () => void;
   isHidden: () => Promise<boolean>;
 };
 

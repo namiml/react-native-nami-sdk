@@ -36,6 +36,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
             let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
             return dictionary
         }
+
         let dictionary: [String: Any?] = [
             "name": entitlement.name,
             "desc": entitlement.desc,
@@ -77,5 +78,10 @@ class RNNamiEntitlementManager: RCTEventEmitter {
             }
             RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dictionaries)
         }
+    }
+
+    @objc(clearProvisionalEntitlementGrants)
+    func clearProvisionalEntitlementGrants() {
+        NamiEntitlementManager.clearProvisionalEntitlementGrants()
     }
 }

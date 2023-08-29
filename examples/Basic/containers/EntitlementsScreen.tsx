@@ -31,9 +31,13 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   };
 
   const onRefreshPress = () => {
-    NamiEntitlementManager.refresh(newEtitlements => {
-      console.log('newEntitlements', newEtitlements);
+    NamiEntitlementManager.refresh(newEntitlements => {
+      console.log('newEntitlements', newEntitlements);
     });
+  };
+
+  const onClearPress = () => {
+    NamiEntitlementManager.clearProvisionalEntitlementGrants();
   };
 
   useEffect(() => {
@@ -61,6 +65,19 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
               testID="refresh_entitlements"
               style={styles.headerButtonText}>
               Refresh
+            </Text>
+          </TouchableOpacity>
+        );
+      },
+      headerLeft: () => {
+        return (
+          <TouchableOpacity
+            style={styles.headerLeftButton}
+            onPress={onClearPress}>
+            <Text
+              testID="clear_entitlements"
+              style={styles.headerButtonText}>
+              Clear
             </Text>
           </TouchableOpacity>
         );
@@ -132,6 +149,12 @@ const styles = StyleSheet.create({
   },
   headerButton: {
     marginRight: 15,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerLeftButton: {
+    marginLeft: 15,
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',
