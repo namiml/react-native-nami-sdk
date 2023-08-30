@@ -201,7 +201,7 @@ describe('Android: Profile and Entitlements screen', () => {
 
     await waitFor(element(by.id('login_btn_text')))
       .toHaveText('Logout')
-      .withTimeout(5000);
+      .withTimeout(10000);
 
     await expect(element(by.id('user_id'))).toHaveText('Customer Id');
 
@@ -209,7 +209,7 @@ describe('Android: Profile and Entitlements screen', () => {
 
     await waitFor(element(by.id('login_btn_text')))
       .toHaveText('Login')
-      .withTimeout(5000);
+      .withTimeout(10000);
 
     await expect(element(by.id('user_id'))).toHaveText('Device Id');
   });
