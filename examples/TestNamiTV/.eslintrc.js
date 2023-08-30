@@ -1,3 +1,5 @@
+// We need understand how to expand base eslint config from SDK, for reusing,
+// right now we have conflicts of react-native-tvos with such configuration of eslint
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser', // Specifies the ESLint parser

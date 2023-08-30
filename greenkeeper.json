@@ -1,0 +1,11 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "examples/Basic/package.json",
+        "examples/TestNamiTV/package.json",
+        "package.json"
+      ]
+    }
+  }
+}

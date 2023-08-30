@@ -14,8 +14,8 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test:e2e": "detox test --configuration android.emu.debug",
-    "i": "echo 'Examples: \"yarn i both\"- run all setups, \"yarn i ios\"- run ios' && ./install.sh",
-    "b": "echo 'Examples: \"yarn b ios\", \"yarn b android\"' && ./building.sh",
+    "i": "echo 'Examples: \"yarn i both\"- run all setups, \"yarn i ios\"- run ios' && scripts/install.sh",
+    "b": "echo 'Examples: \"yarn b ios\", \"yarn b android\"' && scripts/building.sh",
     "d": "./scripts/detox.sh"
   },
   "dependencies": {
@@ -27,7 +27,6 @@
     "react": "17.0.2",
     "react-native": "0.65.2",
     "react-native-gesture-handler": "^2.1.0",
-    "react-native-nami-sdk": "file:../../",
     "react-native-reanimated": "^2.3.1",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.20.0"
@@ -44,8 +43,10 @@
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "babel-jest": "^27.4.5",
+    "babel-plugin-module-resolver": "^5.0.0",
     "detox": "^20.9.1",
     "eslint": "^8.37.0",
+    "eslint-plugin-import": "^2.28.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-native": "^4.0.0",
     "jest": "^29.5.0",

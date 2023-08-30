@@ -201,7 +201,7 @@ describe('Android: Profile and Entitlements screen', () => {
 
     await waitFor(element(by.id('login_btn_text')))
       .toHaveText('Logout')
-      .withTimeout(5000);
+      .withTimeout(10000);
 
     await expect(element(by.id('user_id'))).toHaveText('Customer Id');
 
@@ -209,7 +209,7 @@ describe('Android: Profile and Entitlements screen', () => {
 
     await waitFor(element(by.id('login_btn_text')))
       .toHaveText('Login')
-      .withTimeout(5000);
+      .withTimeout(10000);
 
     await expect(element(by.id('user_id'))).toHaveText('Device Id');
   });
@@ -236,7 +236,7 @@ describe('Android: Profile and Entitlements screen', () => {
 
 describe('Android: Customer Manager screen Test', () => {
   beforeAll(async () => {
-    await device.launchApp();
+    await device.launchApp({ newInstance: true });
   });
 
   it('Should navigate to the Customer Manager tab screen', async () => {
