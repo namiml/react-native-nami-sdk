@@ -66,6 +66,9 @@ export const NamiPaywallManager: INamiPaywallManager = {
       ServicesEnum.GooglePlay
     );
   },
+  buySkuCancel: () => {
+    RNNamiPaywallManager.buySkuCancel();
+  },
   registerBuySkuHandler: (callback: (sku: NamiSKU) => void) => {
     let subscription: EmitterSubscription;
     subscription = NamiPaywallManager.paywallEmitter.addListener(

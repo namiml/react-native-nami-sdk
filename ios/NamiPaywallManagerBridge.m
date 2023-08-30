@@ -33,6 +33,8 @@ RCT_EXTERN_METHOD(hide)
 
 RCT_EXTERN_METHOD(isHidden:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
+RCT_EXTERN_METHOD(buySkuCancel)
+
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }

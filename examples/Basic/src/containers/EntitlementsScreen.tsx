@@ -36,6 +36,10 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
     });
   };
 
+  const onClearPress = () => {
+    NamiEntitlementManager.clearProvisionalEntitlementGrants();
+  };
+
   useEffect(() => {
     getAllEntitlements();
     const subscriptionRemover =
@@ -61,6 +65,19 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
               testID="refresh_entitlements"
               style={styles.headerButtonText}>
               Refresh
+            </Text>
+          </TouchableOpacity>
+        );
+      },
+      headerLeft: () => {
+        return (
+          <TouchableOpacity
+            style={styles.headerLeftButton}
+            onPress={onClearPress}>
+            <Text
+              testID="clear_entitlements"
+              style={styles.headerButtonText}>
+              Clear
             </Text>
           </TouchableOpacity>
         );
@@ -132,6 +149,12 @@ const styles = StyleSheet.create({
   },
   headerButton: {
     marginRight: 15,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerLeftButton: {
+    marginLeft: 15,
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',

@@ -62,6 +62,11 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     }
 
     @ReactMethod
+    fun clearProvisionalEntitlementGrants() {
+        NamiEntitlementManager.clearProvisionalEntitlementGrants()
+    }
+
+    @ReactMethod
     fun addListener(eventName: String?) {
     }
 

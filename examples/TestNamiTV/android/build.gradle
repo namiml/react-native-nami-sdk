@@ -46,5 +46,8 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven { url "https://packages.namiml.com/NamiSDK/Amazon/"}
+        maven { url "https://packages.namiml.com/NamiSDK/Android/"}
+
     }
 }

@@ -11,6 +11,7 @@ export type NamiEntitlementManager = {
   registerActiveEntitlementsHandler: (
     callback: (activeEntitlements: NamiEntitlement[]) => void
   ) => EmitterSubscription['remove'];
+  clearProvisionalEntitlementGrants: () => void;
 };
 
 export type NamiEntitlement = {

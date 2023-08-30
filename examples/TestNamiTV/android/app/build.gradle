@@ -200,15 +200,9 @@ android {
     productFlavors {
         amazon {
             dimension "store"
-            repositories {
-                maven { url "https://packages.namiml.com/NamiSDK/Amazon/"}
-            }
         }
         play {
             dimension "store"
-            repositories {
-                maven { url "https://packages.namiml.com/NamiSDK/Android/"}
-            }
         }
     }
 
@@ -232,6 +226,9 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
+
+    amazonImplementation "com.namiml:sdk-amazon:3.1.5"
+    playImplementation "com.namiml:sdk-android:3.1.5"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

@@ -21,6 +21,7 @@ export type NamiPaywallManager = {
   ) => EmitterSubscription['remove'];
   show: () => void;
   hide: () => void;
+  buySkuCancel: () => void;
   isHidden: () => Promise<boolean>;
 };
 
