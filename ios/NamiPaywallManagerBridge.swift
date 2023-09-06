@@ -111,6 +111,13 @@ class RNNamiPaywallManager: RCTEventEmitter {
         }
     }
 
+    @objc(registerDeeplinkActionHandler)
+    func registerDeeplinkActionHandler() {
+        NamiPaywallManager.registerDeeplinkActionHandler { url in
+            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallDeeplinkAction", body: url)
+        }
+    }
+
     @objc(dismiss:)
     func dismiss(animated: Bool) {
         NamiPaywallManager.dismiss(animated: animated) {}

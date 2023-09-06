@@ -25,6 +25,8 @@ RCT_EXTERN_METHOD(registerSignInHandler)
 
 RCT_EXTERN_METHOD(registerRestoreHandler)
 
+RCT_EXTERN_METHOD(registerDeeplinkActionHandler)
+
 RCT_EXTERN_METHOD(dismiss:(BOOL)animated)
 
 RCT_EXTERN_METHOD(show)

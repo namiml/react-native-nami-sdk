@@ -236,6 +236,18 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun registerDeeplinkActionHandler() {
+        NamiPaywallManager.registerDeepLinkHandler { activity , url ->
+            latestPaywallActivity = activity
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("PaywallDeeplinkAction", url)
+        }
+
+    }
+
+
+    @ReactMethod
     fun show() {
         // Do nothing on Android side
     }

@@ -15,6 +15,7 @@ export enum NamiPaywallManagerEvents {
   PaywallCloseRequested = 'PaywallCloseRequested',
   PaywallSignInRequested = 'PaywallSignInRequested',
   PaywallRestoreRequested = 'PaywallRestoreRequested',
+  PaywallDeeplinkAction = 'PaywallDeeplinkAction',
 }
 
 export enum ServicesEnum {
@@ -69,8 +70,7 @@ export const NamiPaywallManager: INamiPaywallManager = {
     RNNamiPaywallManager.buySkuCancel();
   },
   registerBuySkuHandler: (callback: (sku: NamiSKU) => void) => {
-    let subscription;
-    subscription = NamiPaywallManager.paywallEmitter.addListener(
+    let subscription = NamiPaywallManager.paywallEmitter.addListener(
       NamiPaywallManagerEvents.RegisterBuySKU,
       sku => {
         callback(sku);
@@ -84,8 +84,7 @@ export const NamiPaywallManager: INamiPaywallManager = {
     };
   },
   registerCloseHandler: (callback: (body: any) => void) => {
-    let subscription;
-    subscription = NamiPaywallManager.paywallEmitter.addListener(
+    let subscription = NamiPaywallManager.paywallEmitter.addListener(
       NamiPaywallManagerEvents.PaywallCloseRequested,
       body => {
         callback(body);
@@ -99,8 +98,7 @@ export const NamiPaywallManager: INamiPaywallManager = {
     };
   },
   registerSignInHandler(callback) {
-    let subscription;
-    subscription = NamiPaywallManager.paywallEmitter.addListener(
+    let subscription = NamiPaywallManager.paywallEmitter.addListener(
       NamiPaywallManagerEvents.PaywallSignInRequested,
       () => {
         callback();
@@ -115,14 +113,27 @@ export const NamiPaywallManager: INamiPaywallManager = {
     };
   },
   registerRestoreHandler(callback) {
-    let subscription;
-    subscription = NamiPaywallManager.paywallEmitter.addListener(
+    let subscription = NamiPaywallManager.paywallEmitter.addListener(
       NamiPaywallManagerEvents.PaywallRestoreRequested,
       () => {
         callback();
       },
     );
     RNNamiPaywallManager.registerRestoreHandler();
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  },
+  registerDeeplinkActionHandler: (callback: (url: string) => void) => {
+    let subscription = NamiPaywallManager.paywallEmitter.addListener(
+      NamiPaywallManagerEvents.PaywallDeeplinkAction,
+      url => {
+        callback(url);
+      },
+    );
+    RNNamiPaywallManager.registerDeeplinkActionHandler();
     return () => {
       if (subscription) {
         subscription.remove();
