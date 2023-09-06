@@ -94,9 +94,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         NamiPaywallManager.dismiss();
       });
 
-    const subscriptionDeeplinkeRemover =
+    const subscriptionDeeplinkRemover =
       NamiPaywallManager.registerDeeplinkActionHandler((url) => {
         console.log('deeplink action ', url);
+        // for testing:
+        NamiPaywallManager.buySkuCancel();
+
         NamiPaywallManager.dismiss();
       });
 
@@ -114,7 +117,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       subscriptionRemover();
       subscriptionSignInRemover();
       subscriptionRestoreRemover();
-      subscriptionDeeplinkeRemover();
+      subscriptionDeeplinkRemover();
       // Clean up the launch subscription when the component unmounts
       // For safety reasons
       if (NamiCampaignManager.launchSubscription) {

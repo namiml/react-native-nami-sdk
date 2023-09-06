@@ -30,6 +30,7 @@ export interface INamiPaywallManager {
   buySkuCompleteGooglePlay: (
     purchaseSuccess: NamiPurchaseSuccessGooglePlay,
   ) => void;
+  buySkuCancel: () => void;
   registerBuySkuHandler: (
     callback: (sku: NamiSKU) => void,
   ) => EmitterSubscription['remove'];
