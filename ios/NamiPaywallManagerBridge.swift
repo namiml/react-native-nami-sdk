@@ -19,7 +19,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["RegisterBuySKU", "PaywallCloseRequested", "PaywallSignInRequested", "PaywallRestoreRequested"]
+        return ["RegisterBuySKU", "PaywallCloseRequested", "PaywallSignInRequested", "PaywallRestoreRequested", "PaywallDeeplinkAction"]
     }
 
     @objc(buySkuComplete:)

@@ -40,6 +40,9 @@ export interface INamiPaywallManager {
   registerRestoreHandler: (
     callback: () => void,
   ) => EmitterSubscription['remove'];
+  registerDeeplinkActionHandler: (
+    callback: (url: string) => void,
+  ) => EmitterSubscription['remove'];
   dismiss: (animated?: boolean) => void;
   show: () => void;
   hide: () => void;
