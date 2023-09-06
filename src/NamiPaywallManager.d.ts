@@ -18,6 +18,9 @@ export const NamiPaywallManager: {
   registerRestoreHandler: (
     callback: () => void,
   ) => EmitterSubscription['remove'];
+  registerDeeplinkActionHandler: (
+    callback: (url: string) => void,
+  ) => EmitterSubscription['remove'];
   show: () => void;
   hide: () => void;
   buySkuCancel: () => void;

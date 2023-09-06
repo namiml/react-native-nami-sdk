@@ -63,6 +63,8 @@ class RNNamiCampaignManager: RCTEventEmitter {
             actionString = "PURCHASE_SELECTED_SKU"
         case .purchase_success:
             actionString = "PURCHASE_SUCCESS"
+        case .purchase_pending:
+            actionString = "PURCHASE_PENDING"
         case .purchase_deferred:
             actionString = "PURCHASE_DEFERRED"
         case .purchase_failed:
