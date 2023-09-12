@@ -25,7 +25,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     fun buySkuComplete(dict: ReadableMap, storeType: String) {
         var product: ReadableMap? = null
         var productId: String? = null
-        var skuId: String? = null
+        var skuRefId: String? = null
         var typeString: String? = null
         var purchaseSourceString: String? = null
         var expiresDateInt: Int? = null
@@ -54,7 +54,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             }
 
             if (product.hasKey("skuId")) {
-                skuId = product.getString("skuId")
+                skuRefId = product.getString("skuId")
             }
 
             if (product.hasKey("type")) {
@@ -75,21 +75,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             purchaseDate = Date(purchaseDateInt * 1000L)
         }
 
-        skuType = when (typeString) {
-            "UNKNOWN" -> {
-                NamiSKUType.UNKNOWN
-            }
-            "SUBSCRIPTION" -> {
-                NamiSKUType.SUBSCRIPTION
-            }
-            "ONE_TIME_PURCHASE" -> {
-                NamiSKUType.ONE_TIME_PURCHASE
-            }
-            else -> {
-                NamiSKUType.UNKNOWN
-            }
-        }
-
         val purchaseSource = when (purchaseSourceString) {
             "CAMPAIGN" -> {
                 NamiPurchaseSource.CAMPAIGN
@@ -105,19 +90,10 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             }
         }
 
-        if (productId != null && skuId != null && skuType != null) {
-            val namiSku = NamiSKU(
-                skuId = skuId,
-                productDetails = null,
-                amazonProduct = null,
-                id = productId,
-                type = skuType,
-                name = "",
-                featured = false,
-                rawDisplayText = null,
-                rawSubDisplayText = null,
-                entitlements = emptyList(),
-                variables = null,
+        if (productId != null && skuRefId != null) {
+            val namiSku = NamiSKU.create(
+                skuRefId = skuRefId,
+                skuId = productId,
             )
             var purchaseSuccess: NamiPurchaseSuccess? = null
 

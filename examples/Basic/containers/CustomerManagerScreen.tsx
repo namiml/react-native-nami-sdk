@@ -53,7 +53,9 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   };
 
   useEffect(() => {
-    handleAnonymousMode();
+    if (inAnonymousMode) {
+      handleAnonymousMode();
+    }
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
     //Note: not needed in depts
