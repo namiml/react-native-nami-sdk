@@ -52,7 +52,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
         }
 
         // Start commands with header iformation for Nami to let them know this is a React client.
-        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.0.34"]];
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.1.0"]];
 
         // Add additional namiCommands app may have sent in.
         NSObject *appCommandStrings = configDict[@"namiCommands"];
