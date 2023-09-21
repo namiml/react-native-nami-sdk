@@ -35,11 +35,11 @@ buildscript {
     }
 }
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
     defaultConfig {
         minSdkVersion 22
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
     }
