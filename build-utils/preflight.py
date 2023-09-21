@@ -6,7 +6,7 @@ import subprocess
 
 # Regex to validate version numbers
 PROD_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+$")
-PRERELEASE_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+-(alpha|beta|rc)\.\d{2}$")
+PRERELEASE_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+-(alpha|beta|rc)\.\d+$")
 
 early_access = str(os.getenv("EARLY_ACCESS"))
 
