@@ -156,6 +156,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             putString(EXTERNAL_SEGMENT_ID, paywallEvent.externalSegmentId ?: "")
             putString(DEEP_LINK_URL, paywallEvent.deeplinkUrl ?: "")
         }
+        Log.d(LOG_TAG, "Paywall event being emitted - $resultMap")
 
         emitEvent(_RESULT_CAMPAIGN, resultMap)
     }

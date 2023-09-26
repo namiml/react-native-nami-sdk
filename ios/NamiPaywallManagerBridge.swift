@@ -151,4 +151,12 @@ class RNNamiPaywallManager: RCTEventEmitter {
             resolve(isHidden)
         }
     }
+
+    @objc(isPaywallOpen:rejecter:)
+    func isPaywallOpen(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
+        DispatchQueue.main.async {
+            let isPaywallOpen = NamiPaywallManager.isPaywallOpen()
+            resolve(isPaywallOpen)
+        }
+    }
 }

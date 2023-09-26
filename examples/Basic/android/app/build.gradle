@@ -126,6 +126,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
     defaultConfig {
         applicationId "com.namiml.stg.testreactnative"
         minSdkVersion 26
@@ -177,6 +181,7 @@ android {
             storePassword 'android'
             keyAlias 'androidreleasekey'
             keyPassword 'android'
+            v2SigningEnabled true
         }
     }
     buildTypes {
@@ -186,8 +191,9 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig null
-            minifyEnabled enableProguardInReleaseBuilds
+            signingConfig signingConfigs.release
+	        minifyEnabled true
+            shrinkResources = true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
         }
@@ -218,7 +224,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
-    implementation "com.namiml:sdk-android:3.1.10"
+    implementation "com.namiml:sdk-android:3.1.13-rc.01"
 
     implementation project(':react-native-screens')
 

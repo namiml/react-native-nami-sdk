@@ -20,13 +20,11 @@
 @implementation NamiBridge (RCTExternModule)
 
 RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponseSenderBlock) completion) {
-    if ([configDict count] == 0 || [configDict[@"logLevel"] isEqual: @"DEBUG"] ) {
-        NSLog(@"Configure dictionary is %@", configDict);
-    }
     NSString *appID = configDict[@"appPlatformID-apple"];
 
     if ([appID length] > 0 ) {
         NamiConfiguration *config = [NamiConfiguration configurationForAppPlatformId:appID];
+            NSLog(@"NAMI: RN Bridge - appPlatformId: %@", appID);
 
         NSString *logLevelString = configDict[@"logLevel"];
         if ([logLevelString isEqualToString:@"ERROR" ]) {
@@ -42,7 +40,7 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
 
         NSString *languageString = configDict[@"namiLanguageCode"];
         if ([languageString length] > 0) {
-            NSLog(@"Nami language code from config dictionary is %@", languageString);
+            NSLog(@"NAMI: RN Bridge - language code: %@", languageString);
             if  ([[NamiLanguageCodes allAvailableNamiLanguageCodes]
                   containsObject:[languageString lowercaseString]] ) {
               config.namiLanguageCode = languageString;
@@ -52,12 +50,12 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
         }
 
         // Start commands with header iformation for Nami to let them know this is a React client.
-        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.1.10"]];
+        NSMutableArray *namiCommandStrings = [NSMutableArray arrayWithArray:@[@"extendedClientInfo:react-native:3.1.11"]];
 
         // Add additional namiCommands app may have sent in.
         NSObject *appCommandStrings = configDict[@"namiCommands"];
         if ( appCommandStrings != NULL ) {
-            NSLog(@"NamiCommand from dictionary is %@", configDict[@"namiCommands"]);
+            NSLog(@"NAMI: RN Bridge - additional config settings %@", configDict[@"namiCommands"]);
             if ([appCommandStrings isKindOfClass:[NSArray class]] ) {
                 for (NSObject *commandObj in ((NSArray *)appCommandStrings)){
                     if ([commandObj isKindOfClass:[NSString class]]) {
@@ -71,13 +69,19 @@ RCT_EXPORT_METHOD(configure: (NSDictionary *)configDict completion: (RCTResponse
 
         NSString *initialConfigString = configDict[@"initialConfig"];
         if ([initialConfigString length] > 0) {
-              NSLog(@"Found an initialConfig file to use for Nami SDK setup.");
+              NSLog(@"NAMI: RN Bridge - Found an initialConfig file to use for Nami SDK setup.");
               config.initialConfig = initialConfigString;
         }
 
-        [Nami configureWith:config];
-        NSDictionary *dict = @{@"success": @YES};
-        completion(@[dict]);
+        [Nami configureWith:config :^(BOOL sdkConfigured) {
+            if ( sdkConfigured == YES ) {
+                NSDictionary *dict = @{@"success": @YES};
+                completion(@[dict]);
+            } else {
+                NSDictionary *dict = @{@"success": @NO};
+                completion(@[dict]);
+            }
+        }];
     }
 }
 

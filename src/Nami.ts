@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native';
 import { NamiConfiguration } from './types';
 
-export const { NamiBridge } = NativeModules;
+export const { NamiBridge, NamiManager } = NativeModules;
 
 export interface INami {
   configure: (
