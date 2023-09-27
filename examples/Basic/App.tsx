@@ -93,7 +93,6 @@ const App = () => {
       },
     );
 
-    NamiCustomerManager.setCustomerDataPlatformId('2135');
     return () => {
       subscriptionRemover();
     };

@@ -177,10 +177,10 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('release.keystore')
-            storePassword 'android'
-            keyAlias 'androidreleasekey'
-            keyPassword 'android'
+            storeFile file('/Users/dannami/Nami/SigningKeys/GooglePlay/release.keystore')
+            storePassword 'kyFYiLg7QVe78QaEg'
+            keyAlias 'namirelease'
+            keyPassword 'kyFYiLg7QVe78QaEg'
             v2SigningEnabled true
         }
     }
@@ -224,7 +224,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
-    implementation "com.namiml:sdk-android:3.1.13-rc.01"
+    implementation "com.namiml:sdk-android:3.1.13"
 
     implementation project(':react-native-screens')
 
