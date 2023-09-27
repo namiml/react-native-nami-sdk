@@ -59,7 +59,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const checkIfPaywallOpen = async () => {
     const isOpen = await NamiPaywallManager.isPaywallOpen();
     console.log('NamiSDK: paywall open? ', isOpen);
-};
+  };
 
   const showPaywallIfHidden = async () => {
     try {

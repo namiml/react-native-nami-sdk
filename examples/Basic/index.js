@@ -17,8 +17,8 @@ const Root = () => {
   const [isConfigurationComplete, setIsConfigurationComplete] = useState();
 
   const checkSdkConfigured = async () => {
-      const configured = await NamiManager.sdkConfigured();
-      console.log('NamiSDK: configured', configured);
+    const configured = await NamiManager.sdkConfigured();
+    console.log('NamiSDK: configured', configured);
   };
 
   useEffect(() => {
