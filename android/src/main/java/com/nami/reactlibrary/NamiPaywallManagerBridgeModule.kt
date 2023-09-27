@@ -240,6 +240,12 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun isPaywallOpen(promise: Promise) {
+        val paywallOpen = NamiPaywallManager.isPaywallOpen()
+        promise.resolve(paywallOpen)
+    }
+
+    @ReactMethod
     fun buySkuCancel() {
         NamiPaywallManager.buySkuCancel()
     }

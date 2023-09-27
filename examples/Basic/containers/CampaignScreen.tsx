@@ -56,6 +56,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     'INITIAL',
   );
 
+  const checkIfPaywallOpen = async () => {
+    const isOpen = await NamiPaywallManager.isPaywallOpen();
+    console.log('NamiSDK: paywall open? ', isOpen);
+  };
+
   const showPaywallIfHidden = async () => {
     try {
       const isHidden = await NamiPaywallManager.isHidden()
@@ -129,6 +134,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   const triggerLaunch = (label?: any, url?: any) => {
+    checkIfPaywallOpen();
+
     return NamiCampaignManager.launch(
       label,
       url,
@@ -136,6 +143,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       (successAction, error) => {
         console.log('successAction', successAction);
         console.log('error', error);
+
+        checkIfPaywallOpen();
+
       },
       (
         action,

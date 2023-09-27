@@ -153,6 +153,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           }
         },
       );
+
+    NamiCustomerManager.setCustomerDataPlatformId('4444');
+
     return () => {
       subscriptionJourneyStateRemover();
       subscriptionAccountStateRemover();

@@ -48,6 +48,7 @@ export interface INamiPaywallManager {
   show: () => void;
   hide: () => void;
   isHidden: () => Promise<boolean>;
+  isPaywallOpen: () => Promise<boolean>;
 }
 
 const { NamiPaywallManagerBridge, RNNamiPaywallManager } = NativeModules;
@@ -155,5 +156,8 @@ export const NamiPaywallManager: INamiPaywallManager = {
   },
   isHidden: () => {
     return RNNamiPaywallManager.isHidden();
+  },
+  isPaywallOpen: () => {
+    return RNNamiPaywallManager.isPaywallOpen();
   },
 };

@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.Promise
 import com.namiml.Nami
 import com.namiml.NamiConfiguration
 import com.namiml.NamiLanguageCode
@@ -44,15 +45,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         }
 
         val appContext: Context = reactApplicationContext.applicationContext
-        Log.i(LOG_TAG, "Configure called with appID $appPlatformID")
-        Log.i(LOG_TAG, "Configure called with context $reactApplicationContext")
-        Log.i(LOG_TAG, "Nami Configure called with context.applicationContext $appContext")
-
-        val isApplication: Boolean = (appContext is Application)
-        Log.i(LOG_TAG, "Configure called with (context as Application) $isApplication.")
-        Log.i(LOG_TAG, "End Application check ")
-
-        // Application fred = (reactContext as Application);
+        Log.d(LOG_TAG, "NAMI: RN Bridge - Configure called with appPlatformID $appPlatformID")
 
         val builder: NamiConfiguration.Builder =
             NamiConfiguration.Builder(appContext, appPlatformID)
@@ -78,15 +71,15 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
                 builder.logLevel(NamiLogLevel.DEBUG)
             }
         }
-        Log.i(LOG_TAG, "Nami Configuration log level passed in is $logLevelString")
+        Log.d(LOG_TAG, "NAMI: RN Bridge - configuration log level is $logLevelString")
 
         val developmentMode = if (configDict.hasKey(CONFIG_MAP_DEVELOPMENT_MODE_KEY)) {
             configDict.getBoolean(CONFIG_MAP_DEVELOPMENT_MODE_KEY)
         } else {
             false
         }
-        Log.i(LOG_TAG, "Nami Configuration developmentMode is $developmentMode")
         if (developmentMode) {
+                    Log.d(LOG_TAG, "NAMI: RN Bridge - development mode is $developmentMode")
             builder.developmentMode = true
         }
 
@@ -115,11 +108,11 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             } else {
                 Arguments.createArray()
             }
-        val settingsList = mutableListOf("extendedClientInfo:react-native:3.1.10")
+        val settingsList = mutableListOf("extendedClientInfo:react-native:3.1.11")
         namiCommandsReact?.toArrayList()?.filterIsInstance<String>()?.let { commandsFromReact ->
             settingsList.addAll(commandsFromReact)
         }
-        Log.i(LOG_TAG, "Nami Configuration command settings are $settingsList")
+        Log.d(LOG_TAG, "Nami Configuration command settings are $settingsList")
         builder.settingsList = settingsList
 
         val initialConfig = if (configDict.hasKey(CONFIG_MAP_INITIAL_CONFIG_KEY)) {
@@ -128,7 +121,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             null
         }
         initialConfig?.let { initialConfigString ->
-            Log.i(
+            Log.d(
                 LOG_TAG,
                 "Nami Configuration initialConfig found.",
             )
@@ -136,14 +129,16 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         }
 
         val builtConfig: NamiConfiguration = builder.build()
-        Log.i(LOG_TAG, "Nami Configuration object is $builtConfig")
+        Log.d(LOG_TAG, "Nami Configuration object is $builtConfig")
 
         reactApplicationContext.runOnUiQueueThread {
+
             // Configure must be called on main thread
-            Nami.configure(builtConfig)
-            val resultMap = Arguments.createMap()
-            resultMap.putBoolean("success", true)
-            completion.invoke(resultMap)
+            Nami.configure(builtConfig) { result ->
+                val resultMap = Arguments.createMap()
+                resultMap.putBoolean("success", result)
+                completion.invoke(resultMap)
+            }
         }
     }
 }

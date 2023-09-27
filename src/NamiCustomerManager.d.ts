@@ -1,4 +1,5 @@
 import { EmitterSubscription } from 'react-native';
+import { AccountStateAction } from './types';
 
 export const NamiCustomerManager: {
   setCustomerAttribute: (key: string, value: string) => void;
@@ -36,17 +37,3 @@ export type CustomerJourneyState = {
   inPause: boolean;
   inAccountHold: boolean;
 };
-
-export type AccountStateAction =
-  | 'login'
-  | 'logout'
-  | 'advertising_id_set'
-  | 'vendor_id_set'
-  | 'customer_data_platform_id_set'
-  | 'nami_device_id_set'
-  | 'advertising_id_cleared'
-  | 'vendor_id_cleared'
-  | 'customer_data_platform_id_cleared'
-  | 'nami_device_id_cleared'
-  | 'anonymous_mode_on'
-  | 'anonymous_mode_off';
