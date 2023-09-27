@@ -77,6 +77,12 @@ jobs:
         env:
           BASIC_ANDROID_PROD_APP_PLATFORM_ID: '${{ secrets.ANDROID_PROD_APP_PLATFORM_ID }}'
 
+      - name: Manually create the bundle
+        run: |
+          mkdir -p  android/app/src/main/assets/
+          npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle
+        working-directory: source/examples/Basic
+
       - name: Build Android App Bundle
         run: |
           ./gradlew clean bundleProductionRelease
