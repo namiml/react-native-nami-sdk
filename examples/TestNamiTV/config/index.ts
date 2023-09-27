@@ -14,14 +14,14 @@ export function getConfigObject() {
         namiCommands: ['useStagingAPI'],
         initialConfig: getInitialConfig(),
       };
-      case 'production':
-        return {
-          'appPlatformID-apple': 'APPLE_PROD_APP_PLATFORM_ID',
-          'appPlatformID-android': 'UNUSED',
-          logLevel: 'DEBUG',
-          namiCommands: ['useStagingAPI'],
-          initialConfig: getInitialConfig(),
-        };
+    case 'production':
+      return {
+        'appPlatformID-apple': 'APPLE_PROD_APP_PLATFORM_ID',
+        'appPlatformID-android': 'UNUSED',
+        logLevel: 'DEBUG',
+        namiCommands: ['useStagingAPI'],
+        initialConfig: getInitialConfig(),
+      };
     case 'stagingAmazon':
       return {
         'appPlatformID-apple': 'UNUSED',
