@@ -191,7 +191,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig null
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -227,8 +227,8 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
 
-    amazonImplementation "com.namiml:sdk-amazon::3.1.13"
-    playImplementation "com.namiml:sdk-android::3.1.13"
+    amazonImplementation "com.namiml:sdk-amazon:3.1.13"
+    playImplementation "com.namiml:sdk-android:3.1.13"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

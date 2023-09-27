@@ -16,7 +16,7 @@ const Root = () => {
   const [isConfigurationComplete, setIsConfigurationComplete] = useState();
   useEffect(() => {
     Nami.configure(configDict, (resultObject) => {
-      setIsConfigurationComplete(resultObject.success);
+      setIsConfigurationComplete(true);
     });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};

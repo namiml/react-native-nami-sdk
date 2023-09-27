@@ -17,7 +17,7 @@ export const getInitialConfig = () => {
       );
     case 'ios':
       return JSON.stringify(
-        flavor !== 'production'
+        flavor === 'production'
           ? initAppleProductionConfig
           : initAppleStageConfig,
       );
