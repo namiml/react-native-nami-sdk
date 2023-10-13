@@ -227,8 +227,8 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
 
-    amazonImplementation "com.namiml:sdk-amazon:3.1.14"
-    playImplementation "com.namiml:sdk-android:3.1.14"
+    amazonImplementation "com.namiml:sdk-amazon:3.1.16"
+    playImplementation "com.namiml:sdk-android:3.1.16"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
