@@ -112,8 +112,8 @@ export type NamiSKU = {
   googleProduct?: GoogleProduct;
   amazonProduct?: AmazonProduct;
   type: NamiSKUType;
-  promoId?: string;
-  promoToken?: string;
+  promoId?: string | null;
+  promoToken?: string | null;
 };
 
 export enum NamiPurchaseState {

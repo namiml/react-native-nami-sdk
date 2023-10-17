@@ -52,7 +52,7 @@ const App = () => {
         console.log(
           'buy sku handler - need to start purchase flow for sku:',
           sku.skuId,
-          sku.promoId,
+          sku.promoId || 'no promo',
         );
 
         NamiPaywallManager.dismiss(true);
