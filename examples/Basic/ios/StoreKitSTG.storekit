@@ -9,7 +9,55 @@
   "settings" : {
     "_applicationInternalID" : "6443910111",
     "_developerTeamID" : "K6APTMK8Y8",
-    "_lastSynchronizedDate" : 712074466.26017404
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 719266999.81882799,
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
   },
   "subscriptionGroups" : [
     {
@@ -23,7 +71,7 @@
           "adHocOffers" : [
             {
               "displayPrice" : "4.99",
-              "internalID" : "FD31BD5B",
+              "internalID" : "3F12D493",
               "numberOfPeriods" : 1,
               "offerID" : "plus_annual_promo_1",
               "paymentMode" : "payAsYouGo",
@@ -79,7 +127,15 @@
         },
         {
           "adHocOffers" : [
-
+            {
+              "displayPrice" : "0.99",
+              "internalID" : "08F5BCA3",
+              "numberOfPeriods" : 1,
+              "offerID" : "promo_test",
+              "paymentMode" : "payAsYouGo",
+              "referenceName" : "Promo Test",
+              "subscriptionPeriod" : "P1M"
+            }
           ],
           "codeOffers" : [
 
@@ -89,7 +145,7 @@
           "groupNumber" : 2,
           "internalID" : "6447770869",
           "introductoryOffer" : {
-            "internalID" : "832A850B",
+            "internalID" : "1BEAF578",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
@@ -119,7 +175,7 @@
           "groupNumber" : 1,
           "internalID" : "6447770794",
           "introductoryOffer" : {
-            "internalID" : "7985E305",
+            "internalID" : "00D64525",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P1W"
@@ -174,7 +230,7 @@
           "groupNumber" : 1,
           "internalID" : "6447770843",
           "introductoryOffer" : {
-            "internalID" : "B3B76E7C",
+            "internalID" : "17C94BE4",
             "numberOfPeriods" : 1,
             "paymentMode" : "free",
             "subscriptionPeriod" : "P3D"
@@ -196,7 +252,7 @@
     }
   ],
   "version" : {
-    "major" : 2,
+    "major" : 3,
     "minor" : 0
   }
 }

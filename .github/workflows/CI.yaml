@@ -97,7 +97,7 @@ jobs:
         working-directory: source/examples/Basic
 
       - name: Install iOS pods
-        run: pod install
+        run: RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install
         working-directory: source/examples/Basic/ios
 
       - name: Rebuild cache detox
@@ -134,7 +134,7 @@ jobs:
           name: detox-artifacts
           path: artifacts
   e2e-android:
-    runs-on: macos-latest
+    runs-on: macos-12
     env:
       DETOX_CONFIGURATION: android.emu.release
 
