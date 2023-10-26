@@ -1,6 +1,6 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "3.1.13",
+  "version": "3.1.14",
   "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
   "main": "index.ts",
   "types": "index.d.ts",
