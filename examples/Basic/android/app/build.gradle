@@ -224,7 +224,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.github.jeziellago:compose-markdown:0.3.0'
-    implementation "com.namiml:sdk-android:3.1.16"
+    implementation "com.namiml:sdk-android:3.1.17"
 
     implementation project(':react-native-screens')
 
