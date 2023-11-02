@@ -10,8 +10,8 @@ import com.namiml.billing.NamiPurchase
 import com.namiml.campaign.LaunchCampaignResult
 import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
-import com.namiml.paywall.model.PaywallLaunchContext
 import com.namiml.paywall.model.NamiPaywallEvent
+import com.namiml.paywall.model.PaywallLaunchContext
 
 class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext), ActivityEventListener {

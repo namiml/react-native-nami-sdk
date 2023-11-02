@@ -1,8 +1,6 @@
 package com.nami.reactlibrary
 
-import android.util.Log
 import com.facebook.react.bridge.*
-import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.Nami
 
 class NamiManagerBridgeModule(reactContext: ReactApplicationContext) :
