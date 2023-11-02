@@ -27,12 +27,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
         var productId: String? = null
         var skuRefId: String? = null
         var typeString: String? = null
-        var purchaseSourceString: String? = null
-        var expiresDateInt: Int? = null
-        var purchaseDateInt: Int? = null
-
-        var expiresDate: Date? = null
-        var purchaseDate: Date? = null
 
         var skuType: NamiSKUType?
 
@@ -62,34 +56,6 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             }
         }
 
-        if (dict.hasKey("purchaseSource")) {
-            purchaseSourceString = dict.getString("purchaseSource")
-        }
-
-        if (dict.hasKey("expiresDate")) {
-            expiresDateInt = dict.getInt("expiresDate")
-            expiresDate = Date(expiresDateInt * 1000L)
-        }
-        if (dict.hasKey("purchaseDate")) {
-            purchaseDateInt = dict.getInt("purchaseDate")
-            purchaseDate = Date(purchaseDateInt * 1000L)
-        }
-
-        val purchaseSource = when (purchaseSourceString) {
-            "CAMPAIGN" -> {
-                NamiPurchaseSource.CAMPAIGN
-            }
-            "MARKETPLACE" -> {
-                NamiPurchaseSource.MARKETPLACE
-            }
-            "UNKNOWN" -> {
-                NamiPurchaseSource.UNKNOWN
-            }
-            else -> {
-                NamiPurchaseSource.UNKNOWN
-            }
-        }
-
         if (productId != null && skuRefId != null) {
             val namiSku = NamiSKU.create(
                 skuRefId = skuRefId,
@@ -104,15 +70,11 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
                 if (dict.hasKey("orderId")) {
                     orderId = dict.getString("orderId")
                 }
-                Log.d(LOG_TAG, "$namiSku $purchaseToken $orderId $purchaseDateInt $purchaseDate")
+                Log.d(LOG_TAG, "$namiSku $purchaseToken $orderId")
 
-                if (namiSku != null && purchaseToken != null && orderId != null && purchaseDate != null) {
+                if (namiSku != null && purchaseToken != null && orderId != null) {
                     purchaseSuccess = NamiPurchaseSuccess.GooglePlay(
                         product = namiSku,
-                        expiresDate = expiresDate,
-                        purchaseDate = purchaseDate,
-                        purchaseSource = purchaseSource,
-                        description = null,
                         orderId = orderId,
                         purchaseToken = purchaseToken,
                     )
@@ -130,13 +92,9 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
                 if (dict.hasKey("marketplace")) {
                     marketplace = dict.getString("marketplace")
                 }
-                if (namiSku != null && receiptId != null && localizedPrice != null && userId != null && marketplace != null && purchaseDate != null) {
+                if (namiSku != null && receiptId != null && localizedPrice != null && userId != null && marketplace != null) {
                     purchaseSuccess = NamiPurchaseSuccess.Amazon(
                         product = namiSku,
-                        expiresDate = expiresDate,
-                        purchaseDate = purchaseDate,
-                        purchaseSource = purchaseSource,
-                        description = null,
                         receiptId = receiptId,
                         localizedPrice = localizedPrice,
                         userId = userId,
@@ -213,15 +171,13 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun registerDeeplinkActionHandler() {
-        NamiPaywallManager.registerDeepLinkHandler { activity , url ->
+        NamiPaywallManager.registerDeepLinkHandler { activity, url ->
             latestPaywallActivity = activity
             reactApplicationContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                 .emit("PaywallDeeplinkAction", url)
         }
-
     }
-
 
     @ReactMethod
     fun show() {

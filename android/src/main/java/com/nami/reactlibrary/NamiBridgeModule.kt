@@ -1,6 +1,5 @@
 package com.nami.reactlibrary
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.facebook.react.bridge.Arguments
@@ -10,7 +9,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.Promise
 import com.namiml.Nami
 import com.namiml.NamiConfiguration
 import com.namiml.NamiLanguageCode
@@ -79,7 +77,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             false
         }
         if (developmentMode) {
-                    Log.d(LOG_TAG, "NAMI: RN Bridge - development mode is $developmentMode")
+            Log.d(LOG_TAG, "NAMI: RN Bridge - development mode is $developmentMode")
             builder.developmentMode = true
         }
 
@@ -108,7 +106,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             } else {
                 Arguments.createArray()
             }
-        val settingsList = mutableListOf("extendedClientInfo:react-native:3.1.14")
+        val settingsList = mutableListOf("extendedClientInfo:react-native:3.1.17")
         namiCommandsReact?.toArrayList()?.filterIsInstance<String>()?.let { commandsFromReact ->
             settingsList.addAll(commandsFromReact)
         }
@@ -132,7 +130,6 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
         Log.d(LOG_TAG, "Nami Configuration object is $builtConfig")
 
         reactApplicationContext.runOnUiQueueThread {
-
             // Configure must be called on main thread
             Nami.configure(builtConfig) { result ->
                 val resultMap = Arguments.createMap()

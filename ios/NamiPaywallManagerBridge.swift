@@ -42,35 +42,24 @@ class RNNamiPaywallManager: RCTEventEmitter {
                 }
 
                 let namiSku = NamiSKU(namiId: namiId, storeId: storeId, skuType: namiSkuType)
+                let priceString = dict["price"] as? String ?? "0"
 
                 do {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.locale = .init(identifier: "en_US_POSIX")
-                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-
-                    if
-                        let transactionID = dict["transactionID"] as? String,
-                        let originalTransactionID = dict["originalTransactionID"] as? String,
-                        let priceDecimal = Decimal(string: dict["price"] as! String),
-                        let currencyCode = dict["currencyCode"] as? String,
-                        let localeString = dict["locale"] as? String
+                    if let transactionID = dict["transactionID"] as? String,
+                       let originalTransactionID = dict["originalTransactionID"] as? String,
+                       let priceDecimal = Decimal(string: priceString),
+                       let currencyCode = dict["currencyCode"] as? String
                     {
-                        let expiresDate = Date(timeIntervalSince1970: dict["purchaseDate"] as! Double? ?? 0)
-                        let originalPurchaseDate = Date(timeIntervalSince1970: dict["originalPurchaseDate"] as! Double)
-                        let purchaseDate = Date(timeIntervalSince1970: dict["purchaseDate"] as! Double)
-                        let locale = Locale(identifier: localeString)
                         let purchaseSuccess = NamiPurchaseSuccess(
                             product: namiSku,
                             transactionID: transactionID,
                             originalTransactionID: originalTransactionID,
-                            originalPurchaseDate: originalPurchaseDate,
-                            purchaseDate: purchaseDate,
-                            expiresDate: expiresDate,
                             price: priceDecimal,
-                            currencyCode: currencyCode,
-                            locale: locale
+                            currencyCode: currencyCode
                         )
                         NamiPaywallManager.buySkuComplete(purchaseSuccess: purchaseSuccess)
+                    } else {
+                        print("RNNamiPaywallManager - buySkuComplete payload error \(dict)")
                     }
                 } catch {
                     print("RNNamiPaywallManager - buySkuComplete error - decoding JSON: \(error)")

@@ -32,28 +32,18 @@ export type NamiPurchaseSuccessApple = {
   product: NamiSKU;
   transactionID: string;
   originalTransactionID: string;
-  originalPurchaseDate: number;
-  purchaseDate: number;
-  expiresDate?: number;
   price: string;
   currencyCode: string;
-  locale: string;
 };
 
 export type NamiPurchaseSuccessGooglePlay = {
   product: NamiSKU;
   orderId: string;
-  purchaseDate: number;
-  expiresDate?: number;
   purchaseToken: string;
-  purchaseSource: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
 };
 
 export type NamiPurchaseSuccessAmazon = {
   product: NamiSKU;
-  purchaseDate: number;
-  expiresDate?: number;
-  purchaseSource: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
   receiptId: string;
   localizedPrice: string;
   userId: string;
