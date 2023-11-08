@@ -2,6 +2,7 @@ export type NamiConfiguration = {
   'appPlatformID-apple': string;
   'appPlatformID-android': string;
   logLevel: string;
+  namiCommands?: string[];
   namiLanguageCode?: NamiLanguageCodes;
   initialConfig?: string;
 };
@@ -176,7 +177,7 @@ export enum LaunchCampaignError {
   PAYWALL_COULD_NOT_DISPLAY = 5,
   URL_CAMPAIGN_NOT_FOUND = 6,
   PRODUCT_DATA_NOT_FOUND = 7,
-  PRODUCT_GROUPS_NOT_FOUND = 8,
+  PRODUCT_GROUPS_NOT_FOUND = 8
 }
 
 export enum LaunchCampaignResultAction {
