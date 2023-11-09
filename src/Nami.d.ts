@@ -9,6 +9,7 @@ export type NamiConfiguration = {
   'appPlatformID-apple': string;
   'appPlatformID-android': string;
   logLevel: string;
+  namiCommands?: string[];
   namiLanguageCode?: NamiLanguageCodes;
   initialConfig?: string;
 };
