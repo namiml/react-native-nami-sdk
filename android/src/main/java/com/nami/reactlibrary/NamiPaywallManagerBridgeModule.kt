@@ -104,7 +104,11 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             }
 
             if (purchaseSuccess != null) {
-                NamiPaywallManager.buySkuComplete(currentActivity!!, purchaseSuccess)
+                if (latestPaywallActivity != null) {
+                    NamiPaywallManager.buySkuComplete(latestPaywallActivity!!, purchaseSuccess)
+                } else {
+                    NamiPaywallManager.buySkuComplete(currentActivity!!, purchaseSuccess)
+                }
             } else {
                 Log.d(LOG_TAG, "Unable to create a valid NamiPurchaseSuccess object, so buySkuComplete will not succeed. Paywall conversion will not be reported for this purchase.")
             }

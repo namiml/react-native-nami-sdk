@@ -55,7 +55,7 @@ const App = () => {
           sku.promoId || 'no promo',
         );
 
-        NamiPaywallManager.dismiss(true);
+        // NamiPaywallManager.dismiss(true);
 
         if (Platform.OS === 'ios' || Platform.isTV) {
           NamiPaywallManager.buySkuCompleteApple({
@@ -75,6 +75,8 @@ const App = () => {
               marketplace: '12345',
             });
           } else {
+            console.log('Preparing to call buySkuCompleteGooglePlay');
+
             NamiPaywallManager.buySkuCompleteGooglePlay({
               product: sku,
               purchaseToken:
