@@ -18,7 +18,6 @@ describe('iOS: Campaign tests setup', () => {
   beforeAll(async () => {
     await device.launchApp();
     await device.reloadReactNative();
-    await device.disableSynchronization();
   });
   afterAll(async () => {
     await device.launchApp({
@@ -67,7 +66,6 @@ describe('iOS: Campaign tests setup', () => {
 describe('iOS: Second part of campaigns tests', () => {
   beforeAll(async () => {
     await device.launchApp();
-    await device.disableSynchronization();
   });
 
   it('Should have Campaigns screen', async () => {
@@ -131,7 +129,6 @@ describe('iOS: Second part of campaigns tests', () => {
 describe('iOS: Profile and Entitlements screens Test', () => {
   beforeAll(async () => {
     await device.launchApp();
-    await device.enableSynchronization();
   });
 
   it('Should have Campaigns screen', async () => {
