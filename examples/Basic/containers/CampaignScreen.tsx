@@ -93,6 +93,13 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       },
     );
 
+    const subscriptionCloseRemover = NamiPaywallManager.registerCloseHandler(
+      () => {
+        console.log('close handler called');
+        NamiPaywallManager.dismiss();
+      },
+    );
+
     const subscriptionRestoreRemover =
       NamiPaywallManager.registerRestoreHandler(() => {
         console.log('restore');
@@ -121,6 +128,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return () => {
       subscriptionRemover();
       subscriptionSignInRemover();
+      subscriptionCloseRemover();
       subscriptionRestoreRemover();
       subscriptionDeeplinkRemover();
       // Clean up the launch subscription when the component unmounts
