@@ -34,9 +34,9 @@ describe('iOS: Campaign tests setup', () => {
     );
     await expect(element(by.id('refresh_campaigns'))).toBeVisible();
     await expect(element(by.id('refresh_status_text'))).toBeVisible();
-    await expect(element(by.id('refresh_status_text'))).toHaveText(
-      'Refreshed: false',
-    );
+    await waitFor(element(by.id('refresh_status_text')))
+      .toHaveText('Refreshed: false')
+      .withTimeout(10000);
     await element(by.id('refresh_campaigns')).tap();
     await waitFor(element(by.id('refresh_status_text')))
       .toHaveText('Refreshed: true')
