@@ -4,6 +4,16 @@ const data = {
   campaign: 'puffin',
 };
 
+// Will help to debug text statuses //
+async function logElementText(elementId) {
+  try {
+    const text = await element(by.id(elementId)).getAttributes();
+    console.log(`Text of ${elementId}: `, text);
+  } catch (error) {
+    console.error(`Error getting text of ${elementId}: `, error);
+  }
+}
+
 describe('iOS: Campaign tests setup', () => {
   beforeAll(async () => {
     await device.launchApp();
@@ -34,6 +44,7 @@ describe('iOS: Campaign tests setup', () => {
     );
     await expect(element(by.id('refresh_campaigns'))).toBeVisible();
     await expect(element(by.id('refresh_status_text'))).toBeVisible();
+    await logElementText('refresh_status_text');
     await waitFor(element(by.id('refresh_status_text')))
       .toHaveText('Refreshed: false')
       .withTimeout(10000);
