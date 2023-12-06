@@ -16,7 +16,7 @@ async function logElementText(elementId) {
 
 describe('iOS: Campaign tests setup', () => {
   beforeAll(async () => {
-    await device.launchApp();
+    await device.launchApp({ newInstance: true });
     await device.reloadReactNative();
   });
   afterAll(async () => {
@@ -43,8 +43,6 @@ describe('iOS: Campaign tests setup', () => {
     );
     await expect(element(by.id('refresh_campaigns'))).toBeVisible();
     await expect(element(by.id('refresh_status_text'))).toBeVisible();
-    // workaround
-    await element(by.id('refresh_campaigns')).tap();
     await logElementText('refresh_status_text');
     await waitFor(element(by.id('refresh_status_text')))
       .toHaveText('Refreshed: false')
