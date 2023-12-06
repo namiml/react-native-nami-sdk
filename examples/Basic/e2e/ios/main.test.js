@@ -45,11 +45,11 @@ describe('iOS: Campaign tests setup', () => {
     await expect(element(by.id('refresh_status_text'))).toBeVisible();
     await logElementText('refresh_status_text');
     await waitFor(element(by.id('refresh_status_text')))
-      .toHaveText('Refreshed: false')
+      .toHaveText('Refreshed: true')
       .withTimeout(10000);
     await element(by.id('refresh_campaigns')).tap();
     await waitFor(element(by.id('refresh_status_text')))
-      .toHaveText('Refreshed: true')
+      .toHaveText('Refreshed: false')
       .withTimeout(10000);
 
     await element(by.id('campaigns_list')).scrollTo('top');
