@@ -29,6 +29,7 @@ type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
 const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
   <TouchableOpacity
+    accessible={true}
     testID="refresh_campaigns"
     style={styles.headerButton}
     onPress={onRefreshPress}>
@@ -126,6 +127,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       // Clean up the launch subscription when the component unmounts
       // For safety reasons
       if (NamiCampaignManager.launchSubscription) {
+        //@ts-ignore
         NamiCampaignManager.launchSubscription.remove();
       }
     };
