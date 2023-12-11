@@ -29,11 +29,13 @@ type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
 const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
   <TouchableOpacity
-    accessible={true}
-    testID="refresh_campaigns"
     style={styles.headerButton}
     onPress={onRefreshPress}>
-    <Text style={styles.headerButtonText}>Refresh</Text>
+    <Text
+      testID="refresh_campaigns"
+      style={styles.headerButtonText}>
+      Refresh
+    </Text>
   </TouchableOpacity>
 );
 
@@ -282,7 +284,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     <SafeAreaView
       style={styles.container}
       edges={['right', 'bottom', 'left']}>
-      <View>
+      <View accessible={true}>
         <Text
           testID="campaigns_title"
           style={styles.title}>
