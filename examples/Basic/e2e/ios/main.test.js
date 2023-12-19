@@ -4,11 +4,20 @@ const data = {
   campaign: 'puffin',
 };
 
+// Will help to debug text statuses //
+async function logElementText(elementId) {
+  try {
+    const text = await element(by.id(elementId)).getAttributes();
+    console.log(`Text of ${elementId}: `, text);
+  } catch (error) {
+    console.error(`Error getting text of ${elementId}: `, error);
+  }
+}
+
 describe('iOS: Campaign tests setup', () => {
   beforeAll(async () => {
-    await device.launchApp();
+    await device.launchApp({ newInstance: true });
     await device.reloadReactNative();
-    await device.disableSynchronization();
   });
   afterAll(async () => {
     await device.launchApp({
@@ -34,9 +43,10 @@ describe('iOS: Campaign tests setup', () => {
     );
     await expect(element(by.id('refresh_campaigns'))).toBeVisible();
     await expect(element(by.id('refresh_status_text'))).toBeVisible();
-    await expect(element(by.id('refresh_status_text'))).toHaveText(
-      'Refreshed: false',
-    );
+    await logElementText('refresh_status_text');
+    await waitFor(element(by.id('refresh_status_text')))
+      .toHaveText('Refreshed: false')
+      .withTimeout(10000);
     await element(by.id('refresh_campaigns')).tap();
     await waitFor(element(by.id('refresh_status_text')))
       .toHaveText('Refreshed: true')
@@ -56,7 +66,6 @@ describe('iOS: Campaign tests setup', () => {
 describe('iOS: Second part of campaigns tests', () => {
   beforeAll(async () => {
     await device.launchApp();
-    await device.disableSynchronization();
   });
 
   it('Should have Campaigns screen', async () => {
@@ -120,7 +129,6 @@ describe('iOS: Second part of campaigns tests', () => {
 describe('iOS: Profile and Entitlements screens Test', () => {
   beforeAll(async () => {
     await device.launchApp();
-    await device.enableSynchronization();
   });
 
   it('Should have Campaigns screen', async () => {
