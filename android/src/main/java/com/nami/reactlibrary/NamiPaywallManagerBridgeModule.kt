@@ -207,7 +207,9 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun buySkuCancel() {
-        NamiPaywallManager.buySkuCancel()
+        reactApplicationContext.runOnUiQueueThread {
+            NamiPaywallManager.buySkuCancel()
+        }
     }
 
     @ReactMethod
