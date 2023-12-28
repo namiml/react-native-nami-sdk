@@ -7,7 +7,7 @@ export const NamiPaywallManager: {
   buySkuCompleteGooglePlay: (
     purchaseSuccess: NamiPurchaseSuccessGooglePlay,
   ) => void;
-  dismiss: (animated?: boolean) => void;
+  dismiss: () => Promise<boolean>;
   registerBuySkuHandler: (
     callback: (sku: NamiSKU) => void,
   ) => EmitterSubscription['remove'];

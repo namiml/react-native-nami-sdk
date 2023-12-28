@@ -90,33 +90,35 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   useEffect(() => {
     getAllCampaigns();
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
-      () => {
+      async () => {
         console.log('sign in');
-        NamiPaywallManager.dismiss();
+        await NamiPaywallManager.dismiss();
       },
     );
 
     const subscriptionCloseRemover = NamiPaywallManager.registerCloseHandler(
-      () => {
-        console.log('close handler called');
-        NamiPaywallManager.dismiss();
+      async () => {
+        console.log('close handler');
+        await NamiPaywallManager.dismiss();
       },
     );
 
     const subscriptionRestoreRemover =
-      NamiPaywallManager.registerRestoreHandler(() => {
-        console.log('restore');
-        NamiPaywallManager.dismiss();
-      });
+      NamiPaywallManager.registerRestoreHandler(
+        async () => {
+          console.log('restore');
+          await NamiPaywallManager.dismiss();
+        });
 
     const subscriptionDeeplinkRemover =
-      NamiPaywallManager.registerDeeplinkActionHandler((url) => {
-        console.log('deeplink action ', url);
-        // for testing:
-        NamiPaywallManager.buySkuCancel();
+      NamiPaywallManager.registerDeeplinkActionHandler(
+        async (url) => {
+          console.log('deeplink action ', url);
+          // for testing:
+          NamiPaywallManager.buySkuCancel();
 
-        NamiPaywallManager.dismiss();
-      });
+          await NamiPaywallManager.dismiss();
+        });
 
     const subscriptionRemover =
         NamiCampaignManager.registerAvailableCampaignsHandler(

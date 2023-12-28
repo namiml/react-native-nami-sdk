@@ -129,10 +129,12 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun dismiss(animated: Boolean) {
+    fun dismiss(promise: Promise) {
         if (latestPaywallActivity != null) {
             val paywallActivity = latestPaywallActivity as Activity
-            NamiPaywallManager.dismiss(paywallActivity)
+            NamiPaywallManager.dismiss(paywallActivity, completionHandler = {
+                promise.resolve(it)
+            })
         }
     }
 
@@ -207,7 +209,9 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun buySkuCancel() {
-        NamiPaywallManager.buySkuCancel()
+        reactApplicationContext.runOnUiQueueThread {
+            NamiPaywallManager.buySkuCancel()
+        }
     }
 
     @ReactMethod

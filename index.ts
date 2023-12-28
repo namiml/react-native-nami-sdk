@@ -6,4 +6,5 @@ export { NamiEntitlementManager } from './src/NamiEntitlementManager';
 export { NamiManager } from './src/NamiManager';
 export { NamiPurchaseManager } from './src/NamiPurchaseManager';
 export { NamiPaywallManager } from './src/NamiPaywallManager';
+export { NamiSKU } from './src/types';
 export * from './src/types';
