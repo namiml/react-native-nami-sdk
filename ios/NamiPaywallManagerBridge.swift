@@ -111,10 +111,9 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func dismiss(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
             NamiPaywallManager.dismiss(animated: true) {
-                // move resolve into here when 3.1.23 is released
+                resolve(true)
             }
         }
-        resolve(true)
     }
 
     @objc(show)
