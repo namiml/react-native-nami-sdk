@@ -45,6 +45,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    const deeplinkSubscription = NamiPaywallManager.registerDeeplinkActionHandler(async (url) => {
+        await NamiPaywallManager.dismiss();
+        if (await Linking.canOpenURL(url)) {
+          Linking.openURL(url);
+        }
+    });
     const buySkuSubscription = NamiPaywallManager.registerBuySkuHandler(
       (sku) => {
         console.log(
@@ -52,7 +58,7 @@ const App = () => {
           sku.skuId,
         );
 
-        NamiPaywallManager.dismiss(true);
+        NamiPaywallManager.dismiss();
 
         if (Platform.OS === 'ios') {
           NamiPaywallManager.buySkuCompleteApple({
@@ -83,6 +89,7 @@ const App = () => {
       },
     );
     return () => {
+      deeplinkSubscription();
       buySkuSubscription();
     };
   }, []);

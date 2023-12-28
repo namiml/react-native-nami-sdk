@@ -44,7 +44,7 @@ export interface INamiPaywallManager {
   registerDeeplinkActionHandler: (
     callback: (url: string) => void,
   ) => EmitterSubscription['remove'];
-  dismiss: (animated?: boolean) => void;
+  dismiss: () => Promise<boolean>;
   show: () => void;
   hide: () => void;
   isHidden: () => Promise<boolean>;
@@ -145,8 +145,8 @@ export const NamiPaywallManager: INamiPaywallManager = {
       }
     };
   },
-  dismiss: (animated?: boolean) => {
-    RNNamiPaywallManager.dismiss(animated ?? true);
+  dismiss: () => {
+    return RNNamiPaywallManager.dismiss();
   },
   show: () => {
     RNNamiPaywallManager.show();

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Linking, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Linking, Platform, EmitterSubscription } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,6 +10,23 @@ import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
 import CustomerManagerScreen from './containers/CustomerManagerScreen';
 import { handleDeepLink } from './services/deeplinking';
+
+import {
+  finishTransaction,
+  getProducts,
+  getSubscriptions,
+  initConnection,
+  Product,
+  ProductPurchase,
+  PurchaseError,
+  purchaseErrorListener,
+  purchaseUpdatedListener,
+  requestPurchase,
+  requestSubscription,
+  Subscription,
+  SubscriptionPurchase,
+} from 'react-native-iap';
+
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -31,9 +48,14 @@ export interface ViewerTabProps<
   navigation: NativeStackNavigationProp<ViewerTabNavigatorParams, RouteParam>;
 }
 
+
 const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [namiSku, setNamiSku] = useState<NamiSKU>(undefined);
+
   useEffect(() => {
     Linking.addEventListener('url', handleDeepLink);
     Linking.getInitialURL().then((url) => {
@@ -47,51 +69,147 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    async function initialStoreConnection() {
+      await initConnection();
+    }
+
+    async function startBuySubscription(skuId: string) {
+      await requestSubscription({ sku: skuId });
+    }
+
+    async function startBuyOneTime(skuId: string) {
+      await requestPurchase({ sku: skuId });
+    }
+
+    try {
+      initialStoreConnection();
+    } catch (error: any) {
+      if (error instanceof PurchaseError) {
+        console.log('Initial Store Connection');
+        console.log({ message: `[${error.code}]: ${error.message}`, error });
+      } else {
+        console.log({ message: 'initialStoreConnection', error });
+      }
+    }
+
+    const purchaseUpdate: EmitterSubscription = purchaseUpdatedListener(
+      async (purchase: ProductPurchase | SubscriptionPurchase) => {
+        const receipt = purchase.transactionReceipt
+          ? purchase.transactionReceipt
+          : (purchase as unknown as {originalJson: string}).originalJson;
+
+        if (receipt) {
+          try {
+            await finishTransaction({ purchase });
+            let price = '';
+            let currency = '';
+
+            console.log(subscriptions);
+            console.log(JSON.stringify(purchase));
+
+            if (purchase.type === SubscriptionPurchase) {
+              const subscriptionProduct: Subscription = subscriptions[0]
+              price = subscriptionProduct.price
+              currency = subscriptionProduct.currency
+            } else {
+              const oneTimeProduct: Product = products[0]
+              price = oneTimeProduct.price
+              currency = oneTimeProduct.currencurrencycyCode
+
+            }
+
+            if (Platform.OS === 'ios' || Platform.isTV) {
+              console.log('Preparing to call buySkuCompleteApple');
+
+              console.log(namiSku);
+              console.log(purchase.transactionId);
+              console.log(purchase.originalTransactionIdentifierIOS);
+
+              NamiPaywallManager.buySkuCompleteApple({
+                product: namiSku,
+                transactionID: purchase.transactionId ?? '',
+                originalTransactionID: purchase.originalTransactionIdentifierIOS ?? purchase.transactionId,
+                price: price,
+                currencyCode: currency,
+              });
+            } else if (Platform.OS === 'android') {
+              if (Platform.constants.Manufacturer === 'Amazon') {
+                console.log('Preparing to call buySkuCompleteAmazon');
+                NamiPaywallManager.buySkuCompleteAmazon({
+                  product: namiSku,
+                  receiptId: purchase.transactionId ?? '',
+                  localizedPrice: price,
+                  userId: purchase.userIdAmazon ?? '',
+                  marketplace: purchase.userMarketplaceAmazon ?? '',
+                });
+              } else {
+                console.log('Preparing to call buySkuCompleteGooglePlay');
+                NamiPaywallManager.buySkuCompleteGooglePlay({
+                  product: namiSku,
+                  purchaseToken: purchase.purchaseToken ?? '',
+                  orderId: purchase.transactionId ?? '',
+                });
+              }
+            }
+
+
+          } catch (error) {
+            console.log({ message: 'finishTransaction', error });
+          }
+        }
+      },
+    );
+
+    const purchaseError: EmitterSubscription = purchaseErrorListener((error: PurchaseError) => {
+      console.log('purchase error', JSON.stringify(error));
+      // NamiPaywallManager.buySkuCancel();
+    });
+
     const subscriptionRemover = NamiPaywallManager.registerBuySkuHandler(
-      (sku) => {
+      async (sku: NamiSKU) => {
+
         console.log(
           'buy sku handler - need to start purchase flow for sku:',
           sku.skuId,
           sku.promoId || 'no promo',
         );
 
-        // NamiPaywallManager.dismiss(true);
+        setNamiSku(sku);
 
-        if (Platform.OS === 'ios' || Platform.isTV) {
-          NamiPaywallManager.buySkuCompleteApple({
-            product: sku,
-            transactionID: '12345',
-            originalTransactionID: '12345',
-            price: '120',
-            currencyCode: 'USD',
-          });
-        } else if (Platform.OS === 'android') {
-          if (Platform.constants.Manufacturer === 'Amazon') {
-            NamiPaywallManager.buySkuCompleteAmazon({
-              product: sku,
-              receiptId: '12345',
-              localizedPrice: '120',
-              userId: '12345',
-              marketplace: '12345',
+        if (sku.type == 'subscription') {
+          try {
+            const subscriptions = await getSubscriptions({
+              skus: [sku.skuId],
             });
-          } else {
-            console.log('Preparing to call buySkuCompleteGooglePlay');
+            console.log(JSON.stringify(subscriptions));
+            setSubscriptions(subscriptions);
 
-            NamiPaywallManager.buySkuCompleteGooglePlay({
-              product: sku,
-              purchaseToken:
-                'jolbnkpmojnpnjecgmphbmkc.AO-J1OznE4AIzyUvKFe1RSVkxw4KEtv0WfyL_tkzozOqnlSvIPsyQJBphCN80gwIMaex4EMII95rFCZhMCbVPZDc-y_VVhQU5Ddua1dLn8zV7ms_tdwoDmE',
-              orderId: 'GPA.3317-0284-9993-42221',
-            });
+          } catch (error) {
+            console.log({ message: 'getSubscriptions', error });
           }
+          startBuySubscription(sku.skuId);
+        } else {
+          try {
+            const products = await getProducts({
+              skus: [sku.skuId],
+            });
+            console.log(JSON.stringify(products));
+            setProducts(products);
+
+          } catch (error) {
+            console.log({ message: 'getProducts', error });
+          }
+          startBuyOneTime(sku.skuId);
         }
       },
     );
 
     return () => {
       subscriptionRemover();
+      purchaseUpdate;
+      purchaseError;
     };
-  }, []);
+  }, [subscriptions, products, namiSku]);
 
   return (
     <NavigationContainer>
