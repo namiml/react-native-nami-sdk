@@ -138,6 +138,7 @@ android {
         versionName "1.0"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        missingDimensionStrategy 'store', 'play'
     }
     flavorDimensions "default"
     productFlavors {
