@@ -15,7 +15,6 @@ import {
   finishTransaction,
   getProducts,
   getSubscriptions,
-  initConnection,
   Product,
   ProductPurchase,
   PurchaseError,
@@ -69,27 +68,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    async function initialStoreConnection() {
-      await initConnection();
-    }
-
     async function startBuySubscription(skuId: string) {
       await requestSubscription({ sku: skuId });
     }
 
     async function startBuyOneTime(skuId: string) {
       await requestPurchase({ sku: skuId });
-    }
-
-    try {
-      initialStoreConnection();
-    } catch (error: any) {
-      if (error instanceof PurchaseError) {
-        console.log('Initial Store Connection');
-        console.log({ message: `[${error.code}]: ${error.message}`, error });
-      } else {
-        console.log({ message: 'initialStoreConnection', error });
-      }
     }
 
     const purchaseUpdate: EmitterSubscription = purchaseUpdatedListener(
@@ -107,14 +91,14 @@ const App = () => {
             console.log(subscriptions);
             console.log(JSON.stringify(purchase));
 
-            if (purchase.type === SubscriptionPurchase) {
+            if (purchase as SubscriptionPurchase) {
               const subscriptionProduct: Subscription = subscriptions[0]
               price = subscriptionProduct.price
               currency = subscriptionProduct.currency
             } else {
               const oneTimeProduct: Product = products[0]
               price = oneTimeProduct.price
-              currency = oneTimeProduct.currencurrencycyCode
+              currency = oneTimeProduct.currency
 
             }
 
@@ -128,7 +112,7 @@ const App = () => {
               NamiPaywallManager.buySkuCompleteApple({
                 product: namiSku,
                 transactionID: purchase.transactionId ?? '',
-                originalTransactionID: purchase.originalTransactionIdentifierIOS ?? purchase.transactionId,
+                originalTransactionID: purchase.originalTransactionIdentifierIOS ?? purchase.transactionId ?? '',
                 price: price,
                 currencyCode: currency,
               });
@@ -162,7 +146,7 @@ const App = () => {
 
     const purchaseError: EmitterSubscription = purchaseErrorListener((error: PurchaseError) => {
       console.log('purchase error', JSON.stringify(error));
-      // NamiPaywallManager.buySkuCancel();
+      NamiPaywallManager.buySkuCancel();
     });
 
     const subscriptionRemover = NamiPaywallManager.registerBuySkuHandler(
