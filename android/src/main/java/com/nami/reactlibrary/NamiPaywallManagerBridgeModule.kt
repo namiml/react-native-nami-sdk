@@ -213,7 +213,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
             if (latestPaywallActivity != null) {
                 NamiPaywallManager.buySkuCancel(latestPaywallActivity!!)
             } else if (currentActivity != null) {
-                NamiPaywallManager.buySkuComplete(currentActivity!!)
+                NamiPaywallManager.buySkuCancel(currentActivity!!)
             } else {
                 NamiPaywallManager.buySkuCancel()
             }
