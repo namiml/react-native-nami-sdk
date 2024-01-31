@@ -24,6 +24,7 @@ import {
 import { ViewerTabProps } from '../App';
 import theme from '../theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { handleDeepLink } from '../services/deeplinking';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
@@ -118,6 +119,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
           NamiPaywallManager.buySkuCancel();
 
           await NamiPaywallManager.dismiss();
+
+          if (url) {
+            handleDeepLink({ url });
+          }
+
         });
 
     const subscriptionRemover =
