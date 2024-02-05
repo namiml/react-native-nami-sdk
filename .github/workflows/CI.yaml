@@ -97,7 +97,7 @@ jobs:
         working-directory: source/examples/Basic
 
       - name: Install iOS pods
-        run: RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install
+        run: RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install --repo-update
         working-directory: source/examples/Basic/ios
 
       - name: Rebuild cache detox
