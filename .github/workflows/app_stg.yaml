@@ -196,7 +196,7 @@ jobs:
 
       - name: Install test iOS dependencies
         run: |
-          pod install
+          pod install --repo-update
         working-directory: source/examples/Basic/ios
 
       - name: Build resolve Swift dependencies
@@ -316,7 +316,7 @@ jobs:
 
       - name: Install test tvOS dependencies
         run: |
-          RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install
+          RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install --repo-update
         working-directory: source/examples/TestNamiTV/ios
 
       - name: Build resolve Swift dependencies
