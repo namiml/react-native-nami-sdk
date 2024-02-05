@@ -99,14 +99,20 @@ class RNNamiPurchaseManager: RCTEventEmitter {
 
     @objc(skuPurchased:resolver:rejecter:)
     func skuPurchased(skuId: String, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
-        let isSkuPurchased = NamiPurchaseManager.skuPurchased(skuId)
-        resolve(isSkuPurchased)
+        Task {
+            let isSkuPurchased = NamiPurchaseManager.skuPurchased(skuId)
+            resolve(isSkuPurchased)
+        }
+        resolve(false)
     }
 
     @objc(anySkuPurchased:resolver:rejecter:)
     func anySkuPurchased(skuIds: [String], resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
-        let isSkusPurchased = NamiPurchaseManager.anySkuPurchased(skuIds)
-        resolve(isSkusPurchased)
+        Task {
+            let isSkusPurchased = NamiPurchaseManager.anySkuPurchased(skuIds)
+            resolve(isSkusPurchased)
+        }
+        resolve(false)
     }
 
     @objc(consumePurchasedSku:)
