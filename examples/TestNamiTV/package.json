@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "babel-jest": "^27.4.5",
-    "detox": "^20.9.1",
+    "detox": "20.9.1",
     "eslint": "^8.37.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-native": "^4.0.0",
