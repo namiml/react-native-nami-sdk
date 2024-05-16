@@ -106,7 +106,7 @@ class NamiBridgeModule(reactContext: ReactApplicationContext) :
             } else {
                 Arguments.createArray()
             }
-        val settingsList = mutableListOf("extendedClientInfo:react-native:3.1.34")
+        val settingsList = mutableListOf("extendedClientInfo:react-native:3.2.0-beta.01")
         namiCommandsReact?.toArrayList()?.filterIsInstance<String>()?.let { commandsFromReact ->
             settingsList.addAll(commandsFromReact)
         }

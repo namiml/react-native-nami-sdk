@@ -26,6 +26,7 @@ export const NamiPaywallManager: {
   buySkuCancel: () => void;
   isHidden: () => Promise<boolean>;
   isPaywallOpen: () => Promise<boolean>;
+  setProductDetails: (productDetails: string, allowOffers: boolean) => void;
 };
 
 export type NamiPurchaseSuccessApple = {
