@@ -221,6 +221,11 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun setProductDetails(productDetails: String, allowOffers: Boolean) { 
+        NamiPaywallManager.setProductDetails(productDetails, allowOffers = false)
+    }
+
+    @ReactMethod
     fun addListener(eventName: String?) {
     }
 
