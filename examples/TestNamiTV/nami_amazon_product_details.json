@@ -11,18 +11,6 @@
           "coinsRewardsAmount": 0,
           "subscriptionPeriod": "Annual",
           "freeTrialPeriod": "7 days",
-          "promotions": [
-            {
-              "promotionType": "Introductory",
-              "promotionPlans": [
-                {
-                  "promotionPricePeriod": "SemiAnnual",
-                  "promotionPrice": "$39.99",
-                  "promotionPriceCycles": 1
-                }
-              ]
-            }
-          ]
         },
         "originalPrice": "$99.99",
         "iconUrl": "",
@@ -44,6 +32,18 @@
           "title": "POC Premium Monthly",
           "coinsRewardsAmount": 0,
           "subscriptionPeriod": "Monthly"
+          "promotions": [
+            {
+              "promotionType": "Introductory",
+              "promotionPlans": [
+                {
+                  "promotionPricePeriod": "Monthly",
+                  "promotionPrice": "$9.99",
+                  "promotionPriceCycles": 1
+                }
+              ]
+            }
+          ]
         },
         "originalPrice": "$14.99",
         "iconUrl": "",
