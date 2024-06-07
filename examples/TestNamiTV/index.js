@@ -25,7 +25,7 @@ const Root = () => {
       setIsConfigurationComplete(true);
 
       if (Platform.constants.Manufacturer === 'Amazon') {
-        NamiPaywallManager.setProductDetails(getAmazonProducts(), false);
+        NamiPaywallManager.setProductDetails(getAmazonProducts(), true);
       }
 
     });

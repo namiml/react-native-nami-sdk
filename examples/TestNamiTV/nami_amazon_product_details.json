@@ -31,7 +31,7 @@
           "smallIconUrl": "",
           "title": "POC Premium Monthly",
           "coinsRewardsAmount": 0,
-          "subscriptionPeriod": "Monthly"
+          "subscriptionPeriod": "Monthly",
           "promotions": [
             {
               "promotionType": "Introductory",
