@@ -151,7 +151,7 @@ export type GoogleProduct = {};
 
 export type AmazonProduct = {};
 
-// NameCampaignManager
+// NamiCampaignManager
 export type NamiCampaign = {
   id: string;
   rule: string;
@@ -297,3 +297,26 @@ export type NamiPurchasesState =
   | 'failed'
   | 'cancelled'
   | 'unknown';
+
+export type NamiPaywallEvent = {
+  action: NamiPaywallAction;
+  campaignId?: string;
+  campaignName?: string;
+  campaignType?: string;
+  campaignLabel?: string;
+  campaignUrl?: string;
+  paywallId?: string;
+  paywallName?: string;
+  componentChange?: NamiPaywallComponentChange;
+  segmentId?: string;
+  externalSegmentId?: string;
+  deeplinkUrl?: string;
+  sku?: NamiSKU;
+  purchaseError?: string;
+  purchases?: NamiPurchase[];
+};
+
+export type NamiPaywallComponentChange = {
+  id?: string;
+  name?: string;
+};

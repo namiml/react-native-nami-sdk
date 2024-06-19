@@ -151,3 +151,24 @@ export type NamiPurchase = {
     purchaseSource?: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
 };
 export type NamiPurchasesState = 'pending' | 'purchased' | 'consumed' | 'resubscribed' | 'unsubscribed' | 'deferred' | 'failed' | 'cancelled' | 'unknown';
+export type NamiPaywallEvent = {
+    action: NamiPaywallAction;
+    campaignId?: string;
+    campaignName?: string;
+    campaignType?: string;
+    campaignLabel?: string;
+    campaignUrl?: string;
+    paywallId?: string;
+    paywallName?: string;
+    componentChange?: NamiPaywallComponentChange;
+    segmentId?: string;
+    externalSegmentId?: string;
+    deeplinkUrl?: string;
+    sku?: NamiSKU;
+    purchaseError?: string;
+    purchases?: NamiPurchase[];
+};
+export type NamiPaywallComponentChange = {
+    id?: string;
+    name?: string;
+};
