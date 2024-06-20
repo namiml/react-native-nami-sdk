@@ -1,0 +1,174 @@
+export type NamiConfiguration = {
+    'appPlatformID-apple': string;
+    'appPlatformID-android': string;
+    logLevel: string;
+    namiCommands?: string[];
+    namiLanguageCode?: NamiLanguageCodes;
+    initialConfig?: string;
+};
+export type NamiLanguageCodes = 'af' | 'ar' | 'ar-dz' | 'ast' | 'az' | 'bg' | 'be' | 'bn' | 'br' | 'bs' | 'ca' | 'cs' | 'cy' | 'da' | 'de' | 'dsb' | 'el' | 'en' | 'en-au' | 'en-gb' | 'eo' | 'es' | 'es-ar' | 'es-co' | 'es-mx' | 'es-ni' | 'es-ve' | 'et' | 'eu' | 'fa' | 'fi' | 'fr' | 'fy' | 'ga' | 'gd' | 'gl' | 'he' | 'hi' | 'hr' | 'hsb' | 'hu' | 'hy' | 'ia' | 'id' | 'ig' | 'io' | 'is' | 'it' | 'ja' | 'ka' | 'kab' | 'kk' | 'km' | 'kn' | 'ko' | 'ky' | 'lb' | 'lt' | 'lv' | 'mk' | 'ml' | 'mn' | 'mr' | 'my' | 'nb' | 'ne' | 'nl' | 'nn' | 'os' | 'pa' | 'pl' | 'pt' | 'pt-br' | 'ro' | 'ru' | 'sk' | 'sl' | 'sq' | 'sr' | 'sr-latn' | 'sv' | 'sw' | 'ta' | 'te' | 'tg' | 'th' | 'tk' | 'tr' | 'tt' | 'udm' | 'uk' | 'ur' | 'uz' | 'vi' | 'zh-hans' | 'zh-hant';
+export type NamiSKU = {
+    id: string;
+    name?: string;
+    skuId: string;
+    appleProduct?: AppleProduct;
+    googleProduct?: GoogleProduct;
+    amazonProduct?: AmazonProduct;
+    type: NamiSKUType;
+    promoId?: string | null;
+    promoToken?: string | null;
+};
+export declare enum NamiPurchaseState {
+    PENDING = "pending",
+    PURCHASED = "purchased",
+    CONSUMED = "consumed",
+    RESUBSCRIBED = "resubscribed",
+    UNSUBSCRIBED = "unsubscribed",
+    DEFERRED = "deferred",
+    FAILED = "failed",
+    CANCELLED = "cancelled",
+    UNKNOWN = "unknown"
+}
+export declare enum NamiRestorePurchasesState {
+    STARTED = "started",
+    FINISHED = "finished",
+    ERROR = "error"
+}
+export type NamiSKUType = 'unknown' | 'one_time_purchase' | 'subscription';
+export type AppleProduct = {
+    localizedDescription: string;
+    localizedMultipliedPrice: string;
+    localizedPrice: string;
+    localizedTitle: string;
+    price: string;
+    priceCurrency: string;
+    priceLanguage: string;
+};
+export type GoogleProduct = {};
+export type AmazonProduct = {};
+export type NamiCampaign = {
+    id: string;
+    rule: string;
+    segment: string;
+    paywall: string;
+    type: NamiCampaignRuleType;
+    value?: string | null;
+};
+export declare enum NamiCampaignRuleType {
+    DEFAULT = "default",
+    LABEL = "label",
+    UNKNOWN = "unknown",
+    URL = "url"
+}
+export declare enum LaunchCampaignError {
+    DEFAULT_CAMPAIGN_NOT_FOUND = 0,
+    LABELED_CAMPAIGN_NOT_FOUND = 1,
+    CAMPAIGN_DATA_NOT_FOUND = 2,
+    PAYWALL_ALREADY_DISPLAYED = 3,
+    SDK_NOT_INITIALIZED = 4,
+    PAYWALL_COULD_NOT_DISPLAY = 5,
+    URL_CAMPAIGN_NOT_FOUND = 6,
+    PRODUCT_DATA_NOT_FOUND = 7,
+    PRODUCT_GROUPS_NOT_FOUND = 8
+}
+export declare enum LaunchCampaignResultAction {
+    FAILURE = "FAILURE",
+    SUCCESS = "SUCCESS"
+}
+export type FailureResultObject = {
+    error: string;
+};
+export type PaywallLaunchContext = {
+    productGroups?: string[];
+    customAttributes: {
+        [key: string]: string;
+    };
+};
+export type CustomerJourneyState = {
+    formerSubscriber: boolean;
+    inGracePeriod: boolean;
+    inTrialPeriod: boolean;
+    inIntroOfferPeriod: boolean;
+    isCancelled: boolean;
+    inPause: boolean;
+    inAccountHold: boolean;
+};
+export type AccountStateAction = 'login' | 'logout' | 'advertising_id_set' | 'vendor_id_set' | 'customer_data_platform_id_set' | 'nami_device_id_set' | 'advertising_id_cleared' | 'vendor_id_cleared' | 'customer_data_platform_id_cleared' | 'nami_device_id_cleared' | 'anonymous_mode_on' | 'anonymous_mode_off';
+export type NamiEntitlement = {
+    activePurchases: NamiPurchase[];
+    desc: string;
+    name: string;
+    namiId: string;
+    purchasedSkus: NamiSKU[];
+    referenceId: string;
+    relatedSkus: NamiSKU[];
+};
+export type NamiPurchaseSuccessApple = {
+    product: NamiSKU;
+    transactionID: string;
+    originalTransactionID: string;
+    price: string;
+    currencyCode: string;
+};
+export type NamiPurchaseSuccessGooglePlay = {
+    product: NamiSKU;
+    orderId: string;
+    purchaseToken: string;
+};
+export type NamiPurchaseSuccessAmazon = {
+    product: NamiSKU;
+    receiptId: string;
+    localizedPrice: string;
+    userId: string;
+    marketplace: string;
+};
+export declare enum NamiPaywallAction {
+    BUY_SKU = "BUY_SKU",
+    SELECT_SKU = "SELECT_SKU",
+    RESTORE_PURCHASES = "RESTORE_PURCHASES",
+    SIGN_IN = "SIGN_IN",
+    CLOSE_PAYWALL = "CLOSE_PAYWALL",
+    SHOW_PAYWALL = "SHOW_PAYWALL",
+    PURCHASE_SELECTED_SKU = "PURCHASE_SELECTED_SKU",
+    PURCHASE_SUCCESS = "PURCHASE_SUCCESS",
+    PURCHASE_FAILED = "PURCHASE_FAILED",
+    PURCHASE_CANCELLED = "PURCHASE_CANCELLED",
+    PURCHASE_PENDING = "PURCHASE_PENDING",
+    PURCHASE_UNKNOWN = "PURCHASE_UNKNOWN",
+    PURCHASE_DEFERRED = "PURCHASE_DEFERRED",
+    DEEPLINK = "DEEPLINK",
+    TOGGLE_CHANGE = "TOGGLE_CHANGE",
+    PAGE_CHANGE = "PAGE_CHANGE",
+    SLIDE_CHANGE = "SLIDE_CHANGE",
+    UNKNOWN = "UNKNOWN"
+}
+export type NamiPurchase = {
+    sku?: NamiSKU;
+    skuId: string;
+    transactionIdentifier?: string;
+    expires?: Date;
+    purchaseInitiatedTimestamp: Date;
+    purchaseSource?: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
+};
+export type NamiPurchasesState = 'pending' | 'purchased' | 'consumed' | 'resubscribed' | 'unsubscribed' | 'deferred' | 'failed' | 'cancelled' | 'unknown';
+export type NamiPaywallEvent = {
+    action: NamiPaywallAction;
+    campaignId?: string;
+    campaignName?: string;
+    campaignType?: string;
+    campaignLabel?: string;
+    campaignUrl?: string;
+    paywallId?: string;
+    paywallName?: string;
+    componentChange?: NamiPaywallComponentChange;
+    segmentId?: string;
+    externalSegmentId?: string;
+    deeplinkUrl?: string;
+    sku?: NamiSKU;
+    purchaseError?: string;
+    purchases?: NamiPurchase[];
+};
+export type NamiPaywallComponentChange = {
+    id?: string;
+    name?: string;
+};
