@@ -49,7 +49,7 @@ interface ICampaignManager {
       purchases?: NamiPurchase[],
     ) => void,
   ) => void;
-  refresh: () => void;
+  refresh: () => Promise<Array<NamiCampaign>>;
   registerAvailableCampaignsHandler: (
     callback: (availableCampaigns: NamiCampaign[]) => void,
   ) => EmitterSubscription['remove'];
@@ -115,8 +115,8 @@ export const NamiCampaignManager: ICampaignManager = {
       label ?? null,
       withUrl ?? null,
       context ?? null,
-      resultCallback ?? (() => {}),
-      actionCallback ?? (() => {}),
+      resultCallback ?? (() => { }),
+      actionCallback ?? (() => { }),
     );
   },
 
@@ -140,4 +140,8 @@ export const NamiCampaignManager: ICampaignManager = {
       }
     };
   },
+
+  refresh: async () => {
+    return await RNNamiCampaignManager.refresh();
+  }
 };
