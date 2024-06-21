@@ -154,8 +154,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const triggerLaunch = (label?: any, url?: any) => {
+  const triggerLaunch = async (label?: any, url?: any) => {
     checkIfPaywallOpen();
+
+    const camps = await NamiCampaignManager.refresh()
+    console.log('NamiSDK: refresh campaigns', camps);
 
     return NamiCampaignManager.launch(
       label,
