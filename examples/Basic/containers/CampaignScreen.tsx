@@ -11,6 +11,7 @@ import {
   NamiPaywallManager,
   NamiPaywallAction,
   NamiCampaignRuleType,
+  NamiPaywallEvent,
 } from 'react-native-nami-sdk';
 import {
   FlatList,
@@ -165,43 +166,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         console.log('error', error);
 
         checkIfPaywallOpen();
-
       },
-      (
-        action,
-        campaignId,
-        paywallId,
-        campaignName,
-        campaignType,
-        campaignLabel,
-        campaignUrl,
-        paywallName,
-        segmentId,
-        externalSegmentId,
-        deeplinkUrl,
-        skuId,
-        componentChangeId,
-        componentChangeName,
-        purchaseError,
-        purchases,
-      ) => {
-        console.log('action', action);
-        setAction(action);
-        console.log('campaignId', campaignId);
-        console.log('paywallId', paywallId);
-        console.log('campaignName', campaignName);
-        console.log('campaignType', campaignType);
-        console.log('campaignLabel', campaignLabel);
-        console.log('campaignUrl', campaignUrl);
-        console.log('paywallName', paywallName);
-        console.log('segmentId', segmentId);
-        console.log('externalSegmentId', externalSegmentId);
-        console.log('deeplinkUrl', deeplinkUrl);
-        console.log('skuId', skuId);
-        console.log('componentChangeId', componentChangeId);
-        console.log('componentChangeName', componentChangeName);
-        console.log('purchaseError', purchaseError);
-        console.log('purchases', purchases);
+      (event: NamiPaywallEvent) => {
+        console.log('event', event);
+        setAction(event.action);
       },
     );
   };

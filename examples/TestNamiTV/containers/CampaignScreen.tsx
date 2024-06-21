@@ -12,7 +12,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import { NamiCampaignManager, NamiCampaign, NamiCampaignRuleType } from 'react-native-nami-sdk';
+import { NamiCampaignManager, NamiCampaign, NamiCampaignRuleType, NamiPaywallEvent } from 'react-native-nami-sdk';
 import { ViewerTabProps } from '../App';
 import theme from '../theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -65,36 +65,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         console.log('successAction', successAction);
         console.log('error', error);
       },
-      (
-        action,
-        campaignId,
-        paywallId,
-        campaignName,
-        campaignType,
-        campaignLabel,
-        campaignUrl,
-        paywallName,
-        segmentId,
-        externalSegmentId,
-        deeplinkUrl,
-        skuId,
-        purchaseError,
-        purchases,
-      ) => {
-        console.log('action', action);
-        console.log('campaignId', campaignId);
-        console.log('paywallId', paywallId);
-        console.log('campaignLabel', campaignLabel);
-        console.log('campaignName', campaignName);
-        console.log('campaignType', campaignType);
-        console.log('campaignUrl', campaignUrl);
-        console.log('paywallName', paywallName);
-        console.log('segmentId', segmentId);
-        console.log('externalSegmentId', externalSegmentId);
-        console.log('deeplinkUrl', deeplinkUrl);
-        console.log('skuId', skuId);
-        console.log('purchaseError', purchaseError);
-        console.log('purchases', purchases);
+      (event: NamiPaywallEvent) => {
+        console.log('event', event);
       },
     );
   };
