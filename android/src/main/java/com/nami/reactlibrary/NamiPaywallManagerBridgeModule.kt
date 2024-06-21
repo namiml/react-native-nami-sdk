@@ -222,6 +222,8 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun setProductDetails(productDetails: String, allowOffers: Boolean) { 
+        Log.i(LOG_TAG, "$productDetails")
+
         NamiPaywallManager.setProductDetails(productDetails, allowOffers = allowOffers)
     }
 
