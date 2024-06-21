@@ -6,8 +6,8 @@ import {
 import {
   LaunchCampaignError,
   NamiCampaign,
-  NamiPaywallAction,
-  NamiPurchase,
+  NamiPaywallActionHandler,
+  NamiPaywallEvent,
   PaywallLaunchContext,
 } from './types';
 
@@ -30,24 +30,7 @@ interface ICampaignManager {
     withUrl?: string,
     context?: PaywallLaunchContext,
     resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
-    actionCallback?: (
-      action: NamiPaywallAction,
-      campaignId: string,
-      paywallId: string,
-      campaignName?: string,
-      campaignType?: string,
-      campaignLabel?: string,
-      campaignUrl?: string,
-      paywallName?: string,
-      segmentId?: string,
-      externalSegmentId?: string,
-      deeplinkUrl?: string,
-      skuId?: string,
-      componentChangeId?: string,
-      componentChangeName?: string,
-      purchaseError?: string,
-      purchases?: NamiPurchase[],
-    ) => void,
+    actionCallback?: NamiPaywallActionHandler,
   ) => void;
   refresh: () => void;
   registerAvailableCampaignsHandler: (
@@ -71,43 +54,25 @@ export const NamiCampaignManager: ICampaignManager = {
           ? body.action.substring(5, body.action.length)
           : body.action;
 
-        const {
-          action,
-          campaignId,
-          paywallId,
-          campaignName,
-          campaignType,
-          campaignLabel,
-          campaignUrl,
-          paywallName,
-          segmentId,
-          externalSegmentId,
-          deeplinkUrl,
-          skuId,
-          componentChangeId,
-          componentChangeName,
-          purchaseError,
-          purchases,
-        } = body;
         if (actionCallback) {
-          actionCallback(
-            action,
-            campaignId,
-            paywallId,
-            campaignName,
-            campaignType,
-            campaignLabel,
-            campaignUrl,
-            paywallName,
-            segmentId,
-            externalSegmentId,
-            deeplinkUrl,
-            skuId,
-            componentChangeId,
-            componentChangeName,
-            purchaseError,
-            purchases,
-          );
+          const paywallEvent: NamiPaywallEvent = {
+            action: body.action,
+            campaignId: body.campaignId,
+            campaignName: body.campaignName,
+            campaignType: body.campaignType,
+            campaignLabel: body.campaignLabel,
+            campaignUrl: body.campaignUrl,
+            paywallId: body.paywallId,
+            paywallName: body.paywallName,
+            componentChange: body.componentChange,
+            segmentId: body.segmentId,
+            externalSegmentId: body.externalSegmentId,
+            deeplinkUrl: body.deeplinkUrl,         
+            sku: body.sku,
+            purchaseError: body.purchaseError,
+            purchases: body.purchases,
+          }
+          actionCallback(paywallEvent)
         }
       },
     );
@@ -115,8 +80,8 @@ export const NamiCampaignManager: ICampaignManager = {
       label ?? null,
       withUrl ?? null,
       context ?? null,
-      resultCallback ?? (() => {}),
-      actionCallback ?? (() => {}),
+      resultCallback ?? (() => { }),
+      actionCallback ?? (() => { }),
     );
   },
 

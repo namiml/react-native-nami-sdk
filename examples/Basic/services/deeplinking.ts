@@ -1,4 +1,4 @@
-import { NamiCampaignManager } from 'react-native-nami-sdk';
+import { NamiCampaignManager, NamiPaywallEvent } from 'react-native-nami-sdk';
 
 interface HandleDeepLinkParams {
   url: string;
@@ -22,36 +22,8 @@ export async function handleDeepLink(params: HandleDeepLinkParams) {
       (success, error) => {
         console.log(success, error);
       },
-      (
-        action,
-        campaignId,
-        paywallId,
-        campaignLabel,
-        campaignName,
-        campaignType,
-        campaignUrl,
-        segmentId,
-        externalSegmentId,
-        paywallName,
-        deeplinkUrl,
-        skuId,
-        purchaseError,
-        purchases,
-      ) => {
-        console.log('action', action);
-        console.log('campaignId', campaignId);
-        console.log('paywallId', paywallId);
-        console.log('campaignLabel', campaignLabel);
-        console.log('campaignName', campaignName);
-        console.log('campaignType', campaignType);
-        console.log('campaignUrl', campaignUrl);
-        console.log('paywallName', paywallName);
-        console.log('segmentId', segmentId);
-        console.log('externalSegmentId', externalSegmentId);
-        console.log('deeplinkUrl', deeplinkUrl);
-        console.log('skuId', skuId);
-        console.log('purchaseError', purchaseError);
-        console.log('purchases', purchases);
+      (event: NamiPaywallEvent) => {
+        console.log('event', event);
       },
     );
   }

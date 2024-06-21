@@ -314,7 +314,9 @@ export type NamiPaywallEvent = {
   sku?: NamiSKU;
   purchaseError?: string;
   purchases?: NamiPurchase[];
-};
+}
+
+export type NamiPaywallActionHandler = (event: NamiPaywallEvent) => void;
 
 export type NamiPaywallComponentChange = {
   id?: string;
