@@ -50,6 +50,7 @@ export interface INamiPaywallManager {
   isHidden: () => Promise<boolean>;
   isPaywallOpen: () => Promise<boolean>;
   setProductDetails: (productDetails: string, allowOffers: boolean) => void;
+  setAppSuppliedVideoDetails: (url: string, name?: string) => void;
 }
 
 const { NamiPaywallManagerBridge, RNNamiPaywallManager } = NativeModules;
@@ -161,13 +162,10 @@ export const NamiPaywallManager: INamiPaywallManager = {
   isPaywallOpen: () => {
     return RNNamiPaywallManager.isPaywallOpen();
   },
-  setProductDetails: (
-    productDetails: string,
-    allowOffers: boolean
-  ) => {
-    RNNamiPaywallManager.setProductDetails(
-      productDetails,
-      allowOffers,
-    );
+  setProductDetails: (productDetails: string, allowOffers: boolean) => {
+    RNNamiPaywallManager.setProductDetails(productDetails, allowOffers);
+  },
+  setAppSuppliedVideoDetails: (url: string, name?: string) => {
+    RNNamiPaywallManager.setAppSuppliedVideoDetails(url, name);
   },
 };

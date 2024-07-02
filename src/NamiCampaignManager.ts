@@ -67,12 +67,12 @@ export const NamiCampaignManager: ICampaignManager = {
             componentChange: body.componentChange,
             segmentId: body.segmentId,
             externalSegmentId: body.externalSegmentId,
-            deeplinkUrl: body.deeplinkUrl,         
+            deeplinkUrl: body.deeplinkUrl,
             sku: body.sku,
             purchaseError: body.purchaseError,
             purchases: body.purchases,
-          }
-          actionCallback(paywallEvent)
+          };
+          actionCallback(paywallEvent);
         }
       },
     );
@@ -80,8 +80,8 @@ export const NamiCampaignManager: ICampaignManager = {
       label ?? null,
       withUrl ?? null,
       context ?? null,
-      resultCallback ?? (() => { }),
-      actionCallback ?? (() => { }),
+      resultCallback ?? (() => {}),
+      actionCallback ?? (() => {}),
     );
   },
 

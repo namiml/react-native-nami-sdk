@@ -221,8 +221,13 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun setProductDetails(productDetails: String, allowOffers: Boolean) { 
+    fun setProductDetails(productDetails: String, allowOffers: Boolean) {
         NamiPaywallManager.setProductDetails(productDetails, allowOffers = false)
+    }
+
+    @ReactMethod
+    fun setAppSuppliedVideoDetails(url: String, name: String?) {
+        // To be implemented
     }
 
     @ReactMethod
