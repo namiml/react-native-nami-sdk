@@ -23,7 +23,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
-        working-directory: source/examples/Basic
 
       - name: Linter
         run: |
@@ -48,7 +47,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
-        working-directory: source/examples/Basic
 
       - name: Generate .d files
         run: |
