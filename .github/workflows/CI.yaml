@@ -23,10 +23,12 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
+        working-directory: source/
 
       - name: Linter
         run: |
           npx eslint . --ext .js,.jsx,.ts,.tsx
+        working-directory: source/
   tsc:
     name: Generate Declaration Files
     permissions:
@@ -47,10 +49,12 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline
+        working-directory: source/
 
       - name: Generate .d files
         run: |
           npx tsc
+        working-directory: source/
   eslintapps:
     name: ESLint Sample Apps
     permissions:
