@@ -226,8 +226,14 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun refresh() {
-        NamiCampaignManager.refresh() { }
+     fun refresh(promise: Promise) {
+        NamiCampaignManager.refresh { campaigns ->
+            val array = WritableNativeArray()
+            campaigns?.forEach { campaign ->
+                array.pushMap(campaignToReadableMap(campaign))
+            }
+            promise.resolve(array)
+        }    
     }
 
     @ReactMethod

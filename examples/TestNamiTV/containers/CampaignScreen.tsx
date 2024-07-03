@@ -91,8 +91,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
 
-  const onRefreshPress = useCallback(() => {
-    NamiCampaignManager.refresh();
+  const onRefreshPress = useCallback(async () => {
+    const fetchedCampaigns = await NamiCampaignManager.refresh();
+    const refreshedCampaigns = fetchedCampaigns.filter(campaign =>
+      Boolean(campaign.value),
+    );
+    setCampaigns(refreshedCampaigns);
   }, []);
 
   useLayoutEffect(() => {

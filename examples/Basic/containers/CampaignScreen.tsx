@@ -89,6 +89,15 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return validCampaigns;
   }, []);
 
+  const getRefreshedCampaigns = useCallback(async () => {
+    const fetchedCampaigns = await NamiCampaignManager.refresh();
+    const refreshedCampaigns = fetchedCampaigns.filter((campaign) =>
+      Boolean(campaign.value),
+    );
+    setCampaigns(refreshedCampaigns);
+    return refreshedCampaigns;
+  }, []);
+
   useEffect(() => {
     getAllCampaigns();
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
@@ -197,7 +206,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const onRefreshPress = useCallback(() => {
     getAllCampaigns();
     setRefresh(!refresh);
-    NamiCampaignManager.refresh();
+    getRefreshedCampaigns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -212,7 +221,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
           onRefreshPress={() => {
             getAllCampaigns();
             setRefresh(!refresh);
-            NamiCampaignManager.refresh();
+            getRefreshedCampaigns();
           }}
         />
       ),

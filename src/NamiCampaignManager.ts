@@ -32,7 +32,7 @@ interface ICampaignManager {
     resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: NamiPaywallActionHandler,
   ) => void;
-  refresh: () => void;
+  refresh: () => Promise<Array<NamiCampaign>>;
   registerAvailableCampaignsHandler: (
     callback: (availableCampaigns: NamiCampaign[]) => void,
   ) => EmitterSubscription['remove'];
