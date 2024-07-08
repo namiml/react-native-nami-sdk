@@ -154,7 +154,12 @@ class RNNamiPaywallManager: RCTEventEmitter {
     }
 
     @objc(setProductDetails:allowOffers:)
-    func setProductDetails(productDetails: String, allowOffers: Bool) {
+    func setProductDetails(productDetails _: String, allowOffers _: Bool) {
         // Do nothing on Apple
+    }
+
+    @objc(setAppSuppliedVideoDetails:allowOffers:)
+    func setAppSuppliedVideoDetails(url _: String, name _: String?) {
+        // To be implemented
     }
 }

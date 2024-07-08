@@ -39,8 +39,9 @@ RCT_EXTERN_METHOD(isPaywallOpen:(RCTPromiseResolveBlock)resolve rejecter:(RCTPro
 
 RCT_EXTERN_METHOD(buySkuCancel)
 
-RCT_EXTERN_METHOD(setProductDetails:(NSString *)productDetails allowOffers:(BOOL *))
+RCT_EXTERN_METHOD(setProductDetails:(NSString *)productDetails allowOffers:(nullable BOOL *))
 
+RCT_EXTERN_METHOD(setAppSuppliedVideoDetails:(NSString *)url name:(nullable NSString *))
 
 + (BOOL)requiresMainQueueSetup {
   return YES;

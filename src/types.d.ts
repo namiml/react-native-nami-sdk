@@ -83,6 +83,9 @@ export type PaywallLaunchContext = {
     customAttributes: {
         [key: string]: string;
     };
+    customObject?: {
+        [key: string]: any;
+    };
 };
 export type CustomerJourneyState = {
     formerSubscriber: boolean;
@@ -168,6 +171,7 @@ export type NamiPaywallEvent = {
     purchaseError?: string;
     purchases?: NamiPurchase[];
 };
+export type NamiPaywallActionHandler = (event: NamiPaywallEvent) => void;
 export type NamiPaywallComponentChange = {
     id?: string;
     name?: string;
