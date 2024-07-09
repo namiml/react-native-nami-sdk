@@ -20,15 +20,16 @@ export const getAmazonProducts = () => {
 
 const Root = () => {
   const [isConfigurationComplete, setIsConfigurationComplete] = useState();
-  useEffect(() => {
-    Nami.configure(configDict, (resultObject) => {
+  useEffect(async () => {
+    const result = await Nami.configure(configDict);
+    if(result.success){
       setIsConfigurationComplete(true);
 
       if (Platform.constants.Manufacturer === 'Amazon') {
         NamiPaywallManager.setProductDetails(getAmazonProducts(), false);
       }
+    }
 
-    });
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, []);
