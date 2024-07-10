@@ -177,7 +177,7 @@ export enum LaunchCampaignError {
   PAYWALL_COULD_NOT_DISPLAY = 5,
   URL_CAMPAIGN_NOT_FOUND = 6,
   PRODUCT_DATA_NOT_FOUND = 7,
-  PRODUCT_GROUPS_NOT_FOUND = 8
+  PRODUCT_GROUPS_NOT_FOUND = 8,
 }
 
 export enum LaunchCampaignResultAction {
@@ -195,6 +195,10 @@ export type PaywallLaunchContext = {
   // Key-value pairs used to override template values
   customAttributes: {
     [key: string]: string;
+  };
+  // Custom object used as data source for advanced paywall components
+  customObject?: {
+    [key: string]: any;
   };
 };
 
@@ -314,7 +318,7 @@ export type NamiPaywallEvent = {
   sku?: NamiSKU;
   purchaseError?: string;
   purchases?: NamiPurchase[];
-}
+};
 
 export type NamiPaywallActionHandler = (event: NamiPaywallEvent) => void;
 

@@ -38,17 +38,15 @@ const Root = () => {
     console.log('NamiSDK: configured', configured);
   };
 
-
-
-  useEffect(() => {
+  useEffect(async() => {
 
     checkSdkConfigured();
 
-    Nami.configure(configDict, (resultObject) => {
+    const result = await Nami.configure(configDict);
+    if(result.success){
       setIsConfigurationComplete(true);
-      checkSdkConfigured();
-
-    });
+      checkSdkConfigured();  
+    }
 
     initStoreConnection();
 
