@@ -160,7 +160,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return NamiCampaignManager.launch(
       label,
       url,
-      { customAttributes: {} },
+      { customAttributes: {}, customObject: { 'items' : [{ 'name' : 'item1' }] } },
       (successAction, error) => {
         console.log('successAction', successAction);
         console.log('error', error);
@@ -190,6 +190,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         ? triggerLaunch(item.value, null)
         : triggerLaunch(null, item.value);
     }
+
+    NamiPaywallManager.setAppSuppliedVideoDetails('https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'app-supplied-video');
+
   }, []);
 
   const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
