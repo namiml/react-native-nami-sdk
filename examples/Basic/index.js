@@ -45,7 +45,7 @@ const Root = () => {
     const result = await Nami.configure(configDict);
     if(result.success){
       setIsConfigurationComplete(true);
-      checkSdkConfigured();  
+      checkSdkConfigured();
     }
 
     initStoreConnection();
