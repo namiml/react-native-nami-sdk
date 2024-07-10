@@ -27,11 +27,11 @@
     "react": "17.0.2",
     "react-native": "0.65.2",
     "react-native-gesture-handler": "^1.8.0",
+    "react-native-iap": "10.1.3",
     "react-native-nami-sdk": "file:../../",
     "react-native-reanimated": "^2.14.4",
     "react-native-safe-area-context": "^3.3.2",
-    "react-native-screens": "3.18.2",
-    "react-native-iap": "10.1.3"
+    "react-native-screens": "3.18.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",

@@ -15,7 +15,7 @@ RCT_EXTERN_METHOD(allCampaigns:(RCTPromiseResolveBlock)resolve rejecter:(RCTProm
 
 RCT_EXTERN_METHOD(isCampaignAvailable:(nullable NSString *)campaignSource resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(refresh)
+RCT_EXTERN_METHOD(refresh:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(registerAvailableCampaignsHandler)
 
