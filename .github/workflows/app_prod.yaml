@@ -158,7 +158,7 @@ jobs:
         - name: Install the provisioning profile
           run: |
             PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-            echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode --output $PP_PATH
+            echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode -o $PP_PATH
             mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
             cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           env:
@@ -278,7 +278,7 @@ jobs:
       - name: Install the provisioning profile
         run: |
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode --output $PP_PATH
+          echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode -o $PP_PATH
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
         env:
