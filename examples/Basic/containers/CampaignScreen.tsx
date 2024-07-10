@@ -163,14 +163,14 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const triggerLaunch = (label?: any, url?: any) => {
+  const triggerLaunch = useCallback((label?: any, url?: any) => {
     checkIfPaywallOpen();
 
     return NamiCampaignManager.launch(
       label,
       url,
       { customAttributes: {} },
-      (successAction, error) => {
+      (successAction: any, error: any) => {
         console.log('successAction', successAction);
         console.log('error', error);
 
@@ -181,7 +181,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         setAction(event.action);
       },
     );
-  };
+  }, [])
 
   const isCampaignAvailable = async (value?: string | null | undefined) => {
     try {
@@ -199,9 +199,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         ? triggerLaunch(item.value, null)
         : triggerLaunch(null, item.value);
     }
-  }, []);
+  }, [triggerLaunch]);
 
-  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
+  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), [triggerLaunch]);
 
   const onRefreshPress = useCallback(() => {
     getAllCampaigns();
@@ -227,7 +227,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       ),
       headerLeft: () => <HeaderLeft onButtonPress={onButtonPress} />,
     });
-  }, [navigation, onRefreshPress, onButtonPress, getAllCampaigns, refresh]);
+  }, [navigation, onRefreshPress, onButtonPress, getAllCampaigns, getRefreshedCampaigns, refresh]);
 
   const renderItem = ({ item, index }: {item: NamiCampaign; index: number}) => {
     const lasItem = index === campaigns.length - 1;

@@ -9,11 +9,16 @@ export interface INami {
 
 export const Nami: INami = {
   ...NamiBridge,
-  configure: (configureObj: NamiConfiguration): Promise<{ success: boolean }> => {
-    return new Promise((resolve) => {
-      NamiBridge.configure(configureObj, (resultObject: { success: boolean }) => {
-        resolve(resultObject);
-      });
-    })
-  }
-}
+  configure: (
+    configureObj: NamiConfiguration,
+  ): Promise<{ success: boolean }> => {
+    return new Promise(resolve => {
+      NamiBridge.configure(
+        configureObj,
+        (resultObject: { success: boolean }) => {
+          resolve(resultObject);
+        },
+      );
+    });
+  },
+};
