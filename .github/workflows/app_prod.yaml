@@ -201,6 +201,11 @@ jobs:
             pod install --repo-update
           working-directory: source/examples/Basic/ios
 
+        - name: Apply Patches
+          run: |
+            patch -p0 < *.patch
+          working-directory: source/examples/Basic/patches
+
         - name: Build resolve Swift dependencies
           run: |
             xcodebuild -resolvePackageDependencies -workspace ios/Basic.xcworkspace -scheme BasicProduction -configuration Release
@@ -320,6 +325,11 @@ jobs:
         run: |
           RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install --repo-update
         working-directory: source/examples/TestNamiTV/ios
+
+      - name: Apply Patches
+        run: |
+          patch -p0 < *.patch
+        working-directory: source/examples/TextNamiTV/patches
 
       - name: Build resolve Swift dependencies
         run: |
