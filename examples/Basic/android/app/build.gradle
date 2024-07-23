@@ -127,7 +127,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig signingConfigs.release
+            signingConfig null
             minifyEnabled enableProguardInReleaseBuilds
         }
     }
