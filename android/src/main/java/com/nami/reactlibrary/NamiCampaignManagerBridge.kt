@@ -33,7 +33,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         const val EXTERNAL_SEGMENT_ID = "externalSegmentId"
         const val DEEP_LINK_URL = "deeplinkUrl"
         const val TIME_SPENT_ON_PAYWALL = "timeSpentOnPaywall"
-        const var VIDEO_METADATA = "videoMetadata"
+        const val VIDEO_METADATA = "videoMetadata"
         const val _RESULT_CAMPAIGN = "ResultCampaign"
     }
 
@@ -164,14 +164,39 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             putString(CAMPAIGN_TYPE, paywallEvent.campaignType ?: "")
             putString(CAMPAIGN_URL, paywallEvent.campaignUrl ?: "")
             putString(PAYWALL_NAME, paywallEvent.paywallName ?: "")
-            putMap(COMPONENT_CHANGE, paywallEvent?.componentChange ?: Arguments.createMap())
             putString(SEGMENT_ID, paywallEvent.segmentId ?: "")
             putString(EXTERNAL_SEGMENT_ID, paywallEvent.externalSegmentId ?: "")
             putString(DEEP_LINK_URL, paywallEvent.deeplinkUrl ?: "")
-            putString(TIME_SPENT_ON_PAYWALL, paywallEvent.timeSpentOnPaywall ?: "")
-            putMap(VIDEO_METADATA, paywallEvent?.componentChange ?: Arguments.createMap())
 
         }
+
+        if (paywallEvent.componentChange != null) {
+            val componentChangeMap = Arguments.createMap().apply {
+                putString("id", paywallEvent.componentChange?.id ?: "")
+                putString("name", paywallEvent.componentChange?.name ?: "")
+            }
+
+            resultMap.putMap(COMPONENT_CHANGE, componentChangeMap)
+        }
+
+        if (paywallEvent.videoMetadata != null) {
+            val videoMetadataMap = Arguments.createMap().apply {
+                putString("id", paywallEvent.videoMetadata?.id ?: "")
+                putString("name", paywallEvent.videoMetadata?.name ?: "")
+                putBoolean("autoplayVideo", paywallEvent.videoMetadata?.autoplayVideo ?: false)
+                putBoolean("muteByDefault", paywallEvent.videoMetadata?.muteByDefault ?: false)
+                putBoolean("loopVideo", paywallEvent.videoMetadata?.loopVideo ?: false)
+                putDouble("contentDuration", paywallEvent.videoMetadata?.contentDuration ?: 0.0)
+                putDouble("contentTimecode", paywallEvent.videoMetadata?.contentTimecode ?: 0.0)
+            }
+
+            resultMap.putMap(VIDEO_METADATA, videoMetadataMap)
+        }
+
+        if (paywallEvent.timeSpentOnPaywall != null) {
+            resultMap.putDouble(TIME_SPENT_ON_PAYWALL, paywallEvent.timeSpentOnPaywall ?: 0.0)
+        }
+
         emitEvent(_RESULT_CAMPAIGN, resultMap)
     }
 
