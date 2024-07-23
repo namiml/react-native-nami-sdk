@@ -26,6 +26,9 @@ allprojects {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
+        maven {
+            url("$rootDir/../node_modules/detox/Detox-android")
+        }
         maven { url("https://packages.namiml.com/NamiSDK/Amazon/") }
         maven { url("https://packages.namiml.com/NamiSDK/Android/") }
     }
