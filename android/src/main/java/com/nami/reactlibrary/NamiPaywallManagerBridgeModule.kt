@@ -227,7 +227,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun setAppSuppliedVideoDetails(url: String, name: String?) {
-        // To be implemented
+        NamiPaywallManager.setAppSuppliedVideoDetails(url = url, name = name)
     }
 
     @ReactMethod

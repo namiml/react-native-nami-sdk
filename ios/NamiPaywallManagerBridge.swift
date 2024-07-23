@@ -159,7 +159,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     }
 
     @objc(setAppSuppliedVideoDetails:name:)
-    func setAppSuppliedVideoDetails(url _: String, name _: String?) {
-        // To be implemented
+    func setAppSuppliedVideoDetails(url: String, name: String?) {
+        NamiPaywallManager.setAppSuppliedVideoDetails(url, name)
     }
 }

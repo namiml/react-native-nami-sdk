@@ -26,6 +26,7 @@ import { ViewerTabProps } from '../App';
 import theme from '../theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { handleDeepLink } from '../services/deeplinking';
+import customLaunchObject from '../nami_launch_context_custom_object.json';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
@@ -90,7 +91,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    getAllCampaigns();
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       async () => {
         console.log('sign in');
@@ -137,6 +137,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
             setCampaigns(availableCampaigns);
           },
         );
+
+    getAllCampaigns();
+
     return () => {
       subscriptionRemover();
       subscriptionSignInRemover();
@@ -157,10 +160,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const triggerLaunch = (label?: any, url?: any) => {
     checkIfPaywallOpen();
 
+    NamiPaywallManager.setAppSuppliedVideoDetails('https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'app-supplied-video');
+
     return NamiCampaignManager.launch(
       label,
       url,
-      { customAttributes: {}, customObject: { 'items' : [{ 'name' : 'item1' }] } },
+      { customAttributes: {}, customObject: customLaunchObject },
       (successAction, error) => {
         console.log('successAction', successAction);
         console.log('error', error);
@@ -190,9 +195,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         ? triggerLaunch(item.value, null)
         : triggerLaunch(null, item.value);
     }
-
-    NamiPaywallManager.setAppSuppliedVideoDetails('https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'app-supplied-video');
-
   }, []);
 
   const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
