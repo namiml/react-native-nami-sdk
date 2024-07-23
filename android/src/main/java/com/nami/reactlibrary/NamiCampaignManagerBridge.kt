@@ -28,11 +28,12 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         const val CAMPAIGN_TYPE = "campaignType"
         const val CAMPAIGN_URL = "campaignUrl"
         const val PAYWALL_NAME = "paywallName"
-        const val COMPONENT_CHANGE_ID = "componentChangeId"
-        const val COMPONENT_CHANGE_NAME = "componentChangeName"
+        const val COMPONENT_CHANGE = "componentChange"
         const val SEGMENT_ID = "segmentId"
         const val EXTERNAL_SEGMENT_ID = "externalSegmentId"
         const val DEEP_LINK_URL = "deeplinkUrl"
+        const val TIME_SPENT_ON_PAYWALL = "timeSpentOnPaywall"
+        const var VIDEO_METADATA = "videoMetadata"
         const val _RESULT_CAMPAIGN = "ResultCampaign"
     }
 
@@ -60,6 +61,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         if (context != null) {
             val productGroups: MutableList<String> = mutableListOf()
             val customAttributes: MutableMap<String, String> = mutableMapOf()
+            val customObject: MutableMap<String, String> = mutableMapOf()
 
             if (context.hasKey("productGroups")) {
                 val groups = context.getArray("productGroups")
@@ -86,10 +88,22 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 }
             }
 
+            if (context.hasKey("customObject")) {
+                val attr = context.getMap("customObject")
+                if (attr != null) {
+                    val keyIterator = attr.keySetIterator()
+                    while (keyIterator.hasNextKey()) {
+                        val key = keyIterator.nextKey()
+                        customObject[key] = attr.getString(key) ?: ""
+                    }
+                    Log.d(LOG_TAG, "customObject $customObject")
+                }
+            }
+
             if (context.hasKey("productGroups")) {
-                paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes)
+                paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes, customObject)
             } else {
-                paywallLaunchContext = PaywallLaunchContext(null, customAttributes)
+                paywallLaunchContext = PaywallLaunchContext(null, customAttributes, customObject)
             }
         }
 
@@ -150,11 +164,13 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             putString(CAMPAIGN_TYPE, paywallEvent.campaignType ?: "")
             putString(CAMPAIGN_URL, paywallEvent.campaignUrl ?: "")
             putString(PAYWALL_NAME, paywallEvent.paywallName ?: "")
-            putString(COMPONENT_CHANGE_ID, paywallEvent?.componentChange?.id ?: "")
-            putString(COMPONENT_CHANGE_NAME, paywallEvent?.componentChange?.name ?: "")
+            putMap(COMPONENT_CHANGE, paywallEvent?.componentChange ?: Arguments.createMap())
             putString(SEGMENT_ID, paywallEvent.segmentId ?: "")
             putString(EXTERNAL_SEGMENT_ID, paywallEvent.externalSegmentId ?: "")
             putString(DEEP_LINK_URL, paywallEvent.deeplinkUrl ?: "")
+            putString(TIME_SPENT_ON_PAYWALL, paywallEvent.timeSpentOnPaywall ?: "")
+            putMap(VIDEO_METADATA, paywallEvent?.componentChange ?: Arguments.createMap())
+
         }
         emitEvent(_RESULT_CAMPAIGN, resultMap)
     }
