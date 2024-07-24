@@ -177,7 +177,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
         const log = logger.createLogger();
         // console.log(`NamiPaywallEvent ${event}"`)
-        log.info(`NamiPaywallEvent ${event}"`)
+        log.info(`NamiPaywallEvent ${event.toString}"`)
         setAction(event.action);
       },
     );
