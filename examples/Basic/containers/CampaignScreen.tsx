@@ -177,7 +177,18 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
         const log = logger.createLogger();
         // console.log(`NamiPaywallEvent ${event}"`)
-        log.info(`NamiPaywallEvent ${event.toString()}"`)
+        log.info(`NamiPaywallEvent action - ${event.action.toString()}"`);
+        log.info(`NamiPaywallEvent timeSpentOnPaywall - ${event.timeSpentOnPaywall?.toString()}"`);
+        log.info(`NamiPaywallEvent component change id - ${event.componentChange?.id?.toString()}"`);
+        log.info(`NamiPaywallEvent component change name - ${event.componentChange?.name?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata id - ${event.videoMetadata?.id?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata url - ${event.videoMetadata?.url?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata name - ${event.videoMetadata?.name?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata contentDuration - ${event.videoMetadata?.contentDuration?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata contentTimecode - ${event.videoMetadata?.contentTimecode?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata autoplayVideo - ${event.videoMetadata?.autoplayVideo?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata muteByDefault - ${event.videoMetadata?.muteByDefault?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata loopVideo - ${event.videoMetadata?.loopVideo?.toString()}"`);
         setAction(event.action);
       },
     );
