@@ -88,6 +88,7 @@ module.exports = {
     'android.emu.release': {
       device: 'emulator',
       app: 'production.android.release',
+      forceAdbInstall: true,
     },
     'android.emu.debug.local': {
       device: 'emulatorLocal',

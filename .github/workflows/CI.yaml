@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v3
@@ -39,7 +39,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v3
@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v3
@@ -98,7 +98,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v3
@@ -200,7 +200,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -218,7 +218,7 @@ jobs:
         with:
           cache: gradle
           distribution: temurin
-          java-version: 11
+          java-version: 17
 
       - name: Update App Platform ID
         working-directory: source/examples/Basic/config/

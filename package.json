@@ -1,6 +1,6 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "3.2.0",
+  "version": "3.2.1-beta.2",
   "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
   "main": "index.ts",
   "types": "index.d.ts",
@@ -49,19 +49,19 @@
     ]
   },
   "peerDependencies": {
-    "react": ">=17",
-    "react-native": ">=0.65"
+    "react": ">=18",
+    "react-native": ">=0.73"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.2.0",
-    "@types/react-native": "^0.72.2",
+    "@types/react-native": "^0.73.0",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "eslint": "^8.41.0",
     "eslint-plugin-jest": "^27.2.2",
     "@types/jest": "^29.5.2",
     "prettier": "^2.8.7",
-    "react": "^17.0.2",
-    "react-native": "^0.65.2",
+    "react": "^18.2.0",
+    "react-native": "^0.73.0",
     "react-native-codegen": "^0.0.12",
     "typescript": "^5.0.2"
   },

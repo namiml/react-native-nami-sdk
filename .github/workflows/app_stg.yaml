@@ -32,7 +32,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v2
@@ -40,6 +40,13 @@ jobs:
           path: source
           ref: '${{ inputs.ref }}'
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          cache: gradle
+          distribution: temurin
+          java-version: 17
+          
       - name: Install Google API python client
         run: |
           pip install google-api-python-client
@@ -114,7 +121,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: "Checkout ${{ inputs.ref }}"
         uses: actions/checkout@v2
@@ -201,10 +208,10 @@ jobs:
           pod install --repo-update
         working-directory: source/examples/Basic/ios
 
-      - name: Apply Patches
-        run: |
-          patch -p0 < *.patch
-        working-directory: source/examples/Basic/patches
+      # - name: Apply Patches
+      #   run: |
+      #     patch -p0 < *.patch
+      #   working-directory: source/examples/Basic/patches
 
       - name: Build resolve Swift dependencies
         run: |
@@ -239,7 +246,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: "Checkout ${{ inputs.ref }}"
         uses: actions/checkout@v2
@@ -326,10 +333,10 @@ jobs:
           RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install --repo-update
         working-directory: source/examples/TestNamiTV/ios
 
-      - name: Apply Patches
-        run: |
-          patch -p0 < *.patch
-        working-directory: source/examples/TestNamiTV/patches
+      # - name: Apply Patches
+      #   run: |
+      #     patch -p0 < *.patch
+      #   working-directory: source/examples/TestNamiTV/patches
 
       - name: Build resolve Swift dependencies
         run: |

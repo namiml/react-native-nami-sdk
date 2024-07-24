@@ -81,12 +81,50 @@ class RNNamiCampaignManager: RCTEventEmitter {
             actionString = "PAGE_CHANGE"
         case .slide_change:
             actionString = "SLIDE_CHANGE"
+        case .nami_collapsible_drawer_open:
+          actionString = "COLLAPSIBLE_DRAWER_OPEN"
+        case .nami_collapsible_drawer_close:
+          actionString = "COLLAPSIBLE_DRAWER_CLOSE"
+        case .video_play:
+            actionString = "VIDEO_STARTED"
+        case .video_pause:
+            actionString = "VIDEO_PAUSED"
+        case .video_resume:
+            actionString = "VIDEO_RESUMED"
+        case .video_end:
+            actionString = "VIDEO_ENDED"
+        case .video_change:
+            actionString = "VIDEO_CHANGED"
+        case .video_mute:
+            actionString = "VIDEO_MUTED"
+        case .video_unmute:
+            actionString = "VIDEO_UNMUTED"
         default:
             actionString = "UNKNOWN"
         }
         let errorSting = paywallEvent.purchaseError?.localizedDescription
 
         let dictionaries = paywallEvent.purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }
+
+        var componentChange: [String: Any?] = [:]
+
+        if let eventComponentChange = paywallEvent.componentChange {
+            componentChange["id"] = eventComponentChange.id
+            componentChange["name"] = eventComponentChange.name
+        }
+
+        var videoMetadata: [String: Any?] = [:]
+
+        if let eventVideoMetadata = paywallEvent.videoMetadata {
+            videoMetadata["id"] = eventVideoMetadata.id
+            videoMetadata["name"] = eventVideoMetadata.name
+            videoMetadata["url"] = eventVideoMetadata.url
+            videoMetadata["loopVideo"] = eventVideoMetadata.loopVideo
+            videoMetadata["muteByDefault"] = eventVideoMetadata.muteByDefault
+            videoMetadata["autoplayVideo"] = eventVideoMetadata.autoplayVideo
+            videoMetadata["contentTimecode"] = eventVideoMetadata.contentTimecode
+            videoMetadata["contentDuration"] = eventVideoMetadata.contentDuration
+        }
 
         let payload: [String: Any?] = [
             "campaignId": paywallEvent.campaignId,
@@ -103,8 +141,9 @@ class RNNamiCampaignManager: RCTEventEmitter {
             "purchaseError": errorSting,
             "purchases": dictionaries,
             "deeplinkUrl": paywallEvent.deeplinkUrl,
-            "componentChangeId": paywallEvent.componentChange?.id,
-            "componentChangeName": paywallEvent.componentChange?.name,
+            "componentChange": componentChange,
+            "videoMetadata": videoMetadata,
+            "timeSpentOnPaywall": paywallEvent.timeSpentOnPaywall,
         ]
 
         RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
@@ -126,6 +165,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
 
         var productGroups: [String]?
         var customAttributes: [String: Any]?
+        var customObject: [String: Any]?
 
         if let context = context {
             if let contextProductGroups = context["productGroups"] as? [String] {
@@ -134,10 +174,13 @@ class RNNamiCampaignManager: RCTEventEmitter {
             if let contextCustomAttributes = context["customAttributes"] as? [String: Any] {
                 customAttributes = contextCustomAttributes
             }
+            if let contextCustomObject = context["customObject"] as? [String: Any] {
+                customObject = contextCustomObject
+            }
         }
 
-        if productGroups != nil || customAttributes != nil {
-            paywallLaunchContext = PaywallLaunchContext(productGroups: productGroups, customAttributes: customAttributes)
+        if productGroups != nil || customAttributes != nil || customObject != nil {
+            paywallLaunchContext = PaywallLaunchContext(productGroups: productGroups, customAttributes: customAttributes, customObject: customObject)
         }
 
         var launchMethod: (() -> Void)?
