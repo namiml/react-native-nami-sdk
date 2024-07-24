@@ -183,6 +183,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             val videoMetadataMap = Arguments.createMap().apply {
                 putString("id", paywallEvent.videoMetadata?.id ?: "")
                 putString("name", paywallEvent.videoMetadata?.name ?: "")
+                putString("url", paywallEvent.videoMetadata?.url ?: "")
                 putBoolean("autoplayVideo", paywallEvent.videoMetadata?.autoplayVideo ?: false)
                 putBoolean("muteByDefault", paywallEvent.videoMetadata?.muteByDefault ?: false)
                 putBoolean("loopVideo", paywallEvent.videoMetadata?.loopVideo ?: false)

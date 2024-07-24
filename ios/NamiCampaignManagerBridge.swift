@@ -118,7 +118,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
         if let eventVideoMetadata = paywallEvent.videoMetadata {
             videoMetadata["id"] = eventVideoMetadata.id
             videoMetadata["name"] = eventVideoMetadata.name
-            videoMetadata["url"] = eventVideoMetadata.name
+            videoMetadata["url"] = eventVideoMetadata.url
             videoMetadata["loopVideo"] = eventVideoMetadata.loopVideo
             videoMetadata["muteByDefault"] = eventVideoMetadata.muteByDefault
             videoMetadata["autoplayVideo"] = eventVideoMetadata.autoplayVideo
