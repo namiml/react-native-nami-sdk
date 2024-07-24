@@ -40,6 +40,13 @@ jobs:
           path: source
           ref: '${{ inputs.ref }}'
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          cache: gradle
+          distribution: temurin
+          java-version: 17
+
       - name: Install Google API python client
         run: |
           pip install google-api-python-client
