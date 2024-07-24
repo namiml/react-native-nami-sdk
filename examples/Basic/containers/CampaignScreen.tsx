@@ -27,7 +27,7 @@ import theme from '../theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { handleDeepLink } from '../services/deeplinking';
 import customLaunchObject from '../nami_launch_context_custom_object.json';
-import { logger } from "react-native-logs";
+import { logger } from 'react-native-logs';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
@@ -175,7 +175,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       },
       (event: NamiPaywallEvent) => {
 
-        var log = logger.createLogger();
+        const log = logger.createLogger();
         // console.log(`NamiPaywallEvent ${event}"`)
         log.info(`NamiPaywallEvent ${event}"`)
         setAction(event.action);
