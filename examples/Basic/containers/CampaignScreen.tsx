@@ -167,7 +167,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
           setAction(event.action);
         },
       );
-      checkIfPaywallOpen();
     } catch (error) {
       console.log('Error launching campaign: ', error);
     }
