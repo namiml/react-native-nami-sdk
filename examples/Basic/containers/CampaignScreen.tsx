@@ -158,7 +158,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     checkIfPaywallOpen();
 
     try {
-      NamiCampaignManager.launch(
+      return NamiCampaignManager.launch(
         label,
         url,
         {customAttributes: {}, customObject: {items: [{name: 'item1'}]}},

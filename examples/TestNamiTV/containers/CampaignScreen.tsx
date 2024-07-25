@@ -58,7 +58,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   const triggerLaunch = (label?: any, url?: any) => {
     try {
-      NamiCampaignManager.launch(
+      return NamiCampaignManager.launch(
         label,
         url,
         undefined,
