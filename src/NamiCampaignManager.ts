@@ -85,12 +85,12 @@ export const NamiCampaignManager: ICampaignManager = {
         (success: boolean, err: any) => {
           if (err) {
             reject(err);
-          } 
+          }
           resolve();
         },
-        actionCallback ?? (() => { }),
+        actionCallback ?? (() => {}),
       );
-    })
+    });
   },
 
   isCampaignAvailable: campaignSource => {
