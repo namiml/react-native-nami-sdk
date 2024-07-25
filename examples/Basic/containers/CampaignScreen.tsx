@@ -157,21 +157,20 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const triggerLaunch = (label?: any, url?: any) => {
     checkIfPaywallOpen();
 
-    return NamiCampaignManager.launch(
-      label,
-      url,
-      { customAttributes: {}, customObject: { 'items' : [{ 'name' : 'item1' }] } },
-      (successAction, error) => {
-        console.log('successAction', successAction);
-        console.log('error', error);
-
-        checkIfPaywallOpen();
-      },
-      (event: NamiPaywallEvent) => {
-        console.log('event', event);
-        setAction(event.action);
-      },
-    );
+    try {
+      NamiCampaignManager.launch(
+        label,
+        url,
+        {customAttributes: {}, customObject: {items: [{name: 'item1'}]}},
+        (event: NamiPaywallEvent) => {
+          console.log('event', event);
+          setAction(event.action);
+        },
+      );
+      checkIfPaywallOpen();
+    } catch (error) {
+      console.log('Error launching campaign: ', error);
+    }
   };
 
   const isCampaignAvailable = async (value?: string | null | undefined) => {

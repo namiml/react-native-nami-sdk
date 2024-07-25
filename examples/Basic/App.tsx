@@ -3,7 +3,7 @@ import { Linking, Platform, EmitterSubscription } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NamiPaywallManager } from 'react-native-nami-sdk';
+import { NamiPaywallManager, NamiSKU } from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
@@ -53,7 +53,7 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 const App = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [namiSku, setNamiSku] = useState<NamiSKU>(undefined);
+  const [namiSku, setNamiSku] = useState<NamiSKU>({} as NamiSKU);
 
   useEffect(() => {
     Linking.addEventListener('url', handleDeepLink);

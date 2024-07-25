@@ -4,7 +4,6 @@ import {
   EmitterSubscription,
 } from 'react-native';
 import {
-  LaunchCampaignError,
   NamiCampaign,
   NamiPaywallActionHandler,
   NamiPaywallEvent,
@@ -29,9 +28,8 @@ interface ICampaignManager {
     label?: string,
     withUrl?: string,
     context?: PaywallLaunchContext,
-    resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
     actionCallback?: NamiPaywallActionHandler,
-  ) => void;
+  ) => Promise<void>;
   refresh: () => void;
   registerAvailableCampaignsHandler: (
     callback: (availableCampaigns: NamiCampaign[]) => void,
@@ -42,7 +40,7 @@ export const NamiCampaignManager: ICampaignManager = {
   launchSubscription: undefined,
   emitter: new NativeEventEmitter(RNNamiCampaignManager),
   ...RNNamiCampaignManager,
-  launch(label, withUrl, context, resultCallback, actionCallback) {
+  launch(label, withUrl, context, actionCallback) {
     if (this.launchSubscription) {
       this.launchSubscription.remove();
     }
@@ -76,13 +74,21 @@ export const NamiCampaignManager: ICampaignManager = {
         }
       },
     );
-    RNNamiCampaignManager.launch(
-      label ?? null,
-      withUrl ?? null,
-      context ?? null,
-      resultCallback ?? (() => {}),
-      actionCallback ?? (() => {}),
-    );
+
+    return new Promise((resolve, reject) => {
+      RNNamiCampaignManager.launch(
+        label ?? null,
+        withUrl ?? null,
+        context ?? null,
+        (success: boolean, err: any) => {
+          if (err) {
+            reject(err);
+          } 
+          resolve();
+        },
+        actionCallback ?? (() => { }),
+      );
+    })
   },
 
   isCampaignAvailable: campaignSource => {

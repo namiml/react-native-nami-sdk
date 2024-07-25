@@ -57,18 +57,18 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   const triggerLaunch = (label?: any, url?: any) => {
-    return NamiCampaignManager.launch(
-      label,
-      url,
-      undefined,
-      (successAction, error) => {
-        console.log('successAction', successAction);
-        console.log('error', error);
-      },
-      (event: NamiPaywallEvent) => {
-        console.log('event', event);
-      },
-    );
+    try {
+      NamiCampaignManager.launch(
+        label,
+        url,
+        undefined,
+        (event: NamiPaywallEvent) => {
+          console.log('event', event);
+        },
+      );
+    } catch (error) {
+      console.log('Error launching campaign: ', error);
+    }
   };
 
   const isCampaignAvailable = async (value?: string | null | undefined) => {
