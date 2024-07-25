@@ -278,6 +278,15 @@ export enum NamiPaywallAction {
   TOGGLE_CHANGE = 'TOGGLE_CHANGE',
   PAGE_CHANGE = 'PAGE_CHANGE',
   SLIDE_CHANGE = 'SLIDE_CHANGE',
+  COLLAPSIBLE_DRAWER_OPEN = 'COLLAPSIBLE_DRAWER_OPEN',
+  COLLAPSIBLE_DRAWER_CLOSE = 'COLLAPSIBLE_DRAWER_CLOSE',
+  VIDEO_STARTED = 'VIDEO_STARTED',
+  VIDEO_PAUSED = 'VIDEO_PAUSED',
+  VIDEO_RESUMED = 'VIDEO_RESUMED',
+  VIDEO_ENDED = 'VIDEO_ENDED',
+  VIDEO_CHANGED = 'VIDEO_CHANGED',
+  VIDEO_MUTED = 'VIDEO_MUTED',
+  VIDEO_UNMUTED = 'VIDEO_UNMUTED',
   UNKNOWN = 'UNKNOWN',
 }
 
@@ -318,6 +327,8 @@ export type NamiPaywallEvent = {
   sku?: NamiSKU;
   purchaseError?: string;
   purchases?: NamiPurchase[];
+  videoMetadata?: NamiPaywallEventVideoMetadata;
+  timeSpentOnPaywall?: number;
 };
 
 export type NamiPaywallActionHandler = (event: NamiPaywallEvent) => void;
@@ -325,4 +336,15 @@ export type NamiPaywallActionHandler = (event: NamiPaywallEvent) => void;
 export type NamiPaywallComponentChange = {
   id?: string;
   name?: string;
+};
+
+export type NamiPaywallEventVideoMetadata = {
+  id?: string;
+  name?: string;
+  url?: string;
+  loopVideo: boolean;
+  muteByDefault: boolean;
+  autoplayVideo: boolean;
+  contentTimecode?: number;
+  contentDuration?: number;
 };

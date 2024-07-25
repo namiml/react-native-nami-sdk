@@ -66,6 +66,8 @@ export const NamiCampaignManager: ICampaignManager = {
             segmentId: body.segmentId,
             externalSegmentId: body.externalSegmentId,
             deeplinkUrl: body.deeplinkUrl,
+            videoMetadata: body.videoMetadata,
+            timeSpentOnPaywall: body.timeSpentOnPaywall,
             sku: body.sku,
             purchaseError: body.purchaseError,
             purchases: body.purchases,
