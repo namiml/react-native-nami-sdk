@@ -233,7 +233,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     @ReactMethod
     fun clearAppSuppliedVideoDetails() {
         NamiPaywallManager.clearAppSuppliedVideoDetails()
-
+    }
 
     @ReactMethod
     fun addListener(eventName: String?) {
