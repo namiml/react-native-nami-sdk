@@ -29,5 +29,6 @@ export interface INamiPaywallManager {
     isPaywallOpen: () => Promise<boolean>;
     setProductDetails: (productDetails: string, allowOffers: boolean) => void;
     setAppSuppliedVideoDetails: (url: string, name?: string) => void;
+    clearAppSuppliedVideoDetails: () => void;
 }
 export declare const NamiPaywallManager: INamiPaywallManager;

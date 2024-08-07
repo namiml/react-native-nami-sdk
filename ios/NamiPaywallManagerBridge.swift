@@ -162,4 +162,11 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func setAppSuppliedVideoDetails(url: String, name: String?) {
         NamiPaywallManager.setAppSuppliedVideoDetails(url: url, name: name)
     }
+
+    @objc(clearAppSuppliedVideoDetails)
+    func clearAppSuppliedVideoDetails() {
+        DispatchQueue.main.async {
+            NamiPaywallManager.clearAppSuppliedVideoDetails()
+        }
+    }
 }

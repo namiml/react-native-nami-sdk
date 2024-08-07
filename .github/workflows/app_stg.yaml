@@ -46,7 +46,7 @@ jobs:
           cache: gradle
           distribution: temurin
           java-version: 17
-          
+
       - name: Install Google API python client
         run: |
           pip install google-api-python-client

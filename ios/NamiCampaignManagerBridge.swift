@@ -82,9 +82,9 @@ class RNNamiCampaignManager: RCTEventEmitter {
         case .slide_change:
             actionString = "SLIDE_CHANGE"
         case .nami_collapsible_drawer_open:
-          actionString = "COLLAPSIBLE_DRAWER_OPEN"
+            actionString = "COLLAPSIBLE_DRAWER_OPEN"
         case .nami_collapsible_drawer_close:
-          actionString = "COLLAPSIBLE_DRAWER_CLOSE"
+            actionString = "COLLAPSIBLE_DRAWER_CLOSE"
         case .video_play:
             actionString = "VIDEO_STARTED"
         case .video_pause:
