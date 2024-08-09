@@ -6,6 +6,7 @@ import subprocess
 
 # Regex to validate version numbers
 PROD_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+$")
+PROD_VERSION_EXT_RE = re.compile(r"^\d+\.\d+\.\d+-\d$")
 PRERELEASE_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+-(alpha|beta|rc)\.\d+$")
 
 early_access = str(os.getenv("EARLY_ACCESS"))
@@ -21,7 +22,7 @@ git_long_hash = (
 )
 
 # Check what kind of release this is and guard against non-conforming version numbers
-if PROD_VERSION_RE.match(nami_sdk_version):
+if PROD_VERSION_RE.match(nami_sdk_version) or PROD_VERSION_EXT_RE.match(nami_sdk_version):
     if early_access == "true":
         print(f"Early access value ('{early_access}') is not compatible with production version format '{nami_sdk_version}'")
         sys.exit(1)
