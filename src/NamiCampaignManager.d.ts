@@ -1,5 +1,5 @@
 import { NativeEventEmitter, EmitterSubscription } from 'react-native';
-import { LaunchCampaignError, NamiCampaign, NamiPaywallActionHandler, PaywallLaunchContext } from './types';
+import { NamiCampaign, NamiPaywallActionHandler, PaywallLaunchContext } from './types';
 export declare const RNNamiCampaignManager: any;
 export declare enum NamiCampaignManagerEvents {
     ResultCampaign = "ResultCampaign",
@@ -10,7 +10,7 @@ interface ICampaignManager {
     emitter: NativeEventEmitter;
     allCampaigns: () => Promise<Array<NamiCampaign>>;
     isCampaignAvailable(campaignSource: string | null): Promise<boolean>;
-    launch: (label?: string, withUrl?: string, context?: PaywallLaunchContext, resultCallback?: (success: boolean, error?: LaunchCampaignError) => void, actionCallback?: NamiPaywallActionHandler) => void;
+    launch: (label?: string, withUrl?: string, context?: PaywallLaunchContext, actionCallback?: NamiPaywallActionHandler) => Promise<void>;
     refresh: () => void;
     registerAvailableCampaignsHandler: (callback: (availableCampaigns: NamiCampaign[]) => void) => EmitterSubscription['remove'];
 }

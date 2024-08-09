@@ -15,16 +15,17 @@ export async function handleDeepLink(params: HandleDeepLinkParams) {
   );
   if (isCampaignAvailable && url) {
     console.log('Calling verified deeplink action using launch:', url);
-    NamiCampaignManager.launch(
-      undefined,
-      url,
-      undefined,
-      (success, error) => {
-        console.log(success, error);
-      },
-      (event: NamiPaywallEvent) => {
-        console.log('event', event);
-      },
-    );
+    try {
+      NamiCampaignManager.launch(
+        undefined,
+        url,
+        undefined,
+        (event: NamiPaywallEvent) => {
+          console.log('event', event);
+        },
+      );
+    } catch (error) {
+      console.log('Error launching campaign: ', error);
+    }
   }
 }
