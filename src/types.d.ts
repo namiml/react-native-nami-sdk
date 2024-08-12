@@ -47,13 +47,20 @@ export type AppleProduct = {
 export type GoogleProduct = {};
 export type AmazonProduct = {};
 export type NamiCampaign = {
-    id: string;
+    name: string;
     rule: string;
     segment: string;
     paywall: string;
     type: NamiCampaignRuleType;
     value?: string | null;
+    form_factors: FormFactor[];
+    external_segment_id: string | null;
 };
+type FormFactor = {
+    form_factor: string;
+    supports_portrait: boolean;
+    supports_landscape: boolean;
+}
 export declare enum NamiCampaignRuleType {
     DEFAULT = "default",
     LABEL = "label",
@@ -158,6 +165,7 @@ export type NamiPurchase = {
     sku?: NamiSKU;
     skuId: string;
     transactionIdentifier?: string;
+    purchaseToken?: string;
     expires?: Date;
     purchaseInitiatedTimestamp: Date;
     purchaseSource?: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
