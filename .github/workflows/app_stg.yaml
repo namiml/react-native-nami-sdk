@@ -1,4 +1,6 @@
 name: Generate Test React STG
+env:
+  DEVELOPER_DIR: /Applications/Xcode_15.0.1.app/Contents/Developer
 on:
   workflow_dispatch:
     inputs:
@@ -30,7 +32,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v2
@@ -38,6 +40,13 @@ jobs:
           path: source
           ref: '${{ inputs.ref }}'
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          cache: gradle
+          distribution: temurin
+          java-version: 17
+          
       - name: Install Google API python client
         run: |
           pip install google-api-python-client
@@ -107,12 +116,12 @@ jobs:
       actions: write
       contents: write
       id-token: write
-    runs-on: macos-12
+    runs-on: macos-13
     timeout-minutes: 40
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: "Checkout ${{ inputs.ref }}"
         uses: actions/checkout@v2
@@ -156,7 +165,7 @@ jobs:
       - name: Install the provisioning profile
         run: |
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode --output $PP_PATH
+          echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode -o $PP_PATH
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
         env:
@@ -199,6 +208,11 @@ jobs:
           pod install --repo-update
         working-directory: source/examples/Basic/ios
 
+      # - name: Apply Patches
+      #   run: |
+      #     patch -p0 < *.patch
+      #   working-directory: source/examples/Basic/patches
+
       - name: Build resolve Swift dependencies
         run: |
           xcodebuild -resolvePackageDependencies -workspace ios/Basic.xcworkspace -scheme Basic -configuration Release
@@ -227,12 +241,12 @@ jobs:
       actions: write
       contents: write
       id-token: write
-    runs-on: macos-12
+    runs-on: macos-13
     timeout-minutes: 40
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: "Checkout ${{ inputs.ref }}"
         uses: actions/checkout@v2
@@ -276,7 +290,7 @@ jobs:
       - name: Install the provisioning profile
         run: |
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode --output $PP_PATH
+          echo -n "$PROVISIONING_CERTIFICATE_BASE64" | base64 --decode -o $PP_PATH
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
         env:
@@ -318,6 +332,11 @@ jobs:
         run: |
           RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install --repo-update
         working-directory: source/examples/TestNamiTV/ios
+
+      # - name: Apply Patches
+      #   run: |
+      #     patch -p0 < *.patch
+      #   working-directory: source/examples/TestNamiTV/patches
 
       - name: Build resolve Swift dependencies
         run: |

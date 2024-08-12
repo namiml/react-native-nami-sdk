@@ -28,11 +28,12 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         const val CAMPAIGN_TYPE = "campaignType"
         const val CAMPAIGN_URL = "campaignUrl"
         const val PAYWALL_NAME = "paywallName"
-        const val COMPONENT_CHANGE_ID = "componentChangeId"
-        const val COMPONENT_CHANGE_NAME = "componentChangeName"
+        const val COMPONENT_CHANGE = "componentChange"
         const val SEGMENT_ID = "segmentId"
         const val EXTERNAL_SEGMENT_ID = "externalSegmentId"
         const val DEEP_LINK_URL = "deeplinkUrl"
+        const val TIME_SPENT_ON_PAYWALL = "timeSpentOnPaywall"
+        const val VIDEO_METADATA = "videoMetadata"
         const val _RESULT_CAMPAIGN = "ResultCampaign"
     }
 
@@ -50,7 +51,13 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun launch(label: String?, withUrl: String?, context: ReadableMap?, resultCallback: Callback, actionCallback: Callback) {
+    fun launch(
+        label: String?,
+        withUrl: String?,
+        context: ReadableMap?,
+        resultCallback: Callback,
+        actionCallback: Callback,
+    ) {
         var theActivity: Activity? = null
         if (reactApplicationContext.hasCurrentActivity()) {
             theActivity = reactApplicationContext.getCurrentActivity()
@@ -60,6 +67,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         if (context != null) {
             val productGroups: MutableList<String> = mutableListOf()
             val customAttributes: MutableMap<String, String> = mutableMapOf()
+            var customObject: MutableMap<String, Any> = mutableMapOf()
 
             if (context.hasKey("productGroups")) {
                 val groups = context.getArray("productGroups")
@@ -86,10 +94,21 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 }
             }
 
+            if (context.hasKey("customObject")) {
+                val attr = context.getMap("customObject")
+                if (attr != null) {
+                    try {
+                        customObject = attr.toHashMap().toMutableMap()
+                    } catch (e: Exception) {
+                        Log.d(LOG_TAG, "Unable to parse PaywallLaunchContext customObject $customObject")
+                    }
+                }
+            }
+
             if (context.hasKey("productGroups")) {
-                paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes)
+                paywallLaunchContext = PaywallLaunchContext(productGroups.toList(), customAttributes, customObject)
             } else {
-                paywallLaunchContext = PaywallLaunchContext(null, customAttributes)
+                paywallLaunchContext = PaywallLaunchContext(null, customAttributes, customObject)
             }
         }
 
@@ -138,24 +157,54 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
 
         val purchasesArray = createPurchaseArray(paywallEvent.purchases)
 
-        val resultMap = Arguments.createMap().apply {
-            putString(CAMPAIGN_ID, paywallEvent.campaignId)
-            putString(CAMPAIGN_LABEL, paywallEvent.campaignLabel ?: "")
-            putString(PAYWALL_ID, paywallEvent.paywallId)
-            putString(ACTION, actionString)
-            putString(SKU_ID, skuString)
-            putString(PURCHASE_ERROR, paywallEvent.purchaseError ?: "")
-            putArray(PURCHASES, purchasesArray)
-            putString(CAMPAIGN_NAME, paywallEvent.campaignName ?: "")
-            putString(CAMPAIGN_TYPE, paywallEvent.campaignType ?: "")
-            putString(CAMPAIGN_URL, paywallEvent.campaignUrl ?: "")
-            putString(PAYWALL_NAME, paywallEvent.paywallName ?: "")
-            putString(COMPONENT_CHANGE_ID, paywallEvent?.componentChange?.id ?: "")
-            putString(COMPONENT_CHANGE_NAME, paywallEvent?.componentChange?.name ?: "")
-            putString(SEGMENT_ID, paywallEvent.segmentId ?: "")
-            putString(EXTERNAL_SEGMENT_ID, paywallEvent.externalSegmentId ?: "")
-            putString(DEEP_LINK_URL, paywallEvent.deeplinkUrl ?: "")
+        val resultMap =
+            Arguments.createMap().apply {
+                putString(CAMPAIGN_ID, paywallEvent.campaignId)
+                putString(CAMPAIGN_LABEL, paywallEvent.campaignLabel ?: "")
+                putString(PAYWALL_ID, paywallEvent.paywallId)
+                putString(ACTION, actionString)
+                putString(SKU_ID, skuString)
+                putString(PURCHASE_ERROR, paywallEvent.purchaseError ?: "")
+                putArray(PURCHASES, purchasesArray)
+                putString(CAMPAIGN_NAME, paywallEvent.campaignName ?: "")
+                putString(CAMPAIGN_TYPE, paywallEvent.campaignType ?: "")
+                putString(CAMPAIGN_URL, paywallEvent.campaignUrl ?: "")
+                putString(PAYWALL_NAME, paywallEvent.paywallName ?: "")
+                putString(SEGMENT_ID, paywallEvent.segmentId ?: "")
+                putString(EXTERNAL_SEGMENT_ID, paywallEvent.externalSegmentId ?: "")
+                putString(DEEP_LINK_URL, paywallEvent.deeplinkUrl ?: "")
+            }
+
+        if (paywallEvent.componentChange != null) {
+            val componentChangeMap =
+                Arguments.createMap().apply {
+                    putString("id", paywallEvent.componentChange?.id ?: "")
+                    putString("name", paywallEvent.componentChange?.name ?: "")
+                }
+
+            resultMap.putMap(COMPONENT_CHANGE, componentChangeMap)
         }
+
+        if (paywallEvent.videoMetadata != null) {
+            val videoMetadataMap =
+                Arguments.createMap().apply {
+                    putString("id", paywallEvent.videoMetadata?.id ?: "")
+                    putString("name", paywallEvent.videoMetadata?.name ?: "")
+                    putString("url", paywallEvent.videoMetadata?.url ?: "")
+                    putBoolean("autoplayVideo", paywallEvent.videoMetadata?.autoplayVideo ?: false)
+                    putBoolean("muteByDefault", paywallEvent.videoMetadata?.muteByDefault ?: false)
+                    putBoolean("loopVideo", paywallEvent.videoMetadata?.loopVideo ?: false)
+                    putDouble("contentDuration", paywallEvent.videoMetadata?.contentDuration ?: 0.0)
+                    putDouble("contentTimecode", paywallEvent.videoMetadata?.contentTimecode ?: 0.0)
+                }
+
+            resultMap.putMap(VIDEO_METADATA, videoMetadataMap)
+        }
+
+        if (paywallEvent.timeSpentOnPaywall != null) {
+            resultMap.putDouble(TIME_SPENT_ON_PAYWALL, paywallEvent.timeSpentOnPaywall ?: 0.0)
+        }
+
         emitEvent(_RESULT_CAMPAIGN, resultMap)
     }
 
@@ -171,7 +220,10 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
     }
 
-    private fun emitEvent(event: String, map: WritableMap) {
+    private fun emitEvent(
+        event: String,
+        map: WritableMap,
+    ) {
         val emitter = reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
         if (emitter is DeviceEventManagerModule.RCTDeviceEventEmitter) {
             emitter.emit(event, map)
@@ -180,7 +232,10 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         }
     }
 
-    private fun handleResult(result: LaunchCampaignResult, resultCallback: Callback) {
+    private fun handleResult(
+        result: LaunchCampaignResult,
+        resultCallback: Callback,
+    ) {
         val resultMap = Arguments.createMap()
         when (result) {
             is LaunchCampaignResult.Success -> {
@@ -216,12 +271,16 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun isCampaignAvailable(campaignSource: String?, promise: Promise) {
-        val isCampaignAvailable = when {
-            campaignSource == null -> NamiCampaignManager.isCampaignAvailable()
-            Uri.parse(campaignSource)?.scheme != null -> NamiCampaignManager.isCampaignAvailable(Uri.parse(campaignSource))
-            else -> NamiCampaignManager.isCampaignAvailable(campaignSource)
-        }
+    fun isCampaignAvailable(
+        campaignSource: String?,
+        promise: Promise,
+    ) {
+        val isCampaignAvailable =
+            when {
+                campaignSource == null -> NamiCampaignManager.isCampaignAvailable()
+                Uri.parse(campaignSource)?.scheme != null -> NamiCampaignManager.isCampaignAvailable(Uri.parse(campaignSource))
+                else -> NamiCampaignManager.isCampaignAvailable(campaignSource)
+            }
         promise.resolve(isCampaignAvailable)
     }
 

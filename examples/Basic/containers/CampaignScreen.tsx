@@ -26,6 +26,8 @@ import { ViewerTabProps } from '../App';
 import theme from '../theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { handleDeepLink } from '../services/deeplinking';
+import customLaunchObject from '../nami_launch_context_custom_object.json';
+import { logger } from 'react-native-logs';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
@@ -99,7 +101,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    getAllCampaigns();
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       async () => {
         console.log('sign in');
@@ -146,6 +147,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
             setCampaigns(availableCampaigns);
           },
         );
+
+    getAllCampaigns();
+
     return () => {
       subscriptionRemover();
       subscriptionSignInRemover();
@@ -166,18 +170,34 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const triggerLaunch = useCallback((label?: any, url?: any) => {
     checkIfPaywallOpen();
 
+    NamiPaywallManager.setAppSuppliedVideoDetails('https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'app-supplied-video');
+
     return NamiCampaignManager.launch(
       label,
       url,
-      { customAttributes: {} },
-      (successAction: any, error: any) => {
+      { customAttributes: {}, customObject: customLaunchObject },
+      (successAction, error) => {
         console.log('successAction', successAction);
         console.log('error', error);
 
         checkIfPaywallOpen();
       },
       (event: NamiPaywallEvent) => {
-        console.log('event', event);
+
+        const log = logger.createLogger();
+        // console.log(`NamiPaywallEvent ${event}"`)
+        log.info(`NamiPaywallEvent action - ${event.action.toString()}"`);
+        log.info(`NamiPaywallEvent timeSpentOnPaywall - ${event.timeSpentOnPaywall?.toString()}"`);
+        log.info(`NamiPaywallEvent component change id - ${event.componentChange?.id?.toString()}"`);
+        log.info(`NamiPaywallEvent component change name - ${event.componentChange?.name?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata id - ${event.videoMetadata?.id?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata url - ${event.videoMetadata?.url?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata name - ${event.videoMetadata?.name?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata contentDuration - ${event.videoMetadata?.contentDuration?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata contentTimecode - ${event.videoMetadata?.contentTimecode?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata autoplayVideo - ${event.videoMetadata?.autoplayVideo?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata muteByDefault - ${event.videoMetadata?.muteByDefault?.toString()}"`);
+        log.info(`NamiPaywallEvent video metadata loopVideo - ${event.videoMetadata?.loopVideo?.toString()}"`);
         setAction(event.action);
       },
     );
