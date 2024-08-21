@@ -38,17 +38,22 @@ const Root = () => {
     console.log('NamiSDK: configured', configured);
   };
 
-  useEffect(async() => {
+  useEffect(() => {
 
-    checkSdkConfigured();
-
-    const result = await Nami.configure(configDict);
-    if(result.success){
-      setIsConfigurationComplete(true);
+    async function configureSDK() {
+      // You can await here
       checkSdkConfigured();
-    }
 
-    initStoreConnection();
+      const result = await Nami.configure(configDict);
+      if(result.success){
+        setIsConfigurationComplete(true);
+        checkSdkConfigured();
+      }
+
+      initStoreConnection();
+      // ...
+    }
+    configureSDK();
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
