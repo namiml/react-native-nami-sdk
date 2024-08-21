@@ -174,7 +174,7 @@ type NamiFormFactor = {
   form_factor?: string;
   supports_portrait?: boolean;
   supports_landscape?: boolean;
-}
+};
 
 export enum LaunchCampaignError {
   DEFAULT_CAMPAIGN_NOT_FOUND = 0,
