@@ -21,7 +21,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         const val CAMPAIGN_LABEL = "campaignLabel"
         const val PAYWALL_ID = "paywallId"
         const val ACTION = "action"
-        const val SKU_ID = "skuId"
+        const val SKU = "sku"
         const val PURCHASE_ERROR = "purchaseError"
         const val PURCHASES = "purchases"
         const val CAMPAIGN_NAME = "campaignName"
@@ -153,7 +153,6 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         actionCallback: Callback,
     ) {
         val actionString = paywallEvent.action.toString()
-        val skuString = paywallEvent.sku?.skuId ?: ""
 
         val purchasesArray = createPurchaseArray(paywallEvent.purchases)
 
@@ -163,7 +162,6 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 putString(CAMPAIGN_LABEL, paywallEvent.campaignLabel ?: "")
                 putString(PAYWALL_ID, paywallEvent.paywallId)
                 putString(ACTION, actionString)
-                putString(SKU_ID, skuString)
                 putString(PURCHASE_ERROR, paywallEvent.purchaseError ?: "")
                 putArray(PURCHASES, purchasesArray)
                 putString(CAMPAIGN_NAME, paywallEvent.campaignName ?: "")
@@ -174,6 +172,17 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 putString(EXTERNAL_SEGMENT_ID, paywallEvent.externalSegmentId ?: "")
                 putString(DEEP_LINK_URL, paywallEvent.deeplinkUrl ?: "")
             }
+
+        if (paywallEvent.sku != null) {
+            val skuMap =
+                Arguments.createMap().apply {
+                    putString("id", paywallEvent.sku?.id ?: "")
+                    putString("skuId", paywallEvent.sku?.skuId ?: "")
+                    putString("name", paywallEvent.sku?.name ?: "")
+                    putString("name", paywallEvent.sku?.type ?: "unknown")
+                }
+            resultMap.putMap(SKU, skuMap)
+        }
 
         if (paywallEvent.componentChange != null) {
             val componentChangeMap =
