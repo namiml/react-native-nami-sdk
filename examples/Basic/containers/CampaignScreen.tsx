@@ -197,7 +197,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         log.info(`NamiPaywallEvent sku id - ${event.sku?.id}"`);
         log.info(`NamiPaywallEvent sku skuId - ${event.sku?.skuId}"`);
         log.info(`NamiPaywallEvent sku type - ${event.sku?.type}"`);
-
         setAction(event.action);
       },
     );
