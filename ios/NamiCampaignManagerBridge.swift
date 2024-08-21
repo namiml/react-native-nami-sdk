@@ -112,7 +112,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
             skuDict["id"] = sku.id
             skuDict["name"] = sku.name
             skuDict["skuId"] = sku.skuId
-            skuDict["type"] = sku.type
+            skuDict["type"] = sku.type.description
         }
 
         var componentChange: [String: Any?] = [:]
