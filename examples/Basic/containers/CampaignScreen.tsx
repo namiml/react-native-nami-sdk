@@ -189,6 +189,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         log.info(`NamiPaywallEvent video metadata autoplayVideo - ${event.videoMetadata?.autoplayVideo?.toString()}"`);
         log.info(`NamiPaywallEvent video metadata muteByDefault - ${event.videoMetadata?.muteByDefault?.toString()}"`);
         log.info(`NamiPaywallEvent video metadata loopVideo - ${event.videoMetadata?.loopVideo?.toString()}"`);
+        log.info(`NamiPaywallEvent sku - ${event.sku?.skuId}"`);
         setAction(event.action);
       },
     );

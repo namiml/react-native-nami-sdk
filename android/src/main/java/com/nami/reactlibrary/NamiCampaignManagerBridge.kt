@@ -179,7 +179,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                     putString("id", paywallEvent.sku?.id ?: "")
                     putString("skuId", paywallEvent.sku?.skuId ?: "")
                     putString("name", paywallEvent.sku?.name ?: "")
-                    putString("name", paywallEvent.sku?.type ?: "unknown")
+                    putString("type", paywallEvent.sku?.type.toString())
                 }
             resultMap.putMap(SKU, skuMap)
         }
