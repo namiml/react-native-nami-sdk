@@ -53,13 +53,13 @@ export type NamiCampaign = {
     paywall: string;
     type: NamiCampaignRuleType;
     value?: string | null;
-    form_factors: FormFactor[];
+    form_factors: NamiFormFactor[];
     external_segment_id: string | null;
 };
-type FormFactor = {
+type NamiFormFactor = {
     form_factor: string;
-    supports_portrait: boolean;
-    supports_landscape: boolean;
+    supports_portrait?: boolean;
+    supports_landscape?: boolean;
 }
 export declare enum NamiCampaignRuleType {
     DEFAULT = "default",

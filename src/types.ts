@@ -159,7 +159,7 @@ export type NamiCampaign = {
   paywall: string;
   type: NamiCampaignRuleType;
   value?: string | null;
-  form_factors: FormFactor[];
+  form_factors: NamiFormFactor[];
   external_segment_id: string | null;
 };
 
@@ -170,10 +170,10 @@ export enum NamiCampaignRuleType {
   URL = 'url',
 }
 
-type FormFactor = {
-  form_factor: string;
-  supports_portrait: boolean;
-  supports_landscape: boolean;
+type NamiFormFactor = {
+  form_factor?: string;
+  supports_portrait?: boolean;
+  supports_landscape?: boolean;
 }
 
 export enum LaunchCampaignError {
