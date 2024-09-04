@@ -86,9 +86,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     const validCampaigns = fetchedCampaigns.filter((campaign) =>
       Boolean(campaign.value),
     );
-    setCampaigns(validCampaigns);
-    console.log('validCampaigns', validCampaigns);
-    return validCampaigns;
+
+    const sortedCampaigns = validCampaigns.sort( (a, b) => (a.value ?? '').localeCompare(b.value ?? '') );
+    setCampaigns(sortedCampaigns);
+    console.log('validCampaigns', sortedCampaigns);
+    return sortedCampaigns;
   }, []);
 
   const getRefreshedCampaigns = useCallback(async () => {
@@ -101,6 +103,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       async () => {
         console.log('sign in');
@@ -144,7 +147,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
             const isEqualList =
                   JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
             setRefresh(!isEqualList);
-            setCampaigns(availableCampaigns);
+            const sortedCampaigns = availableCampaigns.sort( (a, b) => (a.value ?? '').localeCompare(b.value ?? '') );
+            setCampaigns(sortedCampaigns);
           },
         );
 
@@ -198,6 +202,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         log.info(`NamiPaywallEvent video metadata autoplayVideo - ${event.videoMetadata?.autoplayVideo?.toString()}"`);
         log.info(`NamiPaywallEvent video metadata muteByDefault - ${event.videoMetadata?.muteByDefault?.toString()}"`);
         log.info(`NamiPaywallEvent video metadata loopVideo - ${event.videoMetadata?.loopVideo?.toString()}"`);
+        log.info(`NamiPaywallEvent sku name - ${event.sku?.name}"`);
+        log.info(`NamiPaywallEvent sku id - ${event.sku?.id}"`);
+        log.info(`NamiPaywallEvent sku skuId - ${event.sku?.skuId}"`);
+        log.info(`NamiPaywallEvent sku type - ${event.sku?.type}"`);
         setAction(event.action);
       },
     );
