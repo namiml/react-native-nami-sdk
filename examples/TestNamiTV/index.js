@@ -23,18 +23,19 @@ const Root = () => {
   useEffect(() => {
     async function configureNami() {
       const result = await Nami.configure(configDict);
-      if (result.success) {
+      if(result.success){
         setIsConfigurationComplete(true);
-
+  
         if (Platform.constants.Manufacturer === 'Amazon') {
           NamiPaywallManager.setProductDetails(getAmazonProducts(), false);
         }
       }
+  
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {};
+  
     }
     configureNami();
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return () => {};
   }, []);
 
   return isConfigurationComplete ? <App /> : <View />;

@@ -153,12 +153,14 @@ export type AmazonProduct = {};
 
 // NamiCampaignManager
 export type NamiCampaign = {
-  id: string;
+  name: string;
   rule: string;
   segment: string;
   paywall: string;
   type: NamiCampaignRuleType;
   value?: string | null;
+  form_factors: NamiFormFactor[];
+  external_segment: string | null;
 };
 
 export enum NamiCampaignRuleType {
@@ -167,6 +169,12 @@ export enum NamiCampaignRuleType {
   UNKNOWN = 'unknown',
   URL = 'url',
 }
+
+type NamiFormFactor = {
+  form_factor?: string;
+  supports_portrait?: boolean;
+  supports_landscape?: boolean;
+};
 
 export enum LaunchCampaignError {
   DEFAULT_CAMPAIGN_NOT_FOUND = 0,
@@ -295,6 +303,7 @@ export type NamiPurchase = {
   sku?: NamiSKU;
   skuId: string;
   transactionIdentifier?: string;
+  purchaseToken?: string;
   expires?: Date;
   purchaseInitiatedTimestamp: Date;
   purchaseSource?: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';

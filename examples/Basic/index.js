@@ -56,6 +56,24 @@ const Root = () => {
     return () => {};
   }, []);
 
+  useEffect(() => {
+    async function configureNami() {
+      checkSdkConfigured();
+
+      const result = await Nami.configure(configDict);
+      if(result.success){
+        setIsConfigurationComplete(true);
+        checkSdkConfigured();
+      }
+  
+      initStoreConnection();
+  
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {};
+    }
+    configureNami();
+  }, []);
+
   return isConfigurationComplete ? <App /> : <View />;
 };
 
