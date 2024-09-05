@@ -160,7 +160,7 @@ export type NamiCampaign = {
   type: NamiCampaignRuleType;
   value?: string | null;
   form_factors: NamiFormFactor[];
-  external_segment_id: string | null;
+  external_segment: string | null;
 };
 
 export enum NamiCampaignRuleType {
