@@ -93,6 +93,15 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return sortedCampaigns;
   }, []);
 
+  const getRefreshedCampaigns = useCallback(async () => {
+    const fetchedCampaigns = await NamiCampaignManager.refresh();
+    const refreshedCampaigns = fetchedCampaigns.filter((campaign) =>
+      Boolean(campaign.value),
+    );
+    setCampaigns(refreshedCampaigns);
+    return refreshedCampaigns;
+  }, []);
+
   useEffect(() => {
 
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
@@ -162,7 +171,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const triggerLaunch = (label?: any, url?: any) => {
+  const triggerLaunch = useCallback((label?: any, url?: any) => {
     checkIfPaywallOpen();
 
     NamiPaywallManager.setAppSuppliedVideoDetails('https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'app-supplied-video');
@@ -200,7 +209,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         setAction(event.action);
       },
     );
-  };
+  }, [])
 
   const isCampaignAvailable = async (value?: string | null | undefined) => {
     try {
@@ -218,14 +227,14 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         ? triggerLaunch(item.value, null)
         : triggerLaunch(null, item.value);
     }
-  }, []);
+  }, [triggerLaunch]);
 
-  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
+  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), [triggerLaunch]);
 
   const onRefreshPress = useCallback(() => {
     getAllCampaigns();
     setRefresh(!refresh);
-    NamiCampaignManager.refresh();
+    getRefreshedCampaigns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -240,13 +249,13 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
           onRefreshPress={() => {
             getAllCampaigns();
             setRefresh(!refresh);
-            NamiCampaignManager.refresh();
+            getRefreshedCampaigns();
           }}
         />
       ),
       headerLeft: () => <HeaderLeft onButtonPress={onButtonPress} />,
     });
-  }, [navigation, onRefreshPress, onButtonPress, getAllCampaigns, refresh]);
+  }, [navigation, onRefreshPress, onButtonPress, getAllCampaigns, getRefreshedCampaigns, refresh]);
 
   const renderItem = ({ item, index }: {item: NamiCampaign; index: number}) => {
     const lasItem = index === campaigns.length - 1;

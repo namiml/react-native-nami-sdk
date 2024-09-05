@@ -11,7 +11,7 @@ interface ICampaignManager {
     allCampaigns: () => Promise<Array<NamiCampaign>>;
     isCampaignAvailable(campaignSource: string | null): Promise<boolean>;
     launch: (label?: string, withUrl?: string, context?: PaywallLaunchContext, resultCallback?: (success: boolean, error?: LaunchCampaignError) => void, actionCallback?: NamiPaywallActionHandler) => void;
-    refresh: () => void;
+    refresh: () => Promise<Array<NamiCampaign>>;
     registerAvailableCampaignsHandler: (callback: (availableCampaigns: NamiCampaign[]) => void) => EmitterSubscription['remove'];
 }
 export declare const NamiCampaignManager: ICampaignManager;

@@ -270,9 +270,12 @@ class RNNamiCampaignManager: RCTEventEmitter {
         resolve(isCampaignAvailable)
     }
 
-    @objc(refresh)
-    func refresh() {
-        NamiCampaignManager.refresh()
+    @objc(refresh:rejecter:)
+    func refresh(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
+        NamiCampaignManager.refresh { campaigns in
+            let dictionaries = campaigns.map { campaign in self.campaignInToDictionary(campaign) }
+            resolve(dictionaries)
+        } 
     }
 
     @objc(registerAvailableCampaignsHandler)
