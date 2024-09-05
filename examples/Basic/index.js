@@ -39,26 +39,21 @@ const Root = () => {
   };
 
   useEffect(() => {
-
-    async function configureSDK() {
-      // You can await here
+    async function configureNami() {
       checkSdkConfigured();
 
       const result = await Nami.configure(configDict);
-      if(result.success){
+      if (result.success) {
         setIsConfigurationComplete(true);
         checkSdkConfigured();
       }
 
       initStoreConnection();
-      // ...
     }
-    configureSDK();
+    configureNami();
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
-
-
   }, []);
 
   return isConfigurationComplete ? <App /> : <View />;
