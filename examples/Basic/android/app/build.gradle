@@ -102,6 +102,7 @@ android {
             keyAlias 'androidreleasekey'
             keyPassword 'android'
             v2SigningEnabled true
+            v1SigningEnabled true
         }
     }
     flavorDimensions += "environment"

@@ -323,7 +323,7 @@ jobs:
           arch: x86
           channel: canary
           profile: pixel
-          avd-name: Pixel_4_API_30_AOSP
+          avd-name: Pixel_4_API_34
           script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} e2e/android --headless --record-logs all
           working-directory: source/examples/Basic
 
