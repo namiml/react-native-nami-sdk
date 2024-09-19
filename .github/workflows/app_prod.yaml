@@ -207,7 +207,7 @@ jobs:
           run: |
             pod install --repo-update
           working-directory: source/examples/Basic/ios
-          
+
         - name: Build resolve Swift dependencies
           run: |
             xcodebuild -resolvePackageDependencies -workspace ios/Basic.xcworkspace -scheme BasicProduction -configuration Release

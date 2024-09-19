@@ -301,7 +301,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 array.pushMap(campaignToReadableMap(campaign))
             }
             promise.resolve(array)
-        }    
+        }
     }
 
     @ReactMethod

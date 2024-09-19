@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,swift}"
   s.requires_arc = true
 
-  s.dependency 'Nami', '3.2.3'
+  s.dependency 'Nami', '3.2.4-beta.01'
   s.dependency 'React'
 
 end
