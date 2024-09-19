@@ -65,9 +65,9 @@ const Root = () => {
         setIsConfigurationComplete(true);
         checkSdkConfigured();
       }
-  
+
       initStoreConnection();
-  
+
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return () => {};
     }
