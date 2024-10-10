@@ -43,4 +43,4 @@ yarn add react-native-nami-sdk
 
 Example apps showing how to use the bridge are available in this repository in the [examples directory](https://github.com/namiml/react-native-nami-sdk/tree/master/examples), including instructions on how to build the apps.
 
-More information on configuring and using the SDK is available in our docs at [https://docs.namiml.com](https://docs.namiml.com).
+More information on configuring and using the SDK is available in our docs at [https://learn.namiml.com](https://learn.namiml.com).
