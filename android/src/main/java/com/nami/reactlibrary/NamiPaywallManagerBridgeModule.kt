@@ -238,6 +238,10 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     fun removeListeners(count: Int?) {
     }
 
+    @ReactMethod
+    fun removeAllListeners(eventName: String?) {
+    }
+
     override fun onActivityResult(
         activity: Activity?,
         requestCode: Int,
