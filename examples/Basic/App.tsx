@@ -155,7 +155,8 @@ const App = () => {
         console.log(
           'buy sku handler - need to start purchase flow for sku:',
           sku.skuId,
-          sku.promoId || 'no promo',
+          sku.promoId || 'no promoId',
+          sku.promoToken || 'no promoToken',
         );
 
         setNamiSku(sku);
