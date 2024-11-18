@@ -1,6 +1,5 @@
 import { NativeEventEmitter, EmitterSubscription } from 'react-native';
-import { NamiPurchaseSuccessAmazon, NamiPurchaseSuccessApple, NamiPurchaseSuccessGooglePlay, NamiSKU } from './types';
-import { NamiPurchaseSuccess } from './types';
+import { NamiPurchaseSuccess, NamiPurchaseSuccessAmazon, NamiPurchaseSuccessApple, NamiPurchaseSuccessGooglePlay, NamiSKU } from './types';
 export declare enum NamiPaywallManagerEvents {
     RegisterBuySKU = "RegisterBuySKU",
     PaywallCloseRequested = "PaywallCloseRequested",
