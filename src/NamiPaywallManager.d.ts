@@ -1,5 +1,6 @@
 import { NativeEventEmitter, EmitterSubscription } from 'react-native';
 import { NamiPurchaseSuccessAmazon, NamiPurchaseSuccessApple, NamiPurchaseSuccessGooglePlay, NamiSKU } from './types';
+import { NamiPurchaseSuccess } from './types';
 export declare enum NamiPaywallManagerEvents {
     RegisterBuySKU = "RegisterBuySKU",
     PaywallCloseRequested = "PaywallCloseRequested",
@@ -16,6 +17,7 @@ export interface INamiPaywallManager {
     buySkuCompleteApple: (purchaseSuccess: NamiPurchaseSuccessApple) => void;
     buySkuCompleteAmazon: (purchaseSuccess: NamiPurchaseSuccessAmazon) => void;
     buySkuCompleteGooglePlay: (purchaseSuccess: NamiPurchaseSuccessGooglePlay) => void;
+    buySkuComplete: (purchaseSuccess: NamiPurchaseSuccess) => void;
     buySkuCancel: () => void;
     registerBuySkuHandler: (callback: (sku: NamiSKU) => void) => EmitterSubscription['remove'];
     registerCloseHandler: (callback: () => void) => EmitterSubscription['remove'];
