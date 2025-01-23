@@ -280,7 +280,7 @@ export type NamiPurchaseSuccess = {
   localizedPrice?: string;
   userId?: string;
   marketplace?: string;
-}
+};
 
 export enum NamiPaywallAction {
   BUY_SKU = 'BUY_SKU',
