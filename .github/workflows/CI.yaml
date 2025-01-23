@@ -91,7 +91,7 @@ jobs:
           npx eslint . --ext .js,.jsx,.ts,.tsx
         working-directory: source/examples/TestNamiTV
   e2e-ios:
-    runs-on: macos-12
+    runs-on: macos-13
     env:
       DETOX_CONFIGURATION: ios.sim.release
 
@@ -181,12 +181,12 @@ jobs:
 
       - name: Upload artifacts
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: detox-artifacts
           path: artifacts
   e2e-android:
-    runs-on: macos-12
+    runs-on: macos-13
     env:
       DETOX_CONFIGURATION: android.emu.release
 
@@ -329,7 +329,7 @@ jobs:
 
       - name: Upload artifacts
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: detox-artifacts
           path: artifacts
