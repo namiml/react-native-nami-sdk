@@ -7,7 +7,7 @@ export declare enum NamiEntitlementManagerEvents {
 export interface INamiEntitlementManager {
     emitter: NativeEventEmitter;
     active: () => Promise<Array<NamiEntitlement>>;
-    isEntitlementActive: (label?: string) => boolean;
+    isEntitlementActive: (label: string) => boolean;
     refresh: (resultCallback?: (entitlements?: NamiEntitlement[]) => void) => void;
     registerActiveEntitlementsHandler: (callback: (activeEntitlements: NamiEntitlement[]) => void) => EmitterSubscription['remove'];
     clearProvisionalEntitlementGrants: () => void;

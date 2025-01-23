@@ -61,7 +61,7 @@ const App = () => {
         NamiPaywallManager.dismiss();
 
         if (Platform.OS === 'ios') {
-          NamiPaywallManager.buySkuCompleteApple({
+          NamiPaywallManager.buySkuComplete({
             product: sku,
             transactionID: '12345',
             originalTransactionID: '12345',
@@ -70,7 +70,7 @@ const App = () => {
           });
         } else if (Platform.OS === 'android') {
           if (Platform.constants.Manufacturer === 'Amazon') {
-            NamiPaywallManager.buySkuCompleteAmazon({
+            NamiPaywallManager.buySkuComplete({
               product: sku,
               receiptId: '12345',
               localizedPrice: '120',
@@ -78,7 +78,7 @@ const App = () => {
               marketplace: 'US',
             });
           } else {
-            NamiPaywallManager.buySkuCompleteGooglePlay({
+            NamiPaywallManager.buySkuComplete({
               product: sku,
               purchaseToken:
                 'jolbnkpmojnpnjecgmphbmkc.AO-J1OznE4AIzyUvKFe1RSVkxw4KEtv0WfyL_tkzozOqnlSvIPsyQJBphCN80gwIMaex4EMII95rFCZhMCbVPZDc-y_VVhQU5Ddua1dLn8zV7ms_tdwoDmE',
