@@ -4,6 +4,7 @@ import {
   EmitterSubscription,
 } from 'react-native';
 import {
+  NamiPurchaseSuccess,
   NamiPurchaseSuccessAmazon,
   NamiPurchaseSuccessApple,
   NamiPurchaseSuccessGooglePlay,
@@ -30,6 +31,7 @@ export interface INamiPaywallManager {
   buySkuCompleteGooglePlay: (
     purchaseSuccess: NamiPurchaseSuccessGooglePlay,
   ) => void;
+  buySkuComplete: (purchaseSuccess: NamiPurchaseSuccess) => void;
   buySkuCancel: () => void;
   registerBuySkuHandler: (
     callback: (sku: NamiSKU) => void,
@@ -59,6 +61,9 @@ export const NamiPaywallManager: INamiPaywallManager = {
   paywallEmitter: new NativeEventEmitter(RNNamiPaywallManager),
   ...RNNamiPaywallManager,
   ...NamiPaywallManagerBridge,
+  buySkuComplete: (purchaseSuccess: NamiPurchaseSuccess) => {
+    RNNamiPaywallManager.buySkuComplete(purchaseSuccess);
+  },
   buySkuCompleteApple: (purchaseSuccess: NamiPurchaseSuccessApple) => {
     RNNamiPaywallManager.buySkuComplete(purchaseSuccess);
   },
