@@ -81,7 +81,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
 
   const checkIsLoggedIn = useCallback(() => {
-    // workaround for tests purposes
+
     NamiCustomerManager.isLoggedIn().then(() =>
       setTimeout(() => {
         NamiCustomerManager.isLoggedIn().then((isLogin) => {
@@ -103,7 +103,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const getJourneyState = () => {
     NamiCustomerManager.journeyState().then((myJourneyState) => {
-      console.log('myJourneyState', myJourneyState);
       setJourneyState(myJourneyState);
     });
   };
@@ -121,6 +120,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }, [isUserLogin]);
 
   useEffect(() => {
+
     checkIsLoggedIn();
     getJourneyState();
     checkId();
@@ -154,7 +154,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
         },
       );
 
-    NamiCustomerManager.setCustomerDataPlatformId('4444');
+    // NamiCustomerManager.setCustomerDataPlatformId('4444');
 
     return () => {
       subscriptionJourneyStateRemover();

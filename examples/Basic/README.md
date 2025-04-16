@@ -19,7 +19,7 @@ brew install yarn
 **iOS Setup**
 
 1. Install CocoaPods -> `sudo brew install cocoapods`
-2. `cd ios && rm -rf Pods Podfile.lock && RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install`
+2. `cd ios && rm -rf Pods Podfile.lock && bundle install && bundle exec pod install`
 3. Either run `yarn run ios` or `open Basic.xcworkspace` and build in Xcode.
 
 **Android Setup**
