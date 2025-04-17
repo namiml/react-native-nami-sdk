@@ -43,6 +43,8 @@ RCT_EXTERN_METHOD(setProductDetails:(NSString *)productDetails allowOffers:(null
 
 RCT_EXTERN_METHOD(setAppSuppliedVideoDetails:(NSString *)url name:(nullable NSString *))
 
+RCT_EXTERN_METHOD(allowUserInteraction: allowed:(nullable BOOL *))
+
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }

@@ -231,6 +231,11 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun allowUserInteraction: (allowed: Boolean) {
+        NamiPaywallManager.allowUserInteraction(allow = allowed)
+    }
+
+    @ReactMethod
     fun addListener(eventName: String?) {
     }
 

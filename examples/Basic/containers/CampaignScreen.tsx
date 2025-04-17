@@ -176,6 +176,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
     NamiPaywallManager.setAppSuppliedVideoDetails('https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'app-supplied-video');
 
+    NamiPaywallManager.allowUserInteraction(false);
+
     return NamiCampaignManager.launch(
       label,
       url,
