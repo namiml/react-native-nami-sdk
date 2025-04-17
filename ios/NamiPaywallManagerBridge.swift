@@ -162,4 +162,9 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func setAppSuppliedVideoDetails(url: String, name: String?) {
         NamiPaywallManager.setAppSuppliedVideoDetails(url: url, name: name)
     }
+
+    @objc(allowUserInteraction:)
+    func allowUserInteraction(allowed: Bool) {
+        NamiPaywallManager.allowUserInteraction(allowed)
+    }
 }
