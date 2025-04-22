@@ -165,6 +165,8 @@ class RNNamiPaywallManager: RCTEventEmitter {
 
     @objc(allowUserInteraction:)
     func allowUserInteraction(allowed: Bool) {
-        NamiPaywallManager.allowUserInteraction(allowed)
+        DispatchQueue.main.async {
+            NamiPaywallManager.allowUserInteraction(allowed)
+        }
     }
 }
