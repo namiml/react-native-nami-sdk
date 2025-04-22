@@ -232,7 +232,7 @@ class NamiPaywallManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun allowUserInteraction(allowed: Boolean) {
-        // NamiPaywallManager.allowUserInteraction(allow = allowed)
+         NamiPaywallManager.allowPaywallInteraction(allow = allowed)
     }
 
     @ReactMethod
