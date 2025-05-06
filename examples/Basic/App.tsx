@@ -53,7 +53,7 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 const App = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [namiSku, setNamiSku] = useState<NamiSKU>(undefined);
+  const [namiSku, setNamiSku] = useState<NamiSKU>({} as NamiSKU);
 
   useEffect(() => {
     Linking.addEventListener('url', handleDeepLink);
@@ -103,13 +103,13 @@ const App = () => {
             }
 
             if (Platform.OS === 'ios' || Platform.isTV) {
-              console.log('Preparing to call buySkuCompleteApple');
+              console.log('Preparing to call buySkuComplete with Apple');
 
               console.log(namiSku);
               console.log(purchase.transactionId);
               console.log(purchase.originalTransactionIdentifierIOS);
 
-              NamiPaywallManager.buySkuCompleteApple({
+              NamiPaywallManager.buySkuComplete({
                 product: namiSku,
                 transactionID: purchase.transactionId ?? '',
                 originalTransactionID: purchase.originalTransactionIdentifierIOS ?? purchase.transactionId ?? '',
@@ -118,8 +118,8 @@ const App = () => {
               });
             } else if (Platform.OS === 'android') {
               if (Platform.constants.Manufacturer === 'Amazon') {
-                console.log('Preparing to call buySkuCompleteAmazon');
-                NamiPaywallManager.buySkuCompleteAmazon({
+                console.log('Preparing to call buySkuComplete with Amazon');
+                NamiPaywallManager.buySkuComplete({
                   product: namiSku,
                   receiptId: purchase.transactionId ?? '',
                   localizedPrice: price,
@@ -127,8 +127,8 @@ const App = () => {
                   marketplace: purchase.userMarketplaceAmazon ?? '',
                 });
               } else {
-                console.log('Preparing to call buySkuCompleteGooglePlay');
-                NamiPaywallManager.buySkuCompleteGooglePlay({
+                console.log('Preparing to call buySkuComplete with GooglePlay');
+                NamiPaywallManager.buySkuComplete({
                   product: namiSku,
                   purchaseToken: purchase.purchaseToken ?? '',
                   orderId: purchase.transactionId ?? '',

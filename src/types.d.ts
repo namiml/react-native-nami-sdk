@@ -132,6 +132,19 @@ export type NamiPurchaseSuccessAmazon = {
     userId: string;
     marketplace: string;
 };
+export type NamiPurchaseSuccess = {
+    product: NamiSKU;
+    transactionID?: string;
+    originalTransactionID?: string;
+    price?: string;
+    currencyCode?: string;
+    orderId?: string;
+    purchaseToken?: string;
+    receiptId?: string;
+    localizedPrice?: string;
+    userId?: string;
+    marketplace?: string;
+}
 export declare enum NamiPaywallAction {
     BUY_SKU = "BUY_SKU",
     SELECT_SKU = "SELECT_SKU",
