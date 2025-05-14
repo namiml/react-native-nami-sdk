@@ -1,6 +1,6 @@
 name: Generate Test React PROD
 env:
-  DEVELOPER_DIR: /Applications/Xcode_15.0.1.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_16.0.0.app/Contents/Developer
 on:
   workflow_dispatch:
     inputs:
@@ -139,7 +139,7 @@ jobs:
         - name: Set up Python
           uses: actions/setup-python@v1
           with:
-            python-version: "3.10"
+            python-version: "3.13"
 
         - name: Get expected build number
           run: |
@@ -189,6 +189,8 @@ jobs:
             sed -i '' -e "s/CURRENT_PROJECT_VERSION = 1/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/" ios/Basic.xcodeproj/project.pbxproj
             sed -i '' -e "s/MARKETING_VERSION = 1.0/MARKETING_VERSION = $CURRENT_VERSION/" ios/Basic.xcodeproj/project.pbxproj
             sed -i '' -e "s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/"  ios/Basic/Info.plist
+            echo "BUILD_NUMBER=$(cat ~/.next_build_number)" >> $GITHUB_ENV
+            echo "CURRENT_VERSION=$(cat ~/.current_version)" >> $GITHUB_ENV
           working-directory: source/examples/Basic
 
         - name: Install test app dependencies
@@ -230,13 +232,29 @@ jobs:
           env:
             APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
             APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
+
+        - name: Get PR info
+          id: pr
+          run: |
+            echo "PR_TITLE=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+
+        - name: Upload PR Title to TestFlight Whats New
+          working-directory: appstoreconnect-build-tools
+          run: |-
+            sleep 120
+            python3 upload_testflight_whats_new.py com.namiml.app.testreactnative --notes="${{ env.PR_TITLE }}" --version=${{ env.CURRENT_VERSION }} --platform=IOS --prerelease
+          env:
+            APPSTORE_API_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+            APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+            APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+
   build-tvos-prod:
     name: Build TestNamiTV tvOS PROD
     permissions:
       actions: write
       contents: write
       id-token: write
-    runs-on: macos-13
+    runs-on: macos-15
     timeout-minutes: 40
     steps:
       - uses: actions/setup-node@v3
@@ -259,7 +277,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
-          python-version: "3.10"
+          python-version: "3.13"
 
       - name: Get expected build number
         run: |
@@ -309,6 +327,8 @@ jobs:
           sed -i '' -e "s/CURRENT_PROJECT_VERSION = 1/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/" ios/Basic.xcodeproj/project.pbxproj
           sed -i '' -e "s/MARKETING_VERSION = 1.0/MARKETING_VERSION = $CURRENT_VERSION/" ios/Basic.xcodeproj/project.pbxproj
           sed -i '' -e "s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/"  ios/Info-PROD.plist
+          echo "BUILD_NUMBER=$(cat ~/.next_build_number)" >> $GITHUB_ENV
+          echo "CURRENT_VERSION=$(cat ~/.current_version)" >> $GITHUB_ENV
         working-directory: source/examples/TestNamiTV
 
       - name: Install test app dependencies
@@ -355,3 +375,13 @@ jobs:
         env:
           APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
           APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
+
+      - name: Upload PR Title to TestFlight Whats New
+        working-directory: appstoreconnect-build-tools
+        run: |-
+          sleep 120
+          python3 upload_testflight_whats_new.py com.namiml.app.testreactnative --notes="${{ env.PR_TITLE }}" --version=${{ env.CURRENT_VERSION }} --platform=TV_OS --prerelease
+        env:
+          APPSTORE_API_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+          APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
