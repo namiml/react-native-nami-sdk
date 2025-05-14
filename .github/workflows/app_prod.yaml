@@ -137,7 +137,7 @@ jobs:
             repository: namiml/appstoreconnect-build-tools
 
         - name: Set up Python
-          uses: actions/setup-python@v1
+          uses: actions/setup-python@v5
           with:
             python-version: "3.13"
 
@@ -275,7 +275,7 @@ jobs:
           repository: namiml/appstoreconnect-build-tools
 
       - name: Set up Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
           python-version: "3.13"
 
