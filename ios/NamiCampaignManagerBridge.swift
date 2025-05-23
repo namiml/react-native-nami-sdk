@@ -238,8 +238,9 @@ class RNNamiCampaignManager: RCTEventEmitter {
                                            })
             }
         }
-
-        launchMethod?()
+        DispatchQueue.main.async {
+            launchMethod?()
+        }
     }
 
     @objc(allCampaigns:rejecter:)
