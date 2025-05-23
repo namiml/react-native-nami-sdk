@@ -1,5 +1,6 @@
 name: CI PR Checks
-
+env:
+  DEVELOPER_DIR: /Applications/Xcode_16.0.0.app/Contents/Developer
 on: pull_request
 
 jobs:
@@ -91,7 +92,7 @@ jobs:
           npx eslint . --ext .js,.jsx,.ts,.tsx
         working-directory: source/examples/TestNamiTV
   e2e-ios:
-    runs-on: macos-13
+    runs-on: macos-15
     env:
       DETOX_CONFIGURATION: ios.sim.release
 
@@ -186,7 +187,7 @@ jobs:
           name: detox-artifacts
           path: artifacts
   e2e-android:
-    runs-on: macos-13
+    runs-on: macos-15
     env:
       DETOX_CONFIGURATION: android.emu.release
 
