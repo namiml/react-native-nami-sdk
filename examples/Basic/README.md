@@ -21,6 +21,8 @@ brew install yarn
 1. Install CocoaPods -> `brew install cocoapods`
 2. `cd ios && rm -rf Pods Podfile.lock && RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install`
 3. Either run `yarn run ios` or `open Basic.xcworkspace` and build in Xcode.
+4. Local detox tests: `detox clean-framework-cache && detox build --configuration ios.sim.debug && detox build-framework-cache && yarn detox test --configuration ios.sim.debug  e2e/ios --cleanup --headless --record-logs all`
+
 
 **Android Setup**
 

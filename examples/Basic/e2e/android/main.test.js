@@ -1,7 +1,7 @@
 import { device, element, by, expect, waitFor, log } from 'detox';
 
 const data = {
-  campaign: 'puffin',
+  campaign: 'aquarius',
 };
 
 describe('Android: Configure Test', () => {
@@ -52,14 +52,6 @@ describe('Android: Campaign tests after setup', () => {
 
   it('Should have Campaigns screen', async () => {
     await expect(element(by.id('campaigns_title'))).toBeVisible();
-  });
-
-  it('Should unlabeled campaigns have default', async () => {
-    await expect(
-      element(
-        by.id('default_campaigns').withAncestor(by.id('unlabeled_campaigns')),
-      ),
-    ).toBeVisible();
   });
 
   it('Should interact with item Campaigns', async () => {

@@ -143,11 +143,23 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     const subscriptionRemover =
         NamiCampaignManager.registerAvailableCampaignsHandler(
           (availableCampaigns) => {
-            console.log('availableCampaigns', availableCampaigns);
+            // Filter out (deprecated) campaigns with type === 'default'
+            const filteredCampaigns = availableCampaigns.filter(
+              (campaign) => campaign.type !== 'default'
+            );
+
+            // Compare filtered list to current campaigns
             const isEqualList =
-                  JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
+                JSON.stringify(campaigns) === JSON.stringify(filteredCampaigns);
             setRefresh(!isEqualList);
-            const sortedCampaigns = availableCampaigns.sort( (a, b) => (a.value ?? '').localeCompare(b.value ?? '') );
+
+            // Sort the filtered campaigns
+            const sortedCampaigns = filteredCampaigns.sort((a, b) =>
+              (a.value ?? '').localeCompare(b.value ?? '')
+            );
+            console.log(sortedCampaigns);
+
+            // Update state
             setCampaigns(sortedCampaigns);
           },
         );
@@ -233,8 +245,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     }
   }, [triggerLaunch]);
 
-  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), [triggerLaunch]);
-
   const onRefreshPress = useCallback(() => {
     getAllCampaigns();
     setRefresh(!refresh);
@@ -285,17 +295,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   const SeparatorComponent = () => <View style={styles.separator} />;
 
-  const renderDefault = () => {
-    return (
-      <TouchableOpacity
-        testID="default_campaigns"
-        onPress={() => onItemPressDefault()}
-        style={styles.itemDef}>
-        <Text style={styles.itemText}>default</Text>
-      </TouchableOpacity>
-    );
-  };
-
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = () => {
@@ -313,14 +312,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         <Text
           testID="campaigns_title"
           style={styles.title}>
-            Campaigns
+            Placements
         </Text>
-        <View
-          testID="unlabeled_campaigns"
-          style={styles.marginTop20}>
-          <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
-          {renderDefault()}
-        </View>
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.statusText}>Modal Status:</Text>
           <Text
@@ -336,7 +329,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         </Text>
       </View>
       <View style={styles.bottomContent}>
-        <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
+        <Text style={styles.sectionHeader}>LIVE PLACEMENTS</Text>
         <FlatList
           showsVerticalScrollIndicator={false}
           testID="campaigns_list"
