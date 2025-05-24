@@ -143,12 +143,24 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     const subscriptionRemover =
         NamiCampaignManager.registerAvailableCampaignsHandler(
           (availableCampaigns) => {
-            console.log('availableCampaigns', availableCampaigns);
-            const isEqualList =
-                  JSON.stringify(campaigns) === JSON.stringify(availableCampaigns);
-            setRefresh(!isEqualList);
-            const sortedCampaigns = availableCampaigns.sort( (a, b) => (a.value ?? '').localeCompare(b.value ?? '') );
-            setCampaigns(sortedCampaigns);
+              // Filter out (deprecated) campaigns with type === 'default'
+              const filteredCampaigns = availableCampaigns.filter(
+                (campaign) => campaign.type !== 'default'
+              );
+
+              // Compare filtered list to current campaigns
+              const isEqualList =
+                JSON.stringify(campaigns) === JSON.stringify(filteredCampaigns);
+              setRefresh(!isEqualList);
+
+              // Sort the filtered campaigns
+              const sortedCampaigns = filteredCampaigns.sort((a, b) =>
+                (a.value ?? '').localeCompare(b.value ?? '')
+              );
+              console.log(sortedCampaigns);
+
+              // Update state
+              setCampaigns(sortedCampaigns);
           },
         );
 
@@ -313,14 +325,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         <Text
           testID="campaigns_title"
           style={styles.title}>
-            Campaigns
+            Placements
         </Text>
-        <View
-          testID="unlabeled_campaigns"
-          style={styles.marginTop20}>
-          <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
-          {renderDefault()}
-        </View>
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.statusText}>Modal Status:</Text>
           <Text
@@ -336,7 +342,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         </Text>
       </View>
       <View style={styles.bottomContent}>
-        <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
+        <Text style={styles.sectionHeader}>LIVE PLACEMENTS</Text>
         <FlatList
           showsVerticalScrollIndicator={false}
           testID="campaigns_list"
