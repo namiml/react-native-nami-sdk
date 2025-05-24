@@ -54,13 +54,13 @@ module.exports = {
     emulator: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_8_Pro_API_35',
+        avdName: 'Pixel_4_API_34',
       },
     },
     emulatorLocal: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_8_Pro_API_35',
+        avdName: 'Pixel_4_API_34',
       },
     },
   },

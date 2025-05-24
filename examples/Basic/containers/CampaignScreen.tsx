@@ -143,24 +143,24 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     const subscriptionRemover =
         NamiCampaignManager.registerAvailableCampaignsHandler(
           (availableCampaigns) => {
-              // Filter out (deprecated) campaigns with type === 'default'
-              const filteredCampaigns = availableCampaigns.filter(
-                (campaign) => campaign.type !== 'default'
-              );
+            // Filter out (deprecated) campaigns with type === 'default'
+            const filteredCampaigns = availableCampaigns.filter(
+              (campaign) => campaign.type !== 'default'
+            );
 
-              // Compare filtered list to current campaigns
-              const isEqualList =
+            // Compare filtered list to current campaigns
+            const isEqualList =
                 JSON.stringify(campaigns) === JSON.stringify(filteredCampaigns);
-              setRefresh(!isEqualList);
+            setRefresh(!isEqualList);
 
-              // Sort the filtered campaigns
-              const sortedCampaigns = filteredCampaigns.sort((a, b) =>
-                (a.value ?? '').localeCompare(b.value ?? '')
-              );
-              console.log(sortedCampaigns);
+            // Sort the filtered campaigns
+            const sortedCampaigns = filteredCampaigns.sort((a, b) =>
+              (a.value ?? '').localeCompare(b.value ?? '')
+            );
+            console.log(sortedCampaigns);
 
-              // Update state
-              setCampaigns(sortedCampaigns);
+            // Update state
+            setCampaigns(sortedCampaigns);
           },
         );
 
@@ -245,8 +245,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     }
   }, [triggerLaunch]);
 
-  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), [triggerLaunch]);
-
   const onRefreshPress = useCallback(() => {
     getAllCampaigns();
     setRefresh(!refresh);
@@ -296,17 +294,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   };
 
   const SeparatorComponent = () => <View style={styles.separator} />;
-
-  const renderDefault = () => {
-    return (
-      <TouchableOpacity
-        testID="default_campaigns"
-        onPress={() => onItemPressDefault()}
-        style={styles.itemDef}>
-        <Text style={styles.itemText}>default</Text>
-      </TouchableOpacity>
-    );
-  };
 
   const [refreshing, setRefreshing] = useState(false);
 
