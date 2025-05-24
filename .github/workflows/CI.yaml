@@ -172,6 +172,7 @@ jobs:
 
       - name: Detox test
         run: |
+          export DETOX_SYNCHRONIZATION_DEBUG=1
           yarn start &
           METRO_BUNDLER_PID=$!
           yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} e2e/ios --cleanup --headless --record-logs all
@@ -322,7 +323,10 @@ jobs:
         with:
           target: aosp_atd
           api-level: 30
-          arch: x86
+          arch: x86_64
+          disable-animations: true
+          ram-size: 4096
+          heap-size: 512
           channel: canary
           profile: pixel
           avd-name: Pixel_4_API_34
