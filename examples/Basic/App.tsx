@@ -3,7 +3,7 @@ import { Linking, Platform, EmitterSubscription } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NamiPaywallManager, NamiSKU } from 'react-native-nami-sdk';
+import { NamiPaywallManager, NamiSKU, NamiFlowManager } from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
@@ -189,8 +189,14 @@ const App = () => {
       },
     );
 
+    const subscriptionFlowRemover = NamiFlowManager.registerStepHandoff((tag, data) => {
+        console.log('handoff tag:', tag, 'data:', data);
+    });
+
+
     return () => {
       subscriptionRemover();
+      subscriptionFlowRemover();
       purchaseUpdate;
       purchaseError;
     };

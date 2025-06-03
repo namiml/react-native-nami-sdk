@@ -12,6 +12,7 @@ import {
   NamiPaywallAction,
   NamiCampaignRuleType,
   NamiPaywallEvent,
+  NamiFlowManager,
 } from 'react-native-nami-sdk';
 import {
   FlatList,
@@ -103,7 +104,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       async () => {
         console.log('sign in');

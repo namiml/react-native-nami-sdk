@@ -266,7 +266,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
                 isCampaignAvailable = NamiCampaignManager.isCampaignAvailable(label: source)
             }
         } else {
-            isCampaignAvailable = NamiCampaignManager.isCampaignAvailable()
+            isCampaignAvailable = false
         }
         resolve(isCampaignAvailable)
     }
