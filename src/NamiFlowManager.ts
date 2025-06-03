@@ -6,17 +6,6 @@ import {
 
 const { RNNamiFlowManager } = NativeModules;
 
-// Patch required for RN 0.65+ to avoid "Unbalanced calls" warnings
-if (typeof RNNamiFlowManager.addListener !== 'function') {
-  RNNamiFlowManager.addListener = () => {};
-}
-if (typeof RNNamiFlowManager.removeListeners !== 'function') {
-  RNNamiFlowManager.removeListeners = () => {};
-}
-
-// Create a generic emitter (not bound to the native module object)
-const flowEmitter = new NativeEventEmitter();
-
 export enum NamiFlowManagerEvents {
   RegisterStepHandoff = 'RegisterStepHandoff',
 }
@@ -28,22 +17,31 @@ export interface INamiFlowManager {
   resume: () => void;
 }
 
+if (typeof RNNamiFlowManager?.addListener !== 'function') {
+  RNNamiFlowManager.addListener = () => {};
+}
+if (typeof RNNamiFlowManager?.removeListeners !== 'function') {
+  RNNamiFlowManager.removeListeners = () => {};
+}
+
+const flowEmitter = new NativeEventEmitter(RNNamiFlowManager);
+
 export const NamiFlowManager: INamiFlowManager = {
   registerStepHandoff: (callback) => {
-    console.warn('[NamiFlowManager] Setting up step handoff listener');
+    console.log('[NamiFlowManager] Registering handoff listener...');
 
     const subscription: EmitterSubscription = flowEmitter.addListener(
       NamiFlowManagerEvents.RegisterStepHandoff,
       (event: { handoffTag: string; handoffData?: string }) => {
-        console.warn('[NamiFlowManager] Handoff event received', event);
+        console.log('[NamiFlowManager] Received handoff event:', event);
         callback(event.handoffTag, event.handoffData);
       }
     );
 
-    if (typeof RNNamiFlowManager?.registerStepHandoff === 'function') {
+    if (RNNamiFlowManager?.registerStepHandoff) {
       RNNamiFlowManager.registerStepHandoff();
     } else {
-      console.warn('[NamiFlowManager] Native method registerStepHandoff not found');
+      console.warn('[NamiFlowManager] Native method registerStepHandoff is not available.');
     }
 
     return () => {
@@ -52,10 +50,10 @@ export const NamiFlowManager: INamiFlowManager = {
   },
 
   resume: () => {
-    if (typeof RNNamiFlowManager?.resume === 'function') {
+    if (RNNamiFlowManager?.resume) {
       RNNamiFlowManager.resume();
     } else {
-      console.warn('[NamiFlowManager] Native method resume not found');
+      console.warn('[NamiFlowManager] Native method resume is not available.');
     }
   },
 };
