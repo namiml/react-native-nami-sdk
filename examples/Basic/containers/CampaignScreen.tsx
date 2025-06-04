@@ -29,6 +29,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { handleDeepLink } from '../services/deeplinking';
 import customLaunchObject from '../nami_launch_context_custom_object.json';
 import { logger } from 'react-native-logs';
+import { AppState } from 'react-native';
 
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
@@ -104,6 +105,21 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+
+  const subscriptionFlowRemover = AppState.addEventListener('change', (state) => {
+    if (state === 'active') {
+      NamiFlowManager.registerStepHandoff((tag, data) => {
+        console.log('handoff received: ', tag, data);
+
+        const log = logger.createLogger();
+        log.info('handoff received: ', tag, data);
+
+        NamiFlowManager.resume();
+      });
+    }
+  });
+
+
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       async () => {
         console.log('sign in');
@@ -168,6 +184,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
     return () => {
       subscriptionRemover();
+      subscriptionFlowRemover();
       subscriptionSignInRemover();
       subscriptionCloseRemover();
       subscriptionRestoreRemover();

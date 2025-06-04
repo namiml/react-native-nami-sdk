@@ -56,17 +56,17 @@ export type NamiCampaign = {
     form_factors: NamiFormFactor[];
     external_segment: string | null;
 };
-type NamiFormFactor = {
-    form_factor: string;
-    supports_portrait?: boolean;
-    supports_landscape?: boolean;
-}
 export declare enum NamiCampaignRuleType {
     DEFAULT = "default",
     LABEL = "label",
     UNKNOWN = "unknown",
     URL = "url"
 }
+type NamiFormFactor = {
+    form_factor?: string;
+    supports_portrait?: boolean;
+    supports_landscape?: boolean;
+};
 export declare enum LaunchCampaignError {
     DEFAULT_CAMPAIGN_NOT_FOUND = 0,
     LABELED_CAMPAIGN_NOT_FOUND = 1,
@@ -205,3 +205,4 @@ export type NamiPaywallEventVideoMetadata = {
     contentTimecode?: number;
     contentDuration?: number;
 };
+export {};
