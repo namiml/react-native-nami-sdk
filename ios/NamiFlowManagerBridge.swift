@@ -38,6 +38,8 @@ class RNNamiFlowManager: RCTEventEmitter {
     }
 
     @objc func resume() {
-        NamiFlowManager.resume()
+        DispatchQueue.main.async {
+            NamiFlowManager.resume()
+        }
     }
 }
