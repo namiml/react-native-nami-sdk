@@ -3,14 +3,14 @@ import { Linking, Platform, EmitterSubscription } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NamiPaywallManager, NamiSKU, NamiFlowManager } from 'react-native-nami-sdk';
+import { NamiPaywallManager, NamiSKU } from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
 import CustomerManagerScreen from './containers/CustomerManagerScreen';
 import { handleDeepLink } from './services/deeplinking';
-import { useNamiFlowListener } from './hooks/useNamiFlowListener';
+// import { useNamiFlowListener } from './hooks/useNamiFlowListener';
 
 import {
   finishTransaction,
@@ -56,7 +56,7 @@ const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [namiSku, setNamiSku] = useState<NamiSKU>(undefined);
 
-  useNamiFlowListener();
+  // useNamiFlowListener();
 
   useEffect(() => {
     Linking.addEventListener('url', handleDeepLink);
