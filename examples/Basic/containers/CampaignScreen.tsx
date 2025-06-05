@@ -106,19 +106,15 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
 
-  const subscriptionFlowRemover = AppState.addEventListener('change', (state) => {
-    if (state === 'active') {
-      NamiFlowManager.registerStepHandoff((tag, data) => {
+   const subscriptionFlowRemover = NamiFlowManager.registerStepHandoff(
+      async (tag, data) => {
         console.log('handoff received: ', tag, data);
 
         const log = logger.createLogger();
         log.info('handoff received: ', tag, data);
 
         NamiFlowManager.resume();
-      });
-    }
-  });
-
+    });
 
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       async () => {

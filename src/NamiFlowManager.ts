@@ -33,7 +33,7 @@ export const NamiFlowManager: INamiFlowManager = {
     const subscription: EmitterSubscription = flowEmitter.addListener(
       NamiFlowManagerEvents.RegisterStepHandoff,
       (event: { handoffTag: string; handoffData?: string }) => {
-        console.log('[NamiFlowManager] Received handoff event:', event);
+        console.warn('[NamiFlowManager] Received handoff event:', event);
         callback(event.handoffTag, event.handoffData);
       }
     );
