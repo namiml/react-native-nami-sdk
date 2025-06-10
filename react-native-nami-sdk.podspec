@@ -17,10 +17,19 @@ Pod::Spec.new do |s|
 
 
   s.source       = { :git => "https://github.com/namiml/react-native-nami-sdk.git", :tag => "#{s.version}" }
-  s.source_files = "ios/**/*.{h,m,swift}"
-  s.requires_arc = true
+  s.source_files  = "ios/**/*.{h,m,mm,swift}"
+  s.requires_arc  = true
+  s.swift_version = '5.0'  # or your supported version
 
   s.dependency 'Nami', '3.2.11'
   s.dependency 'React'
+
+  s.pod_target_xcconfig = {
+    "DEFINES_MODULE" => "YES",
+    "SWIFT_VERSION" => "5.0",
+    "OTHER_CPLUSPLUSFLAGS" => "-DRCT_NEW_ARCH_ENABLED=1"
+  }
+
+  install_modules_dependencies(s)
 
 end

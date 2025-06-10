@@ -2,12 +2,18 @@
 //  NamiCustomerManager.swift
 //  RNNami
 //
-//  Copyright © 2023 Nami ML INc.. All rights reserved.
+//  Copyright © 2020-2025 Nami ML Inc. All rights reserved.
 //
 
 import Foundation
 import NamiApple
 import React
+
+#if RCT_NEW_ARCH_ENABLED
+    import React_RCTTurboModule
+
+    extension RNNamiCustomerManager: RCTTurboModule {}
+#endif
 
 @objc(RNNamiCustomerManager)
 class RNNamiCustomerManager: RCTEventEmitter {

@@ -10,6 +10,7 @@ import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
 import CustomerManagerScreen from './containers/CustomerManagerScreen';
 import { handleDeepLink } from './services/deeplinking';
+import { registerNamiPaywallListeners, removeNamiPaywallListeners } from './services/paywallHandlers';
 
 import {
   finishTransaction,
@@ -56,14 +57,26 @@ const App = () => {
   const [namiSku, setNamiSku] = useState<NamiSKU>(undefined);
 
   useEffect(() => {
-    Linking.addEventListener('url', handleDeepLink);
+    const subscription = Linking.addListener('url', handleDeepLink);
+
     Linking.getInitialURL().then((url) => {
       if (url) {
         handleDeepLink({ url });
       }
     });
+
     return () => {
-      Linking.removeAllListeners('url');
+      subscription.remove();
+    };
+  }, []);
+
+
+  useEffect(() => {
+
+    registerNamiPaywallListeners();
+
+    return () => {
+      removeNamiPaywallListeners();
     };
   }, []);
 
@@ -109,7 +122,7 @@ const App = () => {
               console.log(purchase.transactionId);
               console.log(purchase.originalTransactionIdentifierIOS);
 
-              NamiPaywallManager.buySkuCompleteApple({
+              NamiPaywallManager.buySkuComplete({
                 product: namiSku,
                 transactionID: purchase.transactionId ?? '',
                 originalTransactionID: purchase.originalTransactionIdentifierIOS ?? purchase.transactionId ?? '',
@@ -119,7 +132,7 @@ const App = () => {
             } else if (Platform.OS === 'android') {
               if (Platform.constants.Manufacturer === 'Amazon') {
                 console.log('Preparing to call buySkuCompleteAmazon');
-                NamiPaywallManager.buySkuCompleteAmazon({
+                NamiPaywallManager.buySkuComplete({
                   product: namiSku,
                   receiptId: purchase.transactionId ?? '',
                   localizedPrice: price,
@@ -128,7 +141,7 @@ const App = () => {
                 });
               } else {
                 console.log('Preparing to call buySkuCompleteGooglePlay');
-                NamiPaywallManager.buySkuCompleteGooglePlay({
+                NamiPaywallManager.buySkuComplete({
                   product: namiSku,
                   purchaseToken: purchase.purchaseToken ?? '',
                   orderId: purchase.transactionId ?? '',
@@ -149,7 +162,7 @@ const App = () => {
       NamiPaywallManager.buySkuCancel();
     });
 
-    const subscriptionRemover = NamiPaywallManager.registerBuySkuHandler(
+    const buySkuListener = NamiPaywallManager.registerBuySkuHandler(
       async (sku: NamiSKU) => {
 
         console.log(
@@ -190,7 +203,7 @@ const App = () => {
     );
 
     return () => {
-      subscriptionRemover();
+      buySkuListener;
       purchaseUpdate;
       purchaseError;
     };

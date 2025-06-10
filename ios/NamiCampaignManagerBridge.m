@@ -1,8 +1,8 @@
 //
-//  NamiCampaignManager.m
+//  NamiCampaignManagerBridge.m
 //  RNNami
 //
-//  Copyright © 2023 Nami ML INc.. All rights reserved.
+//  Copyright © 2020-2025 Nami ML Inc. All rights reserved.
 //
 
 #import <React/RCTBridgeModule.h>
@@ -20,7 +20,7 @@ RCT_EXTERN_METHOD(refresh:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRe
 RCT_EXTERN_METHOD(registerAvailableCampaignsHandler)
 
 + (BOOL)requiresMainQueueSetup {
-  return YES;
+  return NO;
 }
 
 @end

@@ -29,6 +29,8 @@ import { handleDeepLink } from '../services/deeplinking';
 import customLaunchObject from '../nami_launch_context_custom_object.json';
 import { logger } from 'react-native-logs';
 
+const log = logger.createLogger();
+
 type CampaignScreenProps = ViewerTabProps<'Campaign'>
 
 const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
@@ -65,7 +67,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   const checkIfPaywallOpen = async () => {
     const isOpen = await NamiPaywallManager.isPaywallOpen();
-    console.log('NamiSDK: paywall open? ', isOpen);
+    log.debug('NamiSDK: paywall open? ', isOpen);
   };
 
   const showPaywallIfHidden = async () => {
@@ -74,10 +76,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       if (Platform.OS === 'ios' && isHidden) {
         NamiPaywallManager.show();
       } else {
-        console.log('paywall is not hidden');
+        log.debug('paywall is not hidden');
       }
     } catch (error) {
-      console.log(error);
+      log.debug(error);
     }
   };
 
@@ -89,7 +91,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
     const sortedCampaigns = validCampaigns.sort( (a, b) => (a.value ?? '').localeCompare(b.value ?? '') );
     setCampaigns(sortedCampaigns);
-    console.log('validCampaigns', sortedCampaigns);
+    log.debug('validCampaigns', sortedCampaigns);
     return sortedCampaigns;
   }, []);
 
@@ -103,81 +105,30 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    const removeAvailableCampaignsListener =
+      NamiCampaignManager.registerAvailableCampaignsHandler(
+        (availableCampaigns: NamiCampaign[]) => {
+          const filteredCampaigns = availableCampaigns.filter(
+            (campaign) => campaign.type !== 'default'
+          );
 
-    const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
-      async () => {
-        console.log('sign in');
-        await NamiPaywallManager.dismiss();
-      },
-    );
+          const isEqualList =
+            JSON.stringify(campaigns) === JSON.stringify(filteredCampaigns);
+          setRefresh(!isEqualList);
 
-    const subscriptionCloseRemover = NamiPaywallManager.registerCloseHandler(
-      async () => {
-        console.log('close handler');
-        await NamiPaywallManager.dismiss();
-      },
-    );
+          const sortedCampaigns = filteredCampaigns.sort((a, b) =>
+            (a.value ?? '').localeCompare(b.value ?? '')
+          );
 
-    const subscriptionRestoreRemover =
-      NamiPaywallManager.registerRestoreHandler(
-        async () => {
-          console.log('restore');
-          await NamiPaywallManager.dismiss();
-        });
-
-    const subscriptionDeeplinkRemover =
-      NamiPaywallManager.registerDeeplinkActionHandler(
-        async (url) => {
-          console.log('deeplink action ', url);
-          // for testing:
-          NamiPaywallManager.buySkuCancel();
-
-          await NamiPaywallManager.dismiss();
-
-          if (url) {
-            handleDeepLink({ url });
-          }
-
-        });
-
-    const subscriptionRemover =
-        NamiCampaignManager.registerAvailableCampaignsHandler(
-          (availableCampaigns) => {
-            // Filter out (deprecated) campaigns with type === 'default'
-            const filteredCampaigns = availableCampaigns.filter(
-              (campaign) => campaign.type !== 'default'
-            );
-
-            // Compare filtered list to current campaigns
-            const isEqualList =
-                JSON.stringify(campaigns) === JSON.stringify(filteredCampaigns);
-            setRefresh(!isEqualList);
-
-            // Sort the filtered campaigns
-            const sortedCampaigns = filteredCampaigns.sort((a, b) =>
-              (a.value ?? '').localeCompare(b.value ?? '')
-            );
-            console.log(sortedCampaigns);
-
-            // Update state
-            setCampaigns(sortedCampaigns);
-          },
-        );
+          log.debug(sortedCampaigns);
+          setCampaigns(sortedCampaigns);
+        }
+      );
 
     getAllCampaigns();
 
     return () => {
-      subscriptionRemover();
-      subscriptionSignInRemover();
-      subscriptionCloseRemover();
-      subscriptionRestoreRemover();
-      subscriptionDeeplinkRemover();
-      // Clean up the launch subscription when the component unmounts
-      // For safety reasons
-      if (NamiCampaignManager.launchSubscription) {
-        //@ts-ignore
-        NamiCampaignManager.launchSubscription.remove();
-      }
+      removeAvailableCampaignsListener();
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,8 +144,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       url,
       { customAttributes: {}, customObject: customLaunchObject },
       (successAction, error) => {
-        console.log('successAction', successAction);
-        console.log('error', error);
+        log.debug('successAction', successAction);
+        log.debug('error', error);
 
         checkIfPaywallOpen();
       },
@@ -202,26 +153,25 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
         // NamiPaywallManager.allowUserInteraction(false);
 
-        const log = logger.createLogger();
-        // console.log(`NamiPaywallEvent ${event}"`)
-        log.info(`NamiPaywallEvent action - ${event.action.toString()}"`);
-        log.info(`NamiPaywallEvent timeSpentOnPaywall - ${event.timeSpentOnPaywall?.toString()}"`);
-        log.info(`NamiPaywallEvent component change id - ${event.componentChange?.id?.toString()}"`);
-        log.info(`NamiPaywallEvent component change name - ${event.componentChange?.name?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata id - ${event.videoMetadata?.id?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata url - ${event.videoMetadata?.url?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata name - ${event.videoMetadata?.name?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata contentDuration - ${event.videoMetadata?.contentDuration?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata contentTimecode - ${event.videoMetadata?.contentTimecode?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata autoplayVideo - ${event.videoMetadata?.autoplayVideo?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata muteByDefault - ${event.videoMetadata?.muteByDefault?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata loopVideo - ${event.videoMetadata?.loopVideo?.toString()}"`);
-        log.info(`NamiPaywallEvent sku name - ${event.sku?.name}"`);
-        log.info(`NamiPaywallEvent sku id - ${event.sku?.id}"`);
-        log.info(`NamiPaywallEvent sku skuId - ${event.sku?.skuId}"`);
-        log.info(`NamiPaywallEvent sku type - ${event.sku?.type}"`);
-        log.info(`NamiPaywallEvent sku promoId - ${event.sku?.promoId}"`);
-        log.info(`NamiPaywallEvent sku promoToken - ${event.sku?.promoToken}"`);
+        // log.debug(`NamiPaywallEvent ${event}"`)
+        log.debug(`NamiPaywallEvent action - ${event.action.toString()}"`);
+        log.debug(`NamiPaywallEvent timeSpentOnPaywall - ${event.timeSpentOnPaywall?.toString()}"`);
+        log.debug(`NamiPaywallEvent component change id - ${event.componentChange?.id?.toString()}"`);
+        log.debug(`NamiPaywallEvent component change name - ${event.componentChange?.name?.toString()}"`);
+        log.debug(`NamiPaywallEvent video metadata id - ${event.videoMetadata?.id?.toString()}"`);
+        log.debug(`NamiPaywallEvent video metadata url - ${event.videoMetadata?.url?.toString()}"`);
+        log.debug(`NamiPaywallEvent video metadata name - ${event.videoMetadata?.name?.toString()}"`);
+        log.debug(`NamiPaywallEvent video metadata contentDuration - ${event.videoMetadata?.contentDuration?.toString()}"`);
+        log.debug(`NamiPaywallEvent video metadata contentTimecode - ${event.videoMetadata?.contentTimecode?.toString()}"`);
+        log.debug(`NamiPaywallEvent video metadata autoplayVideo - ${event.videoMetadata?.autoplayVideo?.toString()}"`);
+        log.debug(`NamiPaywallEvent video metadata muteByDefault - ${event.videoMetadata?.muteByDefault?.toString()}"`);
+        log.debug(`NamiPaywallEvent video metadata loopVideo - ${event.videoMetadata?.loopVideo?.toString()}"`);
+        log.debug(`NamiPaywallEvent sku name - ${event.sku?.name}"`);
+        log.debug(`NamiPaywallEvent sku id - ${event.sku?.id}"`);
+        log.debug(`NamiPaywallEvent sku skuId - ${event.sku?.skuId}"`);
+        log.debug(`NamiPaywallEvent sku type - ${event.sku?.type}"`);
+        log.debug(`NamiPaywallEvent sku promoId - ${event.sku?.promoId}"`);
+        log.debug(`NamiPaywallEvent sku promoToken - ${event.sku?.promoToken}"`);
         setAction(event.action);
       },
     );

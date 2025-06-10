@@ -1,6 +1,5 @@
 export type NamiConfiguration = {
-  'appPlatformID-apple': string;
-  'appPlatformID-android': string;
+  appPlatformID: string;
   logLevel: string;
   namiCommands?: string[];
   namiLanguageCode?: NamiLanguageCodes;
@@ -245,7 +244,20 @@ export type NamiEntitlement = {
   relatedSkus: NamiSKU[];
 };
 
-// NamiPaywallManager
+export type NamiPurchaseDetails = {
+  product: NamiSKU;
+  transactionID?: string;
+  originalTransactionID?: string;
+  orderId?: string;
+  purchaseToken?: string;
+  receiptId?: string;
+  localizedPrice?: string;
+  price?: string;
+  currencyCode?: string;
+  userId?: string;
+  marketplace?: string;
+};
+
 export type NamiPurchaseSuccessApple = {
   product: NamiSKU;
   transactionID: string;

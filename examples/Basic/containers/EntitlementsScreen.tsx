@@ -31,14 +31,14 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   };
 
   const onRefreshPress = () => {
-    NamiEntitlementManager.refresh(newEntitlements => {
-      console.log('newEntitlements', newEntitlements);
-    });
+    // NamiEntitlementManager.refresh(newEntitlements => {
+    //   console.log('newEntitlements', newEntitlements);
+    // });
   };
 
-  const onClearPress = () => {
-    NamiEntitlementManager.clearProvisionalEntitlementGrants();
-  };
+  // const onClearPress = () => {
+  //   NamiEntitlementManager.clearProvisionalEntitlementGrants();
+  // };
 
   useEffect(() => {
     getAllEntitlements();
@@ -65,19 +65,6 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
               testID="refresh_entitlements"
               style={styles.headerButtonText}>
               Refresh
-            </Text>
-          </TouchableOpacity>
-        );
-      },
-      headerLeft: () => {
-        return (
-          <TouchableOpacity
-            style={styles.headerLeftButton}
-            onPress={onClearPress}>
-            <Text
-              testID="clear_entitlements"
-              style={styles.headerButtonText}>
-              Clear
             </Text>
           </TouchableOpacity>
         );

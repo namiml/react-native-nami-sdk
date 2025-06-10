@@ -1,10 +1,18 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "3.2.11",
+  "version": "3.2.12",
   "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
   "main": "index.ts",
-  "types": "index.d.ts",
+  "types": "dist/index.d.ts",
+  "codegenConfig": {
+    "name": "Nami",
+    "type": "modules",
+    "jsSrcsDir": "./specs"
+  },
   "scripts": {
+    "build": "tsc",
+    "generate:version": "ts-node scripts/generate-version.ts",
+    "prepare": "npm run generate:version && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "android": "react-native run-android",
     "android-clean": "cd android && rm -rf .gradle && rm -rf .idea && rm -rf android.iml && rm -rf local.properties",

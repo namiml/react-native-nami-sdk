@@ -1,5 +1,5 @@
 # Basic Example App
-The folder contains a simple example app that shows how to use the React-Native bridge with the Nami SDK.
+The folder contains a simple example app that shows how to use the React Native Nami SDK.
 
 ## Setup macOS
 
@@ -12,14 +12,13 @@ brew install yarn
 ```
 3. Clone the project -> `git clone https://github.com/namiml/react-native-nami-sdk.git`.
 4. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/Basic`.
-5. Install Dependencies ->
-   - `rm -rf node_modules ; yarn install`
-   - `rm -rf node_modules/react-native-nami-sdk/examples ; npx react-native start --reset-cache`
+5. Run the project ->
+   - `yarn clean && yarn build && yarn start`
 
 **iOS Setup**
 
 1. Install CocoaPods -> `brew install cocoapods`
-2. `cd ios && rm -rf Pods Podfile.lock && RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install`
+2. `yarn ios-clean && yarn ios-build`
 3. Either run `yarn run ios` or `open Basic.xcworkspace` and build in Xcode.
 4. Local detox tests: `detox clean-framework-cache && detox build --configuration ios.sim.debug && detox build-framework-cache && yarn detox test --configuration ios.sim.debug  e2e/ios --cleanup --headless --record-logs all`
 

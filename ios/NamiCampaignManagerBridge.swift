@@ -2,13 +2,19 @@
 //  NamiCampaignManagerBridge.swift
 //  RNNami
 //
-//  Copyright © 2023 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2025 Nami ML Inc. All rights reserved.
 //
 
 import Foundation
 import NamiApple
 import os
 import React
+
+#if RCT_NEW_ARCH_ENABLED
+    import React_RCTTurboModule
+
+    extension RNNamiCampaignManager: RCTTurboModule {}
+#endif
 
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
@@ -20,7 +26,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["AvailableCampaignsChanged", "ResultCampaign"]
+        return ["AvailableCampaignsChanged", "NamiPaywallEvent"]
     }
 
     private func campaignInToDictionary(_ campaign: NamiCampaign) -> NSDictionary {
@@ -155,7 +161,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
             "timeSpentOnPaywall": paywallEvent.timeSpentOnPaywall,
         ]
 
-        RNNamiCampaignManager.shared?.sendEvent(withName: "ResultCampaign", body: payload)
+        RNNamiCampaignManager.shared?.sendEvent(withName: "NamiPaywallEvent", body: payload)
     }
 
     func handleLaunch(callback: @escaping RCTResponseSenderBlock, success: Bool, error: Error?) {

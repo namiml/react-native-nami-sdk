@@ -8,6 +8,7 @@ node_modules/
 npm-debug.log
 yarn-error.log
 yarn.lock
+package-lock.json
 .npmrc
 react-native-nami-sdk-*.tgz
 
@@ -31,6 +32,7 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 Pods/
+Gemfile.lock
 
 # Android/IntelliJ
 #

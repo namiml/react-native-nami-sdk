@@ -2,7 +2,7 @@
 //  NamiCustomerManager.m
 //  RNNami
 //
-//  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2025 Nami ML Inc. All rights reserved.
 //
 
 #import <React/RCTBridgeModule.h>
@@ -43,7 +43,7 @@ RCT_EXTERN_METHOD(registerAccountStateHandler)
 
 
 + (BOOL)requiresMainQueueSetup {
-  return YES;
+  return NO;
 }
 
 @end

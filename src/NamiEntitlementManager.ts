@@ -1,53 +1,45 @@
 import {
+  TurboModuleRegistry,
   NativeModules,
   NativeEventEmitter,
-  Platform,
   EmitterSubscription,
 } from 'react-native';
-import { NamiEntitlement } from './types';
+import type { Spec } from '../specs/NativeNamiEntitlementManager';
+import type { NamiEntitlement } from './types';
 
-export const { RNNamiEntitlementManager } = NativeModules;
+const RNNamiEntitlementManager: Spec =
+  TurboModuleRegistry.getEnforcing?.<Spec>('RNNamiEntitlementManager') ??
+  NativeModules.RNNamiEntitlementManager;
+
+const emitter = new NativeEventEmitter(NativeModules.RNNamiEntitlementManager);
 
 export enum NamiEntitlementManagerEvents {
-  EntitlementsChanged = 'EntitlementsChanged',
+  EntitlementsChanged = 'EntitlementsChanged'
 }
 
-export interface INamiEntitlementManager {
-  emitter: NativeEventEmitter;
-  active: () => Promise<Array<NamiEntitlement>>;
-  isEntitlementActive: (label?: string) => boolean;
-  refresh: (
-    resultCallback?: (entitlements?: NamiEntitlement[]) => void,
-  ) => void;
-  registerActiveEntitlementsHandler: (
-    callback: (activeEntitlements: NamiEntitlement[]) => void,
-  ) => EmitterSubscription['remove'];
-  clearProvisionalEntitlementGrants: () => void;
-}
+export const NamiEntitlementManager = {
+  emitter,
 
-export const NamiEntitlementManager: INamiEntitlementManager = {
-  ...RNNamiEntitlementManager,
-  emitter: new NativeEventEmitter(RNNamiEntitlementManager),
-  refresh: (resultCallback?: (entitlements?: NamiEntitlement[]) => void) => {
-    if (Platform.OS === 'android') {
-      RNNamiEntitlementManager.refresh(resultCallback ?? (() => {}));
-    } else {
-      RNNamiEntitlementManager.refresh();
-    }
+  active: async (): Promise<NamiEntitlement[]> => {
+    return await RNNamiEntitlementManager.active();
   },
+
+  isEntitlementActive: async (entitlementId: string): Promise<boolean> => {
+    return await RNNamiEntitlementManager.isEntitlementActive(entitlementId);
+  },
+
+  refresh: async (): Promise<void> => {
+    return await RNNamiEntitlementManager.refresh();
+  },
+
   registerActiveEntitlementsHandler: (
-    callback: (activeEntitlements: NamiEntitlement[]) => void,
-  ) => {
-    let subscription: EmitterSubscription =
-      NamiEntitlementManager.emitter.addListener(
-        NamiEntitlementManagerEvents.EntitlementsChanged,
-        callback,
-      );
-    RNNamiEntitlementManager.registerActiveEntitlementsHandler();
-    return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-    };
+    callback: (entitlements: NamiEntitlement[]) => void
+  ): EmitterSubscription['remove'] => {
+    const subscription = emitter.addListener(
+      NamiEntitlementManagerEvents.EntitlementsChanged,
+      callback
+    );
+    RNNamiEntitlementManager.registerActiveEntitlementsHandler?.();
+    return () => subscription.remove();
   },
 };

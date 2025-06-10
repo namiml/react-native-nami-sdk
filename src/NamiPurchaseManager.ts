@@ -1,100 +1,86 @@
-import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
-import { EmitterSubscription } from 'react-native';
+import {
+  NativeEventEmitter,
+  TurboModuleRegistry,
+  NativeModules,
+} from 'react-native';
+import type { Spec } from '../specs/NativeNamiPurchaseManager';
 import {
   NamiPurchase,
   NamiPurchasesState,
   NamiRestorePurchasesState,
 } from './types';
 
-export const { NamiPurchaseManagerBridge, RNNamiPurchaseManager } =
-  NativeModules;
+const RNNamiPurchaseManager: Spec =
+  TurboModuleRegistry.getEnforcing?.<Spec>('RNNamiPurchaseManager') ??
+  NativeModules.RNNamiPurchaseManager;
 
 export enum NamiPurchaseManagerEvents {
   PurchasesChanged = 'PurchasesChanged',
   RestorePurchasesStateChanged = 'RestorePurchasesStateChanged',
 }
 
-export interface INamiPurchaseManager {
-  emitter: NativeEventEmitter;
-  allPurchases: () => NamiPurchase[];
-  anySkuPurchased: (skuIds: string[]) => boolean;
-  consumePurchasedSku: (skuId: string) => void;
-  presentCodeRedemptionSheet: () => void;
-  restorePurchases: (
-    callback: (
-      purchaseState: NamiPurchasesState,
-      purchases: NamiPurchase[],
-      error: string,
-    ) => void,
-  ) => EmitterSubscription['remove'];
-  skuPurchased: (skuId: string) => boolean;
-  registerPurchasesChangedHandler: (
-    callback: (
-      purchaseState: NamiPurchasesState,
-      purchases: NamiPurchase[],
-      error: string,
-    ) => void,
-  ) => EmitterSubscription['remove'];
-  registerRestorePurchasesHandler: (
-    callback: (
-      state: NamiRestorePurchasesState,
-      newPurchases: NamiPurchase[],
-      oldPurchases: NamiPurchase[],
-    ) => void,
-  ) => EmitterSubscription['remove'];
-}
+const emitter = new NativeEventEmitter(NativeModules.RNNamiPurchaseManager)
 
-export const NamiPurchaseManager: INamiPurchaseManager = {
-  emitter: new NativeEventEmitter(RNNamiPurchaseManager),
-  ...NamiPurchaseManagerBridge,
-  ...RNNamiPurchaseManager,
+export const NamiPurchaseManager = {
+  emitter,
+
+  allPurchases: async (): Promise<NamiPurchase[]> =>
+    await RNNamiPurchaseManager.allPurchases(),
+
+  skuPurchased: async (skuId: string): Promise<boolean> =>
+    await RNNamiPurchaseManager.skuPurchased(skuId),
+
+  anySkuPurchased: async (skuIds: string[]): Promise<boolean> =>
+    await RNNamiPurchaseManager.anySkuPurchased(skuIds),
+
+  consumePurchasedSku: (skuId: string): void =>
+    RNNamiPurchaseManager.consumePurchasedSku(skuId),
+
+  presentCodeRedemptionSheet: (): void =>
+    RNNamiPurchaseManager.presentCodeRedemptionSheet(),
+
+  restorePurchases: (): void =>
+    RNNamiPurchaseManager.restorePurchases(),
+
   registerPurchasesChangedHandler: (
     callback: (
-      purchaseState: NamiPurchasesState,
+      state: NamiPurchasesState,
       purchases: NamiPurchase[],
-      error: string,
-    ) => void,
-  ) => {
-    const subscription = NamiPurchaseManager.emitter.addListener(
+      error: string
+    ) => void
+  ): () => void => {
+    const subscription = emitter.addListener(
       NamiPurchaseManagerEvents.PurchasesChanged,
-      body => {
-        let purchases = body.purchases;
-        let purchaseState =
-          body.purchaseState.toLowerCase() as NamiPurchasesState;
-        let error = body.error;
-        callback(purchaseState, purchases, error);
-      },
-    );
-    RNNamiPurchaseManager.registerPurchasesChangedHandler();
-    return () => {
-      if (subscription) {
-        subscription.remove();
+      (event: {
+        state: NamiPurchasesState;
+        purchases: NamiPurchase[];
+        error: string;
+      }) => {
+        callback(event.state, event.purchases, event.error);
       }
-    };
+    );
+    RNNamiPurchaseManager.registerPurchasesChangedHandler?.();
+    return () => subscription.remove();
   },
+
   registerRestorePurchasesHandler: (
     callback: (
       state: NamiRestorePurchasesState,
       newPurchases: NamiPurchase[],
-      oldPurchases: NamiPurchase[],
-    ) => void,
-  ) => {
-    if (Platform.OS === 'ios') {
-      const subscription = NamiPurchaseManager.emitter.addListener(
-        NamiPurchaseManagerEvents.RestorePurchasesStateChanged,
-        body => {
-          let state = body.state.toLowerCase() as NamiRestorePurchasesState;
-          let newPurchases = body.newPurchases;
-          let oldPurchases = body.oldPurchases;
-          callback(state, newPurchases, oldPurchases);
-        },
-      );
-      RNNamiPurchaseManager.registerRestorePurchasesHandler();
-      return () => {
-        if (subscription) {
-          subscription.remove();
-        }
-      };
-    }
+      oldPurchases: NamiPurchase[]
+    ) => void
+  ): () => void => {
+    const subscription = emitter.addListener(
+      NamiPurchaseManagerEvents.RestorePurchasesStateChanged,
+      (event: {
+        state: NamiRestorePurchasesState;
+        newPurchases: NamiPurchase[];
+        oldPurchases: NamiPurchase[];
+      }) => {
+        callback(event.state, event.newPurchases, event.oldPurchases);
+      }
+    );
+    RNNamiPurchaseManager.registerRestorePurchasesHandler?.();
+    return () => subscription.remove();
   },
 };
