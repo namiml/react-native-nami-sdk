@@ -49,6 +49,42 @@ export const NamiCustomerManager: INamiCustomerManager = {
   logout: () => {
     RNNamiCustomerManager.logout();
   },
+  setCustomerDataPlatformId: platformId => {
+    RNNamiCustomerManager.setCustomerDataPlatformId(platformId);
+  },
+  clearCustomerDataPlatformId: () => {
+    RNNamiCustomerManager.clearCustomerDataPlatformId();
+  },
+  setAnonymousMode: anonymousMode => {
+    RNNamiCustomerManager.setAnonymousMode(anonymousMode);
+  },
+  setCustomerAttribute: (key, value) => {
+    RNNamiCustomerManager.setCustomerAttribute(key, value);
+  },
+  clearCustomerAttribute: key => {
+    RNNamiCustomerManager.clearCustomerAttribute(key);
+  },
+  clearAllCustomerAttributes: () => {
+    RNNamiCustomerManager.clearAllCustomerAttributes();
+  },
+  getCustomerAttribute: async key => {
+    return RNNamiCustomerManager.getCustomerAttribute(key);
+  },
+  journeyState: async () => {
+    return RNNamiCustomerManager.journeyState();
+  },
+  isLoggedIn: async () => {
+    return RNNamiCustomerManager.isLoggedIn();
+  },
+  loggedInId: async () => {
+    return RNNamiCustomerManager.loggedInId();
+  },
+  deviceId: async () => {
+    return RNNamiCustomerManager.deviceId();
+  },
+  inAnonymousMode: async () => {
+    return RNNamiCustomerManager.inAnonymousMode();
+  },
   registerJourneyStateHandler: (
     callback: (journeyState: CustomerJourneyState) => void,
   ) => {

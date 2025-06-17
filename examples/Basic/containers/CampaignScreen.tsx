@@ -104,6 +104,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return refreshedCampaigns;
   }, []);
 
+
   useEffect(() => {
 
    const subscriptionFlowRemover = NamiFlowManager.registerStepHandoff(
