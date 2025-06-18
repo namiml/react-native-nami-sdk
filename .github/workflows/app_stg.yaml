@@ -81,6 +81,11 @@ jobs:
         env:
           KEYSTORE_BASE64: '${{ secrets.KEY_STORE_BASE64 }}'
 
+      - name: Pack the SDK
+        run: |
+          npm pack
+        working-directory: source/
+
       - name: Install test app dependencies
         run: |
           yarn install
@@ -192,6 +197,11 @@ jobs:
            echo "BUILD_NUMBER=$(cat ~/.next_build_number)" >> $GITHUB_ENV
            echo "CURRENT_VERSION=$(cat ~/.current_version)" >> $GITHUB_ENV
         working-directory: source/examples/Basic
+
+      - name: Pack the SDK
+        run: |
+          npm pack
+        working-directory: source/
 
       - name: Install test app dependencies
         run: |
