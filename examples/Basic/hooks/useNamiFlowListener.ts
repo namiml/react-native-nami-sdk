@@ -36,31 +36,29 @@ export function useNamiFlowListener() {
               NamiFlowManager.resume();
             });
           } else if (Platform.OS === 'android') {
-            NamiCustomerManager.setCustomerAttribute('pushAuthorized', 'true');
-            NamiFlowManager.resume();
-            // try {
-            //   const permission = 'android.permission.POST_NOTIFICATIONS' as unknown as Permission;
-            //   log.info('[NamiFlowManager] check notification permission');
+            try {
+              const permission = 'android.permission.POST_NOTIFICATIONS' as unknown as Permission;
+              log.info('[NamiFlowManager] check notification permission');
 
-            //   const status = await check(permission);
-            //   if (status === RESULTS.GRANTED) {
-            //     log.info('[NamiFlowManager] notification permission granted');
-            //     NamiCustomerManager.setCustomerAttribute('pushAuthorized', 'true');
-            //     setCustomerAttributesFromHandoff(data);
-            //     NamiFlowManager.resume();
-            //   } else {
-            //     log.info('[NamiFlowManager] notification request permission');
-            //     const grantStatus = await request(permission);
-            //     const granted = grantStatus === RESULTS.GRANTED;
-            //     NamiCustomerManager.setCustomerAttribute('pushAuthorized', granted ? 'true' : 'false');
-            //     if (granted) setCustomerAttributesFromHandoff(data);
-            //     NamiFlowManager.resume();
-            //   }
-            // } catch (err) {
-            //   // Log the error and continue flow
-            //   log.warn('[NamiFlowManager] Error checking/requesting POST_NOTIFICATIONS permission:', err);
-            //   NamiFlowManager.resume();
-            // }
+              const status = await check(permission);
+              if (status === RESULTS.GRANTED) {
+                log.info('[NamiFlowManager] notification permission granted');
+                NamiCustomerManager.setCustomerAttribute('pushAuthorized', 'true');
+                setCustomerAttributesFromHandoff(data);
+                NamiFlowManager.resume();
+              } else {
+                log.info('[NamiFlowManager] notification request permission');
+                const grantStatus = await request(permission);
+                const granted = grantStatus === RESULTS.GRANTED;
+                NamiCustomerManager.setCustomerAttribute('pushAuthorized', granted ? 'true' : 'false');
+                if (granted) setCustomerAttributesFromHandoff(data);
+                NamiFlowManager.resume();
+              }
+            } catch (err) {
+              // Log the error and continue flow
+              log.warn('[NamiFlowManager] Error checking/requesting POST_NOTIFICATIONS permission:', err);
+              NamiFlowManager.resume();
+            }
           } else {
             NamiFlowManager.resume();
           }

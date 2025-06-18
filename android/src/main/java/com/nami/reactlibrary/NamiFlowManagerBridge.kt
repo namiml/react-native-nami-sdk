@@ -35,12 +35,24 @@ class NamiFlowManagerBridgeModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun resume() {
-        NamiFlowManager.resume()
+        val delayMillis = 100L
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            NamiFlowManager.resume()
+        }, delayMillis)
     }
 
     private fun sendEvent(eventName: String, params: WritableMap?) {
         reactApplicationContext
             .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
             .emit(eventName, params)
+    }
+
+    @ReactMethod
+    fun addListener(eventName: String?) {
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
     }
 }
