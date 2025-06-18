@@ -10,7 +10,7 @@ import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
 import CustomerManagerScreen from './containers/CustomerManagerScreen';
 import { handleDeepLink } from './services/deeplinking';
-// import { useNamiFlowListener } from './hooks/useNamiFlowListener';
+import { useNamiFlowListener } from './hooks/useNamiFlowListener';
 
 import {
   finishTransaction,
@@ -56,7 +56,7 @@ const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [namiSku, setNamiSku] = useState<NamiSKU>(undefined);
 
-  // useNamiFlowListener();
+  useNamiFlowListener();
 
   useEffect(() => {
     Linking.addEventListener('url', handleDeepLink);

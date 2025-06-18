@@ -28,12 +28,20 @@ class RNNamiFlowManager: RCTEventEmitter {
 
     @objc func registerStepHandoff() {
         NamiFlowManager.registerStepHandoff { tag, data in
-            let payload: [String: Any] = [
+            var payload: [String: Any] = [
                 "handoffTag": tag,
-                "handoffData": data ?? "",
             ]
-            print("handoff native \(tag) \(data)")
+            if let data = data {
+                payload["handoffData"] = data
+            }
             RNNamiFlowManager.shared?.sendEvent(withName: "RegisterStepHandoff", body: payload)
+        }
+    }
+
+    @objc(registerEventHandler:)
+    func registerEventHandler(_ callback: @escaping RCTResponseSenderBlock) {
+        NamiFlowManager.registerEventHandler { payload in
+            callback([payload])
         }
     }
 

@@ -106,27 +106,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
 
   useEffect(() => {
-
-   const subscriptionFlowRemover = NamiFlowManager.registerStepHandoff(
-      async (tag, data) => {
-        console.log('handoff received: ', tag, data);
-
-        const log = logger.createLogger();
-        log.info('handoff received: ', tag, data);
-
-        NamiFlowManager.resume();
-    });
-
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       async () => {
-        console.log('sign in');
+        console.log('[NamiPaywallManager.registerSignInHandler] sign in');
         await NamiPaywallManager.dismiss();
       },
     );
 
     const subscriptionCloseRemover = NamiPaywallManager.registerCloseHandler(
       async () => {
-        console.log('close handler');
+        console.log('[NamiPaywallManager.registerCloseHandler] close');
         await NamiPaywallManager.dismiss();
       },
     );
@@ -134,14 +123,15 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     const subscriptionRestoreRemover =
       NamiPaywallManager.registerRestoreHandler(
         async () => {
-          console.log('restore');
+          console.log('[NamiPaywallManager.registerRestoreHandler] restore');
           await NamiPaywallManager.dismiss();
         });
 
     const subscriptionDeeplinkRemover =
       NamiPaywallManager.registerDeeplinkActionHandler(
         async (url) => {
-          console.log('deeplink action ', url);
+          console.log('[NamiPaywallManager.registerDeeplinkActionHandler] deeplink action ', url);
+
           // for testing:
           NamiPaywallManager.buySkuCancel();
 
@@ -181,7 +171,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
     return () => {
       subscriptionRemover();
-      subscriptionFlowRemover();
       subscriptionSignInRemover();
       subscriptionCloseRemover();
       subscriptionRestoreRemover();

@@ -11,8 +11,12 @@ brew install watchman
 brew install yarn
 ```
 3. Clone the project -> `git clone https://github.com/namiml/react-native-nami-sdk.git`.
+4. Pack the SDK
+   - `rm react-native-nami-sdk*.tgz`
+   - `npm pack`
 4. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/Basic`.
 5. Install Dependencies ->
+   - `npm install ../../react-native-nami-sdk*.tgz`
    - `rm -rf node_modules ; yarn install`
    - `rm -rf node_modules/react-native-nami-sdk/examples ; npx react-native start --reset-cache`
 
