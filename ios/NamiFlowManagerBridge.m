@@ -14,7 +14,7 @@ RCT_EXTERN_METHOD(registerEventHandler:(RCTResponseSenderBlock)callback)
 RCT_EXTERN_METHOD(resume)
 
 + (BOOL)requiresMainQueueSetup {
-  return YES;
+  return NO;
 }
 
 @end

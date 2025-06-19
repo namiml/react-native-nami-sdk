@@ -19,7 +19,7 @@ class RNNamiFlowManager: RCTEventEmitter {
     }
 
     override static func requiresMainQueueSetup() -> Bool {
-        return true
+        return false
     }
 
     override func supportedEvents() -> [String]! {
@@ -34,14 +34,19 @@ class RNNamiFlowManager: RCTEventEmitter {
             if let data = data {
                 payload["handoffData"] = data
             }
-            RNNamiFlowManager.shared?.sendEvent(withName: "RegisterStepHandoff", body: payload)
+
+            DispatchQueue.main.async {
+                RNNamiFlowManager.shared?.sendEvent(withName: "RegisterStepHandoff", body: payload)
+            }
         }
     }
 
     @objc(registerEventHandler:)
     func registerEventHandler(_ callback: @escaping RCTResponseSenderBlock) {
         NamiFlowManager.registerEventHandler { payload in
-            callback([payload])
+            DispatchQueue.main.async {
+                callback([payload])
+            }
         }
     }
 

@@ -1,66 +1,50 @@
 import {
+  TurboModuleRegistry,
   NativeModules,
   NativeEventEmitter,
-  EmitterSubscription,
 } from 'react-native';
+import type { Spec } from '../specs/NativeNamiFlowManager';
+import type { NamiFlowHandoffPayload } from '../src/types'; // Assume you define this type
 
-const { RNNamiFlowManager } = NativeModules;
+const RNNamiFlowManager: Spec =
+  TurboModuleRegistry.getEnforcing?.<Spec>('RNNamiFlowManager') ??
+  NativeModules.RNNamiFlowManager;
+
+const emitter = new NativeEventEmitter(NativeModules.RNNamiFlowManager);
 
 export enum NamiFlowManagerEvents {
   RegisterStepHandoff = 'RegisterStepHandoff',
 }
 
-export interface INamiFlowManager {
+export const NamiFlowManager = {
+  emitter,
+
   registerStepHandoff: (
-    callback: (handoffTag: string, handoffData?: { [key: string]: any }) => void,
-  ) => () => void;
-  resume: () => void;
-  registerEventHandler: (
-    handler: (payload: { [key: string]: any }) => void
-  ) => void;
-}
+    callback: (handoffTag: string, handoffData?: Record<string, any>) => void,
+  ): () => void => {
+    console.info('[NamiFlowManager] Registering step handoff listener...');
 
-const flowEmitter = new NativeEventEmitter(RNNamiFlowManager);
-
-export const NamiFlowManager: INamiFlowManager = {
-  registerStepHandoff: (callback) => {
-    console.log('[NamiFlowManager] Registering handoff listener...');
-
-    const subscription: EmitterSubscription = flowEmitter.addListener(
+    const sub = emitter.addListener(
       NamiFlowManagerEvents.RegisterStepHandoff,
-      (event: { handoffTag: string; handoffData?: { [key: string]: any } }) => {
+      (event: NamiFlowHandoffPayload) => {
         console.info('[NamiFlowManager] Received handoff event:', event);
         callback(event.handoffTag, event.handoffData);
       }
     );
 
-    if (RNNamiFlowManager?.registerStepHandoff) {
-      RNNamiFlowManager.registerStepHandoff();
-    } else {
-      console.warn('[NamiFlowManager] Native method registerStepHandoff is not available.');
-    }
+    RNNamiFlowManager.registerStepHandoff?.();
 
-    return () => {
-      subscription.remove();
-    };
+    return () => sub.remove();
   },
 
-  resume: () => {
-    if (RNNamiFlowManager?.resume) {
-        console.info('[NamiFlowManager] resume from handoff requested');
-      RNNamiFlowManager.resume();
-    } else {
-      console.warn('[NamiFlowManager] Native method resume is not available.');
-    }
+  resume: (): void => {
+    console.info('[NamiFlowManager] resume from handoff requested');
+    RNNamiFlowManager.resume?.();
   },
 
-  registerEventHandler: (handler) => {
-    if (RNNamiFlowManager?.registerEventHandler) {
-      RNNamiFlowManager.registerEventHandler((payload: { [key: string]: any }) => {
-        handler(payload);
-      });
-    } else {
-      console.warn('[NamiFlowManager] Native method registerEventHandler is not available.');
-    }
+  registerEventHandler: (
+    handler: (payload: Record<string, any>) => void
+  ): void => {
+    RNNamiFlowManager.registerEventHandler?.(handler);
   },
 };

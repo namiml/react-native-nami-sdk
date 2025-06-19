@@ -24,7 +24,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     }
 
     override static func requiresMainQueueSetup() -> Bool {
-        return true
+        return false
     }
 
     override func supportedEvents() -> [String]! {
@@ -76,7 +76,9 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     func registerActiveEntitlementsHandler() {
         NamiEntitlementManager.registerActiveEntitlementsHandler { entitlements in
             let dicts = entitlements.map { self.entitlementToDictionary($0) }
-            RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
+            DispatchQueue.main.async {
+                RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
+            }
         }
     }
 }
