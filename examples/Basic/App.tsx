@@ -10,7 +10,7 @@ import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
 import CustomerManagerScreen from './containers/CustomerManagerScreen';
 import { handleDeepLink } from './services/deeplinking';
-import { registerNamiPaywallListeners, removeNamiPaywallListeners } from './services/paywallHandlers';
+import { useNamiFlowListener } from './hooks/useNamiFlowListener';
 
 import {
   finishTransaction,
@@ -56,6 +56,8 @@ const App = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [namiSku, setNamiSku] = useState<NamiSKU>(undefined);
 
+  useNamiFlowListener();
+
   useEffect(() => {
     const subscription = Linking.addListener('url', handleDeepLink);
 
@@ -67,16 +69,6 @@ const App = () => {
 
     return () => {
       subscription.remove();
-    };
-  }, []);
-
-
-  useEffect(() => {
-
-    registerNamiPaywallListeners();
-
-    return () => {
-      removeNamiPaywallListeners();
     };
   }, []);
 
@@ -201,6 +193,7 @@ const App = () => {
         }
       },
     );
+
 
     return () => {
       buySkuListener;

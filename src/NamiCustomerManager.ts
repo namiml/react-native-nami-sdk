@@ -44,22 +44,21 @@ export const NamiCustomerManager = {
     const id = await RNNamiCustomerManager.loggedInId();
     return id ?? undefined;
   },
-
-  deviceId: async (): Promise<string> =>
-    RNNamiCustomerManager.deviceId(),
-
-  clearCustomerDataPlatformId: () =>
-    RNNamiCustomerManager.clearCustomerDataPlatformId(),
-
-  setCustomerDataPlatformId: (platformId: string) =>
-    RNNamiCustomerManager.setCustomerDataPlatformId(platformId),
-
-  setAnonymousMode: (anonymousMode: boolean) =>
-    RNNamiCustomerManager.setAnonymousMode(anonymousMode),
-
-  inAnonymousMode: async (): Promise<boolean> =>
-    RNNamiCustomerManager.inAnonymousMode(),
-
+  setCustomerDataPlatformId: platformId => {
+    RNNamiCustomerManager.setCustomerDataPlatformId(platformId);
+  },
+  clearCustomerDataPlatformId: () => {
+    RNNamiCustomerManager.clearCustomerDataPlatformId();
+  },
+  setAnonymousMode: anonymousMode => {
+    RNNamiCustomerManager.setAnonymousMode(anonymousMode);
+  },
+  deviceId: async () => {
+    return RNNamiCustomerManager.deviceId();
+  },
+  inAnonymousMode: async () => {
+    return RNNamiCustomerManager.inAnonymousMode();
+  },
   registerJourneyStateHandler: (
     callback: (state: CustomerJourneyState) => void
   ): EmitterSubscription['remove'] => {

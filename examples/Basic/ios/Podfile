@@ -1,3 +1,14 @@
+def node_require(script)
+  # Resolve script with node to allow for hoisting
+  require Pod::Executable.execute_command('node', ['-p',
+    "require.resolve(
+      '#{script}',
+      {paths: [process.argv[1]]},
+    )", __dir__]).strip
+end
+
+node_require('react-native-permissions/scripts/setup.rb')
+
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -17,6 +28,15 @@ target 'Basic' do
     fabric_enabled: true
   )
 
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
+  setup_permissions([
+    'LocationAccuracy',
+    'LocationAlways',
+    'LocationWhenInUse',
+    'Notifications',
+  ])
+
   use_native_modules!
 
   target 'BasicTests' do
@@ -33,6 +53,14 @@ target 'BasicProduction' do
     fabric_enabled: true
   )
 
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
+  setup_permissions([
+    'LocationAccuracy',
+    'LocationAlways',
+    'LocationWhenInUse',
+    'Notifications',
+  ])
   use_native_modules!
 end
 

@@ -12,6 +12,7 @@ import {
   NamiPaywallAction,
   NamiCampaignRuleType,
   NamiPaywallEvent,
+  NamiFlowManager,
 } from 'react-native-nami-sdk';
 import {
   FlatList,
@@ -28,6 +29,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { handleDeepLink } from '../services/deeplinking';
 import customLaunchObject from '../nami_launch_context_custom_object.json';
 import { logger } from 'react-native-logs';
+import { AppState } from 'react-native';
 
 const log = logger.createLogger();
 
@@ -105,7 +107,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    const removeAvailableCampaignsListener =
+    const availableCampaignsRemover =
       NamiCampaignManager.registerAvailableCampaignsHandler(
         (availableCampaigns: NamiCampaign[]) => {
           const filteredCampaigns = availableCampaigns.filter(
@@ -125,10 +127,51 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         }
       );
 
+    const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
+      async () => {
+        console.log('[NamiPaywallManager.registerSignInHandler] sign in');
+        await NamiPaywallManager.dismiss();
+      },
+    );
+
+    const subscriptionCloseRemover = NamiPaywallManager.registerCloseHandler(
+      async () => {
+        console.log('[NamiPaywallManager.registerCloseHandler] close');
+        await NamiPaywallManager.dismiss();
+      },
+    );
+
+    const subscriptionRestoreRemover =
+      NamiPaywallManager.registerRestoreHandler(
+        async () => {
+          console.log('[NamiPaywallManager.registerRestoreHandler] restore');
+          await NamiPaywallManager.dismiss();
+        });
+
+    const subscriptionDeeplinkRemover =
+      NamiPaywallManager.registerDeeplinkActionHandler(
+        async (url) => {
+          console.log('[NamiPaywallManager.registerDeeplinkActionHandler] deeplink action ', url);
+
+          // for testing:
+          NamiPaywallManager.buySkuCancel();
+
+          await NamiPaywallManager.dismiss();
+
+          if (url) {
+            handleDeepLink({ url });
+          }
+
+        });
+
     getAllCampaigns();
 
     return () => {
-      removeAvailableCampaignsListener();
+      availableCampaignsRemover();
+      subscriptionSignInRemover();
+      subscriptionCloseRemover();
+      subscriptionRestoreRemover();
+      subscriptionDeeplinkRemover();
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,14 +201,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         log.debug(`NamiPaywallEvent timeSpentOnPaywall - ${event.timeSpentOnPaywall?.toString()}"`);
         log.debug(`NamiPaywallEvent component change id - ${event.componentChange?.id?.toString()}"`);
         log.debug(`NamiPaywallEvent component change name - ${event.componentChange?.name?.toString()}"`);
-        log.debug(`NamiPaywallEvent video metadata id - ${event.videoMetadata?.id?.toString()}"`);
         log.debug(`NamiPaywallEvent video metadata url - ${event.videoMetadata?.url?.toString()}"`);
         log.debug(`NamiPaywallEvent video metadata name - ${event.videoMetadata?.name?.toString()}"`);
-        log.debug(`NamiPaywallEvent video metadata contentDuration - ${event.videoMetadata?.contentDuration?.toString()}"`);
-        log.debug(`NamiPaywallEvent video metadata contentTimecode - ${event.videoMetadata?.contentTimecode?.toString()}"`);
-        log.debug(`NamiPaywallEvent video metadata autoplayVideo - ${event.videoMetadata?.autoplayVideo?.toString()}"`);
-        log.debug(`NamiPaywallEvent video metadata muteByDefault - ${event.videoMetadata?.muteByDefault?.toString()}"`);
-        log.debug(`NamiPaywallEvent video metadata loopVideo - ${event.videoMetadata?.loopVideo?.toString()}"`);
         log.debug(`NamiPaywallEvent sku name - ${event.sku?.name}"`);
         log.debug(`NamiPaywallEvent sku id - ${event.sku?.id}"`);
         log.debug(`NamiPaywallEvent sku skuId - ${event.sku?.skuId}"`);

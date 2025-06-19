@@ -66,8 +66,8 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         var paywallLaunchContext: PaywallLaunchContext? = null
         if (context != null) {
             val productGroups: MutableList<String> = mutableListOf()
-            val customAttributes: MutableMap<String, String> = mutableMapOf()
-            var customObject: MutableMap<String, Any> = mutableMapOf()
+            val customAttributes: MutableMap<String, Any> = mutableMapOf()
+            var customObject: MutableMap<String, Any?> = mutableMapOf()
 
             if (context.hasKey("productGroups")) {
                 val groups = context.getArray("productGroups")

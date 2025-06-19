@@ -81,6 +81,11 @@ jobs:
         env:
           KEYSTORE_BASE64: '${{ secrets.KEY_STORE_BASE64 }}'
 
+      - name: Pack the SDK
+        run: |
+          npm pack
+        working-directory: source/
+
       - name: Install test app dependencies
         run: |
           yarn install
@@ -193,6 +198,11 @@ jobs:
            echo "CURRENT_VERSION=$(cat ~/.current_version)" >> $GITHUB_ENV
         working-directory: source/examples/Basic
 
+      - name: Pack the SDK
+        run: |
+          npm pack
+        working-directory: source/
+
       - name: Install test app dependencies
         run: |
           yarn install
@@ -210,10 +220,12 @@ jobs:
           pod install --repo-update
         working-directory: source/examples/Basic/ios
 
-      # - name: Apply Patches
-      #   run: |
-      #     patch -p0 < *.patch
-      #   working-directory: source/examples/Basic/patches
+      - name: Add initial config
+        run: |
+          echo $INITIAL_CONFIG_APPLE_STG > nami_initial_config_apple_stg.json
+        working-directory: source/examples/Basic
+        env:
+          INITIAL_CONFIG_APPLE_STG: '${{ secrets.INITIAL_CONFIG_APPLE_STG }}'
 
       - name: Build resolve Swift dependencies
         run: |
