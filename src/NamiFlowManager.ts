@@ -4,7 +4,7 @@ import {
   NativeEventEmitter,
 } from 'react-native';
 import type { Spec } from '../specs/NativeNamiFlowManager';
-import type { NamiFlowHandoffPayload } from '../src/types'; // Assume you define this type
+import type { NamiFlowHandoffPayload } from '../src/types';
 
 const RNNamiFlowManager: Spec =
   TurboModuleRegistry.getEnforcing?.<Spec>('RNNamiFlowManager') ??
@@ -13,7 +13,8 @@ const RNNamiFlowManager: Spec =
 const emitter = new NativeEventEmitter(NativeModules.RNNamiFlowManager);
 
 export enum NamiFlowManagerEvents {
-  RegisterStepHandoff = 'RegisterStepHandoff',
+  Handoff = 'Handoff',
+  FlowEvent = 'FlowEvent'
 }
 
 export const NamiFlowManager = {
@@ -25,7 +26,7 @@ export const NamiFlowManager = {
     console.info('[NamiFlowManager] Registering step handoff listener...');
 
     const sub = emitter.addListener(
-      NamiFlowManagerEvents.RegisterStepHandoff,
+      NamiFlowManagerEvents.Handoff,
       (event: NamiFlowHandoffPayload) => {
         console.info('[NamiFlowManager] Received handoff event:', event);
         callback(event.handoffTag, event.handoffData);
@@ -47,4 +48,11 @@ export const NamiFlowManager = {
   ): void => {
     RNNamiFlowManager.registerEventHandler?.(handler);
   },
+
+  registerEventHandler: (callback: (payload: Record<string, any>) => void): () => void => {
+    const sub = emitter.addListener(NamiFlowManagerEvents.FlowEvent, callback);
+    RNNamiFlowManager.registerEventHandler?.();
+    return () => sub.remove();
+  },
+
 };

@@ -369,3 +369,8 @@ export type NamiPaywallEventVideoMetadata = {
   contentTimecode?: number;
   contentDuration?: number;
 };
+
+export type NamiFlowHandoffPayload = {
+  handoffTag: string;
+  handoffData?: Record<string, any>;
+};

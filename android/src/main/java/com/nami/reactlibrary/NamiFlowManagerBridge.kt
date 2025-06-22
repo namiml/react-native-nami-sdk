@@ -9,11 +9,7 @@ import com.namiml.flow.NamiFlowManager
 class NamiFlowManagerBridgeModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
-    private var eventHandler: ((WritableMap) -> Unit)? = null
-
-    override fun getName(): String {
-        return "RNNamiFlowManager"
-    }
+    override fun getName(): String = "RNNamiFlowManager"
 
     @ReactMethod
     fun registerStepHandoff() {
@@ -24,24 +20,23 @@ class NamiFlowManagerBridgeModule(reactContext: ReactApplicationContext) :
                     putMap("handoffData", Arguments.makeNativeMap(handoffData))
                 }
             }
-            sendEvent("RegisterStepHandoff", payload)
+            sendEvent("Handoff", payload)
         }
     }
 
     @ReactMethod
-    fun registerEventHandler(callback: Callback) {
-        eventHandler = { payload ->
-            callback.invoke(payload)
+    fun registerEventHandler() {
+        NamiFlowManager.registerEventHandler { data ->
+            val payload = Arguments.makeNativeMap(data)
+            sendEvent("FlowEvent", payload)
         }
     }
 
     @ReactMethod
     fun resume() {
-        val delayMillis = 100L
-
         Handler(Looper.getMainLooper()).postDelayed({
             NamiFlowManager.resume()
-        }, delayMillis)
+        }, 100L)
     }
 
     private fun sendEvent(eventName: String, params: WritableMap?) {
@@ -50,11 +45,7 @@ class NamiFlowManagerBridgeModule(reactContext: ReactApplicationContext) :
             .emit(eventName, params)
     }
 
-    @ReactMethod
-    fun addListener(eventName: String?) {
-    }
-
-    @ReactMethod
-    fun removeListeners(count: Int?) {
-    }
+    // Required for RN EventEmitter support
+    @ReactMethod fun addListener(eventName: String?) {}
+    @ReactMethod fun removeListeners(count: Int?) {}
 }

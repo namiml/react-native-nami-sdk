@@ -6,8 +6,22 @@ export declare enum NamiCampaignManagerEvents {
 export declare const NamiCampaignManager: {
     emitter: NativeEventEmitter;
     launch: (label: string | null, withUrl: string | null, context: PaywallLaunchContext | null, completion: (success: boolean, errorCode?: number | null) => void, paywallCompletion: (event: NamiPaywallEvent) => void) => void;
-    allCampaigns: () => Promise<any[]>;
+    allCampaigns: () => Promise<{
+        id?: string;
+        rule?: string;
+        segment?: string;
+        paywall?: string;
+        type: string;
+        value?: string;
+    }[]>;
     isCampaignAvailable: (campaignName: string | null) => Promise<boolean>;
-    refresh: () => Promise<import("./types").NamiCampaign[]>;
+    refresh: () => Promise<{
+        id?: string;
+        rule?: string;
+        segment?: string;
+        paywall?: string;
+        type: string;
+        value?: string;
+    }[]>;
     registerAvailableCampaignsHandler: (callback: (campaigns: any[]) => void) => () => void;
 };

@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import type { Spec } from '../specs/NativeNamiEntitlementManager';
 import type { NamiEntitlement } from './types';
+import { parsePurchaseDates } from './transformers';
 
 const RNNamiEntitlementManager: Spec =
   TurboModuleRegistry.getEnforcing?.<Spec>('RNNamiEntitlementManager') ??
@@ -17,11 +18,22 @@ export enum NamiEntitlementManagerEvents {
   EntitlementsChanged = 'EntitlementsChanged'
 }
 
+
+function parseEntitlements(entitlements: any[]): NamiEntitlement[] {
+  return entitlements.map(ent => ({
+    ...ent,
+    activePurchases: ent.activePurchases.map(parsePurchaseDates),
+    relatedSkus: ent.relatedSkus ?? [],
+    purchasedSkus: ent.purchasedSkus ?? [],
+  }));
+}
+
 export const NamiEntitlementManager = {
   emitter,
 
   active: async (): Promise<NamiEntitlement[]> => {
-    return await RNNamiEntitlementManager.active();
+    const raw = await RNNamiEntitlementManager.active();
+    return parseEntitlements(raw);
   },
 
   isEntitlementActive: async (entitlementId: string): Promise<boolean> => {

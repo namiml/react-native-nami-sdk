@@ -48,66 +48,44 @@ class RNNamiCampaignManager: RCTEventEmitter {
         return false
     }
 
+    private func mapPaywallActionToJS(_ action: NamiPaywallAction) -> String {
+        switch action {
+        case .show_paywall: return "SHOW_PAYWALL"
+        case .close_paywall: return "CLOSE_PAYWALL"
+        case .restore_purchases: return "RESTORE_PURCHASES"
+        case .sign_in: return "SIGN_IN"
+        case .buy_sku: return "BUY_SKU"
+        case .select_sku: return "SELECT_SKU"
+        case .purchase_selected_sku: return "PURCHASE_SELECTED_SKU"
+        case .purchase_success: return "PURCHASE_SUCCESS"
+        case .purchase_pending: return "PURCHASE_PENDING"
+        case .purchase_deferred: return "PURCHASE_DEFERRED"
+        case .purchase_failed: return "PURCHASE_FAILED"
+        case .purchase_cancelled: return "PURCHASE_CANCELLED"
+        case .purchase_unknown: return "PURCHASE_UNKNOWN"
+        case .deeplink: return "DEEPLINK"
+        case .toggle_change: return "TOGGLE_CHANGE"
+        case .page_change: return "PAGE_CHANGE"
+        case .slide_change: return "SLIDE_CHANGE"
+        case .nami_collapsible_drawer_open: return "COLLAPSIBLE_DRAWER_OPEN"
+        case .nami_collapsible_drawer_close: return "COLLAPSIBLE_DRAWER_CLOSE"
+        case .video_play: return "VIDEO_STARTED"
+        case .video_pause: return "VIDEO_PAUSED"
+        case .video_resume: return "VIDEO_RESUMED"
+        case .video_end: return "VIDEO_ENDED"
+        case .video_change: return "VIDEO_CHANGED"
+        case .video_mute: return "VIDEO_MUTED"
+        case .video_unmute: return "VIDEO_UNMUTED"
+        @unknown default:
+            return "UNKNOWN"
+        }
+    }
+
     func handlePaywallAction(
         paywallEvent: NamiPaywallEvent
     ) {
-        var actionString: String
-        switch paywallEvent.action {
-        case .show_paywall:
-            actionString = "SHOW_PAYWALL"
-        case .close_paywall:
-            actionString = "CLOSE_PAYWALL"
-        case .restore_purchases:
-            actionString = "RESTORE_PURCHASES"
-        case .sign_in:
-            actionString = "SIGN_IN"
-        case .buy_sku:
-            actionString = "BUY_SKU"
-        case .select_sku:
-            actionString = "SELECT_SKU"
-        case .purchase_selected_sku:
-            actionString = "PURCHASE_SELECTED_SKU"
-        case .purchase_success:
-            actionString = "PURCHASE_SUCCESS"
-        case .purchase_pending:
-            actionString = "PURCHASE_PENDING"
-        case .purchase_deferred:
-            actionString = "PURCHASE_DEFERRED"
-        case .purchase_failed:
-            actionString = "PURCHASE_FAILED"
-        case .purchase_cancelled:
-            actionString = "PURCHASE_CANCELLED"
-        case .purchase_unknown:
-            actionString = "PURCHASE_UNKNOWN"
-        case .deeplink:
-            actionString = "DEEPLINK"
-        case .toggle_change:
-            actionString = "TOGGLE_CHANGE"
-        case .page_change:
-            actionString = "PAGE_CHANGE"
-        case .slide_change:
-            actionString = "SLIDE_CHANGE"
-        case .nami_collapsible_drawer_open:
-            actionString = "COLLAPSIBLE_DRAWER_OPEN"
-        case .nami_collapsible_drawer_close:
-            actionString = "COLLAPSIBLE_DRAWER_CLOSE"
-        case .video_play:
-            actionString = "VIDEO_STARTED"
-        case .video_pause:
-            actionString = "VIDEO_PAUSED"
-        case .video_resume:
-            actionString = "VIDEO_RESUMED"
-        case .video_end:
-            actionString = "VIDEO_ENDED"
-        case .video_change:
-            actionString = "VIDEO_CHANGED"
-        case .video_mute:
-            actionString = "VIDEO_MUTED"
-        case .video_unmute:
-            actionString = "VIDEO_UNMUTED"
-        default:
-            actionString = "UNKNOWN"
-        }
+        let actionString = mapPaywallActionToJS(paywallEvent.action)
+
         let errorSting = paywallEvent.purchaseError?.localizedDescription
 
         let dictionaries = paywallEvent.purchases.map { purchase in RNNamiPurchaseManager.purchaseToPurchaseDict(purchase) }

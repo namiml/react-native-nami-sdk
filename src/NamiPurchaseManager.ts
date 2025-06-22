@@ -9,6 +9,7 @@ import {
   NamiPurchasesState,
   NamiRestorePurchasesState,
 } from './types';
+import { coerceSkuType } from './transformers';
 
 const RNNamiPurchaseManager: Spec =
   TurboModuleRegistry.getEnforcing?.<Spec>('RNNamiPurchaseManager') ??
@@ -24,8 +25,21 @@ const emitter = new NativeEventEmitter(NativeModules.RNNamiPurchaseManager)
 export const NamiPurchaseManager = {
   emitter,
 
-  allPurchases: async (): Promise<NamiPurchase[]> =>
-    await RNNamiPurchaseManager.allPurchases(),
+  allPurchases: async (): Promise<NamiPurchase[]> => {
+    const rawPurchases = await RNNamiPurchaseManager.allPurchases();
+
+    return rawPurchases.map(purchase => ({
+      ...purchase,
+      purchaseInitiatedTimestamp: new Date(purchase.purchaseInitiatedTimestamp),
+      expires: purchase.expires ? new Date(purchase.expires) : undefined,
+      sku: purchase.sku
+        ? {
+            ...purchase.sku,
+            type: coerceSkuType(purchase.sku.type),
+          }
+        : undefined,
+    }));
+  },
 
   skuPurchased: async (skuId: string): Promise<boolean> =>
     await RNNamiPurchaseManager.skuPurchased(skuId),

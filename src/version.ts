@@ -1,5 +1,5 @@
 /**
- * The version of the React Native Nami SDK.
- * This is used for tagging client info and for runtime diagnostics.
+ * Auto-generated file. Do not edit manually.
+ * React Native Nami SDK version.
  */
-export const NAMI_REACT_NATIVE_VERSION = '3.3.0-beta.09';
+export const NAMI_REACT_NATIVE_VERSION = '3.3.0-beta.13';

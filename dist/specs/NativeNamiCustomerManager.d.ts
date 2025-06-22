@@ -1,5 +1,4 @@
 import type { TurboModule } from 'react-native';
-import { CustomerJourneyState } from '../src/types';
 export interface Spec extends TurboModule {
     setCustomerAttribute(key: string, value: string): void;
     getCustomerAttribute(key: string): Promise<string | null>;
@@ -9,7 +8,15 @@ export interface Spec extends TurboModule {
     clearCustomerDataPlatformId(): void;
     setAnonymousMode(anonymousMode: boolean): void;
     inAnonymousMode(): Promise<boolean>;
-    journeyState: () => Promise<CustomerJourneyState>;
+    journeyState(): Promise<{
+        formerSubscriber: boolean;
+        inGracePeriod: boolean;
+        inTrialPeriod: boolean;
+        inIntroOfferPeriod: boolean;
+        isCancelled: boolean;
+        inPause: boolean;
+        inAccountHold: boolean;
+    }>;
     isLoggedIn(): Promise<boolean>;
     loggedInId(): Promise<string | null>;
     deviceId(): Promise<string>;

@@ -15,10 +15,10 @@ export declare const NamiCustomerManager: {
     journeyState: () => Promise<CustomerJourneyState>;
     isLoggedIn: () => Promise<boolean>;
     loggedInId: () => Promise<string | undefined>;
-    deviceId: () => Promise<string>;
+    setCustomerDataPlatformId: (platformId: any) => void;
     clearCustomerDataPlatformId: () => void;
-    setCustomerDataPlatformId: (platformId: string) => void;
-    setAnonymousMode: (anonymousMode: boolean) => void;
+    setAnonymousMode: (anonymousMode: any) => void;
+    deviceId: () => Promise<string>;
     inAnonymousMode: () => Promise<boolean>;
     registerJourneyStateHandler: (callback: (state: CustomerJourneyState) => void) => EmitterSubscription["remove"];
     registerAccountStateHandler: (callback: (action: AccountStateAction, success: boolean, error?: number) => void) => EmitterSubscription["remove"];

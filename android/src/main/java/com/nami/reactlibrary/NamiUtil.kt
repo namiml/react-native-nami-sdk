@@ -74,47 +74,50 @@ fun Map<*, *>.toWritableMap(): WritableMap {
 }
 
 fun NamiSKU.toSkuDict(): WritableMap {
-    val productDict = Arguments.createMap()
+    val productDict = WritableNativeMap()
 
-    productDict.putString("skuId", this.skuId)
     productDict.putString("id", this.id)
-    productDict.putString("type", this.type.toString())
+    productDict.putString("skuId", this.skuId)
+    productDict.putString("name", this.name ?: "")
+    productDict.putString("type", this.type?.toString() ?: "unknown")
 
-    if (this.promoId != null) {
-        productDict.putString("promoId", this.promoId)
+    this.promoId?.let {
+        productDict.putString("promoId", it)
     }
 
-    if (this.promoOfferToken != null) {
-        productDict.putString("promoToken", this.promoOfferToken)
+    this.promoOfferToken?.let {
+        productDict.putString("promoToken", it)
     }
 
     return productDict
 }
 
-// Really needs to be a NamiPurchase, when exists...
 fun NamiPurchase.toPurchaseDict(): WritableMap {
     val purchaseMap = WritableNativeMap()
 
-    val purchaseSource = purchaseSource.toString()
-    purchaseMap.putString("purchaseSource", purchaseSource)
-
-    val skuDict = namiSku?.toSkuDict()
-    purchaseMap.putMap("sku", skuDict)
-
-    purchaseMap.putString("transactionIdentifier", transactionIdentifier.orEmpty())
     purchaseMap.putString("skuId", skuId)
+    purchaseMap.putString("transactionIdentifier", transactionIdentifier.orEmpty())
+
+    purchaseSource?.let {
+        purchaseMap.putString("purchaseSource", it.toString())
+    }
+
+    namiSku?.let { sku ->
+        val skuMap = WritableNativeMap()
+        skuMap.putString("id", sku.id)
+        skuMap.putString("skuId", sku.skuId)
+        skuMap.putString("name", sku.name ?: "")
+        skuMap.putString("type", sku.type?.toString() ?: "unknown") // match NamiSKUType
+        skuMap.putString("promoId", sku.promoId)
+        skuMap.putString("promoToken", sku.promoOfferToken)
+        purchaseMap.putMap("sku", skuMap)
+    }
 
     expires?.let {
-        purchaseMap.putString("expires", it.toJavascriptDate())
-    }
-    val initiatedTimestamp = purchaseInitiatedTimestamp
-    val purchaseInitiatedDate = Date(initiatedTimestamp)
-    purchaseInitiatedDate.let {
-        purchaseMap.putString("purchaseInitiatedTimestamp", it.toJavascriptDate())
+        purchaseMap.putDouble("expires", it.time.toDouble())
     }
 
-    // TODO: map kotlin dictionary into arbitrary map?
-    purchaseMap.putMap("platformMetadata", WritableNativeMap())
+    purchaseMap.putDouble("purchaseInitiatedTimestamp", purchaseInitiatedTimestamp.toDouble())
 
     return purchaseMap
 }

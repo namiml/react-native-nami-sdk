@@ -16,13 +16,13 @@ brew install yarn
    - `npm pack`
 4. Navigate to the correct directory -> `cd react-native-nami-sdk/examples/Basic`.
 5. Run the project ->
-   - `npm clean && npm getsdk && npm build && npm start`
+   - `npm run clean && npm run getsdk && npm run build && npm run start`
 
 **iOS Setup**
 
 1. Install CocoaPods -> `brew install cocoapods`
-2. `yarn ios-clean && yarn ios-build`
-3. Either run `yarn run ios` or `open Basic.xcworkspace` and build in Xcode.
+2. `npm run ios-clean && npm run ios-build`
+3. Either run `npm run ios` or `open Basic.xcworkspace` and build in Xcode.
 4. Local detox tests: `detox clean-framework-cache && detox build --configuration ios.sim.debug && detox build-framework-cache && yarn detox test --configuration ios.sim.debug  e2e/ios --cleanup --headless --record-logs all`
 
 

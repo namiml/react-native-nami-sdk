@@ -8,7 +8,7 @@ export interface Spec extends TurboModule {
     product: {
       id: string;
       skuId: string;
-      name: string;
+      name?: string;
       type: string;
     };
     transactionID?: string;
@@ -28,7 +28,7 @@ export interface Spec extends TurboModule {
     product: {
       id: string;
       skuId: string;
-      name: string;
+      name?: string;
       type: string;
     };
     transactionID: string;
@@ -41,7 +41,7 @@ export interface Spec extends TurboModule {
     product: {
       id: string;
       skuId: string;
-      name: string;
+      name?: string;
       type: string;
     };
     receiptId: string;
@@ -54,7 +54,7 @@ export interface Spec extends TurboModule {
     product: {
       id: string;
       skuId: string;
-      name: string;
+      name?: string;
       type: string;
     };
     orderId: string;

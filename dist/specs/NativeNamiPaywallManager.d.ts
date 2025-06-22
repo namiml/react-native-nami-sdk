@@ -1,10 +1,57 @@
 import type { TurboModule } from 'react-native';
-import type { NamiPurchaseDetails, NamiPurchaseSuccessApple, NamiPurchaseSuccessAmazon, NamiPurchaseSuccessGooglePlay } from '../src/types';
 export interface Spec extends TurboModule {
-    buySkuComplete(purchase: NamiPurchaseDetails): void;
-    buySkuCompleteApple(purchase: NamiPurchaseSuccessApple): void;
-    buySkuCompleteAmazon(purchase: NamiPurchaseSuccessAmazon): void;
-    buySkuCompleteGooglePlay(purchase: NamiPurchaseSuccessGooglePlay): void;
+    buySkuComplete(purchase: {
+        product: {
+            id: string;
+            skuId: string;
+            name?: string;
+            type: string;
+        };
+        transactionID?: string;
+        originalTransactionID?: string;
+        orderId?: string;
+        purchaseToken?: string;
+        receiptId?: string;
+        localizedPrice?: string;
+        userId?: string;
+        marketplace?: string;
+        price?: string;
+        currencyCode?: string;
+    }): void;
+    buySkuCompleteApple(purchase: {
+        product: {
+            id: string;
+            skuId: string;
+            name?: string;
+            type: string;
+        };
+        transactionID: string;
+        originalTransactionID: string;
+        price: string;
+        currencyCode: string;
+    }): void;
+    buySkuCompleteAmazon(purchase: {
+        product: {
+            id: string;
+            skuId: string;
+            name?: string;
+            type: string;
+        };
+        receiptId: string;
+        localizedPrice: string;
+        userId: string;
+        marketplace: string;
+    }): void;
+    buySkuCompleteGooglePlay(purchase: {
+        product: {
+            id: string;
+            skuId: string;
+            name?: string;
+            type: string;
+        };
+        orderId: string;
+        purchaseToken: string;
+    }): void;
     registerBuySkuHandler(): void;
     registerCloseHandler(): void;
     registerSignInHandler(): void;

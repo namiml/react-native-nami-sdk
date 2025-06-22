@@ -20,13 +20,13 @@ Get started by heading over to our [quick start guide](https://learn.namiml.com/
 ### Build the Bridge Locally
 
 ```
-yarn pack
+npm run prepare && npm pack
 ```
 
 This will generate a file `react-native-nami-sdk-vx.x.x.tgz` with the current version number of the bridge.   You can add this to a project by
 
 ```
-yarn add file:react-native-nami-sdk-vx.x.x.tgz
+npm install react-native-nami-sdk-vx.x.x.tgz
 ```
 
 ### Installing from NPM

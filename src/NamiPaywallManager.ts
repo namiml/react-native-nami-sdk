@@ -54,11 +54,7 @@ export const NamiPaywallManager = {
   },
 
   registerCloseHandler: (callback: () => void): () => void => {
-    // const sub = emitter.addListener(NamiPaywallManagerEvents.Close, callback);
-    console.log('Registering PaywallCloseRequested listener');
-    const sub = emitter.addListener('PaywallCloseRequested', (event) => {
-      console.log('Received PaywallCloseRequested event', event);
-    });
+    const sub = emitter.addListener(NamiPaywallManagerEvents.Close, callback);
     RNNamiPaywallManager.registerCloseHandler?.();
     return () => sub.remove();
   },
