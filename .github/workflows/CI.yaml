@@ -292,7 +292,7 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
-          BUILD_TOOLS_VERSION: '34.0.0'
+          BUILD_TOOLS_VERSION: '35.0.0'
 
       - name: Sign AndroidTest APK for Detox
         id: sign_androidTest_apk
@@ -304,7 +304,7 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
-          BUILD_TOOLS_VERSION: '34.0.0'
+          BUILD_TOOLS_VERSION: '35.0.0'
 
       - name: Get device name
         id: device
@@ -343,14 +343,14 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           target: aosp_atd
-          api-level: 30
+          api-level: 35
           arch: x86_64
           disable-animations: true
           ram-size: 4096
-          heap-size: 512
+          heap-size: 1024
           channel: canary
           profile: pixel
-          avd-name: Pixel_4_API_34
+          avd-name: Pixel_8_Pro_API_35
           script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} e2e/android --headless --record-logs all --loglevel trace
           working-directory: source/examples/Basic
 
