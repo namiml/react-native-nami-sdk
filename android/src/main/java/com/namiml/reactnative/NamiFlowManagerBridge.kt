@@ -1,15 +1,26 @@
-package com.nami.reactlibrary
+package com.namiml.reactnative
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.facebook.react.module.annotations.ReactModule
+import com.facebook.react.turbomodule.core.interfaces.TurboModule
 import com.namiml.flow.NamiFlowManager
 
-class NamiFlowManagerBridgeModule(reactContext: ReactApplicationContext) :
-    ReactContextBaseJavaModule(reactContext) {
+@ReactModule(name = NamiFlowManagerBridgeModule.NAME)
+class NamiFlowManagerBridgeModule internal constructor(
+    reactContext: ReactApplicationContext
+) : ReactContextBaseJavaModule(reactContext), TurboModule {
 
-    override fun getName(): String = "RNNamiFlowManager"
+    companion object {
+        const val NAME = "RNNamiFlowManager"
+    }
+
+    override fun getName(): String {
+        return NAME
+    }
 
     @ReactMethod
     fun registerStepHandoff() {
@@ -17,7 +28,12 @@ class NamiFlowManagerBridgeModule(reactContext: ReactApplicationContext) :
             val payload = Arguments.createMap().apply {
                 putString("handoffTag", handoffTag)
                 if (handoffData != null) {
-                    putMap("handoffData", Arguments.makeNativeMap(handoffData))
+                    try {
+                        val map = Arguments.makeNativeMap(handoffData)
+                        putMap("handoffData", map)
+                    } catch (e: Exception) {
+                        Log.d(NAME, "Failed to convert handoffData to NativeMap: ${e.localizedMessage}")
+                    }
                 }
             }
             sendEvent("Handoff", payload)

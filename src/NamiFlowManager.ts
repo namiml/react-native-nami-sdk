@@ -43,12 +43,6 @@ export const NamiFlowManager = {
     RNNamiFlowManager.resume?.();
   },
 
-  registerEventHandler: (
-    handler: (payload: Record<string, any>) => void
-  ): void => {
-    RNNamiFlowManager.registerEventHandler?.(handler);
-  },
-
   registerEventHandler: (callback: (payload: Record<string, any>) => void): () => void => {
     const sub = emitter.addListener(NamiFlowManagerEvents.FlowEvent, callback);
     RNNamiFlowManager.registerEventHandler?.();

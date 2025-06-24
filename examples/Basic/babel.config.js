@@ -1,5 +1,9 @@
 module.exports = {
-  presets: ['module:metro-react-native-babel-preset'],
+  presets: [
+    ['@react-native/babel-preset', {
+      unstable_enablePackageExports: true,
+    }],
+  ],
   plugins: [
     'react-native-reanimated/plugin',
     ['@babel/plugin-transform-class-properties', { loose: true }],

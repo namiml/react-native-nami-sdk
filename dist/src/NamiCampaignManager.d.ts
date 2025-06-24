@@ -1,11 +1,12 @@
 import { NativeEventEmitter } from 'react-native';
-import type { NamiPaywallEvent, PaywallLaunchContext } from './types';
 export declare enum NamiCampaignManagerEvents {
-    AvailableCampaignsChanged = "AvailableCampaignsChanged"
+    AvailableCampaignsChanged = "AvailableCampaignsChanged",
+    NamiPaywallEvent = "NamiPaywallEvent"
 }
 export declare const NamiCampaignManager: {
     emitter: NativeEventEmitter;
-    launch: (label: string | null, withUrl: string | null, context: PaywallLaunchContext | null, completion: (success: boolean, errorCode?: number | null) => void, paywallCompletion: (event: NamiPaywallEvent) => void) => void;
+    launchSubscription: ReturnType<NativeEventEmitter["addListener"]> | undefined;
+    launch(label: any, withUrl: any, context: any, resultCallback: any, actionCallback: any): void;
     allCampaigns: () => Promise<{
         id?: string;
         rule?: string;

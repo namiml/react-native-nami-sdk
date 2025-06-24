@@ -40,8 +40,15 @@ export const NamiEntitlementManager = {
     return await RNNamiEntitlementManager.isEntitlementActive(entitlementId);
   },
 
-  refresh: async (): Promise<void> => {
-    return await RNNamiEntitlementManager.refresh();
+  refresh: (
+    callback: (entitlements: NamiEntitlement[]) => void
+  ): EmitterSubscription['remove'] => {
+    const subscription = emitter.addListener(
+      NamiEntitlementManagerEvents.EntitlementsChanged,
+      callback
+    );
+    RNNamiEntitlementManager.refresh?.();
+    return () => subscription.remove();
   },
 
   registerActiveEntitlementsHandler: (
@@ -54,4 +61,7 @@ export const NamiEntitlementManager = {
     RNNamiEntitlementManager.registerActiveEntitlementsHandler?.();
     return () => subscription.remove();
   },
+
+  clearProvisionalEntitlementGrants: (): void =>
+    RNNamiEntitlementManager.clearProvisionalEntitlementGrants(),
 };

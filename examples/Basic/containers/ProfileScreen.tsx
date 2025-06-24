@@ -6,12 +6,12 @@ import React, {
   useCallback,
 } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   NamiCustomerManager,
   CustomerJourneyState,
@@ -182,7 +182,9 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }, [navigation, isUserLogin, onLogoutPress, onLoginPress]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}>
       <Text
         testID="profile_title"
         style={styles.title}>

@@ -81,7 +81,6 @@ class RNNamiPaywallManager: RCTEventEmitter {
     @objc(registerCloseHandler)
     func registerCloseHandler() {
         NamiPaywallManager.registerCloseHandler { _ in
-            print("RNNamiPaywallManager - registerCloseHandler invoked")
             let dictionary = NSDictionary(dictionary: ["PaywallCloseRequested": true].compactMapValues { $0 })
             DispatchQueue.main.async {
                 RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallCloseRequested", body: dictionary)

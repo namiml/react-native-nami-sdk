@@ -1,19 +1,16 @@
 import type { TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
-import type {
-  NamiPurchase,
-  NamiPurchasesState,
-  NamiRestorePurchasesState,
-} from '../src/types';
 
 export interface Spec extends TurboModule {
   allPurchases(): Promise<Array<{
     skuId: string;
     sku?: {
-      id: string;
-      skuId: string;
-      name: string;
-      type: string;
+        id: string;
+        skuId: string;
+        name?: string;
+        type: string;
+        promoId?: string;
+        promoToken?: string;
     };
     transactionIdentifier?: string;
     purchaseToken?: string;

@@ -11,8 +11,8 @@ export function getConfigObject() {
     case 'staging':
       appPlatformID =
         Platform.OS === 'ios'
-          ? '4a2f6dbf-e684-4d65-a4df-0488771c577d'
-          : 'b7232eba-ff1d-4b7f-b8d0-55593b66c1d5';
+          ? 'APPLE_STG_APP_PLATFORM_ID'
+          : 'ANDROID_STG_APP_PLATFORM_ID';
       return {
         appPlatformID,
         logLevel: 'DEBUG',

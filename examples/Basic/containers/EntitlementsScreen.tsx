@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState, useLayoutEffect } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   FlatList,
   View,
   Text,
   TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { NamiEntitlementManager, NamiEntitlement } from 'react-native-nami-sdk';
 
 import { ViewerTabProps } from '../App';
@@ -20,7 +21,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
 
   const getAllEntitlements = async () => {
     const allEntitlements = await NamiEntitlementManager.active();
-    console.log('allEntitlements', allEntitlements);
+    console.log('activeEntitlements', allEntitlements);
     setEntitlements(allEntitlements);
   };
 
@@ -31,14 +32,14 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   };
 
   const onRefreshPress = () => {
-    // NamiEntitlementManager.refresh(newEntitlements => {
-    //   console.log('newEntitlements', newEntitlements);
-    // });
+    NamiEntitlementManager.refresh(newEntitlements => {
+      console.log('refreshedEntitlements', newEntitlements);
+    });
   };
 
-  // const onClearPress = () => {
-  //   NamiEntitlementManager.clearProvisionalEntitlementGrants();
-  // };
+  const onClearPress = () => {
+    NamiEntitlementManager.clearProvisionalEntitlementGrants();
+  };
 
   useEffect(() => {
     getAllEntitlements();
@@ -85,7 +86,9 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}>
       <Text
         testID="entitlements_title"
         style={styles.title}>

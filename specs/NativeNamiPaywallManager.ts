@@ -1,6 +1,5 @@
 import type { TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
-import type { NamiPurchaseDetails, NamiPurchaseSuccessApple, NamiPurchaseSuccessAmazon, NamiPurchaseSuccessGooglePlay } from '../src/types';
 
 export interface Spec extends TurboModule {
   // Unified purchase success handler

@@ -238,7 +238,6 @@ export type NamiEntitlement = {
   activePurchases: NamiPurchase[];
   desc: string;
   name: string;
-  namiId: string;
   purchasedSkus: NamiSKU[];
   referenceId: string;
   relatedSkus: NamiSKU[];

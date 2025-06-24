@@ -1,12 +1,13 @@
 import React, { FC, useState, useEffect } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { NamiCustomerManager } from 'react-native-nami-sdk';
 
 import { ViewerTabProps } from '../App';
@@ -63,7 +64,9 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   }, [inAnonymousMode]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}>
       <Text
         testID="customer_manager_title"
         style={styles.title}>
@@ -133,6 +136,8 @@ const styles = StyleSheet.create({
     color: theme.links,
   },
   container: {
+    flex: 1,
+    flexDirection: 'column',
     paddingHorizontal: 15,
   },
   title: {

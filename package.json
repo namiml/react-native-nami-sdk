@@ -1,13 +1,16 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "3.3.0-beta.13",
+  "version": "3.3.0-beta.21",
   "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
   "main": "index.ts",
   "types": "dist/index.d.ts",
   "codegenConfig": {
     "name": "Nami",
     "type": "modules",
-    "jsSrcsDir": "./specs"
+    "jsSrcsDir": "./specs",
+    "android": {
+      "javaPackageName": "com.namiml.reactnative"
+    }
   },
   "scripts": {
     "build": "tsc",
@@ -68,6 +71,7 @@
     "eslint": "^8.41.0",
     "eslint-plugin-jest": "^27.2.2",
     "prettier": "^2.8.7",
+    "react-native-codegen": "^0.70.7",
     "react": "^18.2.0",
     "react-native": "^0.73.0",
     "react-native-codegen": "^0.0.12",

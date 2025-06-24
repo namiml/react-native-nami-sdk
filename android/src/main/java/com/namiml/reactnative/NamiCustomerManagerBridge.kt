@@ -1,15 +1,23 @@
-package com.nami.reactlibrary
+package com.namiml.reactnative
 
 import com.facebook.react.bridge.*
+import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.facebook.react.turbomodule.core.interfaces.TurboModule
 import com.namiml.customer.CustomerJourneyState
 import com.namiml.customer.NamiCustomerManager
 
-class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
-    ReactContextBaseJavaModule(reactContext) {
+@ReactModule(name = NamiCustomerManagerBridgeModule.NAME)
+class NamiCustomerManagerBridgeModule internal constructor(
+    private val reactContext: ReactApplicationContext
+) : ReactContextBaseJavaModule(reactContext), TurboModule {
+
+    companion object {
+        const val NAME = "RNNamiCustomerManager"
+    }
 
     override fun getName(): String {
-        return "RNNamiCustomerManager"
+        return NAME
     }
 
     private fun journeyStateToReadableMap(journeyState: CustomerJourneyState): ReadableMap {
@@ -109,7 +117,7 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
     fun registerJourneyStateHandler() {
         NamiCustomerManager.registerJourneyStateHandler { journeyState ->
             val handledJourneyState = journeyStateToReadableMap(journeyState)
-            reactApplicationContext
+            reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                 .emit("JourneyStateChanged", handledJourneyState)
         }
@@ -122,7 +130,7 @@ class NamiCustomerManagerBridgeModule(reactContext: ReactApplicationContext) :
             body.putString("action", action.toString())
             body.putBoolean("success", success)
             body.putString("error", error.toString())
-            reactApplicationContext
+            reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                 .emit("AccountStateChanged", body)
         }

@@ -1,16 +1,22 @@
-package com.nami.reactlibrary
+package com.namiml.reactnative
 
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.namiml.entitlement.NamiEntitlementManager
-// import com.namiml.entitlement.NamiEntitlementSetter
-import com.facebook.react.bridge.Callback
+import com.facebook.react.module.annotations.ReactModule
+import com.facebook.react.turbomodule.core.interfaces.TurboModule
 
-class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) :
-    ReactContextBaseJavaModule(reactContext) {
+@ReactModule(name = NamiEntitlementManagerBridgeModule.NAME)
+class NamiEntitlementManagerBridgeModule internal constructor(
+    reactContext: ReactApplicationContext
+) : ReactContextBaseJavaModule(reactContext), TurboModule {
+
+    companion object {
+        const val NAME = "RNNamiEntitlementManager"
+    }
 
     override fun getName(): String {
-        return "RNNamiEntitlementManager"
+        return NAME
     }
 
     @ReactMethod
@@ -32,17 +38,17 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
     }
 
     @ReactMethod
-    fun refresh(callback: Callback) {
+    fun refresh() {
         NamiEntitlementManager.refresh { activeNativeEntitlements ->
             val resultArray: WritableArray = WritableNativeArray()
-            if (activeNativeEntitlements != null) {
-                for (entitlement in activeNativeEntitlements) {
-                    entitlement.toEntitlementDict()?.let { entitlementDict ->
-                        resultArray.pushMap(entitlementDict)
-                    }
+            for (entitlement in activeNativeEntitlements) {
+                entitlement.toEntitlementDict()?.let { entitlementDict ->
+                    resultArray.pushMap(entitlementDict)
                 }
             }
-            callback.invoke(resultArray)
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("EntitlementsChanged", resultArray)
         }
     }
 
@@ -68,9 +74,11 @@ class NamiEntitlementManagerBridgeModule(reactContext: ReactApplicationContext) 
 
     @ReactMethod
     fun addListener(eventName: String?) {
+        // Required for React Native event emitter support
     }
 
     @ReactMethod
     fun removeListeners(count: Int?) {
+        // Required for React Native event emitter support
     }
 }

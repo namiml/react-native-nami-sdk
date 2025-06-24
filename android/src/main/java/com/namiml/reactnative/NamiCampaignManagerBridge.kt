@@ -1,22 +1,27 @@
-package com.nami.reactlibrary
+package com.namiml.reactnative
 
 import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.facebook.react.turbomodule.core.interfaces.TurboModule
 import com.namiml.billing.NamiPurchase
 import com.namiml.campaign.LaunchCampaignResult
 import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
 import com.namiml.paywall.model.NamiPaywallEvent
 import com.namiml.paywall.model.PaywallLaunchContext
+import androidx.core.net.toUri
 
-class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
-    ReactContextBaseJavaModule(reactContext), ActivityEventListener {
-    // handlePaywallCallback metadata
+@ReactModule(name = NamiCampaignManagerBridgeModule.NAME)
+class NamiCampaignManagerBridgeModule internal constructor(
+    private val reactContext: ReactApplicationContext
+) : ReactContextBaseJavaModule(reactContext), TurboModule {
+
     companion object {
+        const val NAME = "RNNamiCampaignManager"
         const val CAMPAIGN_ID = "campaignId"
         const val CAMPAIGN_LABEL = "campaignLabel"
         const val PAYWALL_ID = "paywallId"
@@ -34,11 +39,12 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         const val DEEP_LINK_URL = "deeplinkUrl"
         const val TIME_SPENT_ON_PAYWALL = "timeSpentOnPaywall"
         const val VIDEO_METADATA = "videoMetadata"
-        const val _RESULT_CAMPAIGN = "ResultCampaign"
+        const val NAMI_PAYWALL_EVENT = "NamiPaywallEvent"
     }
 
+
     override fun getName(): String {
-        return "RNNamiCampaignManager"
+        return NAME
     }
 
     private fun campaignToReadableMap(campaign: NamiCampaign): ReadableMap {
@@ -60,7 +66,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
     ) {
         var theActivity: Activity? = null
         if (reactApplicationContext.hasCurrentActivity()) {
-            theActivity = reactApplicationContext.getCurrentActivity()
+            theActivity = reactApplicationContext.currentActivity
         }
 
         var paywallLaunchContext: PaywallLaunchContext? = null
@@ -74,12 +80,10 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 if (groups != null) {
                     for (i in 0 until groups.size()) {
                         val groupString = groups.getString(i)
-                        if (groupString != null) {
-                            productGroups.add(groupString)
-                        }
+                        productGroups.add(groupString)
                     }
                 }
-                Log.d(LOG_TAG, "productGroups $productGroups")
+                Log.d(NAME, "productGroups $productGroups")
             }
 
             if (context.hasKey("customAttributes")) {
@@ -90,7 +94,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                         val key = keyIterator.nextKey()
                         customAttributes[key] = attr.getString(key) ?: ""
                     }
-                    Log.d(LOG_TAG, "customAttributes $customAttributes")
+                    Log.d(NAME, "customAttributes $customAttributes")
                 }
             }
 
@@ -100,7 +104,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                     try {
                         customObject = attr.toHashMap().toMutableMap()
                     } catch (e: Exception) {
-                        Log.d(LOG_TAG, "Unable to parse PaywallLaunchContext customObject $customObject")
+                        Log.d(NAME, "Unable to parse PaywallLaunchContext customObject $customObject")
                     }
                 }
             }
@@ -122,7 +126,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                     )
                 }
 
-                val uriObject: Uri? = if (withUrl != null) Uri.parse(withUrl) else null
+                val uriObject: Uri? = if (withUrl != null) withUrl.toUri() else null
 
                 if (label != null) {
                     NamiCampaignManager.launch(
@@ -214,7 +218,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
             resultMap.putDouble(TIME_SPENT_ON_PAYWALL, paywallEvent.timeSpentOnPaywall ?: 0.0)
         }
 
-        emitEvent(_RESULT_CAMPAIGN, resultMap)
+        emitEvent(NAMI_PAYWALL_EVENT, resultMap)
     }
 
     private fun createPurchaseArray(purchases: List<NamiPurchase>?): WritableArray {
@@ -223,7 +227,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 try {
                     pushMap(purchase.toPurchaseDict())
                 } catch (e: Exception) {
-                    Log.e(LOG_TAG, "Error while converting data in createPurchaseArray to a Map", e)
+                    Log.e(NAME, "Error while converting data in createPurchaseArray to a Map", e)
                 }
             }
         }
@@ -237,7 +241,7 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         if (emitter is DeviceEventManagerModule.RCTDeviceEventEmitter) {
             emitter.emit(event, map)
         } else {
-            Log.w(LOG_TAG, "Cannot emit $event event: RCTDeviceEventEmitter instance is null")
+            Log.w(NAME, "Cannot emit $event event: RCTDeviceEventEmitter instance is null")
         }
     }
 
@@ -254,19 +258,6 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
                 resultCallback.invoke(false, "${result.error}")
             }
         }
-    }
-
-    override fun onActivityResult(
-        activity: Activity?,
-        requestCode: Int,
-        resultCode: Int,
-        intent: Intent?,
-    ) {
-        Log.d(LOG_TAG, "Nami Activity result listener activated, code is $requestCode")
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        // do nothing
     }
 
     @ReactMethod
@@ -287,14 +278,15 @@ class NamiCampaignManagerBridgeModule(reactContext: ReactApplicationContext) :
         val isCampaignAvailable =
             when {
                 campaignSource == null -> NamiCampaignManager.isCampaignAvailable()
-                Uri.parse(campaignSource)?.scheme != null -> NamiCampaignManager.isCampaignAvailable(Uri.parse(campaignSource))
+                campaignSource.toUri().scheme != null -> NamiCampaignManager.isCampaignAvailable(
+                    campaignSource.toUri())
                 else -> NamiCampaignManager.isCampaignAvailable(campaignSource)
             }
         promise.resolve(isCampaignAvailable)
     }
 
     @ReactMethod
-     fun refresh(promise: Promise) {
+    fun refresh(promise: Promise) {
         NamiCampaignManager.refresh { campaigns ->
             val array = WritableNativeArray()
             campaigns?.forEach { campaign ->

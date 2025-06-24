@@ -1,12 +1,9 @@
 module.exports = {
-  dependencies: {
-    'react-native-nami-sdk': {
-      root: __dirname,
+  dependency: {
+    platforms: {
+      android: {
+        'cmakeListsPath': '../android/src/main/jni/CMakeLists.txt',
+      },
     },
-  },
-  codegenConfig: {
-    name: 'Nami',
-    type: 'modules',
-    jsSrcsDir: './specs',
   },
 };

@@ -1,4 +1,4 @@
-package com.nami.reactlibrary
+package com.namiml.reactnative
 
 import android.util.Log
 import com.facebook.react.bridge.Arguments

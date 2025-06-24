@@ -44,14 +44,16 @@ class RNNamiEntitlementManager: RCTEventEmitter {
             RNNamiPurchaseManager.skuToSKUDict($0)
         }
 
-        return [
-            "name": entitlement.name,
-            "desc": entitlement.desc,
+        let dictionary: [String: Any?] = [
+            "name": entitlement.name ?? "",
+            "desc": entitlement.desc ?? "",
             "referenceId": entitlement.referenceId,
             "activePurchases": activePurchases,
             "relatedSkus": relatedSkus,
             "purchasedSkus": purchasedSkus,
         ]
+
+        return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
     }
 
     @objc
@@ -60,7 +62,9 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     }
 
     @objc
-    func active(_ resolve: RCTPromiseResolveBlock, rejecter _: RCTPromiseRejectBlock) {
+    func active(_ resolve: @escaping RCTPromiseResolveBlock,
+                rejecter _: @escaping RCTPromiseRejectBlock)
+    {
         let entitlements = NamiEntitlementManager.active().map {
             self.entitlementToDictionary($0)
         }
@@ -69,7 +73,12 @@ class RNNamiEntitlementManager: RCTEventEmitter {
 
     @objc
     func refresh() {
-        NamiEntitlementManager.refresh()
+        NamiEntitlementManager.refresh { entitlements in
+            let dicts = entitlements.map { self.entitlementToDictionary($0) }
+            DispatchQueue.main.async {
+                RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
+            }
+        }
     }
 
     @objc
@@ -81,4 +90,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
             }
         }
     }
+
+    @objc
+    func clearProvisionalEntitlementGrants() {}
 }
