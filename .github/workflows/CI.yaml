@@ -123,6 +123,7 @@ jobs:
 
       - name: Pack the SDK
         run: |
+          npm install
           npm run prepare && npm pack
         working-directory: source/
 
@@ -226,6 +227,7 @@ jobs:
 
       - name: Pack the SDK
         run: |
+          npm install
           npm run prepare && npm pack
         working-directory: source/
 
