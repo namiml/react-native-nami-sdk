@@ -57,6 +57,7 @@
     "@react-native/typescript-config": "^0.75.0",
     "@types/react": "^18.2.6",
     "@types/react-test-renderer": "^18.0.0",
+    "ts-node": "^10.9.2",
     "babel-jest": "^29.6.3",
     "detox": "20.34.4",
     "eslint": "^8.19.0",
