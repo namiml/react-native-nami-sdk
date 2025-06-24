@@ -1,9 +1,18 @@
 import type { Spec } from '../specs/NativeNamiCampaignManager';
-import { TurboModuleRegistry, NativeModules, NativeEventEmitter } from 'react-native';
-import type { NamiPaywallEvent, PaywallLaunchContext } from './types';
+import {
+  TurboModuleRegistry,
+  NativeModules,
+  NativeEventEmitter,
+} from 'react-native';
+import type {
+  NamiPaywallEvent,
+  PaywallLaunchContext,
+  NamiCampaign,
+} from './types';
 import { NamiPaywallAction } from './types';
 
-const RNNamiCampaignManager: Spec = TurboModuleRegistry.getEnforcing<Spec>('RNNamiCampaignManager') ??
+const RNNamiCampaignManager: Spec =
+  TurboModuleRegistry.getEnforcing<Spec>('RNNamiCampaignManager') ??
   NativeModules.RNNamiCampaignManager;
 
 export enum NamiCampaignManagerEvents {
@@ -11,7 +20,9 @@ export enum NamiCampaignManagerEvents {
   NamiPaywallEvent = 'NamiPaywallEvent',
 }
 
-const validPaywallActions = new Set(Object.values(NamiPaywallAction) as NamiPaywallAction[]);
+const validPaywallActions = new Set(
+  Object.values(NamiPaywallAction) as NamiPaywallAction[],
+);
 
 function mapToNamiPaywallAction(action: string): NamiPaywallAction {
   return validPaywallActions.has(action as NamiPaywallAction)
@@ -24,19 +35,27 @@ const emitter = new NativeEventEmitter(NativeModules.RNNamiCampaignManager);
 export const NamiCampaignManager = {
   emitter,
 
-  launchSubscription: undefined as ReturnType<NativeEventEmitter['addListener']> | undefined,
+  launchSubscription: undefined as
+    | ReturnType<NativeEventEmitter['addListener']>
+    | undefined,
 
-  launch(label, withUrl, context, resultCallback, actionCallback) {
+  launch(
+    label: string | null,
+    withUrl: string | null,
+    context: PaywallLaunchContext | null,
+    resultCallback?: (success: boolean, errorCode?: number | null) => void,
+    actionCallback?: (event: NamiPaywallEvent) => void,
+  ): void {
     if (this.launchSubscription) {
       this.launchSubscription.remove();
     }
 
     this.launchSubscription = this.emitter.addListener(
       NamiCampaignManagerEvents.NamiPaywallEvent,
-      body => {
+      (body: NamiPaywallEvent) => {
         if (actionCallback) {
           const paywallEvent: NamiPaywallEvent = {
-            action: body.action,
+            action: mapToNamiPaywallAction(body.action),
             campaignId: body.campaignId,
             campaignName: body.campaignName,
             campaignType: body.campaignType,
@@ -58,31 +77,38 @@ export const NamiCampaignManager = {
         }
       },
     );
+
     RNNamiCampaignManager.launch(
-      label ?? null,
-      withUrl ?? null,
-      context ?? null,
+      label,
+      withUrl,
+      context,
       resultCallback ?? (() => {}),
       actionCallback ?? (() => {}),
     );
   },
-
 
   allCampaigns: async () => {
     return await RNNamiCampaignManager.allCampaigns();
   },
 
   isCampaignAvailable: async (campaignName: string | null) => {
-    return await RNNamiCampaignManager.isCampaignAvailable(campaignName ?? undefined);
+    return await RNNamiCampaignManager.isCampaignAvailable(
+      campaignName ?? undefined,
+    );
   },
 
   refresh: async () => {
     return await RNNamiCampaignManager.refresh();
   },
 
-registerAvailableCampaignsHandler: (callback: (campaigns: any[]) => void): () => void => {
-  const sub = emitter.addListener(NamiCampaignManagerEvents.AvailableCampaignsChanged, callback);
-  RNNamiCampaignManager.registerAvailableCampaignsHandler?.();
-  return () => sub.remove();
-},
+  registerAvailableCampaignsHandler: (
+    callback: (campaigns: NamiCampaign[]) => void,
+  ): (() => void) => {
+    const sub = emitter.addListener(
+      NamiCampaignManagerEvents.AvailableCampaignsChanged,
+      callback,
+    );
+    RNNamiCampaignManager.registerAvailableCampaignsHandler?.();
+    return () => sub.remove();
+  },
 };

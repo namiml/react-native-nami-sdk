@@ -16,7 +16,7 @@ import theme from '../theme';
 
 const TEST_KEY = 'key1';
 
-type CustomerManagerScreenProps = ViewerTabProps<'CustomerManager'>
+type CustomerManagerScreenProps = ViewerTabProps<'CustomerManager'>;
 
 const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   const [value, onChangeValue] = useState<string>('');
@@ -34,9 +34,8 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   };
 
   const handleGetAttribute = async () => {
-    const attributeNami = await NamiCustomerManager.getCustomerAttribute(
-      TEST_KEY,
-    );
+    const attributeNami =
+      await NamiCustomerManager.getCustomerAttribute(TEST_KEY);
     console.log('customer attribute', attributeNami);
     setAttribute(attributeNami ? attributeNami : '');
     onChangeValue('');
@@ -90,7 +89,8 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
           <TouchableOpacity
             testID="send_btn"
             style={styles.sendBtn}
-            onPress={handleSetAttribute}>
+            onPress={handleSetAttribute}
+          >
             <Text>Send</Text>
           </TouchableOpacity>
         </View>
@@ -105,14 +105,16 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
         <TouchableOpacity
           testID="clear_attribute_btn"
           style={styles.clearBtn}
-          onPress={handleClearAttribute}>
+          onPress={handleClearAttribute}
+        >
           <Text>Clear Attribute</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           testID="anonymous_mode_btn"
           style={styles.anonBtn}
-          onPress={toggleAnonymousMode}>
+          onPress={toggleAnonymousMode}
+        >
           <Text>
             {inAnonymousMode
               ? 'Turn Anonymous Mode off'

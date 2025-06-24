@@ -25,11 +25,11 @@ export function registerNamiPaywallListeners() {
       if (url) {
         handleDeepLink({ url });
       }
-    })
+    }),
   );
 }
 
 export function removeNamiPaywallListeners() {
-  eventSubscriptions.forEach((remove) => remove());
+  eventSubscriptions.forEach(remove => remove());
   eventSubscriptions.length = 0;
 }

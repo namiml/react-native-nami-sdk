@@ -61,28 +61,32 @@ export interface Spec extends TurboModule {
         contentDuration?: string;
       };
       timeSpentOnPaywall?: number;
-    }) => void
+    }) => void,
   ): void;
 
-  allCampaigns(): Promise<{
-    id?: string;
-    rule?: string;
-    segment?: string;
-    paywall?: string;
-    type: string;
-    value?: string;
-  }[]>;
+  allCampaigns(): Promise<
+    {
+      id?: string;
+      rule?: string;
+      segment?: string;
+      paywall?: string;
+      type: string;
+      value?: string;
+    }[]
+  >;
 
   isCampaignAvailable(source?: string): Promise<boolean>;
 
-  refresh(): Promise<{
-    id?: string;
-    rule?: string;
-    segment?: string;
-    paywall?: string;
-    type: string;
-    value?: string;
-  }[]>;
+  refresh(): Promise<
+    {
+      id?: string;
+      rule?: string;
+      segment?: string;
+      paywall?: string;
+      type: string;
+      value?: string;
+    }[]
+  >;
 
   registerAvailableCampaignsHandler(): void;
 }

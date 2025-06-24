@@ -76,7 +76,10 @@ describe('iOS: Second part of campaigns tests', () => {
     ).getAttributes();
 
     // update to ios only
-    const jsonString = device.getPlatform() === 'android' ? campaignItem.label : campaignItem.value;
+    const jsonString =
+      device.getPlatform() === 'android'
+        ? campaignItem.label
+        : campaignItem.value;
     const campaignObj = JSON.parse(jsonString);
     campaignObj.hasOwnProperty('rule');
     if (!campaignObj.hasOwnProperty('rule')) {

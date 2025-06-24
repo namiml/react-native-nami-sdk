@@ -17,14 +17,16 @@ import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-const Dot = ({ isActive = false }) => <View style={[styles.cir, isActive && styles.active]} />;
+const Dot = ({ isActive = false }) => (
+  <View style={[styles.cir, isActive && styles.active]} />
+);
 
-type ProfileScreenProps = ViewerTabProps<'Profile'>
+type ProfileScreenProps = ViewerTabProps<'Profile'>;
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [journeyState, setJourneyState] = useState<
-      CustomerJourneyState | undefined
-      >(undefined);
+    CustomerJourneyState | undefined
+  >(undefined);
   const [isUserLogin, setIsUserLogin] = useState<boolean>(false);
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
@@ -62,7 +64,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     getJourneyState();
     checkId();
     const subscriptionJourneyStateRemover =
-      NamiCustomerManager.registerJourneyStateHandler((newJourneyState) => {
+      NamiCustomerManager.registerJourneyStateHandler(newJourneyState => {
         console.log('newJourneyState', newJourneyState);
         setJourneyState(newJourneyState);
       });
@@ -92,7 +94,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
         return (
           <TouchableOpacity
             style={styles.headerButton}
-            onPress={isUserLogin ? onLogoutPress : onLoginPress}>
+            onPress={isUserLogin ? onLogoutPress : onLoginPress}
+          >
             <Text style={styles.headerButtonText}>
               {isUserLogin ? 'Logout' : 'Login'}
             </Text>

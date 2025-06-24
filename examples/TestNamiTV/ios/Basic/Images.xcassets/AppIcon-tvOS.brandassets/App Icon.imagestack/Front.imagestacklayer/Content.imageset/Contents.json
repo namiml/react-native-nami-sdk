@@ -1,18 +1,18 @@
 {
-  "images" : [
+  "images": [
     {
-      "filename" : "AppleTV-STG-RN-Front.png",
-      "idiom" : "tv",
-      "scale" : "1x"
+      "filename": "AppleTV-STG-RN-Front.png",
+      "idiom": "tv",
+      "scale": "1x"
     },
     {
-      "filename" : "AppleTV-STG-RN-Front@2x.png",
-      "idiom" : "tv",
-      "scale" : "2x"
+      "filename": "AppleTV-STG-RN-Front@2x.png",
+      "idiom": "tv",
+      "scale": "2x"
     }
   ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
+  "info": {
+    "author": "xcode",
+    "version": 1
   }
 }

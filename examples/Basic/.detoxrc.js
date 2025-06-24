@@ -20,11 +20,13 @@ module.exports = {
       type: 'ios.app',
       binaryPath:
         'ios/build/Build/Products/Release-iphonesimulator/BasicProduction.app',
-      build: "export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/Basic.xcworkspace -UseNewBuildSystem=NO -scheme BasicProduction -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
+      build:
+        'export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/Basic.xcworkspace -UseNewBuildSystem=NO -scheme BasicProduction -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet',
     },
     'staging.android.debug': {
       type: 'android.apk',
-      binaryPath: 'android/app/build/outputs/apk/staging/debug/app-staging-debug.apk',
+      binaryPath:
+        'android/app/build/outputs/apk/staging/debug/app-staging-debug.apk',
       build:
         'cd android && ./gradlew assembleStagingDebug assembleStagingDebugAndroidTest -DtestBuildType=debug && cd ..',
       reversePorts: [8081],
@@ -32,10 +34,11 @@ module.exports = {
     'production.android.release': {
       type: 'android.apk',
       binaryPath:
-          'android/app/build/outputs/apk/production/release/app-production-release-unsigned-signed.apk',
+        'android/app/build/outputs/apk/production/release/app-production-release-unsigned-signed.apk',
       testBinaryPath:
-          'android/app/build/outputs/apk/androidTest/production/release/app-production-release-androidTest-signed.apk',
-      build: 'cd android && ./gradlew assembleProductionRelease assembleProductionReleaseAndroidTest -DtestBuildType=release && cd ..'
+        'android/app/build/outputs/apk/androidTest/production/release/app-production-release-androidTest-signed.apk',
+      build:
+        'cd android && ./gradlew assembleProductionRelease assembleProductionReleaseAndroidTest -DtestBuildType=release && cd ..',
     },
   },
   devices: {

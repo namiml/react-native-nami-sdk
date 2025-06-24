@@ -21,20 +21,20 @@ describe('Android: Configure Test', () => {
     await expect(element(by.id('refresh_campaigns'))).toBeVisible();
     await element(by.id('refresh_campaigns')).tap();
     await element(by.id('refresh_campaigns')).tap();
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
     await element(by.id('refresh_campaigns')).tap();
     await element(by.id('refresh_campaigns')).tap();
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
   });
 
   it('Should load data #2', async () => {
     await expect(element(by.id('refresh_campaigns'))).toBeVisible();
     await element(by.id('refresh_campaigns')).tap();
     await element(by.id('refresh_campaigns')).tap();
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
     await element(by.id('refresh_campaigns')).tap();
     await element(by.id('refresh_campaigns')).tap();
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await new Promise(resolve => setTimeout(resolve, 10000));
     await element(by.id('refresh_campaigns')).tap();
   });
 });

@@ -1,62 +1,62 @@
 {
-  "images" : [
+  "images": [
     {
-      "filename" : "AppStoreIcon=20-STG@2x.png",
-      "idiom" : "iphone",
-      "scale" : "2x",
-      "size" : "20x20"
+      "filename": "AppStoreIcon=20-STG@2x.png",
+      "idiom": "iphone",
+      "scale": "2x",
+      "size": "20x20"
     },
     {
-      "filename" : "AppStoreIcon=20-STG@3x.png",
-      "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "20x20"
+      "filename": "AppStoreIcon=20-STG@3x.png",
+      "idiom": "iphone",
+      "scale": "3x",
+      "size": "20x20"
     },
     {
-      "filename" : "AppStoreIcon=29-STG@2x.png",
-      "idiom" : "iphone",
-      "scale" : "2x",
-      "size" : "29x29"
+      "filename": "AppStoreIcon=29-STG@2x.png",
+      "idiom": "iphone",
+      "scale": "2x",
+      "size": "29x29"
     },
     {
-      "filename" : "AppStoreIcon=29-STG@3x.png",
-      "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "29x29"
+      "filename": "AppStoreIcon=29-STG@3x.png",
+      "idiom": "iphone",
+      "scale": "3x",
+      "size": "29x29"
     },
     {
-      "filename" : "AppStoreIcon=40-STG@2x.png",
-      "idiom" : "iphone",
-      "scale" : "2x",
-      "size" : "40x40"
+      "filename": "AppStoreIcon=40-STG@2x.png",
+      "idiom": "iphone",
+      "scale": "2x",
+      "size": "40x40"
     },
     {
-      "filename" : "AppStoreIcon=40-STG@3x.png",
-      "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "40x40"
+      "filename": "AppStoreIcon=40-STG@3x.png",
+      "idiom": "iphone",
+      "scale": "3x",
+      "size": "40x40"
     },
     {
-      "filename" : "AppStoreIcon=60-STG@2x.png",
-      "idiom" : "iphone",
-      "scale" : "2x",
-      "size" : "60x60"
+      "filename": "AppStoreIcon=60-STG@2x.png",
+      "idiom": "iphone",
+      "scale": "2x",
+      "size": "60x60"
     },
     {
-      "filename" : "AppStoreIcon=60-STG@3x.png",
-      "idiom" : "iphone",
-      "scale" : "3x",
-      "size" : "60x60"
+      "filename": "AppStoreIcon=60-STG@3x.png",
+      "idiom": "iphone",
+      "scale": "3x",
+      "size": "60x60"
     },
     {
-      "filename" : "AppStoreIcon=1024-STG.jpg",
-      "idiom" : "ios-marketing",
-      "scale" : "1x",
-      "size" : "1024x1024"
+      "filename": "AppStoreIcon=1024-STG.jpg",
+      "idiom": "ios-marketing",
+      "scale": "1x",
+      "size": "1024x1024"
     }
   ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
+  "info": {
+    "author": "xcode",
+    "version": 1
   }
 }

@@ -1,11 +1,5 @@
 import React, { FC, useEffect, useState, useLayoutEffect } from 'react';
-import {
-  StyleSheet,
-  FlatList,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, FlatList, View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { NamiEntitlementManager, NamiEntitlement } from 'react-native-nami-sdk';
@@ -14,7 +8,7 @@ import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-type EntitlementsScreenProps = ViewerTabProps<'Entitlements'>
+type EntitlementsScreenProps = ViewerTabProps<'Entitlements'>;
 
 const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   const [entitlements, setEntitlements] = useState<NamiEntitlement[]>([]);
@@ -61,7 +55,8 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
         return (
           <TouchableOpacity
             style={styles.headerButton}
-            onPress={onRefreshPress}>
+            onPress={onRefreshPress}
+          >
             <Text
               testID="refresh_entitlements"
               style={styles.headerButtonText}>
@@ -70,16 +65,31 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
         );
       },
+      headerLeft: () => {
+        return (
+          <TouchableOpacity
+            style={styles.headerLeftButton}
+            onPress={onClearPress}
+          >
+            <Text
+              testID="clear_entitlements"
+              style={styles.headerButtonText}>
+              Clear
+            </Text>
+          </TouchableOpacity>
+        );
+      },
     });
   }, [navigation]);
 
-  const renderCampaigns = ({ item }: { item: NamiEntitlement }) => {
+  const renderCampaigns = ({ item }: {item: NamiEntitlement}) => {
     return (
       <TouchableOpacity
         onPress={() => {
           onItemPress(item.referenceId);
         }}
-        style={styles.item}>
+        style={styles.item}
+      >
         <Text style={styles.itemText}>{item.referenceId}</Text>
       </TouchableOpacity>
     );

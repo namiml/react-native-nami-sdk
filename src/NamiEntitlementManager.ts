@@ -5,7 +5,7 @@ import {
   EmitterSubscription,
 } from 'react-native';
 import type { Spec } from '../specs/NativeNamiEntitlementManager';
-import type { NamiEntitlement } from './types';
+import type { NamiEntitlement, NamiPurchaseFromBridge } from './types';
 import { parsePurchaseDates } from './transformers';
 
 const RNNamiEntitlementManager: Spec =
@@ -15,12 +15,13 @@ const RNNamiEntitlementManager: Spec =
 const emitter = new NativeEventEmitter(NativeModules.RNNamiEntitlementManager);
 
 export enum NamiEntitlementManagerEvents {
-  EntitlementsChanged = 'EntitlementsChanged'
+  EntitlementsChanged = 'EntitlementsChanged',
 }
 
-
-function parseEntitlements(entitlements: any[]): NamiEntitlement[] {
-  return entitlements.map(ent => ({
+function parseEntitlements(
+  entitlements: NamiPurchaseFromBridge[],
+): NamiEntitlement[] {
+  return entitlements.map((ent) => ({
     ...ent,
     activePurchases: ent.activePurchases.map(parsePurchaseDates),
     relatedSkus: ent.relatedSkus ?? [],
@@ -41,22 +42,22 @@ export const NamiEntitlementManager = {
   },
 
   refresh: (
-    callback: (entitlements: NamiEntitlement[]) => void
+    callback: (entitlements: NamiEntitlement[]) => void,
   ): EmitterSubscription['remove'] => {
     const subscription = emitter.addListener(
       NamiEntitlementManagerEvents.EntitlementsChanged,
-      callback
+      callback,
     );
     RNNamiEntitlementManager.refresh?.();
     return () => subscription.remove();
   },
 
   registerActiveEntitlementsHandler: (
-    callback: (entitlements: NamiEntitlement[]) => void
+    callback: (entitlements: NamiEntitlement[]) => void,
   ): EmitterSubscription['remove'] => {
     const subscription = emitter.addListener(
       NamiEntitlementManagerEvents.EntitlementsChanged,
-      callback
+      callback,
     );
     RNNamiEntitlementManager.registerActiveEntitlementsHandler?.();
     return () => subscription.remove();

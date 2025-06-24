@@ -9,10 +9,7 @@ import App from './App';
 import { name as appName } from './app.json';
 import { getConfigObject } from './config';
 
-import {
-  initConnection,
-  PurchaseError,
-} from 'react-native-iap';
+import { initConnection, PurchaseError } from 'react-native-iap';
 
 const configDict = getConfigObject();
 console.log('Nami SDK Config:', configDict);
@@ -22,7 +19,11 @@ async function initStoreConnection() {
     await initConnection();
   } catch (error) {
     if (error instanceof PurchaseError) {
-      console.log('[Store Init Error]', `[${error.code}]: ${error.message}`, error);
+      console.log(
+        '[Store Init Error]',
+        `[${error.code}]: ${error.message}`,
+        error,
+      );
     } else {
       console.log('[Store Init Error]', error);
     }
@@ -48,7 +49,6 @@ const Root = () => {
           if (success) {
             console.log('Nami configured successfully');
             setIsConfigurationComplete(true);
-
           } else {
             console.warn('Nami configuration returned success: false');
             setSdkError('Nami SDK configuration returned false');
@@ -63,7 +63,6 @@ const Root = () => {
       }
     }
     configureNami();
-
   }, []);
 
   if (isLoading) {
@@ -83,7 +82,8 @@ const Root = () => {
         </Text>
         <Text>{sdkError}</Text>
         <Text style={{ marginTop: 12 }}>
-          Check logs or the configuration object your are passing into Nami.configure.
+          Check logs or the configuration object your are passing into
+          Nami.configure.
         </Text>
       </View>
     );

@@ -6,7 +6,7 @@ on:
     inputs:
       ref:
         default: main
-        description: "Git Tag, Branch or SHA to build"
+        description: 'Git Tag, Branch or SHA to build'
         required: true
     secrets:
       BUILD_USER_PAT:
@@ -32,7 +32,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v2
@@ -126,13 +126,13 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
-      - name: "Checkout ${{ inputs.ref }}"
+      - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v2
         with:
           path: source
-          ref: "${{ inputs.ref }}"
+          ref: '${{ inputs.ref }}'
 
       - name: Checkout appstoreconnect-build-tools
         uses: actions/checkout@v2
@@ -144,7 +144,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: '3.13'
 
       - name: Get expected build number
         run: |
@@ -157,15 +157,15 @@ jobs:
           python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --version=$CURRENT_VERSION --platform=IOS > $RUNNER_TEMP/.next_build_number
         working-directory: appstoreconnect-build-tools
         env:
-          APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
-          APPSTORE_API_PRIVATE_KEY: "${{ secrets.APPSTORE_API_PRIVATE_KEY }}"
-          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
+          APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
+          APPSTORE_API_PRIVATE_KEY: '${{ secrets.APPSTORE_API_PRIVATE_KEY }}'
+          APPSTORE_ISSUER_ID: '${{ secrets.APPSTORE_ISSUER_ID }}'
 
       - name: Install Apple Certificate
         uses: apple-actions/import-codesign-certs@v1
         with:
-          p12-file-base64: "${{ secrets.IOS_P12_BASE64 }}"
-          p12-password: "${{ secrets.IOS_CERTIFICATE_PASSWORD }}"
+          p12-file-base64: '${{ secrets.IOS_P12_BASE64 }}'
+          p12-password: '${{ secrets.IOS_CERTIFICATE_PASSWORD }}'
 
       - name: Install the provisioning profile
         run: |
@@ -174,7 +174,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
         env:
-          PROVISIONING_CERTIFICATE_BASE64: "${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_STG }}"
+          PROVISIONING_CERTIFICATE_BASE64: '${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_STG }}'
 
       - name: Store App Store Private Key
         run: |
@@ -189,13 +189,13 @@ jobs:
 
       - name: Adjust version & build number
         run: |-
-           export CURRENT_VERSION=`cat $RUNNER_TEMP/.current_version`
-           export BUILD_NUMBER=`cat $RUNNER_TEMP/.next_build_number`
-           sed -i '' -e "s/CURRENT_PROJECT_VERSION = 1/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/" ios/Basic.xcodeproj/project.pbxproj
-           sed -i '' -e "s/MARKETING_VERSION = 1.0/MARKETING_VERSION = $CURRENT_VERSION/" ios/Basic.xcodeproj/project.pbxproj
-           sed -i '' -e "s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/"  ios/Basic/Info.plist
-           echo "BUILD_NUMBER=$(cat ~/.next_build_number)" >> $GITHUB_ENV
-           echo "CURRENT_VERSION=$(cat ~/.current_version)" >> $GITHUB_ENV
+          export CURRENT_VERSION=`cat $RUNNER_TEMP/.current_version`
+          export BUILD_NUMBER=`cat $RUNNER_TEMP/.next_build_number`
+          sed -i '' -e "s/CURRENT_PROJECT_VERSION = 1/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/" ios/Basic.xcodeproj/project.pbxproj
+          sed -i '' -e "s/MARKETING_VERSION = 1.0/MARKETING_VERSION = $CURRENT_VERSION/" ios/Basic.xcodeproj/project.pbxproj
+          sed -i '' -e "s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/"  ios/Basic/Info.plist
+          echo "BUILD_NUMBER=$(cat ~/.next_build_number)" >> $GITHUB_ENV
+          echo "CURRENT_VERSION=$(cat ~/.current_version)" >> $GITHUB_ENV
         working-directory: source/examples/Basic
 
       - name: Pack the SDK
@@ -247,8 +247,8 @@ jobs:
           xcrun altool --upload-app --type ios --file build-output/ios-stg/Basic.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
         working-directory: source/examples/Basic
         env:
-          APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
-          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
+          APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
+          APPSTORE_ISSUER_ID: '${{ secrets.APPSTORE_ISSUER_ID }}'
 
       - name: Upload PR Title to TestFlight Whats New
         working-directory: appstoreconnect-build-tools
@@ -270,13 +270,13 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
-      - name: "Checkout ${{ inputs.ref }}"
+      - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v2
         with:
           path: source
-          ref: "${{ inputs.ref }}"
+          ref: '${{ inputs.ref }}'
 
       - name: Checkout appstoreconnect-build-tools
         uses: actions/checkout@v2
@@ -288,7 +288,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: '3.13'
 
       - name: Get expected build number
         run: |
@@ -301,15 +301,15 @@ jobs:
           python3 get_next_build.py com.namiml.stg.testreactnative --prerelease --platform=TV_OS > $RUNNER_TEMP/.next_build_number
         working-directory: appstoreconnect-build-tools
         env:
-          APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
-          APPSTORE_API_PRIVATE_KEY: "${{ secrets.APPSTORE_API_PRIVATE_KEY }}"
-          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
+          APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
+          APPSTORE_API_PRIVATE_KEY: '${{ secrets.APPSTORE_API_PRIVATE_KEY }}'
+          APPSTORE_ISSUER_ID: '${{ secrets.APPSTORE_ISSUER_ID }}'
 
       - name: Install Apple Certificate
         uses: apple-actions/import-codesign-certs@v1
         with:
-          p12-file-base64: "${{ secrets.IOS_P12_BASE64 }}"
-          p12-password: "${{ secrets.IOS_CERTIFICATE_PASSWORD }}"
+          p12-file-base64: '${{ secrets.IOS_P12_BASE64 }}'
+          p12-password: '${{ secrets.IOS_CERTIFICATE_PASSWORD }}'
 
       - name: Install the provisioning profile
         run: |
@@ -318,7 +318,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
         env:
-          PROVISIONING_CERTIFICATE_BASE64: "${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_TVOS_STG }}"
+          PROVISIONING_CERTIFICATE_BASE64: '${{ secrets.IOS_MOBILE_PROVISION_BASE64_TEST_REACT_TVOS_STG }}'
 
       - name: Store App Store Private Key
         run: |
@@ -384,8 +384,8 @@ jobs:
           xcrun altool --upload-app --type tvos --file build-output/tvos-stg/Basic-tvOS.ipa --apiKey $APPSTORE_API_KEY_ID --apiIssuer $APPSTORE_ISSUER_ID
         working-directory: source/examples/TestNamiTV
         env:
-          APPSTORE_API_KEY_ID: "${{ secrets.APPSTORE_API_KEY_ID }}"
-          APPSTORE_ISSUER_ID: "${{ secrets.APPSTORE_ISSUER_ID }}"
+          APPSTORE_API_KEY_ID: '${{ secrets.APPSTORE_API_KEY_ID }}'
+          APPSTORE_ISSUER_ID: '${{ secrets.APPSTORE_ISSUER_ID }}'
 
       - name: Upload PR Title to TestFlight Whats New
         working-directory: appstoreconnect-build-tools

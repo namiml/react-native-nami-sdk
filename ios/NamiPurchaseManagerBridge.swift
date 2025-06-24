@@ -79,18 +79,15 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             skuDictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
         }
 
-        let purchaseInitiatedString = ISO8601DateFormatter().string(from: purchase.purchaseInitiatedTimestamp)
-
         var purchaseDict: [String: Any?] = [
             "skuId": purchase.skuId,
             "transactionIdentifier": purchase.transactionIdentifier,
             "sku": skuDictionary,
-            "purchaseInitiatedTimestamp": purchaseInitiatedString,
+            "purchaseInitiatedTimestamp": purchase.purchaseInitiatedTimestamp.timeIntervalSince1970 * 1000,
         ]
 
         if let expires = purchase.expires {
-            let expiresString = ISO8601DateFormatter().string(from: expires)
-            purchaseDict["expires"] = expiresString
+            purchaseDict["expires"] = expires.timeIntervalSince1970 * 1000
         }
 
         return NSDictionary(dictionary: purchaseDict.compactMapValues { $0 })

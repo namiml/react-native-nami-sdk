@@ -14,15 +14,18 @@ const emitter = new NativeEventEmitter(NativeModules.RNNamiFlowManager);
 
 export enum NamiFlowManagerEvents {
   Handoff = 'Handoff',
-  FlowEvent = 'FlowEvent'
+  FlowEvent = 'FlowEvent',
 }
 
 export const NamiFlowManager = {
   emitter,
 
   registerStepHandoff: (
-    callback: (handoffTag: string, handoffData?: Record<string, any>) => void,
-  ): () => void => {
+    callback: (
+      handoffTag: string,
+      handoffData?: Record<string, unknown>,
+    ) => void,
+  ): (() => void) => {
     console.info('[NamiFlowManager] Registering step handoff listener...');
 
     const sub = emitter.addListener(
@@ -30,7 +33,7 @@ export const NamiFlowManager = {
       (event: NamiFlowHandoffPayload) => {
         console.info('[NamiFlowManager] Received handoff event:', event);
         callback(event.handoffTag, event.handoffData);
-      }
+      },
     );
 
     RNNamiFlowManager.registerStepHandoff?.();
@@ -43,10 +46,11 @@ export const NamiFlowManager = {
     RNNamiFlowManager.resume?.();
   },
 
-  registerEventHandler: (callback: (payload: Record<string, any>) => void): () => void => {
+  registerEventHandler: (
+    callback: (payload: Record<string, unknown>) => void,
+  ): (() => void) => {
     const sub = emitter.addListener(NamiFlowManagerEvents.FlowEvent, callback);
     RNNamiFlowManager.registerEventHandler?.();
     return () => sub.remove();
   },
-
 };

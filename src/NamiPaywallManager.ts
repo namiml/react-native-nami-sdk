@@ -8,8 +8,9 @@ import type {
   NamiPurchaseDetails,
   NamiPurchaseSuccessApple,
   NamiPurchaseSuccessAmazon,
-  NamiPurchaseSuccessGooglePlay
-} from '../src/types'
+  NamiPurchaseSuccessGooglePlay,
+  NamiSKU,
+} from '../src/types';
 const RNNamiPaywallManager: Spec =
   TurboModuleRegistry.getEnforcing?.<Spec>('RNNamiPaywallManager') ??
   NativeModules.RNNamiPaywallManager;
@@ -41,38 +42,41 @@ export const NamiPaywallManager = {
     RNNamiPaywallManager.buySkuCompleteAmazon(purchase);
   },
 
-  buySkuCompleteGooglePlay: (
-    purchase: NamiPurchaseSuccessGooglePlay
-  ): void => {
+  buySkuCompleteGooglePlay: (purchase: NamiPurchaseSuccessGooglePlay): void => {
     RNNamiPaywallManager.buySkuCompleteGooglePlay(purchase);
   },
 
-  registerBuySkuHandler: (callback: (sku: any) => void): () => void => {
+  registerBuySkuHandler: (callback: (sku: NamiSKU) => void): (() => void) => {
     const sub = emitter.addListener(NamiPaywallManagerEvents.BuySku, callback);
     RNNamiPaywallManager.registerBuySkuHandler?.();
     return () => sub.remove();
   },
 
-  registerCloseHandler: (callback: () => void): () => void => {
+  registerCloseHandler: (callback: () => void): (() => void) => {
     const sub = emitter.addListener(NamiPaywallManagerEvents.Close, callback);
     RNNamiPaywallManager.registerCloseHandler?.();
     return () => sub.remove();
   },
 
-  registerSignInHandler: (callback: () => void): () => void => {
+  registerSignInHandler: (callback: () => void): (() => void) => {
     const sub = emitter.addListener(NamiPaywallManagerEvents.SignIn, callback);
     RNNamiPaywallManager.registerSignInHandler?.();
     return () => sub.remove();
   },
 
-  registerRestoreHandler: (callback: () => void): () => void => {
+  registerRestoreHandler: (callback: () => void): (() => void) => {
     const sub = emitter.addListener(NamiPaywallManagerEvents.Restore, callback);
     RNNamiPaywallManager.registerRestoreHandler?.();
     return () => sub.remove();
   },
 
-  registerDeeplinkActionHandler: (callback: (url: string) => void): () => void => {
-    const sub = emitter.addListener(NamiPaywallManagerEvents.DeeplinkAction, callback);
+  registerDeeplinkActionHandler: (
+    callback: (url: string) => void,
+  ): (() => void) => {
+    const sub = emitter.addListener(
+      NamiPaywallManagerEvents.DeeplinkAction,
+      callback,
+    );
     RNNamiPaywallManager.registerDeeplinkActionHandler?.();
     return () => sub.remove();
   },
@@ -102,17 +106,11 @@ export const NamiPaywallManager = {
     RNNamiPaywallManager.buySkuCancel();
   },
 
-  setProductDetails: (
-    productDetails: string,
-    allowOffers?: boolean
-  ): void => {
+  setProductDetails: (productDetails: string, allowOffers?: boolean): void => {
     RNNamiPaywallManager.setProductDetails(productDetails, allowOffers);
   },
 
-  setAppSuppliedVideoDetails: (
-    url: string,
-    name?: string
-  ): void => {
+  setAppSuppliedVideoDetails: (url: string, name?: string): void => {
     RNNamiPaywallManager.setAppSuppliedVideoDetails(url, name);
   },
 

@@ -13,7 +13,7 @@ import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-type EntitlementsScreenProps = ViewerTabProps<'Entitlements'>
+type EntitlementsScreenProps = ViewerTabProps<'Entitlements'>;
 
 const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   const [entitlements, setEntitlements] = useState<NamiEntitlement[]>([]);
@@ -31,7 +31,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   };
 
   const onRefreshPress = () => {
-    NamiEntitlementManager.refresh((newEtitlements) => {
+    NamiEntitlementManager.refresh(newEtitlements => {
       console.log('newEtitlements', newEtitlements);
     });
   };
@@ -40,7 +40,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
     getAllEntitlements();
     const subscriptionRemover =
       NamiEntitlementManager.registerActiveEntitlementsHandler(
-        (activeEntitlements) => {
+        activeEntitlements => {
           console.log('activeEntitlements', activeEntitlements);
           setEntitlements(activeEntitlements);
         },
@@ -56,7 +56,8 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
         return (
           <TouchableOpacity
             style={styles.headerButton}
-            onPress={onRefreshPress}>
+            onPress={onRefreshPress}
+          >
             <Text style={styles.headerButtonText}>Refresh</Text>
           </TouchableOpacity>
         );
@@ -70,7 +71,8 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
         onPress={() => {
           onItemPress(item.referenceId);
         }}
-        style={styles.item}>
+        style={styles.item}
+      >
         <Text style={styles.itemText}>{item.name}</Text>
       </TouchableOpacity>
     );

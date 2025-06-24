@@ -146,9 +146,9 @@ export type AppleProduct = {
   priceLanguage: string;
 };
 
-export type GoogleProduct = {};
+export type GoogleProduct = Record<string, never>;
 
-export type AmazonProduct = {};
+export type AmazonProduct = Record<string, never>;
 
 // NamiCampaignManager
 export type NamiCampaign = {
@@ -205,7 +205,7 @@ export type PaywallLaunchContext = {
   };
   // Custom object used as data source for advanced paywall components
   customObject?: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
 };
 
@@ -320,6 +320,16 @@ export type NamiPurchase = {
   purchaseSource?: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
 };
 
+export type NamiPurchaseFromBridge = {
+  sku?: NamiSKU;
+  skuId: string;
+  transactionIdentifier?: string;
+  purchaseToken?: string;
+  expires?: number;
+  purchaseInitiatedTimestamp: number;
+  purchaseSource?: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
+};
+
 export type NamiPurchasesState =
   | 'pending'
   | 'purchased'
@@ -371,5 +381,11 @@ export type NamiPaywallEventVideoMetadata = {
 
 export type NamiFlowHandoffPayload = {
   handoffTag: string;
-  handoffData?: Record<string, any>;
+  handoffData?: Record<string, unknown>;
+};
+
+export type NamiAccountStateEvent = {
+  action: AccountStateAction;
+  success: boolean;
+  error?: number;
 };

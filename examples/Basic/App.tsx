@@ -27,7 +27,6 @@ import {
   SubscriptionPurchase,
 } from 'react-native-iap';
 
-
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
   headerBackTitleVisible: false,
@@ -48,7 +47,6 @@ export interface ViewerTabProps<
   navigation: NativeStackNavigationProp<ViewerTabNavigatorParams, RouteParam>;
 }
 
-
 const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
@@ -61,7 +59,7 @@ const App = () => {
   useEffect(() => {
     const subscription = Linking.addListener('url', handleDeepLink);
 
-    Linking.getInitialURL().then((url) => {
+    Linking.getInitialURL().then(url => {
       if (url) {
         handleDeepLink({ url });
       }
@@ -97,14 +95,13 @@ const App = () => {
             console.log(JSON.stringify(purchase));
 
             if (purchase as SubscriptionPurchase) {
-              const subscriptionProduct: Subscription = subscriptions[0]
-              price = subscriptionProduct.price
-              currency = subscriptionProduct.currency
+              const subscriptionProduct: Subscription = subscriptions[0];
+              price = subscriptionProduct.price;
+              currency = subscriptionProduct.currency;
             } else {
-              const oneTimeProduct: Product = products[0]
-              price = oneTimeProduct.price
-              currency = oneTimeProduct.currency
-
+              const oneTimeProduct: Product = products[0];
+              price = oneTimeProduct.price;
+              currency = oneTimeProduct.currency;
             }
 
             if (Platform.OS === 'ios' || Platform.isTV) {
@@ -117,7 +114,10 @@ const App = () => {
               NamiPaywallManager.buySkuComplete({
                 product: namiSku,
                 transactionID: purchase.transactionId ?? '',
-                originalTransactionID: purchase.originalTransactionIdentifierIOS ?? purchase.transactionId ?? '',
+                originalTransactionID:
+                  purchase.originalTransactionIdentifierIOS ??
+                  purchase.transactionId ??
+                  '',
                 price: price,
                 currencyCode: currency,
               });
@@ -140,8 +140,6 @@ const App = () => {
                 });
               }
             }
-
-
           } catch (error) {
             console.log({ message: 'finishTransaction', error });
           }
@@ -149,14 +147,15 @@ const App = () => {
       },
     );
 
-    const purchaseError: EmitterSubscription = purchaseErrorListener((error: PurchaseError) => {
-      console.log('purchase error', JSON.stringify(error));
-      NamiPaywallManager.buySkuCancel();
-    });
+    const purchaseError: EmitterSubscription = purchaseErrorListener(
+      (error: PurchaseError) => {
+        console.log('purchase error', JSON.stringify(error));
+        NamiPaywallManager.buySkuCancel();
+      },
+    );
 
     const buySkuListener = NamiPaywallManager.registerBuySkuHandler(
       async (sku: NamiSKU) => {
-
         console.log(
           'buy sku handler - need to start purchase flow for sku:',
           sku.skuId,
@@ -173,7 +172,6 @@ const App = () => {
             });
             console.log(JSON.stringify(subscriptions));
             setSubscriptions(subscriptions);
-
           } catch (error) {
             console.log({ message: 'getSubscriptions', error });
           }
@@ -185,7 +183,6 @@ const App = () => {
             });
             console.log(JSON.stringify(products));
             setProducts(products);
-
           } catch (error) {
             console.log({ message: 'getProducts', error });
           }
@@ -193,7 +190,6 @@ const App = () => {
         }
       },
     );
-
 
     return () => {
       buySkuListener;
