@@ -17,7 +17,7 @@ module.exports = {
   rules: {
     'prettier/prettier': 0,
     quotes: ['error', 'single'],
-    indent: ['error', 2, {SwitchCase: 1}],
+    indent: ['error', 2, { SwitchCase: 1 }],
     'react/prop-types': 'off',
     '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
@@ -27,10 +27,10 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off', //it makes sense to enable this rule
     '@typescript-eslint/no-unused-vars': [
       2,
-      {args: 'none', ignoreRestSiblings: true},
+      { args: 'none', ignoreRestSiblings: true },
     ],
     '@typescript-eslint/explicit-function-return-type': 'off', //it makes sense to enable this rule
-    '@typescript-eslint/no-use-before-define': ['error', {variables: false}],
+    '@typescript-eslint/no-use-before-define': ['error', { variables: false }],
     'react/jsx-first-prop-new-line': [1, 'multiline'],
     'react/jsx-max-props-per-line': [
       1,
