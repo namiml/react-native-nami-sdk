@@ -5,7 +5,7 @@ import {
   EmitterSubscription,
 } from 'react-native';
 import type { Spec } from '../specs/NativeNamiEntitlementManager';
-import type { NamiEntitlement, NamiPurchaseFromBridge } from './types';
+import type { NamiEntitlement } from './types';
 import { parsePurchaseDates } from './transformers';
 
 const RNNamiEntitlementManager: Spec =
@@ -18,9 +18,7 @@ export enum NamiEntitlementManagerEvents {
   EntitlementsChanged = 'EntitlementsChanged',
 }
 
-function parseEntitlements(
-  entitlements: NamiPurchaseFromBridge[],
-): NamiEntitlement[] {
+function parseEntitlements(entitlements: any[]): NamiEntitlement[] {
   return entitlements.map((ent) => ({
     ...ent,
     activePurchases: ent.activePurchases.map(parsePurchaseDates),

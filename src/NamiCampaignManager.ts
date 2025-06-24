@@ -44,7 +44,7 @@ export const NamiCampaignManager = {
     withUrl: string | null,
     context: PaywallLaunchContext | null,
     resultCallback?: (success: boolean, errorCode?: number | null) => void,
-    actionCallback?: (event: NamiPaywallEvent) => void,
+    actionCallback?: (event: any) => void,
   ): void {
     if (this.launchSubscription) {
       this.launchSubscription.remove();
@@ -52,7 +52,7 @@ export const NamiCampaignManager = {
 
     this.launchSubscription = this.emitter.addListener(
       NamiCampaignManagerEvents.NamiPaywallEvent,
-      (body: NamiPaywallEvent) => {
+      (body: any) => {
         if (actionCallback) {
           const paywallEvent: NamiPaywallEvent = {
             action: mapToNamiPaywallAction(body.action),

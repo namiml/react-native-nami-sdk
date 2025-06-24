@@ -1,4 +1,5 @@
+import type { NamiConfiguration } from './types';
 export declare const Nami: {
-  configure: (config: any) => Promise<boolean>;
-  sdkConfigured: () => Promise<boolean>;
+    configure: (config: NamiConfiguration) => Promise<boolean>;
+    sdkConfigured: () => Promise<boolean>;
 };

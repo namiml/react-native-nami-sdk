@@ -1,15 +1,11 @@
 import { NativeEventEmitter } from 'react-native';
 export declare enum NamiFlowManagerEvents {
-  Handoff = 'Handoff',
-  FlowEvent = 'FlowEvent',
+    Handoff = "Handoff",
+    FlowEvent = "FlowEvent"
 }
 export declare const NamiFlowManager: {
-  emitter: NativeEventEmitter;
-  registerStepHandoff: (
-    callback: (handoffTag: string, handoffData?: Record<string, any>) => void,
-  ) => () => void;
-  resume: () => void;
-  registerEventHandler: (
-    callback: (payload: Record<string, any>) => void,
-  ) => () => void;
+    emitter: NativeEventEmitter;
+    registerStepHandoff: (callback: (handoffTag: string, handoffData?: Record<string, unknown>) => void) => (() => void);
+    resume: () => void;
+    registerEventHandler: (callback: (payload: Record<string, unknown>) => void) => (() => void);
 };

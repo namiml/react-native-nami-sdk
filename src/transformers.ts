@@ -1,8 +1,6 @@
 import type { NamiPurchase, NamiSKUType } from './types';
 
-export function parsePurchaseDates(
-  purchase: NamiPurchaseFromBridge,
-): NamiPurchase {
+export function parsePurchaseDates(purchase: any): NamiPurchase {
   return {
     ...purchase,
     purchaseInitiatedTimestamp: new Date(purchase.purchaseInitiatedTimestamp),

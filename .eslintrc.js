@@ -22,6 +22,7 @@ module.exports = {
     // TS tweaks
     '@typescript-eslint/no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }],
     '@typescript-eslint/no-use-before-define': ['error', { variables: false }],
+    "@typescript-eslint/no-explicit-any": "off",
     'no-unused-vars': 'off',
   },
 };

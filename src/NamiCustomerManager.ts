@@ -88,7 +88,8 @@ export const NamiCustomerManager = {
     const subscription = emitter.addListener(
       NamiCustomerManagerEvents.AccountStateChanged,
       (body: NamiAccountStateEvent) => {
-        const action: AccountStateAction = body.action.toLowerCase();
+        const action: AccountStateAction =
+          body.action.toLowerCase() as AccountStateAction;
         callback(action, body.success, body.error);
       },
     );
