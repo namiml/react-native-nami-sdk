@@ -41,9 +41,11 @@ class NamiEntitlementManagerBridgeModule internal constructor(
     fun refresh() {
         NamiEntitlementManager.refresh { activeNativeEntitlements ->
             val resultArray: WritableArray = WritableNativeArray()
-            for (entitlement in activeNativeEntitlements) {
-                entitlement.toEntitlementDict()?.let { entitlementDict ->
-                    resultArray.pushMap(entitlementDict)
+            if (activeNativeEntitlements != null) {
+                for (entitlement in activeNativeEntitlements) {
+                    entitlement.toEntitlementDict()?.let { entitlementDict ->
+                        resultArray.pushMap(entitlementDict)
+                    }
                 }
             }
             reactApplicationContext

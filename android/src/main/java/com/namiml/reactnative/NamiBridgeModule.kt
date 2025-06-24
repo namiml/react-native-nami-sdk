@@ -7,6 +7,7 @@ import com.namiml.Nami
 import com.namiml.NamiConfiguration
 import com.namiml.NamiLanguageCode
 import com.namiml.NamiLogLevel
+import android.util.Log
 
 @ReactModule(name = NamiBridgeModule.NAME)
 class NamiBridgeModule internal constructor(
@@ -35,6 +36,8 @@ class NamiBridgeModule internal constructor(
 
     @ReactMethod
     fun configure(configDict: ReadableMap, promise: Promise) {
+        logNewArchitectureStatus()
+
         val appPlatformID = configDict.getString(CONFIG_MAP_PLATFORM_ID_KEY) ?: PLATFORM_ID_ERROR_VALUE
         val builder = NamiConfiguration.Builder(context.applicationContext, appPlatformID)
 
@@ -76,6 +79,11 @@ class NamiBridgeModule internal constructor(
                 promise.resolve(resultMap)
             }
         }
+    }
+
+    fun logNewArchitectureStatus() {
+        val isNewArch = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+        Log.d("RNNami", "New Architecture is ${if (isNewArch) "ENABLED" else "DISABLED"}")
     }
 
     @ReactMethod fun addListener(eventName: String?) {}

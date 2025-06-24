@@ -32,7 +32,13 @@ class RNNami: NSObject {
         }
 
         let config = NamiConfiguration(appPlatformId: appID)
-        NSLog("NAMI: RN Bridge - appPlatformId: %@", appID)
+        NSLog("RNNami: Configure with appPlatformId: %@", appID)
+
+        if isNewArchitectureEnabled() {
+            NSLog("RNNami: New Architecture is ENABLED")
+        } else {
+            NSLog("RNNami: New Architecture is DISABLED")
+        }
 
         if let logLevelString = configDict["logLevel"] as? String {
             config.logLevel = {
@@ -67,5 +73,13 @@ class RNNami: NSObject {
     @objc
     func sdkConfigured(_ resolve: RCTPromiseResolveBlock, rejecter _: RCTPromiseRejectBlock) {
         resolve(Nami.sdkConfigured())
+    }
+
+    func isNewArchitectureEnabled() -> Bool {
+        #if RCT_NEW_ARCH_ENABLED
+            return true
+        #else
+            return false
+        #endif
     }
 }
