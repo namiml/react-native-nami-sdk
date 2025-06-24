@@ -76,6 +76,7 @@ jobs:
 
       - name: Pack the SDK
         run: |
+          npm install
           npm run prepare && npm pack
         working-directory: source/
 
@@ -120,8 +121,14 @@ jobs:
           path: source/examples/Basic/node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install Yarn Dependencies
-        run: yarn install
+      - name: Pack the SDK
+        run: |
+          npm run prepare && npm pack
+        working-directory: source/
+
+      - name: Install test app dependencies
+        run: |
+          npm run clean && npm run getsdk && npm run build
         working-directory: source/examples/Basic
 
       - name: Install macOS dependencies
@@ -217,8 +224,14 @@ jobs:
           path: source/examples/Basic/node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install Yarn dependencies
-        run: yarn install
+      - name: Pack the SDK
+        run: |
+          npm run prepare && npm pack
+        working-directory: source/
+
+      - name: Install test app dependencies
+        run: |
+          npm run clean && npm run getsdk && npm run build
         working-directory: source/examples/Basic
 
       - name: Setup Java
