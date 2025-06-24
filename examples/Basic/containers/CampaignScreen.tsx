@@ -321,7 +321,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     <SafeAreaView
       style={styles.container}
       edges={['right', 'bottom', 'left']}>
-      <View accessible={true}>
+      <View
+        accessible={true}
+        testID="campaign_screen">
         <Text
           testID="campaigns_title"
           style={styles.title}>

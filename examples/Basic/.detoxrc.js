@@ -14,14 +14,14 @@ module.exports = {
       type: 'ios.app',
       binaryPath: 'ios/build/Build/Products/Debug-iphonesimulator/Basic.app',
       build:
-        'xcodebuild -workspace ios/Basic.xcworkspace -scheme Basic -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
+        'export RCT_NEW_ARCH_ENABLED=1 && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/Basic.xcworkspace -scheme Basic -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
     },
     'ios.release': {
       type: 'ios.app',
       binaryPath:
         'ios/build/Build/Products/Release-iphonesimulator/BasicProduction.app',
       build:
-        'export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/Basic.xcworkspace -UseNewBuildSystem=NO -scheme BasicProduction -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet',
+        'export RCT_NEW_ARCH_ENABLED=1 && export RCT_NO_LAUNCH_PACKAGER=true && xcodebuild -workspace ios/Basic.xcworkspace -UseNewBuildSystem=NO -scheme BasicProduction -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet',
     },
     'staging.android.debug': {
       type: 'android.apk',
@@ -57,13 +57,15 @@ module.exports = {
     emulator: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_4_API_34',
+        avdName: 'Pixel_8_Pro_API_35',
+        bootArgs: '-no-audio -no-boot-anim'
       },
     },
     emulatorLocal: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_4_API_34',
+        avdName: 'Pixel_8_Pro_API_35',
+        bootArgs: '-no-audio -no-boot-anim'
       },
     },
   },

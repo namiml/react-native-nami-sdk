@@ -80,6 +80,16 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
 
+  const defaultJourneyState: CustomerJourneyState = {
+  inTrialPeriod: false,
+  inIntroOfferPeriod: false,
+  isCancelled: false,
+  formerSubscriber: false,
+  inGracePeriod: false,
+  inAccountHold: false,
+  inPause: false,
+};
+
   const checkIsLoggedIn = useCallback(() => {
     // workaround for tests purposes
     NamiCustomerManager.isLoggedIn().then(() =>
@@ -101,10 +111,11 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     checkIsLoggedIn();
   }, [checkIsLoggedIn]);
 
+
   const getJourneyState = () => {
     NamiCustomerManager.journeyState().then(myJourneyState => {
       console.log('myJourneyState', myJourneyState);
-      setJourneyState(myJourneyState);
+      setJourneyState(myJourneyState ?? defaultJourneyState);
     });
   };
 
@@ -185,7 +196,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   return (
     <SafeAreaView
       style={styles.container}
-      edges={['right', 'bottom', 'left']}>
+      edges={['right', 'bottom', 'left']}
+      testID="profile_screen">
       <Text
         testID="profile_title"
         style={styles.title}>

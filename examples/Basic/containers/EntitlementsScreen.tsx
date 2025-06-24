@@ -98,7 +98,8 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   return (
     <SafeAreaView
       style={styles.container}
-      edges={['right', 'bottom', 'left']}>
+      edges={['right', 'bottom', 'left']}
+      testID="entitlements_screen">
       <Text
         testID="entitlements_title"
         style={styles.title}>

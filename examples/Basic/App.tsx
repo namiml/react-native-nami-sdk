@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Linking, Platform, EmitterSubscription } from 'react-native';
+import { Linking, Platform, EmitterSubscription, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,6 +11,7 @@ import EntitlementsScreen from './containers/EntitlementsScreen';
 import CustomerManagerScreen from './containers/CustomerManagerScreen';
 import { handleDeepLink } from './services/deeplinking';
 import { useNamiFlowListener } from './hooks/useNamiFlowListener';
+import { LogBox } from 'react-native';
 
 import {
   finishTransaction,
@@ -26,6 +27,10 @@ import {
   Subscription,
   SubscriptionPurchase,
 } from 'react-native-iap';
+
+LogBox.ignoreLogs([
+  'Billing is unavailable',
+]);
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -202,24 +207,40 @@ const App = () => {
     <NavigationContainer>
       <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
         <Tab.Screen
-          options={{ tabBarTestID: 'campaign_screen' }}
           name="Campaign"
           component={CampaignScreen}
+          options={{
+            tabBarButton: (props) => (
+              <TouchableOpacity {...props} testID="campaign_tab" />
+            ),
+          }}
         />
         <Tab.Screen
-          options={{ tabBarTestID: 'profile_screen' }}
           name="Profile"
           component={ProfileScreen}
+          options={{
+            tabBarButton: (props) => (
+              <TouchableOpacity {...props} testID="profile_tab" />
+            ),
+          }}
         />
         <Tab.Screen
-          options={{ tabBarTestID: 'entitlements_screen' }}
           name="Entitlements"
           component={EntitlementsScreen}
+          options={{
+            tabBarButton: (props) => (
+              <TouchableOpacity {...props} testID="entitlements_tab" />
+            ),
+          }}
         />
         <Tab.Screen
-          options={{ tabBarTestID: 'customer_manager_screen' }}
           name="CustomerManager"
           component={CustomerManagerScreen}
+          options={{
+            tabBarButton: (props) => (
+              <TouchableOpacity {...props} testID="customer_manager_tab" />
+            ),
+          }}
         />
       </Tab.Navigator>
     </NavigationContainer>

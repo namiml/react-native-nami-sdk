@@ -65,7 +65,8 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   return (
     <SafeAreaView
       style={styles.container}
-      edges={['right', 'bottom', 'left']}>
+      edges={['right', 'bottom', 'left']}
+      testID="customer_manager_screen">
       <Text
         testID="customer_manager_title"
         style={styles.title}>
