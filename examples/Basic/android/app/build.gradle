@@ -135,6 +135,7 @@ android {
         }
         release {
             signingConfig null
+            debuggable true
             minifyEnabled enableProguardInReleaseBuilds
         }
     }

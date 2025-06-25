@@ -81,14 +81,14 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
 
   const defaultJourneyState: CustomerJourneyState = {
-  inTrialPeriod: false,
-  inIntroOfferPeriod: false,
-  isCancelled: false,
-  formerSubscriber: false,
-  inGracePeriod: false,
-  inAccountHold: false,
-  inPause: false,
-};
+    inTrialPeriod: false,
+    inIntroOfferPeriod: false,
+    isCancelled: false,
+    formerSubscriber: false,
+    inGracePeriod: false,
+    inAccountHold: false,
+    inPause: false,
+  };
 
   const checkIsLoggedIn = useCallback(() => {
     // workaround for tests purposes

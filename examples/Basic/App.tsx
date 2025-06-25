@@ -211,7 +211,9 @@ const App = () => {
           component={CampaignScreen}
           options={{
             tabBarButton: (props) => (
-              <TouchableOpacity {...props} testID="campaign_tab" />
+              <TouchableOpacity
+                {...props}
+                testID="campaign_tab" />
             ),
           }}
         />
@@ -220,7 +222,9 @@ const App = () => {
           component={ProfileScreen}
           options={{
             tabBarButton: (props) => (
-              <TouchableOpacity {...props} testID="profile_tab" />
+              <TouchableOpacity
+                {...props}
+                testID="profile_tab" />
             ),
           }}
         />
@@ -229,7 +233,9 @@ const App = () => {
           component={EntitlementsScreen}
           options={{
             tabBarButton: (props) => (
-              <TouchableOpacity {...props} testID="entitlements_tab" />
+              <TouchableOpacity
+                {...props}
+                testID="entitlements_tab" />
             ),
           }}
         />
@@ -238,7 +244,9 @@ const App = () => {
           component={CustomerManagerScreen}
           options={{
             tabBarButton: (props) => (
-              <TouchableOpacity {...props} testID="customer_manager_tab" />
+              <TouchableOpacity
+                {...props}
+                testID="customer_manager_tab" />
             ),
           }}
         />
