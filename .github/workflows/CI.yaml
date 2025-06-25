@@ -261,14 +261,10 @@ jobs:
           yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
         working-directory: source/examples/Basic
 
-      - name: Allow test-only APK installs
-        run: echo "android.injected.testOnly=true" >> android/gradle.properties
-        working-directory: source/examples/Basic
-
       - name: Increase ADB Install timeout
         run: sed -i 's/INSTALL_TIMEOUT = 45000;/INSTALL_TIMEOUT = 300000;/' node_modules/detox/src/devices/common/drivers/android/exec/ADB.js
         working-directory: source/examples/Basic
-        
+
       - name: Create the Keystore
         run: |
           # import keystore from secrets
