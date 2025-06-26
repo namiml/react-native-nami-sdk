@@ -103,10 +103,10 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('/Users/dannami/Nami/SigningKeys/GooglePlay/release.keystore')
-            storePassword 'kyFYiLg7QVe78QaEg'
-            keyAlias 'namirelease'
-            keyPassword 'kyFYiLg7QVe78QaEg'
+            storeFile file('release.keystore')
+            storePassword 'android'
+            keyAlias 'androidreleasekey'
+            keyPassword 'android'
         }
     }
     flavorDimensions += "environment"
@@ -132,7 +132,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig signingConfigs.release
+            signingConfig null
             minifyEnabled enableProguardInReleaseBuilds
         }
     }
