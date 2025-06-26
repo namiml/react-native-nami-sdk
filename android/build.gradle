@@ -85,11 +85,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    playImplementation "com.namiml:sdk-android:3.3.0-beta.09"
-    amazonImplementation "com.namiml:sdk-amazon:3.3.0-beta.09"
+    playImplementation "com.namiml:sdk-android:3.3.0-beta.10"
+    amazonImplementation "com.namiml:sdk-amazon:3.3.0-beta.10"
 
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.5"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"
 
 }
 
