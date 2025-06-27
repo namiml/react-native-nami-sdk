@@ -193,8 +193,7 @@ jobs:
           name: detox-artifacts
           path: artifacts
   e2e-android:
-    runs-on:
-      labels: ubuntu-latest-m
+    runs-on: ubuntu-latest-m
     env:
       DETOX_CONFIGURATION: android.emu.release
 
