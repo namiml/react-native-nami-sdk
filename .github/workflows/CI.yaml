@@ -242,6 +242,11 @@ jobs:
         env:
           BASIC_ANDROID_PROD_APP_PLATFORM_ID: '${{ secrets.ANDROID_PROD_APP_PLATFORM_ID }}'
 
+      - name: Update Proguard for Detox
+        working-directory: source/examples/Basic/android
+        run: |
+          sed -i 's|proguardFiles.*|proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"|' app/build.gradle
+
       - name: Rebuild cache detox
         run: yarn detox rebuild-framework-cache
         working-directory: source/examples/Basic
