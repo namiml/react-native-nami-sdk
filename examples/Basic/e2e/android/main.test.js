@@ -1,5 +1,4 @@
 import { device, element, by, expect, waitFor } from 'detox';
-import { execSync } from 'child_process';
 
 const data = {
   campaign: 'aquarius',
@@ -7,14 +6,6 @@ const data = {
 
 describe('Android: Configure Test', () => {
   beforeAll(async () => {
-
-    try {
-      execSync('adb shell settings put secure stylus_handwriting_enabled 0');
-      execSync('adb shell pm disable-user --user 0 com.google.android.stylus.apps');
-    } catch (e) {
-      console.warn('⚠️ Stylus overlay disable failed:', e.message);
-    }
-
     await device.launchApp({
       newInstance: true,
       launchArgs: {
