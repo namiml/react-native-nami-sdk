@@ -193,7 +193,8 @@ jobs:
           name: detox-artifacts
           path: artifacts
   e2e-android:
-    runs-on: ubuntu-latest
+    runs-on:
+      labels: ubuntu-latest-m
     env:
       DETOX_CONFIGURATION: android.emu.release
 
@@ -203,6 +204,12 @@ jobs:
         with:
           path: source
           ref: '${{ inputs.ref }}'
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -318,8 +325,11 @@ jobs:
           api-level: 35
           arch: x86_64
           disable-animations: true
-          ram-size: 4096
-          heap-size: 1024
+          ram-size: 4096M
+          heap-size: 1024M
+          disk-size: 500M
+          sdcard-path-or-size: 25M
+          disable-linux-hw-accel: false
           channel: canary
           profile: pixel
           avd-name: Pixel_8_Pro_API_35

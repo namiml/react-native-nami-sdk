@@ -57,14 +57,14 @@ module.exports = {
       type: 'android.emulator',
       device: {
         avdName: 'Pixel_8_Pro_API_35',
-        bootArgs: '-no-boot-anim -no-audio -no-snapshot -wipe-data -camera-back none -camera-front none -accel auto -no-window'
+        bootArgs: '-no-boot-anim -no-audio -no-snapshot -wipe-data -camera-back none -camera-front none -no-window'
       },
     },
     emulatorLocal: {
       type: 'android.emulator',
       device: {
         avdName: 'Pixel_8_Pro_API_35_Detox',
-        bootArgs: '-no-boot-anim -no-audio -no-snapshot -wipe-data -camera-back none -camera-front none -accel auto -no-window'
+        bootArgs: '-no-boot-anim -no-audio -no-snapshot -wipe-data -camera-back none -camera-front none -no-window'
       },
     },
   },
