@@ -55,3 +55,9 @@ IDEWorkspaceChecks.plist
 Podfile.lock
 
 examples/Basic/android/app/src/main/assets/
+examples/Basic/android-test.sh
+examples/Basic/android/app/.cxx/
+examples/Basic/android/app/src/androidTest/java/com/namiml/.DetoxTest.java.swp
+examples/Basic/artifacts/
+*.orig
+examples/Basic/ios/.xcode.env.local

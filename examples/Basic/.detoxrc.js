@@ -3,7 +3,6 @@ module.exports = {
   testRunner: {
     args: {
       $0: 'jest',
-      config: 'e2e/jest.config.js',
     },
     jest: {
       setupTimeout: 300000,
@@ -58,14 +57,14 @@ module.exports = {
       type: 'android.emulator',
       device: {
         avdName: 'Pixel_8_Pro_API_35',
-        bootArgs: '-no-audio -no-boot-anim'
+        bootArgs: '-no-boot-anim -no-audio -no-snapshot -wipe-data -camera-back none -camera-front none -accel auto -no-window'
       },
     },
     emulatorLocal: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_8_Pro_API_35',
-        bootArgs: '-no-audio -no-boot-anim'
+        avdName: 'Pixel_8_Pro_API_35_Detox',
+        bootArgs: '-no-boot-anim -no-audio -no-snapshot -wipe-data -camera-back none -camera-front none -accel auto -no-window'
       },
     },
   },
