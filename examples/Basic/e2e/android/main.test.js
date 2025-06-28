@@ -11,12 +11,13 @@ describe('Android: Configure Test', () => {
     await device.launchApp({
       newInstance: true,
       launchArgs: {
-        DETOX_LOG_LEVEL: 'info',
+        DETOX_LOG_LEVEL: 'debug',
         DETOX_DISABLE_LOGCAT: false,
       },
     });
-    console.log('app launched');
-  });
+  }, 120000);
+
+  console.log('app launched');
 
   it('Should have Campaigns screen', async () => {
     await expect(element(by.id('campaigns_title'))).toBeVisible();
