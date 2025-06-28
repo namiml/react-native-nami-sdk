@@ -5,7 +5,7 @@ module.exports = {
       $0: 'jest',
     },
     jest: {
-      setupTimeout: 300000,
+      setupTimeout: 600000,
     },
   },
   apps: {

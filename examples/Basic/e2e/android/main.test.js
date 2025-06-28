@@ -6,13 +6,16 @@ const data = {
 
 describe('Android: Configure Test', () => {
   beforeAll(async () => {
+    console.log('launching app...');
+
     await device.launchApp({
       newInstance: true,
       launchArgs: {
         DETOX_LOG_LEVEL: 'info',
-        DETOX_DISABLE_LOGCAT: true,
+        DETOX_DISABLE_LOGCAT: false,
       },
     });
+    console.log('app launched');
   });
 
   it('Should have Campaigns screen', async () => {
