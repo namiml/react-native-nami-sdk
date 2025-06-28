@@ -56,8 +56,8 @@ module.exports = {
     emulator: {
       type: 'android.emulator',
       device: {
-        avdName: 'Pixel_8_Pro_API_35',
-        bootArgs: '-no-boot-anim -no-audio -no-snapshot -wipe-data -camera-back none -camera-front none -no-window'
+        avdName: 'Pixel_3a_API_30_AOSP',
+        bootArgs: '-no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none'
       },
     },
     emulatorLocal: {
