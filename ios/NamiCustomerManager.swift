@@ -2,12 +2,18 @@
 //  NamiCustomerManager.swift
 //  RNNami
 //
-//  Copyright © 2023 Nami ML INc.. All rights reserved.
+//  Copyright © 2020-2025 Nami ML Inc. All rights reserved.
 //
 
 import Foundation
 import NamiApple
 import React
+
+#if RCT_NEW_ARCH_ENABLED
+    import React_RCTTurboModule
+
+    extension RNNamiCustomerManager: RCTTurboModule {}
+#endif
 
 @objc(RNNamiCustomerManager)
 class RNNamiCustomerManager: RCTEventEmitter {
@@ -119,7 +125,9 @@ class RNNamiCustomerManager: RCTEventEmitter {
     func registerJourneyStateHandler() {
         NamiCustomerManager.registerJourneyStateHandler { journeyState in
             let dictionary = self.journeyStateToDictionary(journeyState)
-            RNNamiCustomerManager.shared?.sendEvent(withName: "JourneyStateChanged", body: dictionary)
+            DispatchQueue.main.async {
+                RNNamiCustomerManager.shared?.sendEvent(withName: "JourneyStateChanged", body: dictionary)
+            }
         }
     }
 
@@ -160,7 +168,9 @@ class RNNamiCustomerManager: RCTEventEmitter {
                 "success": success,
                 "error": error?._code as Any,
             ]
-            RNNamiCustomerManager.shared?.sendEvent(withName: "AccountStateChanged", body: payload)
+            DispatchQueue.main.async {
+                RNNamiCustomerManager.shared?.sendEvent(withName: "AccountStateChanged", body: payload)
+            }
         }
     }
 }

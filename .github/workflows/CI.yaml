@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v3
@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v3
@@ -66,7 +66,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
       - name: 'Checkout ${{ inputs.ref }}'
         uses: actions/checkout@v3
@@ -74,8 +74,15 @@ jobs:
           path: source
           ref: '${{ inputs.ref }}'
 
-      - name: Install Basic app dependencies
-        run: yarn --frozen-lockfile --prefer-offline
+      - name: Pack the SDK
+        run: |
+          npm install
+          npm run prepare && npm pack
+        working-directory: source/
+
+      - name: Install test app dependencies
+        run: |
+          npm run clean && npm run getsdk && npm run build
         working-directory: source/examples/Basic
 
       - name: Linter Basic
@@ -114,8 +121,15 @@ jobs:
           path: source/examples/Basic/node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install Yarn Dependencies
-        run: yarn install
+      - name: Pack the SDK
+        run: |
+          npm install
+          npm run prepare && npm pack
+        working-directory: source/
+
+      - name: Install test app dependencies
+        run: |
+          npm run clean && npm run getsdk && npm run build
         working-directory: source/examples/Basic
 
       - name: Install macOS dependencies
@@ -135,15 +149,6 @@ jobs:
           sed -i '' -e "s/APPLE_PROD_APP_PLATFORM_ID/$BASIC_APPLE_PROD_APP_PLATFORM_ID/" index.ts
         env:
           BASIC_APPLE_PROD_APP_PLATFORM_ID: '${{ secrets.APPLE_PROD_APP_PLATFORM_ID }}'
-
-#      - name: Cache Pods
-#        uses: actions/cache@v3
-#        id: podcache
-#        with:
-#          path: source/examples/Basic/ios
-#          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
-#          restore-keys: |
-#              ${{ runner.os }}-pods-
 
       - name: Clean node_modules tree
         run: rm -rf node_modules/react-native-nami-sdk/examples
@@ -175,7 +180,7 @@ jobs:
           export DETOX_SYNCHRONIZATION_DEBUG=1
           yarn start &
           METRO_BUNDLER_PID=$!
-          yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} e2e/ios --cleanup --headless --record-logs all --loglevel trace
+          yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} e2e/ios --cleanup --config=e2e/ios-jest.config.js --headless --record-logs all --loglevel trace
           DETOX_EXIT_CODE=$?
           kill $METRO_BUNDLER_PID
           exit $DETOX_EXIT_CODE
@@ -188,7 +193,7 @@ jobs:
           name: detox-artifacts
           path: artifacts
   e2e-android:
-    runs-on: ubuntu-latest
+    runs-on: priority-l
     env:
       DETOX_CONFIGURATION: android.emu.release
 
@@ -199,10 +204,16 @@ jobs:
           path: source
           ref: '${{ inputs.ref }}'
 
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -211,8 +222,15 @@ jobs:
           path: source/examples/Basic/node_modules
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install Yarn dependencies
-        run: yarn install
+      - name: Pack the SDK
+        run: |
+          npm install
+          npm run prepare && npm pack
+        working-directory: source/
+
+      - name: Install test app dependencies
+        run: |
+          npm run clean && npm run getsdk && npm run build
         working-directory: source/examples/Basic
 
       - name: Setup Java
@@ -230,6 +248,11 @@ jobs:
         env:
           BASIC_ANDROID_PROD_APP_PLATFORM_ID: '${{ secrets.ANDROID_PROD_APP_PLATFORM_ID }}'
 
+      - name: Update Proguard for Detox
+        working-directory: source/examples/Basic/android
+        run: |
+          sed -i 's|proguardFiles.*|proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"|' app/build.gradle
+
       - name: Rebuild cache detox
         run: yarn detox rebuild-framework-cache
         working-directory: source/examples/Basic
@@ -241,12 +264,16 @@ jobs:
           path: source/examples/Basic/android/app/build
           key: ${{ runner.os }}-detox-build
           restore-keys: |
-              ${{ runner.os }}-detox-build
+            ${{ runner.os }}-detox-build
 
       - name: Detox build
         run: |
           rm -rf node_modules/react-native-nami-sdk/examples
           yarn detox build --configuration ${{ env.DETOX_CONFIGURATION }}
+        working-directory: source/examples/Basic
+
+      - name: Increase ADB Install timeout
+        run: sed -i 's/INSTALL_TIMEOUT = 45000;/INSTALL_TIMEOUT = 300000;/' node_modules/detox/src/devices/common/drivers/android/exec/ADB.js
         working-directory: source/examples/Basic
 
       - name: Create the Keystore
@@ -265,13 +292,13 @@ jobs:
         id: sign_apk
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: source/examples/Basic/android/app/build/outputs/apk/production/release
+          releaseDirectory: source/examples/Basic/android/app/build/outputs/apk/production/release/
           signingKeyBase64: ${{ env.SIGNINGKEYBASE64 }}
           alias: ${{ secrets.KEY_ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
-          BUILD_TOOLS_VERSION: "34.0.0"
+          BUILD_TOOLS_VERSION: '35.0.0'
 
       - name: Sign AndroidTest APK for Detox
         id: sign_androidTest_apk
@@ -283,54 +310,29 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
-          BUILD_TOOLS_VERSION: "34.0.0"
+          BUILD_TOOLS_VERSION: '35.0.0'
 
       - name: Get device name
         id: device
         run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator.device.avdName)" >> $GITHUB_OUTPUT
         working-directory: source/examples/Basic
 
-#      - name: Cache AVD snapshot
-#        uses: actions/cache@v3
-#        id: avd-cache
-#        with:
-#          path: |
-#            ~/.android/avd/*
-#            ~/.android/adb*
-#          key: avd-30-aosp-atd
-#
-#      - name: Create AVD and generate snapshot for caching
-#        if: steps.avd-cache.outputs.cache-hit != 'true'
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          target: aosp_atd
-#          api-level: 30
-#          arch: x86
-#          channel: canary
-#          profile: pixel
-#          ram-size: 2048M
-#          heapSize: 576M
-#          # avd-name: ${{ steps.device.outputs.AVD_NAME }}
-#          avd-name: Pixel_3a_API_30_AOSP
-#          force-avd-creation: false
-#          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-#          disable-animations: false
-#          script: echo "Generated AVD snapshot for caching"
-#          working-directory: source/examples/Basic
-
       - name: Detox test
         uses: reactivecircus/android-emulator-runner@v2
         with:
           target: aosp_atd
           api-level: 30
-          arch: x86_64
-          disable-animations: true
-          ram-size: 4096
-          heap-size: 512
+          arch: x86
           channel: canary
           profile: pixel
-          avd-name: Pixel_4_API_34
-          script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} e2e/android --headless --record-logs all --loglevel trace
+          ram-size: 2048M
+          heap-size: 576M
+          avd-name: Pixel_3a_API_30_AOSP
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          disable-linux-hw-accel: false
+          script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --config=e2e/android-jest.config.js --headless --record-logs all --loglevel trace
           working-directory: source/examples/Basic
 
       - name: Upload artifacts

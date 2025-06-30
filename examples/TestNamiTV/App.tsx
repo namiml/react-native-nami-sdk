@@ -34,7 +34,7 @@ const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 const App = () => {
   useEffect(() => {
     Linking.addEventListener('url', handleDeepLink);
-    Linking.getInitialURL().then((url) => {
+    Linking.getInitialURL().then(url => {
       if (url) {
         handleDeepLink({ url });
       }
@@ -45,49 +45,48 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const deeplinkSubscription = NamiPaywallManager.registerDeeplinkActionHandler(async (url) => {
-      await NamiPaywallManager.dismiss();
-      if (await Linking.canOpenURL(url)) {
-        Linking.openURL(url);
+    const deeplinkSubscription =
+      NamiPaywallManager.registerDeeplinkActionHandler(async url => {
+        await NamiPaywallManager.dismiss();
+        if (await Linking.canOpenURL(url)) {
+          Linking.openURL(url);
+        }
+      });
+    const buySkuSubscription = NamiPaywallManager.registerBuySkuHandler(sku => {
+      console.log(
+        'buy sku handler - need to start purchase flow for sku:',
+        sku.skuId,
+      );
+
+      NamiPaywallManager.dismiss();
+
+      if (Platform.OS === 'ios') {
+        NamiPaywallManager.buySkuCompleteApple({
+          product: sku,
+          transactionID: '12345',
+          originalTransactionID: '12345',
+          price: '120',
+          currencyCode: 'USD',
+        });
+      } else if (Platform.OS === 'android') {
+        if (Platform.constants.Manufacturer === 'Amazon') {
+          NamiPaywallManager.buySkuCompleteAmazon({
+            product: sku,
+            receiptId: '12345',
+            localizedPrice: '120',
+            userId: '12345',
+            marketplace: 'US',
+          });
+        } else {
+          NamiPaywallManager.buySkuCompleteGooglePlay({
+            product: sku,
+            purchaseToken:
+              'jolbnkpmojnpnjecgmphbmkc.AO-J1OznE4AIzyUvKFe1RSVkxw4KEtv0WfyL_tkzozOqnlSvIPsyQJBphCN80gwIMaex4EMII95rFCZhMCbVPZDc-y_VVhQU5Ddua1dLn8zV7ms_tdwoDmE',
+            orderId: 'GPA.3317-0284-9993-42221',
+          });
+        }
       }
     });
-    const buySkuSubscription = NamiPaywallManager.registerBuySkuHandler(
-      (sku) => {
-        console.log(
-          'buy sku handler - need to start purchase flow for sku:',
-          sku.skuId,
-        );
-
-        NamiPaywallManager.dismiss();
-
-        if (Platform.OS === 'ios') {
-          NamiPaywallManager.buySkuCompleteApple({
-            product: sku,
-            transactionID: '12345',
-            originalTransactionID: '12345',
-            price: '120',
-            currencyCode: 'USD',
-          });
-        } else if (Platform.OS === 'android') {
-          if (Platform.constants.Manufacturer === 'Amazon') {
-            NamiPaywallManager.buySkuCompleteAmazon({
-              product: sku,
-              receiptId: '12345',
-              localizedPrice: '120',
-              userId: '12345',
-              marketplace: 'US',
-            });
-          } else {
-            NamiPaywallManager.buySkuCompleteGooglePlay({
-              product: sku,
-              purchaseToken:
-                'jolbnkpmojnpnjecgmphbmkc.AO-J1OznE4AIzyUvKFe1RSVkxw4KEtv0WfyL_tkzozOqnlSvIPsyQJBphCN80gwIMaex4EMII95rFCZhMCbVPZDc-y_VVhQU5Ddua1dLn8zV7ms_tdwoDmE',
-              orderId: 'GPA.3317-0284-9993-42221',
-            });
-          }
-        }
-      },
-    );
     return () => {
       deeplinkSubscription();
       buySkuSubscription();

@@ -2,12 +2,17 @@
 //  NamiPurchaseManagerBridge.swift
 //  RNNami
 //
-//  Copyright © 2023 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2025 Nami ML Inc. All rights reserved.
 //
 
 import Foundation
 import NamiApple
 import React
+
+#if RCT_NEW_ARCH_ENABLED
+    import React_RCTTurboModule
+    extension RNNamiPurchaseManager: RCTTurboModule {}
+#endif
 
 @objc(RNNamiPurchaseManager)
 class RNNamiPurchaseManager: RCTEventEmitter {
@@ -57,11 +62,12 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             "id": sku.id,
             "skuId": sku.skuId,
             "type": typeString,
+            "name": sku.name ?? "",
             "appleProduct": productDict,
         ]
 
         if let promoId = sku.promoId {
-            skuDict["promoId"] = sku.promoId
+            skuDict["promoId"] = promoId
         }
 
         return NSDictionary(dictionary: skuDict.compactMapValues { $0 })
@@ -72,19 +78,18 @@ class RNNamiPurchaseManager: RCTEventEmitter {
         if let sku = purchase.sku {
             skuDictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
         }
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = .init(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let expiresString = dateFormatter.string(from: purchase.expires ?? Date())
-        let purchaseInitiatedString = dateFormatter.string(from: purchase.purchaseInitiatedTimestamp)
 
-        let purchaseDict: [String: Any?] = [
+        var purchaseDict: [String: Any?] = [
             "skuId": purchase.skuId,
             "transactionIdentifier": purchase.transactionIdentifier,
             "sku": skuDictionary,
-            "expires": expiresString,
-            "purchaseInitiatedTimestamp": purchaseInitiatedString,
+            "purchaseInitiatedTimestamp": purchase.purchaseInitiatedTimestamp.timeIntervalSince1970 * 1000,
         ]
+
+        if let expires = purchase.expires {
+            purchaseDict["expires"] = expires.timeIntervalSince1970 * 1000
+        }
+
         return NSDictionary(dictionary: purchaseDict.compactMapValues { $0 })
     }
 

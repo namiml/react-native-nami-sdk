@@ -2,9 +2,14 @@ import { useEffect } from 'react';
 import { Platform, Linking } from 'react-native';
 import { NamiFlowManager, NamiCustomerManager } from 'react-native-nami-sdk';
 import { logger } from 'react-native-logs';
-import { check, request, PERMISSIONS, RESULTS, Permission } from 'react-native-permissions';
+import {
+  check,
+  request,
+  PERMISSIONS,
+  RESULTS,
+  Permission,
+} from 'react-native-permissions';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-
 
 const log = logger.createLogger({ severity: 'debug' });
 let eventHandlerRegistered = false;
@@ -30,33 +35,48 @@ export function useNamiFlowListener() {
         case 'push': {
           if (Platform.OS === 'ios') {
             PushNotificationIOS.requestPermissions().then(result => {
-              const granted = !!(result.alert || result.authorizationStatus === 1);
-              NamiCustomerManager.setCustomerAttribute('pushAuthorized', granted ? 'true' : 'false');
+              const granted = !!(
+                result.alert || result.authorizationStatus === 1
+              );
+              NamiCustomerManager.setCustomerAttribute(
+                'pushAuthorized',
+                granted ? 'true' : 'false',
+              );
               if (granted) setCustomerAttributesFromHandoff(data);
               NamiFlowManager.resume();
             });
           } else if (Platform.OS === 'android') {
             try {
-              const permission = 'android.permission.POST_NOTIFICATIONS' as unknown as Permission;
+              const permission =
+                'android.permission.POST_NOTIFICATIONS' as unknown as Permission;
               log.info('[NamiFlowManager] check notification permission');
 
               const status = await check(permission);
               if (status === RESULTS.GRANTED) {
                 log.info('[NamiFlowManager] notification permission granted');
-                NamiCustomerManager.setCustomerAttribute('pushAuthorized', 'true');
+                NamiCustomerManager.setCustomerAttribute(
+                  'pushAuthorized',
+                  'true',
+                );
                 setCustomerAttributesFromHandoff(data);
                 NamiFlowManager.resume();
               } else {
                 log.info('[NamiFlowManager] notification request permission');
                 const grantStatus = await request(permission);
                 const granted = grantStatus === RESULTS.GRANTED;
-                NamiCustomerManager.setCustomerAttribute('pushAuthorized', granted ? 'true' : 'false');
+                NamiCustomerManager.setCustomerAttribute(
+                  'pushAuthorized',
+                  granted ? 'true' : 'false',
+                );
                 if (granted) setCustomerAttributesFromHandoff(data);
                 NamiFlowManager.resume();
               }
             } catch (err) {
               // Log the error and continue flow
-              log.warn('[NamiFlowManager] Error checking/requesting POST_NOTIFICATIONS permission:', err);
+              log.warn(
+                '[NamiFlowManager] Error checking/requesting POST_NOTIFICATIONS permission:',
+                err,
+              );
               NamiFlowManager.resume();
             }
           } else {
@@ -75,18 +95,24 @@ export function useNamiFlowListener() {
           if (permission) {
             check(permission).then(status => {
               if (status === RESULTS.GRANTED) {
-                NamiCustomerManager.setCustomerAttribute('locationAuthorized', 'true');
+                NamiCustomerManager.setCustomerAttribute(
+                  'locationAuthorized',
+                  'true',
+                );
                 NamiFlowManager.resume();
               } else if (status === RESULTS.DENIED) {
                 request(permission).then(grantStatus => {
                   NamiCustomerManager.setCustomerAttribute(
                     'locationAuthorized',
-                    grantStatus === RESULTS.GRANTED ? 'true' : 'false'
+                    grantStatus === RESULTS.GRANTED ? 'true' : 'false',
                   );
                   NamiFlowManager.resume();
                 });
               } else {
-                NamiCustomerManager.setCustomerAttribute('locationAuthorized', 'false');
+                NamiCustomerManager.setCustomerAttribute(
+                  'locationAuthorized',
+                  'false',
+                );
                 NamiFlowManager.resume();
               }
             });
@@ -105,18 +131,24 @@ export function useNamiFlowListener() {
           if (url) {
             Linking.openURL(url)
               .catch(err => {
-                log.info('[NamiFlowManager] Failed to open deeplink:', url, err);
+                log.info(
+                  '[NamiFlowManager] Failed to open deeplink:',
+                  url,
+                  err,
+                );
               })
               .finally(() => {
                 NamiFlowManager.resume();
               });
           } else {
-            log.info('[NamiFlowManager] No deeplink URL provided in handoff data:', data);
+            log.info(
+              '[NamiFlowManager] No deeplink URL provided in handoff data:',
+              data,
+            );
             NamiFlowManager.resume();
           }
           break;
         }
-
 
         case 'complete': {
           setCustomerAttributesFromHandoff(data);

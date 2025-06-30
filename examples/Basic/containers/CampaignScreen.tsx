@@ -12,7 +12,6 @@ import {
   NamiPaywallAction,
   NamiCampaignRuleType,
   NamiPaywallEvent,
-  NamiFlowManager,
 } from 'react-native-nami-sdk';
 import {
   FlatList,
@@ -29,9 +28,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { handleDeepLink } from '../services/deeplinking';
 import customLaunchObject from '../nami_launch_context_custom_object.json';
 import { logger } from 'react-native-logs';
-import { AppState } from 'react-native';
 
-type CampaignScreenProps = ViewerTabProps<'Campaign'>
+const log = logger.createLogger();
+
+type CampaignScreenProps = ViewerTabProps<'Campaign'>;
 
 const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
   <TouchableOpacity
@@ -46,7 +46,7 @@ const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
 );
 
 // For Nami testing purposes only
-const HeaderLeft = ({ onButtonPress } : { onButtonPress: () => void }) => (
+const HeaderLeft = ({ onButtonPress }: {onButtonPress: () => void}) => (
   <TouchableOpacity
     style={styles.headerButtonLeft}
     onPress={onButtonPress}>
@@ -67,45 +67,66 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   const checkIfPaywallOpen = async () => {
     const isOpen = await NamiPaywallManager.isPaywallOpen();
-    console.log('NamiSDK: paywall open? ', isOpen);
+    log.debug('NamiSDK: paywall open? ', isOpen);
   };
 
   const showPaywallIfHidden = async () => {
     try {
-      const isHidden = await NamiPaywallManager.isHidden()
+      const isHidden = await NamiPaywallManager.isHidden();
       if (Platform.OS === 'ios' && isHidden) {
         NamiPaywallManager.show();
       } else {
-        console.log('paywall is not hidden');
+        log.debug('paywall is not hidden');
       }
     } catch (error) {
-      console.log(error);
+      log.debug(error);
     }
   };
 
   const getAllCampaigns = useCallback(async () => {
     const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
-    const validCampaigns = fetchedCampaigns.filter((campaign) =>
+    const validCampaigns = fetchedCampaigns.filter(campaign =>
       Boolean(campaign.value),
     );
 
-    const sortedCampaigns = validCampaigns.sort( (a, b) => (a.value ?? '').localeCompare(b.value ?? '') );
+    const sortedCampaigns = validCampaigns.sort((a, b) =>
+      (a.value ?? '').localeCompare(b.value ?? ''),
+    );
     setCampaigns(sortedCampaigns);
-    console.log('validCampaigns', sortedCampaigns);
+    log.debug('validCampaigns', sortedCampaigns);
     return sortedCampaigns;
   }, []);
 
   const getRefreshedCampaigns = useCallback(async () => {
     const fetchedCampaigns = await NamiCampaignManager.refresh();
-    const refreshedCampaigns = fetchedCampaigns.filter((campaign) =>
+    const refreshedCampaigns = fetchedCampaigns.filter(campaign =>
       Boolean(campaign.value),
     );
     setCampaigns(refreshedCampaigns);
     return refreshedCampaigns;
   }, []);
 
-
   useEffect(() => {
+    const availableCampaignsRemover =
+      NamiCampaignManager.registerAvailableCampaignsHandler(
+        (availableCampaigns: NamiCampaign[]) => {
+          const filteredCampaigns = availableCampaigns.filter(
+            campaign => campaign.type !== 'default',
+          );
+
+          const isEqualList =
+            JSON.stringify(campaigns) === JSON.stringify(filteredCampaigns);
+          setRefresh(!isEqualList);
+
+          const sortedCampaigns = filteredCampaigns.sort((a, b) =>
+            (a.value ?? '').localeCompare(b.value ?? ''),
+          );
+
+          log.debug(sortedCampaigns);
+          setCampaigns(sortedCampaigns);
+        },
+      );
+
     const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
       async () => {
         console.log('[NamiPaywallManager.registerSignInHandler] sign in');
@@ -121,66 +142,36 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     );
 
     const subscriptionRestoreRemover =
-      NamiPaywallManager.registerRestoreHandler(
-        async () => {
-          console.log('[NamiPaywallManager.registerRestoreHandler] restore');
-          await NamiPaywallManager.dismiss();
-        });
+      NamiPaywallManager.registerRestoreHandler(async () => {
+        console.log('[NamiPaywallManager.registerRestoreHandler] restore');
+        await NamiPaywallManager.dismiss();
+      });
 
     const subscriptionDeeplinkRemover =
-      NamiPaywallManager.registerDeeplinkActionHandler(
-        async (url) => {
-          console.log('[NamiPaywallManager.registerDeeplinkActionHandler] deeplink action ', url);
-
-          // for testing:
-          NamiPaywallManager.buySkuCancel();
-
-          await NamiPaywallManager.dismiss();
-
-          if (url) {
-            handleDeepLink({ url });
-          }
-
-        });
-
-    const subscriptionRemover =
-        NamiCampaignManager.registerAvailableCampaignsHandler(
-          (availableCampaigns) => {
-            // Filter out (deprecated) campaigns with type === 'default'
-            const filteredCampaigns = availableCampaigns.filter(
-              (campaign) => campaign.type !== 'default'
-            );
-
-            // Compare filtered list to current campaigns
-            const isEqualList =
-                JSON.stringify(campaigns) === JSON.stringify(filteredCampaigns);
-            setRefresh(!isEqualList);
-
-            // Sort the filtered campaigns
-            const sortedCampaigns = filteredCampaigns.sort((a, b) =>
-              (a.value ?? '').localeCompare(b.value ?? '')
-            );
-            console.log(sortedCampaigns);
-
-            // Update state
-            setCampaigns(sortedCampaigns);
-          },
+      NamiPaywallManager.registerDeeplinkActionHandler(async url => {
+        console.log(
+          '[NamiPaywallManager.registerDeeplinkActionHandler] deeplink action ',
+          url,
         );
+
+        // for testing:
+        NamiPaywallManager.buySkuCancel();
+
+        await NamiPaywallManager.dismiss();
+
+        if (url) {
+          handleDeepLink({ url });
+        }
+      });
 
     getAllCampaigns();
 
     return () => {
-      subscriptionRemover();
+      availableCampaignsRemover();
       subscriptionSignInRemover();
       subscriptionCloseRemover();
       subscriptionRestoreRemover();
       subscriptionDeeplinkRemover();
-      // Clean up the launch subscription when the component unmounts
-      // For safety reasons
-      if (NamiCampaignManager.launchSubscription) {
-        //@ts-ignore
-        NamiCampaignManager.launchSubscription.remove();
-      }
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -189,46 +180,53 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const triggerLaunch = useCallback((label?: any, url?: any) => {
     checkIfPaywallOpen();
 
-    NamiPaywallManager.setAppSuppliedVideoDetails('https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4', 'app-supplied-video');
+    NamiPaywallManager.setAppSuppliedVideoDetails(
+      'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      'app-supplied-video',
+    );
 
     return NamiCampaignManager.launch(
       label,
       url,
       { customAttributes: {}, customObject: customLaunchObject },
       (successAction, error) => {
-        console.log('successAction', successAction);
-        console.log('error', error);
+        log.debug('successAction', successAction);
+        log.debug('error', error);
 
         checkIfPaywallOpen();
       },
       (event: NamiPaywallEvent) => {
-
         // NamiPaywallManager.allowUserInteraction(false);
 
-        const log = logger.createLogger();
-        // console.log(`NamiPaywallEvent ${event}"`)
-        log.info(`NamiPaywallEvent action - ${event.action.toString()}"`);
-        log.info(`NamiPaywallEvent timeSpentOnPaywall - ${event.timeSpentOnPaywall?.toString()}"`);
-        log.info(`NamiPaywallEvent component change id - ${event.componentChange?.id?.toString()}"`);
-        log.info(`NamiPaywallEvent component change name - ${event.componentChange?.name?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata id - ${event.videoMetadata?.id?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata url - ${event.videoMetadata?.url?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata name - ${event.videoMetadata?.name?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata contentDuration - ${event.videoMetadata?.contentDuration?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata contentTimecode - ${event.videoMetadata?.contentTimecode?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata autoplayVideo - ${event.videoMetadata?.autoplayVideo?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata muteByDefault - ${event.videoMetadata?.muteByDefault?.toString()}"`);
-        log.info(`NamiPaywallEvent video metadata loopVideo - ${event.videoMetadata?.loopVideo?.toString()}"`);
-        log.info(`NamiPaywallEvent sku name - ${event.sku?.name}"`);
-        log.info(`NamiPaywallEvent sku id - ${event.sku?.id}"`);
-        log.info(`NamiPaywallEvent sku skuId - ${event.sku?.skuId}"`);
-        log.info(`NamiPaywallEvent sku type - ${event.sku?.type}"`);
-        log.info(`NamiPaywallEvent sku promoId - ${event.sku?.promoId}"`);
-        log.info(`NamiPaywallEvent sku promoToken - ${event.sku?.promoToken}"`);
+        // log.debug(`NamiPaywallEvent ${event}"`)
+        log.debug(`NamiPaywallEvent action - ${event.action.toString()}"`);
+        log.debug(
+          `NamiPaywallEvent timeSpentOnPaywall - ${event.timeSpentOnPaywall?.toString()}"`,
+        );
+        log.debug(
+          `NamiPaywallEvent component change id - ${event.componentChange?.id?.toString()}"`,
+        );
+        log.debug(
+          `NamiPaywallEvent component change name - ${event.componentChange?.name?.toString()}"`,
+        );
+        log.debug(
+          `NamiPaywallEvent video metadata url - ${event.videoMetadata?.url?.toString()}"`,
+        );
+        log.debug(
+          `NamiPaywallEvent video metadata name - ${event.videoMetadata?.name?.toString()}"`,
+        );
+        log.debug(`NamiPaywallEvent sku name - ${event.sku?.name}"`);
+        log.debug(`NamiPaywallEvent sku id - ${event.sku?.id}"`);
+        log.debug(`NamiPaywallEvent sku skuId - ${event.sku?.skuId}"`);
+        log.debug(`NamiPaywallEvent sku type - ${event.sku?.type}"`);
+        log.debug(`NamiPaywallEvent sku promoId - ${event.sku?.promoId}"`);
+        log.debug(
+          `NamiPaywallEvent sku promoToken - ${event.sku?.promoToken}"`,
+        );
         setAction(event.action);
       },
     );
-  }, [])
+  }, []);
 
   const isCampaignAvailable = async (value?: string | null | undefined) => {
     try {
@@ -240,13 +238,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     }
   };
 
-  const onItemPressPrimary = useCallback(async (item: NamiCampaign) => {
-    if (await isCampaignAvailable(item.value)) {
-      item.type === 'label'
-        ? triggerLaunch(item.value, null)
-        : triggerLaunch(null, item.value);
-    }
-  }, [triggerLaunch]);
+  const onItemPressPrimary = useCallback(
+    async (item: NamiCampaign) => {
+      if (await isCampaignAvailable(item.value)) {
+        item.type === 'label'
+          ? triggerLaunch(item.value, null)
+          : triggerLaunch(null, item.value);
+      }
+    },
+    [triggerLaunch],
+  );
 
   const onRefreshPress = useCallback(() => {
     getAllCampaigns();
@@ -272,7 +273,14 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       ),
       headerLeft: () => <HeaderLeft onButtonPress={onButtonPress} />,
     });
-  }, [navigation, onRefreshPress, onButtonPress, getAllCampaigns, getRefreshedCampaigns, refresh]);
+  }, [
+    navigation,
+    onRefreshPress,
+    onButtonPress,
+    getAllCampaigns,
+    getRefreshedCampaigns,
+    refresh,
+  ]);
 
   const renderItem = ({ item, index }: {item: NamiCampaign; index: number}) => {
     const lasItem = index === campaigns.length - 1;
@@ -282,11 +290,13 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         testID={`list_item_${item.value}`}
         accessibilityValue={{ text: JSON.stringify(item) }}
         onPress={() => onItemPressPrimary(item)}
-        style={itemStyle}>
+        style={itemStyle}
+      >
         <View
           testID={`list_item_view_${item.value}`}
           accessibilityValue={{ text: JSON.stringify(item) }}
-          style={styles.viewContainer}>
+          style={styles.viewContainer}
+        >
           <Text style={styles.itemText}>{item.value}</Text>
           {item.type === NamiCampaignRuleType.URL && (
             <Text style={styles.itemText}>Open as: {item.type}</Text>
@@ -311,11 +321,13 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     <SafeAreaView
       style={styles.container}
       edges={['right', 'bottom', 'left']}>
-      <View accessible={true}>
+      <View
+        accessible={true}
+        testID="campaign_screen">
         <Text
           testID="campaigns_title"
           style={styles.title}>
-            Placements
+          Placements
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.statusText}>Modal Status:</Text>

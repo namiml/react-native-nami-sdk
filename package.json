@@ -1,10 +1,21 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "3.3.0-beta.8",
+  "version": "3.3.0-beta.22",
   "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
   "main": "index.ts",
-  "types": "index.d.ts",
+  "types": "dist/index.d.ts",
+  "codegenConfig": {
+    "name": "Nami",
+    "type": "modules",
+    "jsSrcsDir": "./specs",
+    "android": {
+      "javaPackageName": "com.namiml.reactnative"
+    }
+  },
   "scripts": {
+    "build": "tsc",
+    "generate:version": "ts-node scripts/generate-version.ts",
+    "prepare": "npm run generate:version && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "android": "react-native run-android",
     "android-clean": "cd android && rm -rf .gradle && rm -rf .idea && rm -rf android.iml && rm -rf local.properties",
@@ -53,16 +64,17 @@
     "react-native": ">=0.73"
   },
   "devDependencies": {
-    "@react-native-community/eslint-config": "^3.2.0",
-    "@types/react-native": "^0.73.0",
-    "@typescript-eslint/eslint-plugin": "^5.59.7",
-    "eslint": "^8.41.0",
-    "eslint-plugin-jest": "^27.2.2",
+    "@react-native/eslint-config": "^0.80.0",
     "@types/jest": "^29.5.2",
-    "prettier": "^2.8.7",
+    "@types/react-native": "^0.73.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-prettier": "^5.5.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "^3.6.0",
     "react": "^18.2.0",
     "react-native": "^0.73.0",
     "react-native-codegen": "^0.0.12",
+    "ts-node": "^10.9.2",
     "typescript": "^5.0.2"
   },
   "repository": {

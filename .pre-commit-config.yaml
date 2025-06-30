@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.8.0
+    rev: v8.56.0
     hooks:
       - id: eslint
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -18,7 +18,7 @@ repos:
     rev: 0.50.8
     hooks:
       - id: swiftformat
-  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-    rev: v2.6.0
-    hooks:
-      - id: pretty-format-kotlin
+  #- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  #  rev: v2.6.0
+  #  hooks:
+  #    - id: pretty-format-kotlin

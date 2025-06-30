@@ -1,8 +1,8 @@
 //
 //  NamiPaywallManager.m
-//  namiReactNative
+//  RNNami
 //
-//  Copyright © 2023 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2025 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -46,7 +46,7 @@ RCT_EXTERN_METHOD(setAppSuppliedVideoDetails:(NSString *)url name:(nullable NSSt
 RCT_EXTERN_METHOD(allowUserInteraction:(BOOL *)allowed)
 
 + (BOOL)requiresMainQueueSetup {
-  return YES;
+  return NO;
 }
 
 @end

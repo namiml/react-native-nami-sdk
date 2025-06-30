@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1430"
+   LastUpgradeVersion = "1620"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      buildArchitectures = "Automatic">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -14,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1324964B29F2C3FF00234012"
+               BlueprintIdentifier = "AB3AE9C62E06E9B5009F0273"
                BuildableName = "BasicProduction.app"
                BlueprintName = "BasicProduction"
                ReferencedContainer = "container:Basic.xcodeproj">
@@ -43,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1324964B29F2C3FF00234012"
+            BlueprintIdentifier = "AB3AE9C62E06E9B5009F0273"
             BuildableName = "BasicProduction.app"
             BlueprintName = "BasicProduction"
             ReferencedContainer = "container:Basic.xcodeproj">
@@ -60,7 +61,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1324964B29F2C3FF00234012"
+            BlueprintIdentifier = "AB3AE9C62E06E9B5009F0273"
             BuildableName = "BasicProduction.app"
             BlueprintName = "BasicProduction"
             ReferencedContainer = "container:Basic.xcodeproj">

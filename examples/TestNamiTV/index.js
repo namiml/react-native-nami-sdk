@@ -23,7 +23,7 @@ const Root = () => {
   useEffect(() => {
     async function configureNami() {
       const result = await Nami.configure(configDict);
-      if(result.success){
+      if (result.success) {
         setIsConfigurationComplete(true);
 
         if (Platform.constants.Manufacturer === 'Amazon') {
@@ -33,7 +33,6 @@ const Root = () => {
 
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       return () => {};
-
     }
     configureNami();
   }, []);

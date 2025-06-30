@@ -2,14 +2,14 @@
 
 # React Native Bridge for the Nami SDK
 
-Nami ML gives you everything you need to power your paywall, streamline subscription management, and drive revenue growth through instantly deployable paywalls, precise targeting and segmentation, and enterprise-grade security and scaleability.
+Nami ML gives you everything you need to power your paywall, streamline subscription management, and drive revenue growth through instantly deployable paywalls, precise targeting and segmentation, and enterprise-grade security and scalability.
 
 Go beyond basic IAP and focus on results with:
 
-* Library of smart paywall templates to choose from, implemented natively
-* No-code paywall creator so you can launch a new paywall design instantly, without submitting an app update
-* Experimentation engine to run paywall A/B tests so you can improve your conversion rates
-* Built-in IAP & subscription management and analytics, so you don't need another solution
+- Library of smart paywall templates to choose from, implemented natively
+- No-code paywall creator so you can launch a new paywall design instantly, without submitting an app update
+- Experimentation engine to run paywall A/B tests so you can improve your conversion rates
+- Built-in IAP & subscription management and analytics, so you don't need another solution
 
 Nami is simple adopt while giving you the tools you need to improve revenue. Our free tier is generous, and gives you everything you need to get started. [Sign up for a free account](https://app.namiml.com/join/)
 
@@ -20,18 +20,18 @@ Get started by heading over to our [quick start guide](https://learn.namiml.com/
 ### Build the Bridge Locally
 
 ```
-yarn pack
+npm run prepare && npm pack
 ```
 
-This will generate a file `react-native-nami-sdk-vx.x.x.tgz` with the current version number of the bridge.   You can add this to a project by
+This will generate a file `react-native-nami-sdk-vx.x.x.tgz` with the current version number of the bridge. You can add this to a project by
 
 ```
-yarn add file:react-native-nami-sdk-vx.x.x.tgz
+npm install react-native-nami-sdk-vx.x.x.tgz
 ```
 
 ### Installing from NPM
 
-The bridge is also available as a package on NPM.  You can install it via yarn or npm
+The bridge is also available as a package on NPM. You can install it via yarn or npm
 
 ```
 npm install react-native-nami-sdk --save
