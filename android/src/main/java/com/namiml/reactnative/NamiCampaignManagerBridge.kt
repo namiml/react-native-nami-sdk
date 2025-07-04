@@ -73,14 +73,16 @@ class NamiCampaignManagerBridgeModule internal constructor(
         if (context != null) {
             val productGroups: MutableList<String> = mutableListOf()
             val customAttributes: MutableMap<String, Any> = mutableMapOf()
-            var customObject: MutableMap<String, Any?> = mutableMapOf()
+            val customObject: MutableMap<String, Any?> = mutableMapOf()
 
             if (context.hasKey("productGroups")) {
                 val groups = context.getArray("productGroups")
                 if (groups != null) {
                     for (i in 0 until groups.size()) {
                         val groupString = groups.getString(i)
-                        productGroups.add(groupString)
+                        if (groupString != null) {
+                            productGroups.add(groupString)
+                        }
                     }
                 }
                 Log.d(NAME, "productGroups $productGroups")
