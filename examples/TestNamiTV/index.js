@@ -2,40 +2,102 @@
  * @format
  */
 import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { AppRegistry } from 'react-native';
-import { Nami, NamiPaywallManager } from 'react-native-nami-sdk';
+import { Nami } from 'react-native-nami-sdk';
 import App from './App';
 import { name as appName } from './app.json';
 import { getConfigObject } from './config';
+
+import { initConnection, PurchaseError } from 'react-native-iap';
 import amazonSideloadProducts from './nami_amazon_product_details.json';
 
 const configDict = getConfigObject();
-console.log('configDict', configDict);
+console.log('Nami SDK Config:', configDict);
+
+async function initStoreConnection() {
+  try {
+    await initConnection();
+  } catch (error) {
+    if (error instanceof PurchaseError) {
+      console.log(
+        '[Store Init Error]',
+        `[${error.code}]: ${error.message}`,
+        error,
+      );
+    } else {
+      console.log('[Store Init Error]', error);
+    }
+  }
+}
 
 export const getAmazonProducts = () => {
   return JSON.stringify(amazonSideloadProducts);
 };
 
 const Root = () => {
-  const [isConfigurationComplete, setIsConfigurationComplete] = useState();
+  const [isConfigurationComplete, setIsConfigurationComplete] = useState(false);
+  const [sdkError, setSdkError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     async function configureNami() {
-      const result = await Nami.configure(configDict);
-      if (result.success) {
-        setIsConfigurationComplete(true);
+      try {
+        const alreadyConfigured = await Nami.sdkConfigured();
+
+        if (alreadyConfigured) {
+          console.log('Nami SDK already configured. Skipping setup.');
+          setIsConfigurationComplete(true);
+        } else {
+          const success = await Nami.configure(configDict);
+
+          if (success) {
+            console.log('Nami configured successfully');
+            setIsConfigurationComplete(true);
+          } else {
+            console.warn('Nami configuration returned success: false');
+            setSdkError('Nami SDK configuration returned false');
+          }
+        }
+      } catch (e) {
+        console.error('Nami configuration error:', e);
+        setSdkError('Exception during Nami SDK configuration');
+      } finally {
+        setIsLoading(false);
 
         if (Platform.constants.Manufacturer === 'Amazon') {
-          NamiPaywallManager.setProductDetails(getAmazonProducts(), true);
-        }
+          -          NamiPaywallManager.setProductDetails(getAmazonProducts(), true);
+        } else {
+          await initStoreConnection();
+        };
       }
-
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      return () => {};
     }
     configureNami();
   }, []);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        {/* Loading spinner or message */}
+        <Text>Starting Nami SDK...</Text>
+      </View>
+    );
+  }
+
+  if (sdkError) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
+        <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 12 }}>
+          Nami SDK Error
+        </Text>
+        <Text>{sdkError}</Text>
+        <Text style={{ marginTop: 12 }}>
+          Check logs or the configuration object your are passing into
+          Nami.configure.
+        </Text>
+      </View>
+    );
+  }
 
   return isConfigurationComplete ? <App /> : <View />;
 };

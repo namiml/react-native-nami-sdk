@@ -1,14 +1,35 @@
-import React, { useEffect } from 'react';
-import { Platform, Linking } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Linking, Platform, EmitterSubscription, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NamiPaywallManager } from 'react-native-nami-sdk';
+import { NamiPaywallManager, NamiSKU } from 'react-native-nami-sdk';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
 import { handleDeepLink } from './services/deeplinking';
+import { useNamiFlowListener } from './hooks/useNamiFlowListener';
+import { LogBox } from 'react-native';
+
+import {
+  finishTransaction,
+  getProducts,
+  getSubscriptions,
+  Product,
+  ProductPurchase,
+  PurchaseError,
+  purchaseErrorListener,
+  purchaseUpdatedListener,
+  requestPurchase,
+  requestSubscription,
+  Subscription,
+  SubscriptionPurchase,
+} from 'react-native-iap';
+
+LogBox.ignoreLogs([
+  'Billing is unavailable',
+]);
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -21,6 +42,7 @@ type ViewerTabNavigatorParams = {
   Campaign: undefined;
   Profile: undefined;
   Entitlements: undefined;
+  CustomerManager: undefined;
 };
 
 export interface ViewerTabProps<
@@ -32,79 +54,190 @@ export interface ViewerTabProps<
 const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
 
 const App = () => {
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [namiSku, setNamiSku] = useState<NamiSKU>(undefined);
+
+  useNamiFlowListener();
+
   useEffect(() => {
-    Linking.addEventListener('url', handleDeepLink);
+    const subscription = Linking.addListener('url', handleDeepLink);
+
     Linking.getInitialURL().then(url => {
       if (url) {
         handleDeepLink({ url });
       }
     });
+
     return () => {
-      Linking.removeAllListeners('url');
+      subscription.remove();
     };
   }, []);
 
   useEffect(() => {
-    const deeplinkSubscription =
-      NamiPaywallManager.registerDeeplinkActionHandler(async url => {
-        await NamiPaywallManager.dismiss();
-        if (await Linking.canOpenURL(url)) {
-          Linking.openURL(url);
+    async function startBuySubscription(skuId: string) {
+      await requestSubscription({ sku: skuId });
+    }
+
+    async function startBuyOneTime(skuId: string) {
+      await requestPurchase({ sku: skuId });
+    }
+
+    const purchaseUpdate: EmitterSubscription = purchaseUpdatedListener(
+      async (purchase: ProductPurchase | SubscriptionPurchase) => {
+        const receipt = purchase.transactionReceipt
+          ? purchase.transactionReceipt
+          : (purchase as unknown as {originalJson: string}).originalJson;
+
+        if (receipt) {
+          try {
+            await finishTransaction({ purchase });
+            let price = '';
+            let currency = '';
+
+            console.log(subscriptions);
+            console.log(JSON.stringify(purchase));
+
+            if (purchase as SubscriptionPurchase) {
+              const subscriptionProduct: Subscription = subscriptions[0];
+              price = subscriptionProduct.price;
+              currency = subscriptionProduct.currency;
+            } else {
+              const oneTimeProduct: Product = products[0];
+              price = oneTimeProduct.price;
+              currency = oneTimeProduct.currency;
+            }
+
+            if (Platform.OS === 'ios' || Platform.isTV) {
+              console.log('Preparing to call buySkuCompleteApple');
+
+              console.log(namiSku);
+              console.log(purchase.transactionId);
+              console.log(purchase.originalTransactionIdentifierIOS);
+
+              NamiPaywallManager.buySkuComplete({
+                product: namiSku,
+                transactionID: purchase.transactionId ?? '',
+                originalTransactionID:
+                  purchase.originalTransactionIdentifierIOS ??
+                  purchase.transactionId ??
+                  '',
+                price: price,
+                currencyCode: currency,
+              });
+            } else if (Platform.OS === 'android') {
+              if (Platform.constants.Manufacturer === 'Amazon') {
+                console.log('Preparing to call buySkuCompleteAmazon');
+                NamiPaywallManager.buySkuComplete({
+                  product: namiSku,
+                  receiptId: purchase.transactionId ?? '',
+                  localizedPrice: price,
+                  userId: purchase.userIdAmazon ?? '',
+                  marketplace: purchase.userMarketplaceAmazon ?? '',
+                });
+              } else {
+                console.log('Preparing to call buySkuCompleteGooglePlay');
+                NamiPaywallManager.buySkuComplete({
+                  product: namiSku,
+                  purchaseToken: purchase.purchaseToken ?? '',
+                  orderId: purchase.transactionId ?? '',
+                });
+              }
+            }
+          } catch (error) {
+            console.log({ message: 'finishTransaction', error });
+          }
         }
-      });
-    const buySkuSubscription = NamiPaywallManager.registerBuySkuHandler(sku => {
-      console.log(
-        'buy sku handler - need to start purchase flow for sku:',
-        sku.skuId,
-      );
+      },
+    );
 
-      NamiPaywallManager.dismiss();
+    const purchaseError: EmitterSubscription = purchaseErrorListener(
+      (error: PurchaseError) => {
+        console.log('purchase error', JSON.stringify(error));
+        NamiPaywallManager.buySkuCancel();
+      },
+    );
 
-      if (Platform.OS === 'ios') {
-        NamiPaywallManager.buySkuCompleteApple({
-          product: sku,
-          transactionID: '12345',
-          originalTransactionID: '12345',
-          price: '120',
-          currencyCode: 'USD',
-        });
-      } else if (Platform.OS === 'android') {
-        if (Platform.constants.Manufacturer === 'Amazon') {
-          NamiPaywallManager.buySkuCompleteAmazon({
-            product: sku,
-            receiptId: '12345',
-            localizedPrice: '120',
-            userId: '12345',
-            marketplace: 'US',
-          });
+    const buySkuListener = NamiPaywallManager.registerBuySkuHandler(
+      async (sku: NamiSKU) => {
+        console.log(
+          'buy sku handler - need to start purchase flow for sku:',
+          sku.skuId,
+          sku.promoId || 'no promoId',
+          sku.promoToken || 'no promoToken',
+        );
+
+        setNamiSku(sku);
+
+        if (sku.type == 'subscription') {
+          try {
+            const subscriptions = await getSubscriptions({
+              skus: [sku.skuId],
+            });
+            console.log(JSON.stringify(subscriptions));
+            setSubscriptions(subscriptions);
+          } catch (error) {
+            console.log({ message: 'getSubscriptions', error });
+          }
+          startBuySubscription(sku.skuId);
         } else {
-          NamiPaywallManager.buySkuCompleteGooglePlay({
-            product: sku,
-            purchaseToken:
-              'jolbnkpmojnpnjecgmphbmkc.AO-J1OznE4AIzyUvKFe1RSVkxw4KEtv0WfyL_tkzozOqnlSvIPsyQJBphCN80gwIMaex4EMII95rFCZhMCbVPZDc-y_VVhQU5Ddua1dLn8zV7ms_tdwoDmE',
-            orderId: 'GPA.3317-0284-9993-42221',
-          });
+          try {
+            const products = await getProducts({
+              skus: [sku.skuId],
+            });
+            console.log(JSON.stringify(products));
+            setProducts(products);
+          } catch (error) {
+            console.log({ message: 'getProducts', error });
+          }
+          startBuyOneTime(sku.skuId);
         }
-      }
-    });
+      },
+    );
+
     return () => {
-      deeplinkSubscription();
-      buySkuSubscription();
+      buySkuListener;
+      purchaseUpdate;
+      purchaseError;
     };
-  }, []);
+  }, [subscriptions, products, namiSku]);
 
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
         <Tab.Screen
           name="Campaign"
-          component={CampaignScreen} />
+          component={CampaignScreen}
+          options={{
+            tabBarButton: (props) => (
+              <TouchableOpacity
+                {...props}
+                testID="campaign_tab" />
+            ),
+          }}
+        />
         <Tab.Screen
           name="Profile"
-          component={ProfileScreen} />
+          component={ProfileScreen}
+          options={{
+            tabBarButton: (props) => (
+              <TouchableOpacity
+                {...props}
+                testID="profile_tab" />
+            ),
+          }}
+        />
         <Tab.Screen
           name="Entitlements"
-          component={EntitlementsScreen} />
+          component={EntitlementsScreen}
+          options={{
+            tabBarButton: (props) => (
+              <TouchableOpacity
+                {...props}
+                testID="entitlements_tab" />
+            ),
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
