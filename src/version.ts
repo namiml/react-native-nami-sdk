@@ -2,4 +2,4 @@
  * Auto-generated file. Do not edit manually.
  * React Native Nami SDK version.
  */
-export const NAMI_REACT_NATIVE_VERSION = '3.3.0-rc.0';
+export const NAMI_REACT_NATIVE_VERSION = '3.3.0';
