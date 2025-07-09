@@ -1,175 +1,120 @@
 import {
+  TurboModuleRegistry,
   NativeModules,
   NativeEventEmitter,
-  EmitterSubscription,
 } from 'react-native';
-import {
-  NamiPurchaseSuccessAmazon,
+import type { Spec } from '../specs/NativeNamiPaywallManager';
+import type {
+  NamiPurchaseDetails,
   NamiPurchaseSuccessApple,
+  NamiPurchaseSuccessAmazon,
   NamiPurchaseSuccessGooglePlay,
   NamiSKU,
-} from './types';
+} from '../src/types';
+const RNNamiPaywallManager: Spec =
+  TurboModuleRegistry.getEnforcing?.<Spec>('RNNamiPaywallManager') ??
+  NativeModules.RNNamiPaywallManager;
+
+const emitter = new NativeEventEmitter(NativeModules.RNNamiPaywallManager);
 
 export enum NamiPaywallManagerEvents {
-  RegisterBuySKU = 'RegisterBuySKU',
-  PaywallCloseRequested = 'PaywallCloseRequested',
-  PaywallSignInRequested = 'PaywallSignInRequested',
-  PaywallRestoreRequested = 'PaywallRestoreRequested',
-  PaywallDeeplinkAction = 'PaywallDeeplinkAction',
+  BuySku = 'RegisterBuySKU',
+  Close = 'PaywallCloseRequested',
+  SignIn = 'PaywallSignInRequested',
+  Restore = 'PaywallRestoreRequested',
+  DeeplinkAction = 'PaywallDeeplinkAction',
 }
 
-export enum ServicesEnum {
-  Amazon = 'Amazon',
-  GooglePlay = 'GooglePlay',
-}
+export const NamiPaywallManager = {
+  emitter,
 
-export interface INamiPaywallManager {
-  paywallEmitter: NativeEventEmitter;
-  buySkuCompleteApple: (purchaseSuccess: NamiPurchaseSuccessApple) => void;
-  buySkuCompleteAmazon: (purchaseSuccess: NamiPurchaseSuccessAmazon) => void;
-  buySkuCompleteGooglePlay: (
-    purchaseSuccess: NamiPurchaseSuccessGooglePlay,
-  ) => void;
-  buySkuCancel: () => void;
-  registerBuySkuHandler: (
-    callback: (sku: NamiSKU) => void,
-  ) => EmitterSubscription['remove'];
-  registerCloseHandler: (callback: () => void) => EmitterSubscription['remove'];
-  registerSignInHandler: (
-    callback: () => void,
-  ) => EmitterSubscription['remove'];
-  registerRestoreHandler: (
-    callback: () => void,
-  ) => EmitterSubscription['remove'];
+  // New unified purchase success handler
+  buySkuComplete: (purchase: NamiPurchaseDetails): void => {
+    RNNamiPaywallManager.buySkuComplete(purchase);
+  },
+
+  // Compatibility shims
+  buySkuCompleteApple: (purchase: NamiPurchaseSuccessApple): void => {
+    RNNamiPaywallManager.buySkuCompleteApple(purchase);
+  },
+
+  buySkuCompleteAmazon: (purchase: NamiPurchaseSuccessAmazon): void => {
+    RNNamiPaywallManager.buySkuCompleteAmazon(purchase);
+  },
+
+  buySkuCompleteGooglePlay: (purchase: NamiPurchaseSuccessGooglePlay): void => {
+    RNNamiPaywallManager.buySkuCompleteGooglePlay(purchase);
+  },
+
+  registerBuySkuHandler: (callback: (sku: NamiSKU) => void): (() => void) => {
+    const sub = emitter.addListener(NamiPaywallManagerEvents.BuySku, callback);
+    RNNamiPaywallManager.registerBuySkuHandler?.();
+    return () => sub.remove();
+  },
+
+  registerCloseHandler: (callback: () => void): (() => void) => {
+    const sub = emitter.addListener(NamiPaywallManagerEvents.Close, callback);
+    RNNamiPaywallManager.registerCloseHandler?.();
+    return () => sub.remove();
+  },
+
+  registerSignInHandler: (callback: () => void): (() => void) => {
+    const sub = emitter.addListener(NamiPaywallManagerEvents.SignIn, callback);
+    RNNamiPaywallManager.registerSignInHandler?.();
+    return () => sub.remove();
+  },
+
+  registerRestoreHandler: (callback: () => void): (() => void) => {
+    const sub = emitter.addListener(NamiPaywallManagerEvents.Restore, callback);
+    RNNamiPaywallManager.registerRestoreHandler?.();
+    return () => sub.remove();
+  },
+
   registerDeeplinkActionHandler: (
     callback: (url: string) => void,
-  ) => EmitterSubscription['remove'];
-  dismiss: () => Promise<boolean>;
-  show: () => void;
-  hide: () => void;
-  isHidden: () => Promise<boolean>;
-  isPaywallOpen: () => Promise<boolean>;
-  setProductDetails: (productDetails: string, allowOffers: boolean) => void;
-  setAppSuppliedVideoDetails: (url: string, name?: string) => void;
-  allowUserInteraction: (allowed: boolean) => void;
-}
+  ): (() => void) => {
+    const sub = emitter.addListener(
+      NamiPaywallManagerEvents.DeeplinkAction,
+      callback,
+    );
+    RNNamiPaywallManager.registerDeeplinkActionHandler?.();
+    return () => sub.remove();
+  },
 
-const { NamiPaywallManagerBridge, RNNamiPaywallManager } = NativeModules;
+  dismiss: async (): Promise<boolean> => {
+    await RNNamiPaywallManager.dismiss();
+    return true;
+  },
 
-export const NamiPaywallManager: INamiPaywallManager = {
-  paywallEmitter: new NativeEventEmitter(RNNamiPaywallManager),
-  ...RNNamiPaywallManager,
-  ...NamiPaywallManagerBridge,
-  buySkuCompleteApple: (purchaseSuccess: NamiPurchaseSuccessApple) => {
-    RNNamiPaywallManager.buySkuComplete(purchaseSuccess);
-  },
-  buySkuCompleteAmazon: (purchaseSuccess: NamiPurchaseSuccessAmazon) => {
-    RNNamiPaywallManager.buySkuComplete(purchaseSuccess, ServicesEnum.Amazon);
-  },
-  buySkuCompleteGooglePlay: (
-    purchaseSuccess: NamiPurchaseSuccessGooglePlay,
-  ) => {
-    RNNamiPaywallManager.buySkuComplete(
-      purchaseSuccess,
-      ServicesEnum.GooglePlay,
-    );
-  },
-  buySkuCancel: () => {
-    RNNamiPaywallManager.buySkuCancel();
-  },
-  registerBuySkuHandler: (callback: (sku: NamiSKU) => void) => {
-    let subscription = NamiPaywallManager.paywallEmitter.addListener(
-      NamiPaywallManagerEvents.RegisterBuySKU,
-      sku => {
-        callback(sku);
-      },
-    );
-    RNNamiPaywallManager.registerBuySkuHandler();
-    return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-    };
-  },
-  registerCloseHandler: (callback: (body: any) => void) => {
-    let subscription = NamiPaywallManager.paywallEmitter.addListener(
-      NamiPaywallManagerEvents.PaywallCloseRequested,
-      body => {
-        callback(body);
-      },
-    );
-    RNNamiPaywallManager.registerCloseHandler();
-    return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-    };
-  },
-  registerSignInHandler(callback) {
-    let subscription = NamiPaywallManager.paywallEmitter.addListener(
-      NamiPaywallManagerEvents.PaywallSignInRequested,
-      () => {
-        callback();
-      },
-    );
-    RNNamiPaywallManager.registerSignInHandler();
-
-    return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-    };
-  },
-  registerRestoreHandler(callback) {
-    let subscription = NamiPaywallManager.paywallEmitter.addListener(
-      NamiPaywallManagerEvents.PaywallRestoreRequested,
-      () => {
-        callback();
-      },
-    );
-    RNNamiPaywallManager.registerRestoreHandler();
-    return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-    };
-  },
-  registerDeeplinkActionHandler: (callback: (url: string) => void) => {
-    let subscription = NamiPaywallManager.paywallEmitter.addListener(
-      NamiPaywallManagerEvents.PaywallDeeplinkAction,
-      url => {
-        callback(url);
-      },
-    );
-    RNNamiPaywallManager.registerDeeplinkActionHandler();
-    return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-    };
-  },
-  dismiss: () => {
-    return RNNamiPaywallManager.dismiss();
-  },
-  show: () => {
+  show: (): void => {
     RNNamiPaywallManager.show();
   },
-  hide: () => {
+
+  hide: (): void => {
     RNNamiPaywallManager.hide();
   },
-  isHidden: () => {
+
+  isHidden: async (): Promise<boolean> => {
     return RNNamiPaywallManager.isHidden();
   },
-  isPaywallOpen: () => {
+
+  isPaywallOpen: async (): Promise<boolean> => {
     return RNNamiPaywallManager.isPaywallOpen();
   },
-  setProductDetails: (productDetails: string, allowOffers: boolean) => {
+
+  buySkuCancel: (): void => {
+    RNNamiPaywallManager.buySkuCancel();
+  },
+
+  setProductDetails: (productDetails: string, allowOffers?: boolean): void => {
     RNNamiPaywallManager.setProductDetails(productDetails, allowOffers);
   },
-  setAppSuppliedVideoDetails: (url: string, name?: string) => {
+
+  setAppSuppliedVideoDetails: (url: string, name?: string): void => {
     RNNamiPaywallManager.setAppSuppliedVideoDetails(url, name);
   },
-  allowUserInteraction: (allowed: boolean) => {
+
+  allowUserInteraction: (allowed: boolean): void => {
     RNNamiPaywallManager.allowUserInteraction(allowed);
   },
 };

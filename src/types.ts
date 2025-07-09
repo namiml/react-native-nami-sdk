@@ -1,6 +1,5 @@
 export type NamiConfiguration = {
-  'appPlatformID-apple': string;
-  'appPlatformID-android': string;
+  appPlatformID: string;
   logLevel: string;
   namiCommands?: string[];
   namiLanguageCode?: NamiLanguageCodes;
@@ -147,9 +146,9 @@ export type AppleProduct = {
   priceLanguage: string;
 };
 
-export type GoogleProduct = {};
+export type GoogleProduct = Record<string, never>;
 
-export type AmazonProduct = {};
+export type AmazonProduct = Record<string, never>;
 
 // NamiCampaignManager
 export type NamiCampaign = {
@@ -206,7 +205,7 @@ export type PaywallLaunchContext = {
   };
   // Custom object used as data source for advanced paywall components
   customObject?: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
 };
 
@@ -239,13 +238,25 @@ export type NamiEntitlement = {
   activePurchases: NamiPurchase[];
   desc: string;
   name: string;
-  namiId: string;
   purchasedSkus: NamiSKU[];
   referenceId: string;
   relatedSkus: NamiSKU[];
 };
 
-// NamiPaywallManager
+export type NamiPurchaseDetails = {
+  product: NamiSKU;
+  transactionID?: string;
+  originalTransactionID?: string;
+  orderId?: string;
+  purchaseToken?: string;
+  receiptId?: string;
+  localizedPrice?: string;
+  price?: string;
+  currencyCode?: string;
+  userId?: string;
+  marketplace?: string;
+};
+
 export type NamiPurchaseSuccessApple = {
   product: NamiSKU;
   transactionID: string;
@@ -309,6 +320,16 @@ export type NamiPurchase = {
   purchaseSource?: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
 };
 
+export type NamiPurchaseFromBridge = {
+  sku?: NamiSKU;
+  skuId: string;
+  transactionIdentifier?: string;
+  purchaseToken?: string;
+  expires?: number;
+  purchaseInitiatedTimestamp: number;
+  purchaseSource?: 'CAMPAIGN' | 'MARKETPLACE' | 'UNKNOWN';
+};
+
 export type NamiPurchasesState =
   | 'pending'
   | 'purchased'
@@ -356,4 +377,15 @@ export type NamiPaywallEventVideoMetadata = {
   autoplayVideo: boolean;
   contentTimecode?: number;
   contentDuration?: number;
+};
+
+export type NamiFlowHandoffPayload = {
+  handoffTag: string;
+  handoffData?: Record<string, unknown>;
+};
+
+export type NamiAccountStateEvent = {
+  action: AccountStateAction;
+  success: boolean;
+  error?: number;
 };

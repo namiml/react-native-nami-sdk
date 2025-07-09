@@ -1,26 +1,21 @@
 import React, { FC, useEffect, useState, useLayoutEffect } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  FlatList,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, FlatList, View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { NamiEntitlementManager, NamiEntitlement } from 'react-native-nami-sdk';
 
 import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-type EntitlementsScreenProps = ViewerTabProps<'Entitlements'>
+type EntitlementsScreenProps = ViewerTabProps<'Entitlements'>;
 
 const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
   const [entitlements, setEntitlements] = useState<NamiEntitlement[]>([]);
 
   const getAllEntitlements = async () => {
     const allEntitlements = await NamiEntitlementManager.active();
-    console.log('allEntitlements', allEntitlements);
+    console.log('activeEntitlements', allEntitlements);
     setEntitlements(allEntitlements);
   };
 
@@ -32,7 +27,7 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
 
   const onRefreshPress = () => {
     NamiEntitlementManager.refresh(newEntitlements => {
-      console.log('newEntitlements', newEntitlements);
+      console.log('refreshedEntitlements', newEntitlements);
     });
   };
 
@@ -60,7 +55,8 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
         return (
           <TouchableOpacity
             style={styles.headerButton}
-            onPress={onRefreshPress}>
+            onPress={onRefreshPress}
+          >
             <Text
               testID="refresh_entitlements"
               style={styles.headerButtonText}>
@@ -73,7 +69,8 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
         return (
           <TouchableOpacity
             style={styles.headerLeftButton}
-            onPress={onClearPress}>
+            onPress={onClearPress}
+          >
             <Text
               testID="clear_entitlements"
               style={styles.headerButtonText}>
@@ -85,20 +82,24 @@ const EntitlementsScreen: FC<EntitlementsScreenProps> = ({ navigation }) => {
     });
   }, [navigation]);
 
-  const renderCampaigns = ({ item }: { item: NamiEntitlement }) => {
+  const renderCampaigns = ({ item }: {item: NamiEntitlement}) => {
     return (
       <TouchableOpacity
         onPress={() => {
           onItemPress(item.referenceId);
         }}
-        style={styles.item}>
+        style={styles.item}
+      >
         <Text style={styles.itemText}>{item.referenceId}</Text>
       </TouchableOpacity>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}
+      testID="entitlements_screen">
       <Text
         testID="entitlements_title"
         style={styles.title}>

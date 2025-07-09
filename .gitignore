@@ -1,6 +1,6 @@
-# OSX
-#
 .DS_Store
+
+patches/
 
 # node.js
 #
@@ -8,6 +8,7 @@ node_modules/
 npm-debug.log
 yarn-error.log
 yarn.lock
+package-lock.json
 .npmrc
 react-native-nami-sdk-*.tgz
 
@@ -31,6 +32,7 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 Pods/
+Gemfile.lock
 
 # Android/IntelliJ
 #
@@ -49,3 +51,16 @@ buck-out/
 *.keystore
 IDEWorkspaceChecks.plist
 Podfile.lock
+
+examples/Basic/android/app/src/main/assets/
+examples/Basic/android-test.sh
+examples/Basic/android/app/.cxx/
+examples/Basic/artifacts/
+*.orig
+examples/Basic/ios/.xcode.env.local
+examples/TestNamiTV/ios/.xcode.env.local
+
+examples/TestNamiTV/android/app/src/main/assets/
+examples/TestNamiTV/android-test.sh
+examples/TestNamiTV/android/app/.cxx/
+examples/TestNamiTV/artifacts/

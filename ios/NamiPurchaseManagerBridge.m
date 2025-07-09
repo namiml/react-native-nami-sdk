@@ -1,7 +1,8 @@
 //
 //  NamiPurchaseManagerBridge.m
+//  RNNami
 //
-//  Copyright © 2019 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2025 Nami ML Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -31,7 +32,7 @@ RCT_EXTERN_METHOD(presentCodeRedemptionSheet)
 RCT_EXTERN_METHOD(restorePurchases)
 
 + (BOOL)requiresMainQueueSetup {
-  return YES;
+  return NO;
 }
 
 @end

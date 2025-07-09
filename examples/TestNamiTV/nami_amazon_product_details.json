@@ -1,101 +1,101 @@
 {
-    "products": [
-      {
-        "originalJson": {
-          "sku": "poc_premium_annual_testnami_stg",
-          "productType": "SUBSCRIPTION",
-          "description": "With Nami+, stay connected with premium content.",
-          "price": "$99.99",
-          "smallIconUrl": "",
-          "title": "POC Premium Annual",
-          "coinsRewardsAmount": 0,
-          "subscriptionPeriod": "Annual",
-          "freeTrialPeriod": "7 days",
-          "promotions": [
-            {
-              "promotionType": "Introductory",
-              "promotionPlans": [
-                {
-                  "promotionPricePeriod": "SemiAnnual",
-                  "promotionPrice": "$39.99",
-                  "promotionPriceCycles": 1
-                }
-              ]
-            }
-          ]
-        },
-        "originalPrice": "$99.99",
-        "iconUrl": "",
-        "title": "POC Premium Annual",
-        "localizedPrice": "$99.99",
+  "products": [
+    {
+      "originalJson": {
+        "sku": "poc_premium_annual_testnami_stg",
+        "productType": "SUBSCRIPTION",
+        "description": "With Nami+, stay connected with premium content.",
         "price": "$99.99",
-        "type": "subs",
-        "description": "With Nami+, stay connected with premium content.",
-        "productId": "poc_premium_annual_testnami_stg",
-        "currency": "USD"
+        "smallIconUrl": "",
+        "title": "POC Premium Annual",
+        "coinsRewardsAmount": 0,
+        "subscriptionPeriod": "Annual",
+        "freeTrialPeriod": "7 days",
+        "promotions": [
+          {
+            "promotionType": "Introductory",
+            "promotionPlans": [
+              {
+                "promotionPricePeriod": "SemiAnnual",
+                "promotionPrice": "$39.99",
+                "promotionPriceCycles": 1
+              }
+            ]
+          }
+        ]
       },
-      {
-        "originalJson": {
-          "sku": "poc_premium_monthly_testnami_stg",
-          "productType": "SUBSCRIPTION",
-          "description": "With Nami+, stay connected with premium content.",
-          "price": "$14.99",
-          "smallIconUrl": "",
-          "title": "POC Premium Monthly",
-          "coinsRewardsAmount": 0,
-          "subscriptionPeriod": "Monthly"
-        },
-        "originalPrice": "$14.99",
-        "iconUrl": "",
-        "title": "POC Premium Monthly",
-        "localizedPrice": "$14.99",
+      "originalPrice": "$99.99",
+      "iconUrl": "",
+      "title": "POC Premium Annual",
+      "localizedPrice": "$99.99",
+      "price": "$99.99",
+      "type": "subs",
+      "description": "With Nami+, stay connected with premium content.",
+      "productId": "poc_premium_annual_testnami_stg",
+      "currency": "USD"
+    },
+    {
+      "originalJson": {
+        "sku": "poc_premium_monthly_testnami_stg",
+        "productType": "SUBSCRIPTION",
+        "description": "With Nami+, stay connected with premium content.",
         "price": "$14.99",
-        "type": "subs",
-        "description": "With Nami+, stay connected with premium content.",
-        "productId": "poc_premium_monthly_testnami_stg",
-        "currency": "USD"
+        "smallIconUrl": "",
+        "title": "POC Premium Monthly",
+        "coinsRewardsAmount": 0,
+        "subscriptionPeriod": "Monthly"
       },
-      {
-        "originalJson": {
-          "sku": "poc_base_annual_testnami_stg",
-          "productType": "SUBSCRIPTION",
-          "description": "With Nami+, stay connected with premium content.",
-          "price": "$49.99",
-          "smallIconUrl": "",
-          "title": "POC Base Annual",
-          "coinsRewardsAmount": 0,
-          "subscriptionPeriod": "Annual"
-        },
-        "originalPrice": "$49.99",
-        "iconUrl": "",
-        "title": "POC Base Annual",
-        "localizedPrice": "$49.99",
+      "originalPrice": "$14.99",
+      "iconUrl": "",
+      "title": "POC Premium Monthly",
+      "localizedPrice": "$14.99",
+      "price": "$14.99",
+      "type": "subs",
+      "description": "With Nami+, stay connected with premium content.",
+      "productId": "poc_premium_monthly_testnami_stg",
+      "currency": "USD"
+    },
+    {
+      "originalJson": {
+        "sku": "poc_base_annual_testnami_stg",
+        "productType": "SUBSCRIPTION",
+        "description": "With Nami+, stay connected with premium content.",
         "price": "$49.99",
-        "type": "subs",
-        "description": "With Nami+, stay connected with premium content.",
-        "productId": "poc_base_annual_testnami_stg",
-        "currency": "USD"
+        "smallIconUrl": "",
+        "title": "POC Base Annual",
+        "coinsRewardsAmount": 0,
+        "subscriptionPeriod": "Annual"
       },
-      {
-        "originalJson": {
-          "sku": "poc_base_monthly_testnami_stg",
-          "title": "POC Base Monthly",
-          "productType": "SUBSCRIPTION",
-          "description": "With Nami+, stay connected with premium content.",
-          "price": "$6.99",
-          "smallIconUrl": "",
-          "coinsRewardsAmount": 0,
-          "subscriptionPeriod": "Monthly"
-        },
-        "originalPrice": "$6.99",
-        "iconUrl": "",
+      "originalPrice": "$49.99",
+      "iconUrl": "",
+      "title": "POC Base Annual",
+      "localizedPrice": "$49.99",
+      "price": "$49.99",
+      "type": "subs",
+      "description": "With Nami+, stay connected with premium content.",
+      "productId": "poc_base_annual_testnami_stg",
+      "currency": "USD"
+    },
+    {
+      "originalJson": {
+        "sku": "poc_base_monthly_testnami_stg",
         "title": "POC Base Monthly",
-        "localizedPrice": "$6.99",
-        "price": "$6.99",
-        "type": "subs",
+        "productType": "SUBSCRIPTION",
         "description": "With Nami+, stay connected with premium content.",
-        "productId": "poc_base_monthly_testnami_stg",
-        "currency": "USD"
-      }
-    ]
-  }
+        "price": "$6.99",
+        "smallIconUrl": "",
+        "coinsRewardsAmount": 0,
+        "subscriptionPeriod": "Monthly"
+      },
+      "originalPrice": "$6.99",
+      "iconUrl": "",
+      "title": "POC Base Monthly",
+      "localizedPrice": "$6.99",
+      "price": "$6.99",
+      "type": "subs",
+      "description": "With Nami+, stay connected with premium content.",
+      "productId": "poc_base_monthly_testnami_stg",
+      "currency": "USD"
+    }
+  ]
+}

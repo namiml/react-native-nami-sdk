@@ -5,66 +5,64 @@ import React, {
   useLayoutEffect,
   useCallback,
 } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
-import {
-  NamiCustomerManager,
-  CustomerJourneyState,
-} from 'react-native-nami-sdk';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NamiCustomerManager, CustomerJourneyState } from 'react-native-nami-sdk';
 import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
 interface DotConfig {
-  id: string,
-  property: keyof CustomerJourneyState,
-  label: string
+  id: string;
+  property: keyof CustomerJourneyState;
+  label: string;
 }
 
 const DOT_CONFIGS: DotConfig[] = [
   {
     id: 'trial_period_dot',
     property: 'inTrialPeriod',
-    label: 'In Trial Period'
+    label: 'In Trial Period',
   },
   {
     id: 'offer_period_dot',
     property: 'inIntroOfferPeriod',
-    label: 'In Intro Offer Period'
+    label: 'In Intro Offer Period',
   },
   {
     id: 'cancelled_dot',
     property: 'isCancelled',
-    label: 'Has Cancelled'
+    label: 'Has Cancelled',
   },
   {
     id: 'subscriber_dot',
     property: 'formerSubscriber',
-    label: 'Former Subscriber'
+    label: 'Former Subscriber',
   },
   {
     id: 'grace_period_dot',
     property: 'inGracePeriod',
-    label: 'In Grace Period'
+    label: 'In Grace Period',
   },
   {
     id: 'account_hold_dot',
     property: 'inAccountHold',
-    label: 'In Account Hold'
+    label: 'In Account Hold',
   },
   {
     id: 'pause_dot',
     property: 'inPause',
-    label: 'In Pause'
+    label: 'In Pause',
   },
 ];
 
-const Dot = ({ isActive = false, testId } : { isActive?: boolean, testId?: string }) => (
+const Dot = ({
+  isActive = false,
+  testId,
+}: {
+  isActive?: boolean;
+  testId?: string;
+}) => (
   <View
     testID={testId}
     accessibilityValue={{ text: `${isActive}` }}
@@ -72,19 +70,31 @@ const Dot = ({ isActive = false, testId } : { isActive?: boolean, testId?: strin
   />
 );
 
-type ProfileScreenProps = ViewerTabProps<'Profile'>
+type ProfileScreenProps = ViewerTabProps<'Profile'>;
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
-  const [journeyState, setJourneyState] = useState<CustomerJourneyState | undefined>(undefined);
+  const [journeyState, setJourneyState] = useState<
+    CustomerJourneyState | undefined
+  >(undefined);
   const [isUserLogin, setIsUserLogin] = useState<boolean>(false);
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
+
+  const defaultJourneyState: CustomerJourneyState = {
+    inTrialPeriod: false,
+    inIntroOfferPeriod: false,
+    isCancelled: false,
+    formerSubscriber: false,
+    inGracePeriod: false,
+    inAccountHold: false,
+    inPause: false,
+  };
 
   const checkIsLoggedIn = useCallback(() => {
     // workaround for tests purposes
     NamiCustomerManager.isLoggedIn().then(() =>
       setTimeout(() => {
-        NamiCustomerManager.isLoggedIn().then((isLogin) => {
+        NamiCustomerManager.isLoggedIn().then(isLogin => {
           setIsUserLogin(isLogin);
         });
       }, 500),
@@ -101,20 +111,21 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     checkIsLoggedIn();
   }, [checkIsLoggedIn]);
 
+
   const getJourneyState = () => {
-    NamiCustomerManager.journeyState().then((myJourneyState) => {
+    NamiCustomerManager.journeyState().then(myJourneyState => {
       console.log('myJourneyState', myJourneyState);
-      setJourneyState(myJourneyState);
+      setJourneyState(myJourneyState ?? defaultJourneyState);
     });
   };
 
   const checkId = useCallback(() => {
     if (isUserLogin) {
-      NamiCustomerManager.loggedInId().then((loggedId) => {
+      NamiCustomerManager.loggedInId().then(loggedId => {
         setExternalId(loggedId);
       });
     } else {
-      NamiCustomerManager.deviceId().then((deviceId) => {
+      NamiCustomerManager.deviceId().then(deviceId => {
         setDisplayedDeviceId(deviceId);
       });
     }
@@ -169,7 +180,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           <TouchableOpacity
             testID="login_btn"
             style={styles.headerButton}
-            onPress={isUserLogin ? onLogoutPress : onLoginPress}>
+            onPress={isUserLogin ? onLogoutPress : onLoginPress}
+          >
             <Text
               testID="login_btn_text"
               style={styles.headerButtonText}>
@@ -182,7 +194,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }, [navigation, isUserLogin, onLogoutPress, onLoginPress]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}
+      testID="profile_screen">
       <Text
         testID="profile_title"
         style={styles.title}>

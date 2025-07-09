@@ -1,62 +1,61 @@
+import type { Spec } from '../specs/NativeNamiCampaignManager';
 import {
+  TurboModuleRegistry,
   NativeModules,
   NativeEventEmitter,
-  EmitterSubscription,
 } from 'react-native';
-import {
-  LaunchCampaignError,
-  NamiCampaign,
-  NamiPaywallActionHandler,
+import type {
   NamiPaywallEvent,
   PaywallLaunchContext,
+  NamiCampaign,
 } from './types';
+import { NamiPaywallAction } from './types';
 
-export const { RNNamiCampaignManager } = NativeModules;
+const RNNamiCampaignManager: Spec =
+  TurboModuleRegistry.getEnforcing<Spec>('RNNamiCampaignManager') ??
+  NativeModules.RNNamiCampaignManager;
 
 export enum NamiCampaignManagerEvents {
-  ResultCampaign = 'ResultCampaign',
   AvailableCampaignsChanged = 'AvailableCampaignsChanged',
+  NamiPaywallEvent = 'NamiPaywallEvent',
 }
 
-const searchString_Nami = 'NAMI_';
+const validPaywallActions = new Set(
+  Object.values(NamiPaywallAction) as NamiPaywallAction[],
+);
 
-interface ICampaignManager {
-  launchSubscription: EmitterSubscription | undefined;
-  emitter: NativeEventEmitter;
-  allCampaigns: () => Promise<Array<NamiCampaign>>;
-  isCampaignAvailable(campaignSource: string | null): Promise<boolean>;
-  launch: (
-    label?: string,
-    withUrl?: string,
-    context?: PaywallLaunchContext,
-    resultCallback?: (success: boolean, error?: LaunchCampaignError) => void,
-    actionCallback?: NamiPaywallActionHandler,
-  ) => void;
-  refresh: () => Promise<Array<NamiCampaign>>;
-  registerAvailableCampaignsHandler: (
-    callback: (availableCampaigns: NamiCampaign[]) => void,
-  ) => EmitterSubscription['remove'];
+function mapToNamiPaywallAction(action: string): NamiPaywallAction {
+  return validPaywallActions.has(action as NamiPaywallAction)
+    ? (action as NamiPaywallAction)
+    : NamiPaywallAction.UNKNOWN;
 }
 
-export const NamiCampaignManager: ICampaignManager = {
-  launchSubscription: undefined,
-  emitter: new NativeEventEmitter(RNNamiCampaignManager),
-  ...RNNamiCampaignManager,
-  launch(label, withUrl, context, resultCallback, actionCallback) {
+const emitter = new NativeEventEmitter(NativeModules.RNNamiCampaignManager);
+
+export const NamiCampaignManager = {
+  emitter,
+
+  launchSubscription: undefined as
+    | ReturnType<NativeEventEmitter['addListener']>
+    | undefined,
+
+  launch(
+    label: string | null,
+    withUrl: string | null,
+    context: PaywallLaunchContext | null,
+    resultCallback?: (success: boolean, errorCode?: number | null) => void,
+    actionCallback?: (event: any) => void,
+  ): void {
     if (this.launchSubscription) {
       this.launchSubscription.remove();
     }
 
     this.launchSubscription = this.emitter.addListener(
-      NamiCampaignManagerEvents.ResultCampaign,
-      body => {
-        body.action = body.action.startsWith(searchString_Nami)
-          ? body.action.substring(5, body.action.length)
-          : body.action;
-
+      NamiCampaignManagerEvents.NamiPaywallEvent,
+      (body: any) => {
         if (actionCallback) {
           const paywallEvent: NamiPaywallEvent = {
-            action: body.action,
+            action: mapToNamiPaywallAction(body.action),
             campaignId: body.campaignId,
             campaignName: body.campaignName,
             campaignType: body.campaignType,
@@ -78,33 +77,38 @@ export const NamiCampaignManager: ICampaignManager = {
         }
       },
     );
+
     RNNamiCampaignManager.launch(
-      label ?? null,
-      withUrl ?? null,
-      context ?? null,
+      label,
+      withUrl,
+      context,
       resultCallback ?? (() => {}),
       actionCallback ?? (() => {}),
     );
   },
 
-  isCampaignAvailable: campaignSource => {
-    return RNNamiCampaignManager.isCampaignAvailable(campaignSource ?? null);
+  allCampaigns: async () => {
+    return await RNNamiCampaignManager.allCampaigns();
   },
 
-  registerAvailableCampaignsHandler(callback) {
-    if (typeof callback !== 'function') {
-      throw new Error('Expected callback to be a function.');
-    }
-    const subscription = this.emitter.addListener(
+  isCampaignAvailable: async (campaignName: string | null) => {
+    return await RNNamiCampaignManager.isCampaignAvailable(
+      campaignName ?? undefined,
+    );
+  },
+
+  refresh: async () => {
+    return await RNNamiCampaignManager.refresh();
+  },
+
+  registerAvailableCampaignsHandler: (
+    callback: (campaigns: NamiCampaign[]) => void,
+  ): (() => void) => {
+    const sub = emitter.addListener(
       NamiCampaignManagerEvents.AvailableCampaignsChanged,
       callback,
     );
-
-    RNNamiCampaignManager.registerAvailableCampaignsHandler();
-    return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-    };
+    RNNamiCampaignManager.registerAvailableCampaignsHandler?.();
+    return () => sub.remove();
   },
 };

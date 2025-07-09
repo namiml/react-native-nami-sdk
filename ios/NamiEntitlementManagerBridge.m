@@ -2,8 +2,7 @@
 //  NamiEntitlementManagerBridge.m
 //  RNNami
 //
-//  Created by Kendall Gelner on 4/8/20.
-//  Copyright © 2020-2023 Nami ML Inc. All rights reserved.
+//  Copyright © 2020-2025 Nami ML Inc. All rights reserved.
 //
 
 #import <React/RCTBridgeModule.h>
@@ -21,7 +20,7 @@ RCT_EXTERN_METHOD(registerActiveEntitlementsHandler)
 RCT_EXTERN_METHOD(clearProvisionalEntitlementGrants)
 
 + (BOOL)requiresMainQueueSetup {
-  return YES;
+  return NO;
 }
 
 @end

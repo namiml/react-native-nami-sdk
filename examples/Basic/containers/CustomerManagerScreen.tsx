@@ -1,12 +1,13 @@
 import React, { FC, useState, useEffect } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { NamiCustomerManager } from 'react-native-nami-sdk';
 
 import { ViewerTabProps } from '../App';
@@ -15,7 +16,7 @@ import theme from '../theme';
 
 const TEST_KEY = 'key1';
 
-type CustomerManagerScreenProps = ViewerTabProps<'CustomerManager'>
+type CustomerManagerScreenProps = ViewerTabProps<'CustomerManager'>;
 
 const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   const [value, onChangeValue] = useState<string>('');
@@ -33,9 +34,8 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   };
 
   const handleGetAttribute = async () => {
-    const attributeNami = await NamiCustomerManager.getCustomerAttribute(
-      TEST_KEY,
-    );
+    const attributeNami =
+      await NamiCustomerManager.getCustomerAttribute(TEST_KEY);
     console.log('customer attribute', attributeNami);
     setAttribute(attributeNami ? attributeNami : '');
     onChangeValue('');
@@ -63,7 +63,10 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   }, [inAnonymousMode]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}
+      testID="customer_manager_screen">
       <Text
         testID="customer_manager_title"
         style={styles.title}>
@@ -87,7 +90,8 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
           <TouchableOpacity
             testID="send_btn"
             style={styles.sendBtn}
-            onPress={handleSetAttribute}>
+            onPress={handleSetAttribute}
+          >
             <Text>Send</Text>
           </TouchableOpacity>
         </View>
@@ -102,14 +106,16 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
         <TouchableOpacity
           testID="clear_attribute_btn"
           style={styles.clearBtn}
-          onPress={handleClearAttribute}>
+          onPress={handleClearAttribute}
+        >
           <Text>Clear Attribute</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           testID="anonymous_mode_btn"
           style={styles.anonBtn}
-          onPress={toggleAnonymousMode}>
+          onPress={toggleAnonymousMode}
+        >
           <Text>
             {inAnonymousMode
               ? 'Turn Anonymous Mode off'
@@ -133,6 +139,8 @@ const styles = StyleSheet.create({
     color: theme.links,
   },
   container: {
+    flex: 1,
+    flexDirection: 'column',
     paddingHorizontal: 15,
   },
   title: {

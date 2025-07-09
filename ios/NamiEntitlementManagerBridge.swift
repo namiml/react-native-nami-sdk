@@ -2,12 +2,17 @@
 // NamiEntitlementManagerBridge.swift
 // RNNami
 //
-// Copyright © 2023 Nami ML Inc.. All rights reserved.
+// Copyright © 2023-2025 Nami ML Inc. All rights reserved.
 //
 
 import Foundation
 import NamiApple
 import React
+
+#if RCT_NEW_ARCH_ENABLED
+    import React_RCTTurboModule
+    extension RNNamiEntitlementManager: RCTTurboModule {}
+#endif
 
 @objc(RNNamiEntitlementManager)
 class RNNamiEntitlementManager: RCTEventEmitter {
@@ -18,70 +23,74 @@ class RNNamiEntitlementManager: RCTEventEmitter {
         RNNamiEntitlementManager.shared = self
     }
 
+    override static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+
     override func supportedEvents() -> [String]! {
         return ["EntitlementsChanged"]
     }
 
-    private func entitlementInToDictionary(_ entitlement: NamiEntitlement) -> NSDictionary {
-        let activePurchasesDict: [NSDictionary] = entitlement.activePurchases.map { purchase in
-            let dictionary = RNNamiPurchaseManager.purchaseToPurchaseDict(purchase)
-            return dictionary
+    private func entitlementToDictionary(_ entitlement: NamiEntitlement) -> NSDictionary {
+        let activePurchases = entitlement.activePurchases.map {
+            RNNamiPurchaseManager.purchaseToPurchaseDict($0)
         }
 
-        let purchasedSkusDict: [NSDictionary] = entitlement.purchasedSkus.map { sku in
-            let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
-            return dictionary
+        let purchasedSkus = entitlement.purchasedSkus.map {
+            RNNamiPurchaseManager.skuToSKUDict($0)
         }
-        let relatedSkusDict: [NSDictionary] = entitlement.relatedSkus.map { sku in
-            let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
-            return dictionary
+
+        let relatedSkus = entitlement.relatedSkus.map {
+            RNNamiPurchaseManager.skuToSKUDict($0)
         }
 
         let dictionary: [String: Any?] = [
-            "name": entitlement.name,
-            "desc": entitlement.desc,
+            "name": entitlement.name ?? "",
+            "desc": entitlement.desc ?? "",
             "referenceId": entitlement.referenceId,
-            "activePurchases": activePurchasesDict,
-            "relatedSkus": relatedSkusDict,
-            "purchasedSkus": purchasedSkusDict,
+            "activePurchases": activePurchases,
+            "relatedSkus": relatedSkus,
+            "purchasedSkus": purchasedSkus,
         ]
+
         return NSDictionary(dictionary: dictionary.compactMapValues { $0 })
     }
 
-    @objc(isEntitlementActive:resolver:rejecter:)
-    func isEntitlementActive(referenceId: String, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
-        let isEntitlementActive = NamiEntitlementManager.isEntitlementActive(referenceId)
-        resolve(isEntitlementActive)
+    @objc
+    func isEntitlementActive(_ referenceId: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter _: @escaping RCTPromiseRejectBlock) {
+        resolve(NamiEntitlementManager.isEntitlementActive(referenceId))
     }
 
-    @objc(active:rejecter:)
-    func active(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
-        let entitlements = NamiEntitlementManager.active()
-        let dictionaries: [NSDictionary] = entitlements.map { entitlement in
-            let dictionary = self.entitlementInToDictionary(entitlement)
-            return dictionary
+    @objc
+    func active(_ resolve: @escaping RCTPromiseResolveBlock,
+                rejecter _: @escaping RCTPromiseRejectBlock)
+    {
+        let entitlements = NamiEntitlementManager.active().map {
+            self.entitlementToDictionary($0)
         }
-        resolve(dictionaries)
+        resolve(entitlements)
     }
 
-    @objc(refresh)
+    @objc
     func refresh() {
-        NamiEntitlementManager.refresh()
-    }
-
-    @objc(registerActiveEntitlementsHandler)
-    func registerActiveEntitlementsHandler() {
-        NamiEntitlementManager.registerActiveEntitlementsHandler { activeEntitlements in
-            let dictionaries: [NSDictionary] = activeEntitlements.map { entitlement in
-                let dictionary = self.entitlementInToDictionary(entitlement)
-                return dictionary
+        NamiEntitlementManager.refresh { entitlements in
+            let dicts = entitlements.map { self.entitlementToDictionary($0) }
+            DispatchQueue.main.async {
+                RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
             }
-            RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dictionaries)
         }
     }
 
-    @objc(clearProvisionalEntitlementGrants)
-    func clearProvisionalEntitlementGrants() {
-        NamiEntitlementManager.clearProvisionalEntitlementGrants()
+    @objc
+    func registerActiveEntitlementsHandler() {
+        NamiEntitlementManager.registerActiveEntitlementsHandler { entitlements in
+            let dicts = entitlements.map { self.entitlementToDictionary($0) }
+            DispatchQueue.main.async {
+                RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
+            }
+        }
     }
+
+    @objc
+    func clearProvisionalEntitlementGrants() {}
 }

@@ -5,25 +5,25 @@ import React, {
   useLayoutEffect,
   useCallback,
 } from 'react';
+import { StyleSheet, FlatList, View, Text, TouchableOpacity } from 'react-native';
 import {
-  StyleSheet,
-  FlatList,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
-import { NamiCampaignManager, NamiCampaign, NamiCampaignRuleType, NamiPaywallEvent } from 'react-native-nami-sdk';
+  NamiCampaignManager,
+  NamiCampaign,
+  NamiCampaignRuleType,
+  NamiPaywallEvent,
+} from 'react-native-nami-sdk';
 import { ViewerTabProps } from '../App';
 import theme from '../theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-type CampaignScreenProps = ViewerTabProps<'Campaign'>
+type CampaignScreenProps = ViewerTabProps<'Campaign'>;
 
 const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
   <TouchableOpacity
     testID="refresh_campaigns"
     style={styles.headerButton}
-    onPress={onRefreshPress}>
+    onPress={onRefreshPress}
+  >
     <Text style={styles.headerButtonText}>Refresh</Text>
   </TouchableOpacity>
 );
@@ -35,7 +35,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     getAllCampaigns();
     const subscriptionRemover =
       NamiCampaignManager.registerAvailableCampaignsHandler(
-        (availableCampaigns) => {
+        availableCampaigns => {
           console.log('availableCampaigns', availableCampaigns);
           setCampaigns(availableCampaigns);
         },
@@ -49,7 +49,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   const getAllCampaigns = useCallback(async () => {
     const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
-    const validCampaigns = fetchedCampaigns.filter((campaign) =>
+    const validCampaigns = fetchedCampaigns.filter(campaign =>
       Boolean(campaign.value),
     );
     setCampaigns(validCampaigns);
@@ -117,7 +117,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return (
       <TouchableOpacity
         onPress={() => onItemPressPrimary(item)}
-        style={itemStyle}>
+        style={itemStyle}
+      >
         <View style={styles.viewContainer}>
           <Text style={styles.itemText}>{item.value}</Text>
           {item.type === NamiCampaignRuleType.URL && (
@@ -134,7 +135,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return (
       <TouchableOpacity
         onPress={() => onItemPressDefault()}
-        style={styles.itemDef}>
+        style={styles.itemDef}
+      >
         <Text style={styles.itemText}>default</Text>
       </TouchableOpacity>
     );

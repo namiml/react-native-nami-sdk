@@ -1,22 +1,21 @@
-// android/build.gradle
-// based on:
-//
-// * https://github.com/facebook/react-native/blob/0.60-stable/template/android/build.gradle
-//   original location:
-//   - https://github.com/facebook/react-native/blob/0.58-stable/local-cli/templates/HelloWorld/android/build.gradle
-//
-// * https://github.com/facebook/react-native/blob/0.60-stable/template/android/app/build.gradle
-//   original location:
-//   - https://github.com/facebook/react-native/blob/0.58-stable/local-cli/templates/HelloWorld/android/app/build.gradle
-def DEFAULT_BUILD_TOOLS_VERSION = '34.0.0'
+def DEFAULT_BUILD_TOOLS_VERSION = '35.0.0'
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
+
+ def isNewArchitectureEnabled() {
+    return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
+}
+
+if (isNewArchitectureEnabled()) {
+    apply plugin: 'com.facebook.react'
+}
+
 apply plugin: 'com.android.library'
 // apply plugin: 'maven'
 apply plugin: "kotlin-android"
 buildscript {
-    ext.kotlin_version = '1.8.20'
+    ext.kotlin_version = '1.9.20'
     // The Android Gradle plugin is only required when opening the android folder stand-alone.
     // This avoids unnecessary downloads and potential conflicts when the library is included as a
     // module dependency in an application project.
@@ -27,19 +26,20 @@ buildscript {
             google()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:7.4.2'
+            classpath 'com.android.tools.build:gradle:8.6.1'
             classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         }
     }
 }
 android {
-    compileSdkVersion 34
+    compileSdkVersion 35
     buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
     defaultConfig {
-        minSdkVersion 22
-        targetSdkVersion 34
+        minSdkVersion 23
+        targetSdkVersion 35
         versionCode 1
         versionName "1.0"
+        buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString())
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -85,12 +85,20 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    playImplementation "com.namiml:sdk-android:3.2.11"
-    amazonImplementation "com.namiml:sdk-amazon:3.2.11"
+    playImplementation "com.namiml:sdk-android:3.3.0"
+    amazonImplementation "com.namiml:sdk-amazon:3.3.0"
 
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"
 
+}
+
+if (isNewArchitectureEnabled()) {
+    react {
+        jsRootDir = file("../src/")
+        libraryName = "Nami"
+        codegenJavaPackageName = "com.namiml.reactnative"
+    }
 }
 
 configurations {

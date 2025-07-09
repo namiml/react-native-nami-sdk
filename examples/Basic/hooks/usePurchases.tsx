@@ -15,10 +15,13 @@ const PurchasesContext = createContext<PurchasesContextType | null>(null);
 export const PurchasesContextProvider = ({ children }: IPurchasesContext) => {
   const [purchases, setPurchases] = useState<string[]>([]);
 
-  const value = useMemo(() => ({
-    purchases,
-    setPurchases,
-  }), [purchases, setPurchases])
+  const value = useMemo(
+    () => ({
+      purchases,
+      setPurchases,
+    }),
+    [purchases, setPurchases],
+  );
 
   return (
     <PurchasesContext.Provider value={value}>

@@ -1,89 +1,99 @@
 import {
+  TurboModuleRegistry,
   NativeModules,
   NativeEventEmitter,
   EmitterSubscription,
 } from 'react-native';
-import { AccountStateAction, CustomerJourneyState } from './types';
+import type { Spec } from '../specs/NativeNamiCustomerManager';
+import type {
+  AccountStateAction,
+  CustomerJourneyState,
+  NamiAccountStateEvent,
+} from './types';
 
-export const { RNNamiCustomerManager } = NativeModules;
+const RNNamiCustomerManager: Spec =
+  TurboModuleRegistry.getEnforcing?.<Spec>('RNNamiCustomerManager') ??
+  NativeModules.RNNamiCustomerManager;
+
+const emitter = new NativeEventEmitter(NativeModules.RNNamiCustomerManager);
 
 export enum NamiCustomerManagerEvents {
   JourneyStateChanged = 'JourneyStateChanged',
   AccountStateChanged = 'AccountStateChanged',
 }
 
-export interface INamiCustomerManager {
-  emitter: NativeEventEmitter;
-  setCustomerAttribute: (key: string, value: string) => void;
-  getCustomerAttribute: (key: string) => Promise<string | undefined>;
-  clearCustomerAttribute: (key: string) => void;
-  clearAllCustomerAttributes: () => void;
-  journeyState: () => Promise<CustomerJourneyState | undefined>;
-  isLoggedIn: () => Promise<boolean>;
-  loggedInId: () => Promise<string | undefined>;
-  deviceId: () => Promise<string>;
-  login: (customerId: string) => void;
-  logout: () => void;
-  registerJourneyStateHandler: (
-    callback: (journeyState: CustomerJourneyState) => void,
-  ) => EmitterSubscription['remove'];
-  registerAccountStateHandler: (
-    callback: (
-      action: AccountStateAction,
-      success: boolean,
-      error?: number,
-    ) => void,
-  ) => EmitterSubscription['remove'];
-  clearCustomerDataPlatformId: () => void;
-  setCustomerDataPlatformId: (platformId: string) => void;
-  setAnonymousMode: (anonymousMode: boolean) => void;
-  inAnonymousMode: () => Promise<boolean>;
-}
+export const NamiCustomerManager = {
+  emitter,
 
-export const NamiCustomerManager: INamiCustomerManager = {
-  ...RNNamiCustomerManager,
-  emitter: new NativeEventEmitter(RNNamiCustomerManager),
-  login: customerId => {
-    RNNamiCustomerManager.login(customerId);
+  login: (customerId: string) => RNNamiCustomerManager.login(customerId),
+
+  logout: () => RNNamiCustomerManager.logout(),
+
+  setCustomerAttribute: (key: string, value: string) =>
+    RNNamiCustomerManager.setCustomerAttribute(key, value),
+
+  getCustomerAttribute: async (key: string): Promise<string | undefined> => {
+    const value = await RNNamiCustomerManager.getCustomerAttribute(key);
+    return value ?? undefined;
   },
-  logout: () => {
-    RNNamiCustomerManager.logout();
+
+  clearCustomerAttribute: (key: string) =>
+    RNNamiCustomerManager.clearCustomerAttribute(key),
+
+  clearAllCustomerAttributes: () =>
+    RNNamiCustomerManager.clearAllCustomerAttributes(),
+
+  journeyState: async (): Promise<CustomerJourneyState> =>
+    RNNamiCustomerManager.journeyState() as Promise<CustomerJourneyState>,
+
+  isLoggedIn: async (): Promise<boolean> => RNNamiCustomerManager.isLoggedIn(),
+
+  loggedInId: async (): Promise<string | undefined> => {
+    const id = await RNNamiCustomerManager.loggedInId();
+    return id ?? undefined;
+  },
+  setCustomerDataPlatformId: (platformId) => {
+    RNNamiCustomerManager.setCustomerDataPlatformId(platformId);
+  },
+  clearCustomerDataPlatformId: () => {
+    RNNamiCustomerManager.clearCustomerDataPlatformId();
+  },
+  setAnonymousMode: (anonymousMode) => {
+    RNNamiCustomerManager.setAnonymousMode(anonymousMode);
+  },
+  deviceId: async () => {
+    return RNNamiCustomerManager.deviceId();
+  },
+  inAnonymousMode: async () => {
+    return RNNamiCustomerManager.inAnonymousMode();
   },
   registerJourneyStateHandler: (
-    callback: (journeyState: CustomerJourneyState) => void,
-  ) => {
-    const subscription = NamiCustomerManager.emitter.addListener(
+    callback: (state: CustomerJourneyState) => void,
+  ): EmitterSubscription['remove'] => {
+    const subscription = emitter.addListener(
       NamiCustomerManagerEvents.JourneyStateChanged,
       callback,
     );
-    RNNamiCustomerManager.registerJourneyStateHandler();
-    return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-    };
+    RNNamiCustomerManager.registerJourneyStateHandler?.();
+    return () => subscription.remove();
   },
+
   registerAccountStateHandler: (
     callback: (
       action: AccountStateAction,
       success: boolean,
       error?: number,
     ) => void,
-  ) => {
-    const subscription = NamiCustomerManager.emitter.addListener(
+  ): EmitterSubscription['remove'] => {
+    const subscription = emitter.addListener(
       NamiCustomerManagerEvents.AccountStateChanged,
-      (body: any) => {
-        const action: AccountStateAction = body.action.toLowerCase();
-        const error: number | undefined = body.error;
-        const success: boolean = body.success;
-        callback(action, success, error);
+      (body: NamiAccountStateEvent) => {
+        const action: AccountStateAction =
+          body.action.toLowerCase() as AccountStateAction;
+        callback(action, body.success, body.error);
       },
     );
-    RNNamiCustomerManager.registerAccountStateHandler();
-    return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-    };
+    RNNamiCustomerManager.registerAccountStateHandler?.();
+    return () => subscription.remove();
   },
 };

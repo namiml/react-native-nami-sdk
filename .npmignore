@@ -2,3 +2,13 @@ examples/*
 yarn.lock
 .codeclimate.yml
 gh-release-command.sh
+patches
+android/build
+android/.*
+*.tgz
+.github/
+.eslintignore
+.eslintrc.js
+.pre-commit-config.yaml
+.prettierrc.js
+build-utils/
