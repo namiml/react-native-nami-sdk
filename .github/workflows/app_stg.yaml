@@ -369,8 +369,8 @@ jobs:
 
       - name: Apply Patches
         run: |
-          patch -p0 < *.patch
-        working-directory: source/examples/TestNamiTV/patches
+          patch -p0 < patches/*.patch
+        working-directory: source/examples/TestNamiTV
 
       - name: Build resolve Swift dependencies
         run: |
