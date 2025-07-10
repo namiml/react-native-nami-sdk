@@ -74,9 +74,15 @@ jobs:
         env:
           KEYSTORE_BASE64: '${{ secrets.KEY_STORE_BASE64 }}'
 
+      - name: Pack the SDK
+        run: |
+          npm install
+          npm run prepare && npm pack
+        working-directory: source/
+
       - name: Install test app dependencies
         run: |
-          yarn install
+          npm run clean && npm run getsdk && npm run build
         working-directory: source/examples/Basic
 
       - name: Update App Platform ID
@@ -193,9 +199,15 @@ jobs:
           echo "CURRENT_VERSION=$(cat ~/.current_version)" >> $GITHUB_ENV
         working-directory: source/examples/Basic
 
+      - name: Pack the SDK
+        run: |
+          npm install
+          npm run prepare && npm pack
+        working-directory: source/
+
       - name: Install test app dependencies
         run: |
-          yarn install
+          npm run clean && npm run getsdk && npm run build
         working-directory: source/examples/Basic
 
       - name: Update App Platform ID
@@ -331,10 +343,16 @@ jobs:
           echo "CURRENT_VERSION=$(cat ~/.current_version)" >> $GITHUB_ENV
         working-directory: source/examples/TestNamiTV
 
+      - name: Pack the SDK
+        run: |
+          npm install
+          npm run prepare && npm pack
+        working-directory: source/
+
       - name: Install test app dependencies
         run: |
-          yarn install
-        working-directory: source/examples/TestNamiTV
+          npm run clean && npm run getsdk && npm run build
+        working-directory: source/examples/Basic
 
       - name: Update App Platform ID
         working-directory: source/examples/TestNamiTV/config/
