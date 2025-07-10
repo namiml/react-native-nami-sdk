@@ -344,9 +344,15 @@ jobs:
           echo "CURRENT_VERSION=$(cat ~/.current_version)" >> $GITHUB_ENV
         working-directory: source/examples/TestNamiTV
 
+      - name: Pack the SDK
+        run: |
+          npm install
+          npm run prepare && npm pack
+        working-directory: source/
+
       - name: Install test app dependencies
         run: |
-          yarn install
+          npm run clean && npm run getsdk && npm run build
         working-directory: source/examples/TestNamiTV
 
       - name: Update App Platform ID
