@@ -9,8 +9,6 @@ import NamiApple
 import React
 
 #if RCT_NEW_ARCH_ENABLED
-    import React_RCTTurboModule
-
     extension RNNami: RCTTurboModule {}
 #endif
 
