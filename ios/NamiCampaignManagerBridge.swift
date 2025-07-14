@@ -11,8 +11,6 @@ import os
 import React
 
 #if RCT_NEW_ARCH_ENABLED
-    import React_RCTTurboModule
-
     extension RNNamiCampaignManager: RCTTurboModule {}
 #endif
 
