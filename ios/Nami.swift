@@ -8,9 +8,9 @@ import Foundation
 import NamiApple
 import React
 
-#if RCT_NEW_ARCH_ENABLED
-    extension RNNami: RCTTurboModule {}
-#endif
+// #if RCT_NEW_ARCH_ENABLED
+//    extension RNNami: RCTTurboModule {}
+// #endif
 
 @objc(RNNami)
 class RNNami: NSObject {
