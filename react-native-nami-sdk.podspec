@@ -31,4 +31,14 @@ Pod::Spec.new do |s|
 
   install_modules_dependencies(s)
 
+  if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
+    s.pod_target_xcconfig = {
+      'USE_HEADERMAP' => 'YES',
+      'DEFINES_MODULE' => 'YES',
+      'CLANG_CXX_LANGUAGE_STANDARD' => 'c++14'
+    }
+    s.dependency 'React-Core'
+    s.dependency "ReactCommon/turbomodule/core"
+   end
+
 end
