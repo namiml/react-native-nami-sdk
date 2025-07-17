@@ -31,4 +31,10 @@ Pod::Spec.new do |s|
 
   install_modules_dependencies(s)
 
+  if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
+    s.pod_target_xcconfig = {
+      'USE_HEADERMAP' => 'YES',
+    }
+   end
+
 end
