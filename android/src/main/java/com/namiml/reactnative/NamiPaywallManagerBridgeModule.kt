@@ -29,7 +29,7 @@ class NamiPaywallManagerBridgeModule internal constructor(
         val productId = product?.getString("id")
         val skuRefId = product?.getString("skuId")
         val typeString = product?.getString("type")
-        val storeType = dict.getString("store") ?: "GooglePlay"
+        val storeType = dict.getString("storeType") ?: "GooglePlay"
         var purchaseSuccess: NamiPurchaseSuccess? = null
 
         if (productId != null && skuRefId != null) {
