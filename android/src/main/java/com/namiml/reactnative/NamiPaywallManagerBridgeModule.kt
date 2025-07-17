@@ -24,11 +24,12 @@ class NamiPaywallManagerBridgeModule internal constructor(
     private var latestPaywallActivity: Activity? = null
 
     @ReactMethod
-    fun buySkuComplete(dict: ReadableMap, storeType: String) {
+    fun buySkuComplete(dict: ReadableMap) {
         val product = dict.getMap("product")
         val productId = product?.getString("id")
         val skuRefId = product?.getString("skuId")
         val typeString = product?.getString("type")
+        val storeType = dict.getString("storeType") ?: "GooglePlay"
         var purchaseSuccess: NamiPurchaseSuccess? = null
 
         if (productId != null && skuRefId != null) {

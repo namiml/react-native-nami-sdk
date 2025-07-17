@@ -125,6 +125,7 @@ const App = () => {
                   '',
                 price: price,
                 currencyCode: currency,
+                storeType: 'Apple',
               });
             } else if (Platform.OS === 'android') {
               if (Platform.constants.Manufacturer === 'Amazon') {
@@ -135,6 +136,7 @@ const App = () => {
                   localizedPrice: price,
                   userId: purchase.userIdAmazon ?? '',
                   marketplace: purchase.userMarketplaceAmazon ?? '',
+                  storeType: 'Amazon',
                 });
               } else {
                 console.log('Preparing to call buySkuCompleteGooglePlay');
@@ -142,6 +144,7 @@ const App = () => {
                   product: namiSku,
                   purchaseToken: purchase.purchaseToken ?? '',
                   orderId: purchase.transactionId ?? '',
+                  storeType: 'GooglePlay',
                 });
               }
             }
