@@ -123,6 +123,7 @@ export type NamiPurchaseDetails = {
     currencyCode?: string;
     userId?: string;
     marketplace?: string;
+    storeType?: string;
 };
 export type NamiPurchaseSuccessApple = {
     product: NamiSKU;

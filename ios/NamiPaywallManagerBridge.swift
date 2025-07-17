@@ -48,6 +48,10 @@ class RNNamiPaywallManager: RCTEventEmitter {
                 let namiSku = NamiSKU(namiId: namiId, storeId: storeId, skuType: namiSkuType)
                 let priceString = dict["price"] as? String ?? "0"
 
+                if let store = dict["storeType"] as? String, store != "Apple" {
+                    print("RNNamiPaywallManager - buySkuComplete called with the wrong store type \(dict)")
+                }
+
                 do {
                     if let transactionID = dict["transactionID"] as? String,
                        let originalTransactionID = dict["originalTransactionID"] as? String,
