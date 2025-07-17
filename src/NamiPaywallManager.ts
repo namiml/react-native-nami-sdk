@@ -35,15 +35,15 @@ export const NamiPaywallManager = {
 
   // Compatibility shims
   buySkuCompleteApple: (purchase: NamiPurchaseSuccessApple): void => {
-    RNNamiPaywallManager.buySkuCompleteApple(purchase);
+    RNNamiPaywallManager.buySkuComplete(purchase);
   },
 
   buySkuCompleteAmazon: (purchase: NamiPurchaseSuccessAmazon): void => {
-    RNNamiPaywallManager.buySkuCompleteAmazon(purchase);
+    RNNamiPaywallManager.buySkuComplete(purchase);
   },
 
   buySkuCompleteGooglePlay: (purchase: NamiPurchaseSuccessGooglePlay): void => {
-    RNNamiPaywallManager.buySkuCompleteGooglePlay(purchase);
+    RNNamiPaywallManager.buySkuComplete(purchase);
   },
 
   registerBuySkuHandler: (callback: (sku: NamiSKU) => void): (() => void) => {
