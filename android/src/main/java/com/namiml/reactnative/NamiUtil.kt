@@ -79,7 +79,7 @@ fun NamiSKU.toSkuDict(): WritableMap {
     productDict.putString("id", this.id)
     productDict.putString("skuId", this.skuId)
     productDict.putString("name", this.name ?: "")
-    productDict.putString("type", this.type?.toString() ?: "unknown")
+    productDict.putString("type", this.type?.toString().lowercase() ?: "unknown")
 
     this.promoId?.let {
         productDict.putString("promoId", it)

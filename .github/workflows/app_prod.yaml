@@ -122,7 +122,7 @@ jobs:
       actions: write
       contents: write
       id-token: write
-    runs-on: macos-13
+    runs-on: macos-15
     timeout-minutes: 40
     steps:
       - uses: actions/setup-node@v3
@@ -366,10 +366,10 @@ jobs:
           RCT_NEW_ARCH_ENABLED=0 SWIFT_VERSION=5 pod install --repo-update
         working-directory: source/examples/TestNamiTV/ios
 
-      - name: Apply Patches
-        run: |
-          patch -p0 < *.patch
-        working-directory: source/examples/TestNamiTV/patches
+      # - name: Apply Patches
+      #   run: |
+      #     patch -p0 < *.patch
+      #   working-directory: source/examples/TestNamiTV
 
       - name: Build resolve Swift dependencies
         run: |
