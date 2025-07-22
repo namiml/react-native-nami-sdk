@@ -44,7 +44,10 @@ fun NamiPaywallAction.toRNActionString(): String {
         NamiPaywallAction.NAMI_VIDEO_CHANGED -> "VIDEO_CHANGED"
         NamiPaywallAction.NAMI_VIDEO_MUTED -> "VIDEO_MUTED"
         NamiPaywallAction.NAMI_VIDEO_UNMUTED -> "VIDEO_UNMUTED"
-        else -> "UNKNOWN"
+        else -> {
+            Log.w("NamiUtil", "Unhandled NamiPaywallAction: $this. This might indicate a new enum value added in the SDK.")
+            "UNKNOWN"
+        }
     }
 }
 
