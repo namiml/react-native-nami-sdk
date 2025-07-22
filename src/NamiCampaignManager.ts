@@ -25,7 +25,6 @@ const validPaywallActions = new Set(
 );
 
 function mapToNamiPaywallAction(action: string): NamiPaywallAction {
-  console.log('RNPaywall', action);
   return validPaywallActions.has(action as NamiPaywallAction)
     ? (action as NamiPaywallAction)
     : NamiPaywallAction.UNKNOWN;
