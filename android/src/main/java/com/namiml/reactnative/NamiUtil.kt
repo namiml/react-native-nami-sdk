@@ -15,6 +15,41 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import com.namiml.paywall.model.NamiPaywallAction
+
+fun NamiPaywallAction.toRNActionString(): String {
+    return when (this) {
+        NamiPaywallAction.NAMI_BUY_SKU -> "BUY_SKU"
+        NamiPaywallAction.NAMI_SELECT_SKU -> "SELECT_SKU"
+        NamiPaywallAction.NAMI_RESTORE_PURCHASES -> "RESTORE_PURCHASES"
+        NamiPaywallAction.NAMI_SHOW_PAYWALL -> "SHOW_PAYWALL"
+        NamiPaywallAction.NAMI_CLOSE_PAYWALL -> "CLOSE_PAYWALL"
+        NamiPaywallAction.NAMI_SIGN_IN -> "SIGN_IN"
+        NamiPaywallAction.NAMI_PURCHASE_SELECTED_SKU -> "PURCHASE_SELECTED_SKU"
+        NamiPaywallAction.NAMI_PURCHASE_SUCCESS -> "PURCHASE_SUCCESS"
+        NamiPaywallAction.NAMI_PURCHASE_FAILED -> "PURCHASE_FAILED"
+        NamiPaywallAction.NAMI_PURCHASE_CANCELLED -> "PURCHASE_CANCELLED"
+        NamiPaywallAction.NAMI_PURCHASE_PENDING -> "PURCHASE_PENDING"
+        NamiPaywallAction.NAMI_PURCHASE_UNKNOWN -> "PURCHASE_UNKNOWN"
+        NamiPaywallAction.NAMI_DEEP_LINK -> "DEEPLINK"
+        NamiPaywallAction.NAMI_TOGGLE_CHANGE -> "TOGGLE_CHANGE"
+        NamiPaywallAction.NAMI_PAGE_CHANGE -> "PAGE_CHANGE"
+        NamiPaywallAction.NAMI_SLIDE_CHANGE -> "SLIDE_CHANGE"
+        NamiPaywallAction.NAMI_COLLAPSIBLE_DRAWER_OPEN -> "COLLAPSIBLE_DRAWER_OPEN"
+        NamiPaywallAction.NAMI_COLLAPSIBLE_DRAWER_CLOSE -> "COLLAPSIBLE_DRAWER_CLOSE"
+        NamiPaywallAction.NAMI_VIDEO_STARTED -> "VIDEO_STARTED"
+        NamiPaywallAction.NAMI_VIDEO_PAUSED -> "VIDEO_PAUSED"
+        NamiPaywallAction.NAMI_VIDEO_RESUMED -> "VIDEO_RESUMED"
+        NamiPaywallAction.NAMI_VIDEO_ENDED -> "VIDEO_ENDED"
+        NamiPaywallAction.NAMI_VIDEO_CHANGED -> "VIDEO_CHANGED"
+        NamiPaywallAction.NAMI_VIDEO_MUTED -> "VIDEO_MUTED"
+        NamiPaywallAction.NAMI_VIDEO_UNMUTED -> "VIDEO_UNMUTED"
+        else -> {
+            Log.w("NamiUtil", "Unhandled NamiPaywallAction: $this. This might indicate a new enum value added in the SDK.")
+            "UNKNOWN"
+        }
+    }
+}
 
 fun List<*>.toWritableArray(): WritableArray {
     val convertedArray = Arguments.createArray()

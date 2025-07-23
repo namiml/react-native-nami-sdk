@@ -158,8 +158,7 @@ class NamiCampaignManagerBridgeModule internal constructor(
         paywallEvent: NamiPaywallEvent,
         actionCallback: Callback,
     ) {
-        val actionString = paywallEvent.action.toString()
-
+        val actionString = paywallEvent.action.toRNActionString()
         val purchasesArray = createPurchaseArray(paywallEvent.purchases)
 
         val resultMap =
