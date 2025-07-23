@@ -8,8 +8,6 @@ export interface Spec extends TurboModule {
   registerStepHandoff(): void;
   resume(): void;
   registerEventHandler(): void;
-
-
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNNamiFlowManager');

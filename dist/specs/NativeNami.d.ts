@@ -10,6 +10,7 @@ export interface Spec extends TurboModule {
         success: boolean;
     }>;
     sdkConfigured(): Promise<boolean>;
+    sdkVersion(): Promise<string>;
 }
 declare const _default: Spec;
 export default _default;
