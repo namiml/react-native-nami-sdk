@@ -37,7 +37,7 @@ const Root = () => {
 
   useEffect(() => {
     async function configureNami() {
-      const sdkVersion = Nami.sdkVersion();
+      const sdkVersion = await Nami.sdkVersion();
       console.log('Nami SDK Version: ', sdkVersion);
 
       try {
