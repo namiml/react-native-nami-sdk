@@ -26,7 +26,7 @@ brew install yarn
 1. Install CocoaPods -> `brew install cocoapods`
 2. `npm run ios-clean && npm run ios-build`
 3. Either run `npm run ios` or `open Basic.xcworkspace` and build in Xcode.
-4. Local detox tests: `detox clean-framework-cache && detox build --configuration ios.sim.debug && detox build-framework-cache && yarn detox test --configuration ios.sim.debug  e2e/ios --cleanup --headless --record-logs all`
+4. Local detox tests: `detox clean-framework-cache && detox build --configuration ios.sim.debug && detox build-framework-cache && yarn detox test --configuration ios.sim.debug  e2e/ios --config=e2e/ios-jest.config.js --cleanup --headless --record-logs all`
 
 **Android Setup**
 

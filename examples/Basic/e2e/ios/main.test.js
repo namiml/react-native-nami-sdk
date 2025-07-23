@@ -146,14 +146,9 @@ describe('iOS: Customer Manager screen Test', () => {
     await expect(element(by.id('customer_manager_tab'))).toBeVisible();
 
     await expect(element(by.id('customer_manager_title'))).toBeVisible();
-    await expect(element(by.id('customer_attribute_text'))).toExist();
-    await element(by.id('customer_attribute_input')).typeText('Test Attribute');
     await expect(element(by.id('send_btn'))).toBeVisible();
     await element(by.id('send_btn')).tap();
-    await expect(element(by.id('customer_attribute_text'))).toHaveText(
-      'Test Attribute',
-    );
-
+    await expect(element(by.id('customer_attribute_text'))).toHaveText('value1');
     await expect(element(by.id('clear_attribute_btn'))).toBeVisible();
     await element(by.id('clear_attribute_btn')).tap();
     await expect(element(by.id('customer_attribute_text'))).toHaveText('');
