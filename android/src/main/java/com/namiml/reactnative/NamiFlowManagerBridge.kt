@@ -55,6 +55,18 @@ class NamiFlowManagerBridgeModule internal constructor(
         }, 100L)
     }
 
+    @ReactMethod
+    fun finish() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            NamiFlowManager.finish()
+        }, 100L)
+    }
+
+    @ReactMethod
+    fun isFlowOpen(promise: Promise) {
+        promise.resolve(NamiFlowManager.isFlowOpen())
+    }
+
     private fun sendEvent(eventName: String, params: WritableMap?) {
         reactApplicationContext
             .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)

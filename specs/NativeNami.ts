@@ -11,6 +11,7 @@ export interface Spec extends TurboModule {
   }): Promise<{ success: boolean }>;
 
   sdkConfigured(): Promise<boolean>;
+  sdkVersion(): Promise<string>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNNami');

@@ -53,4 +53,12 @@ export const NamiFlowManager = {
     RNNamiFlowManager.registerEventHandler?.();
     return () => sub.remove();
   },
+
+  finish: (): void => {
+    RNNamiFlowManager.finish();
+  },
+
+  isFlowOpen: async (): Promise<boolean> => {
+    return RNNamiFlowManager.isFlowOpen();
+  },
 };
