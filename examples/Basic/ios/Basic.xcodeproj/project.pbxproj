@@ -903,7 +903,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.app.teactreactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.app.testreactnative;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "BasicProduction-Bridging-Header.h";
@@ -936,7 +936,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.app.teactreactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = com.namiml.app.testreactnative;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "BasicProduction-Bridging-Header.h";
