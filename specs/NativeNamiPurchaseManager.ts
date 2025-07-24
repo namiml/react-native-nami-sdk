@@ -23,7 +23,6 @@ export interface Spec extends TurboModule {
 
   skuPurchased(skuId: string): Promise<boolean>;
   anySkuPurchased(skuIds: string[]): Promise<boolean>;
-  consumePurchasedSku(skuId: string): void;
   presentCodeRedemptionSheet(): void;
   restorePurchases(): void;
   registerPurchasesChangedHandler(): void;

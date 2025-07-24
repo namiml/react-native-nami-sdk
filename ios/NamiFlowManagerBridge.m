@@ -12,6 +12,8 @@
 RCT_EXTERN_METHOD(registerStepHandoff)
 RCT_EXTERN_METHOD(registerEventHandler)
 RCT_EXTERN_METHOD(resume)
+RCT_EXTERN_METHOD(finish)
+RCT_EXTERN_METHOD(isFlowOpen:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 + (BOOL)requiresMainQueueSetup {
   return NO;

@@ -9,7 +9,6 @@ export declare const NamiPurchaseManager: {
     allPurchases: () => Promise<NamiPurchase[]>;
     skuPurchased: (skuId: string) => Promise<boolean>;
     anySkuPurchased: (skuIds: string[]) => Promise<boolean>;
-    consumePurchasedSku: (skuId: string) => void;
     presentCodeRedemptionSheet: () => void;
     restorePurchases: () => void;
     registerPurchasesChangedHandler: (callback: (state: NamiPurchasesState, purchases: NamiPurchase[], error: string) => void) => (() => void);

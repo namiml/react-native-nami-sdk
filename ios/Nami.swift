@@ -73,6 +73,12 @@ class RNNami: NSObject {
         resolve(Nami.sdkConfigured())
     }
 
+    @objc(sdkVersion:rejecter:)
+    func sdkVersion(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
+        let version = Nami.sdkVersion
+        resolve(version)
+    }
+
     func isNewArchitectureEnabled() -> Bool {
         #if RCT_NEW_ARCH_ENABLED
             return true

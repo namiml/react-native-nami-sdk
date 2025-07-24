@@ -119,11 +119,6 @@ class RNNamiPurchaseManager: RCTEventEmitter {
         resolve(false)
     }
 
-    @objc(consumePurchasedSku:)
-    func consumePurchasedSku(skuId: String) {
-        NamiPurchaseManager.consumePurchasedSku(skuId: skuId)
-    }
-
     @objc(registerPurchasesChangedHandler)
     func registerPurchasesChangedHandler() {
         NamiPurchaseManager.registerPurchasesChangedHandler { purchases, purchaseState, error in

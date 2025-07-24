@@ -17,6 +17,7 @@ export interface Spec extends TurboModule {
         marketplace?: string;
         price?: string;
         currencyCode?: string;
+        storeType?: string;
     }): void;
     buySkuCompleteApple(purchase: {
         product: {

@@ -58,4 +58,17 @@ class RNNamiFlowManager: RCTEventEmitter {
             NamiFlowManager.resume()
         }
     }
+
+    @objc func finish() {
+        DispatchQueue.main.async {
+            NamiFlowManager.finish()
+        }
+    }
+
+    @objc func isFlowOpen(_ resolve: @escaping RCTPromiseResolveBlock, rejecter _: @escaping RCTPromiseRejectBlock) {
+        DispatchQueue.main.async {
+            let isFlowOpen = NamiFlowManager.isFlowOpen()
+            resolve(isFlowOpen)
+        }
+    }
 }

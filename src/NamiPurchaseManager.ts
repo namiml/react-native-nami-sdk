@@ -47,9 +47,6 @@ export const NamiPurchaseManager = {
   anySkuPurchased: async (skuIds: string[]): Promise<boolean> =>
     await RNNamiPurchaseManager.anySkuPurchased(skuIds),
 
-  consumePurchasedSku: (skuId: string): void =>
-    RNNamiPurchaseManager.consumePurchasedSku(skuId),
-
   presentCodeRedemptionSheet: (): void =>
     RNNamiPurchaseManager.presentCodeRedemptionSheet(),
 

@@ -35,6 +35,12 @@ class NamiBridgeModule internal constructor(
     }
 
     @ReactMethod
+    fun sdkVersion(promise: Promise) {
+        val version = Nami.sdkVersion()
+        promise.resolve(version)
+    }
+
+    @ReactMethod
     fun configure(configDict: ReadableMap, promise: Promise) {
         logNewArchitectureStatus()
 

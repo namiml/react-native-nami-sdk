@@ -31,4 +31,7 @@ export const Nami = {
   sdkConfigured: async (): Promise<boolean> => {
     return await RNNami.sdkConfigured?.();
   },
+  sdkVersion: async (): Promise<string> => {
+    return await RNNami.sdkVersion();
+  },
 };
