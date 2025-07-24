@@ -75,7 +75,7 @@ class RNNami: NSObject {
 
     @objc(sdkVersion:rejecter:)
     func sdkVersion(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
-        let version = Nami.sdkVersion
+        let version = Nami.sdkVersion()
         resolve(version)
     }
 
