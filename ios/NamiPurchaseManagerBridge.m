@@ -21,8 +21,6 @@ RCT_EXTERN_METHOD(skuPurchased:(NSString *)skuId resolver:(RCTPromiseResolveBloc
 
 RCT_EXTERN_METHOD(anySkuPurchased:(NSArray*)skuIds resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(consumePurchasedSku:(NSString *)skuId)
-
 RCT_EXTERN_METHOD(registerPurchasesChangedHandler)
 
 RCT_EXTERN_METHOD(registerRestorePurchasesHandler)
