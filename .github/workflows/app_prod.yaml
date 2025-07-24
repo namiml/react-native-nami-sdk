@@ -368,7 +368,8 @@ jobs:
 
       - name: Apply Patches
         run: |
-          patch -p0 < patches/*.patch
+          ls patches/
+          patch -p0 < patches/react-native-tvos-codegen.patch
         working-directory: source/examples/TestNamiTV
 
       - name: Build resolve Swift dependencies

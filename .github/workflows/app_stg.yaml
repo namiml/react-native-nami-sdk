@@ -364,12 +364,13 @@ jobs:
 
       - name: Install test tvOS dependencies
         run: |
-          RCT_NEW_ARCH_ENABLED=1 SWIFT_VERSION=5 pod install --repo-update
+          RCT_NEW_ARCH_ENABLED=1 SWIFT_VERSION=5 pod install --repo-update --force
         working-directory: source/examples/TestNamiTV/ios
 
       - name: Apply Patches
         run: |
-          patch -p0 < patches/*.patch
+          ls patches
+          patch -p0 < patches/react-native-tvos-codegen.patch
         working-directory: source/examples/TestNamiTV
 
       - name: Build resolve Swift dependencies
