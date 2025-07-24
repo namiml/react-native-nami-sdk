@@ -43,13 +43,6 @@ class NamiPurchaseManagerBridgeModule internal constructor(
     }
 
     @ReactMethod
-    fun consumePurchasedSku(skuRefId: String) {
-        reactContext.runOnUiQueueThread {
-            NamiPurchaseManager.consumePurchasedSKU(skuRefId)
-        }
-    }
-
-    @ReactMethod
     fun anySkuPurchased(skuIDs: ReadableArray, promise: Promise) {
         reactContext.runOnUiQueueThread {
             val checkArray = mutableListOf<String>()

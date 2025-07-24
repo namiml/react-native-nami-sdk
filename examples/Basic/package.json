@@ -10,7 +10,7 @@
     "android-clean": "cd android && rm -rf .gradle && rm -rf .idea android.iml local.properties .cxx app/.cxx",
     "ios": "react-native run-ios",
     "ios-clean": "cd ios && rm -rf Pods Podfile.lock && rm -rf build",
-    "ios-build": "cd ios && RCT_NEW_ARCH_ENABLED=1 pod install",
+    "ios-build": "cd ios && RCT_NEW_ARCH_ENABLED=1 pod install --repo-update",
     "start": "npx react-native start --reset-cache",
     "start:legacy": "NODE_OPTIONS=--openssl-legacy-provider react-native start --reset-cache",
     "test": "jest",
