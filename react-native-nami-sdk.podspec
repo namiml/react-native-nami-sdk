@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.homepage     = package['homepage']
   s.license      = package['license']
 
-  s.platforms = { :ios => "14.0", :tvos => "15.0" }
+  s.platforms = { :ios => "15.0", :tvos => "15.0" }
 
 
   s.source       = { :git => "https://github.com/namiml/react-native-nami-sdk.git", :tag => "#{s.version}" }
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
   s.swift_version = '5.0'  # or your supported version
 
-  s.dependency 'Nami', '3.3.1.1'
+  s.dependency 'Nami', '3.3.2'
   s.dependency 'React'
 
   s.pod_target_xcconfig = {

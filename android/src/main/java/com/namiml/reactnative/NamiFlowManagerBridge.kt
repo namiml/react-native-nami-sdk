@@ -56,6 +56,13 @@ class NamiFlowManagerBridgeModule internal constructor(
     }
 
     @ReactMethod
+    fun pause() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            NamiFlowManager.pause()
+        }, 100L)
+    }
+
+    @ReactMethod
     fun finish() {
         Handler(Looper.getMainLooper()).postDelayed({
             NamiFlowManager.finish()

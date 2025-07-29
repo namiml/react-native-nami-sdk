@@ -7,6 +7,7 @@ export interface Spec extends TurboModule {
 
   registerStepHandoff(): void;
   resume(): void;
+  pause(): void;
   registerEventHandler(): void;
 }
 
