@@ -61,7 +61,7 @@ class RNNamiFlowManager: RCTEventEmitter {
 
     @objc func pause() {
         DispatchQueue.main.async {
-            NamiFlowManager.resume()
+            NamiFlowManager.pause()
         }
     }
 

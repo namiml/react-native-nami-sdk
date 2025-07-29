@@ -10,6 +10,12 @@ import {
   Permission,
 } from 'react-native-permissions';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import { NavigationContainerRefWithCurrent } from '@react-navigation/native';
+import type { Product, Subscription } from 'react-native-iap';
+import type { NamiSKU } from 'react-native-nami-sdk';
+import {
+  startSkuPurchase,
+} from '../services/purchase';
 
 const log = logger.createLogger({ severity: 'debug' });
 let eventHandlerRegistered = false;
@@ -22,8 +28,12 @@ function setCustomerAttributesFromHandoff(data: any) {
     });
   }
 }
-
-export function useNamiFlowListener() {
+export function useNamiFlowListener(
+  navigationRef: NavigationContainerRefWithCurrent<any>,
+  setProducts: (products: Product[]) => void,
+  setSubscriptions: (subs: Subscription[]) => void,
+  setNamiSku: (sku: NamiSKU) => void,
+) {
   useEffect(() => {
     log.debug('[NamiFlowManager] Registering step handoff listener');
 
@@ -32,6 +42,31 @@ export function useNamiFlowListener() {
       console.info('[NamiFlowManager] Handoff received:', tag, data);
 
       switch (tag) {
+
+        case 'signin': {
+          NamiFlowManager.pause();
+          if (navigationRef?.current?.navigate) {
+            navigationRef.current.navigate('SignIn');
+          }
+          break;
+        }
+
+        case 'buysku': {
+
+          const sku = data?.sku ?? null;
+          if (sku) {
+            log.debug('[NamiFlowManager] handoff sku:', sku);
+            await startSkuPurchase(
+              sku,
+              setProducts,
+              setSubscriptions,
+              setNamiSku
+            );
+          }
+          break;
+
+        }
+
         case 'push': {
           if (Platform.OS === 'ios') {
             PushNotificationIOS.requestPermissions().then(result => {
@@ -152,7 +187,6 @@ export function useNamiFlowListener() {
 
         case 'complete': {
           setCustomerAttributesFromHandoff(data);
-          NamiFlowManager.resume();
           break;
         }
 

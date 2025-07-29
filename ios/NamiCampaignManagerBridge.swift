@@ -95,6 +95,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
             skuDict["name"] = sku.name
             skuDict["skuId"] = sku.skuId
             skuDict["type"] = sku.type.description
+            skuDict["promoId"] = sku.promoId
         }
 
         var componentChange: [String: Any?] = [:]
@@ -142,8 +143,22 @@ class RNNamiCampaignManager: RCTEventEmitter {
         }
     }
 
-    func handleLaunch(callback: @escaping RCTResponseSenderBlock, success: Bool, error: Error?) {
-        callback([success, error?._code as Any])
+    func handleLaunch(callback: RCTResponseSenderBlock?, success: Bool, error: Error?) {
+        guard let callback = callback else {
+            print("[handleLaunch] callback was nil — possibly already released.")
+            return
+        }
+
+        var errorInfo: Any = NSNull()
+        if let nsError = error as NSError? {
+            errorInfo = [
+                "code": nsError.code,
+                "domain": nsError.domain,
+                "message": nsError.localizedDescription,
+            ]
+        }
+
+        callback([success, errorInfo])
     }
 
     @objc(launch:withUrl:context:completion:paywallCompletion:)
@@ -173,55 +188,67 @@ class RNNamiCampaignManager: RCTEventEmitter {
         }
 
         if productGroups != nil || customAttributes != nil || customObject != nil {
-            paywallLaunchContext = PaywallLaunchContext(productGroups: productGroups, customAttributes: customAttributes, customObject: customObject)
+            paywallLaunchContext = PaywallLaunchContext(
+                productGroups: productGroups,
+                customAttributes: customAttributes,
+                customObject: customObject
+            )
+        }
+
+        // Wrap the callback to ensure it's only called once
+        var callbackOnce: RCTResponseSenderBlock? = callback
+        let safeCallback: RCTResponseSenderBlock = { args in
+            if let cb = callbackOnce {
+                cb(args)
+                callbackOnce = nil
+            } else {
+                print("[RNNamiCampaignManager] Warning: callback already called or cleared")
+            }
         }
 
         var launchMethod: (() -> Void)?
 
         if let urlString = withUrl, let urlObject = URL(string: urlString) {
             launchMethod = {
-                NamiCampaignManager.launch(url: urlObject, context: paywallLaunchContext,
-                                           launchHandler: { success, error in
-                                               self.handleLaunch(
-                                                   callback: callback,
-                                                   success: success,
-                                                   error: error
-                                               )
-                                           },
-                                           paywallActionHandler: { paywallEvent in
-                                               self.handlePaywallAction(paywallEvent: paywallEvent)
-                                           })
+                NamiCampaignManager.launch(
+                    url: urlObject,
+                    context: paywallLaunchContext,
+                    launchHandler: { [weak self] success, error in
+                        self?.handleLaunch(callback: safeCallback, success: success, error: error)
+                    },
+                    paywallActionHandler: { [weak self] event in
+                        self?.handlePaywallAction(paywallEvent: event)
+                    }
+                )
             }
         } else if let label = label {
             launchMethod = {
-                NamiCampaignManager.launch(label: label, context: paywallLaunchContext,
-                                           launchHandler: { success, error in
-                                               self.handleLaunch(
-                                                   callback: callback,
-                                                   success: success,
-                                                   error: error
-                                               )
-                                           },
-                                           paywallActionHandler: { paywallEvent in
-                                               self.handlePaywallAction(paywallEvent: paywallEvent)
-                                           })
+                NamiCampaignManager.launch(
+                    label: label,
+                    context: paywallLaunchContext,
+                    launchHandler: { [weak self] success, error in
+                        self?.handleLaunch(callback: safeCallback, success: success, error: error)
+                    },
+                    paywallActionHandler: { [weak self] event in
+                        self?.handlePaywallAction(paywallEvent: event)
+                    }
+                )
             }
         } else {
             print("Neither URL nor label provided calling default launch.")
             launchMethod = {
-                NamiCampaignManager.launch(context: paywallLaunchContext,
-                                           launchHandler: { success, error in
-                                               self.handleLaunch(
-                                                   callback: callback,
-                                                   success: success,
-                                                   error: error
-                                               )
-                                           },
-                                           paywallActionHandler: { paywallEvent in
-                                               self.handlePaywallAction(paywallEvent: paywallEvent)
-                                           })
+                NamiCampaignManager.launch(
+                    context: paywallLaunchContext,
+                    launchHandler: { [weak self] success, error in
+                        self?.handleLaunch(callback: safeCallback, success: success, error: error)
+                    },
+                    paywallActionHandler: { [weak self] event in
+                        self?.handlePaywallAction(paywallEvent: event)
+                    }
+                )
             }
         }
+
         DispatchQueue.main.async {
             launchMethod?()
         }
