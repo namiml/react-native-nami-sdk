@@ -332,7 +332,18 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
           disable-linux-hw-accel: false
-          script: yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --config=e2e/android-jest.config.js --headless --record-logs all --loglevel trace
+          script: |
+            adb wait-for-device
+
+            boot_completed=""
+            until [[ "$boot_completed" == "1" ]]; do
+              boot_completed=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
+              echo "Waiting for emulator... boot_completed=$boot_completed"
+              sleep 5
+            done
+            echo "Emulator is ready!"
+
+            yarn detox test --configuration ${{ env.DETOX_CONFIGURATION }} --config=e2e/android-jest.config.js --headless --record-logs all --loglevel trace
           working-directory: source/examples/Basic
 
       - name: Upload artifacts
