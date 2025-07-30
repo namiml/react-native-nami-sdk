@@ -20,6 +20,7 @@ import {
   PurchaseError,
   ProductPurchase,
   SubscriptionPurchase,
+  setup
 } from 'react-native-iap';
 
 import {
@@ -36,6 +37,7 @@ import { useNamiFlowListener } from './hooks/useNamiFlowListener';
 import { handleDeepLink } from './services/deeplinking';
 
 LogBox.ignoreLogs(['Billing is unavailable']);
+setup({ storekitMode: 'STOREKIT2_MODE' });
 
 const UNTITLED_HEADER_OPTIONS = {
   title: '',

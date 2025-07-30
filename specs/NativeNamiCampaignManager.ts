@@ -29,6 +29,7 @@ export interface Spec extends TurboModule {
         type?: string;
         promoId?: string;
         promoToken?: string;
+        promoOffer?: { [key: string]: string } | null;
       };
       purchaseError?: string;
       purchases?: Array<{

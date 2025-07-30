@@ -1,35 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { Linking, Platform, EmitterSubscription, TouchableOpacity } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Linking, TouchableOpacity, LogBox } from 'react-native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NamiPaywallManager, NamiSKU } from 'react-native-nami-sdk';
+import { NamiPaywallManager, NamiFlowManager, NamiSKU } from 'react-native-nami-sdk';
+import {
+  purchaseUpdatedListener,
+  purchaseErrorListener,
+  PurchaseError,
+  ProductPurchase,
+  SubscriptionPurchase,
+  Product,
+  Subscription,
+} from 'react-native-iap';
+
+import { startSkuPurchase, handlePurchaseUpdate } from './services/purchase';
 
 import CampaignScreen from './containers/CampaignScreen';
 import ProfileScreen from './containers/ProfileScreen';
 import EntitlementsScreen from './containers/EntitlementsScreen';
-import { handleDeepLink } from './services/deeplinking';
+import { SignInScreen } from './containers/SignInScreen';
 import { useNamiFlowListener } from './hooks/useNamiFlowListener';
-import { LogBox } from 'react-native';
+import { handleDeepLink } from './services/deeplinking';
 
-import {
-  finishTransaction,
-  getProducts,
-  getSubscriptions,
-  Product,
-  ProductPurchase,
-  PurchaseError,
-  purchaseErrorListener,
-  purchaseUpdatedListener,
-  requestPurchase,
-  requestSubscription,
-  Subscription,
-  SubscriptionPurchase,
-} from 'react-native-iap';
-
-LogBox.ignoreLogs([
-  'Billing is unavailable',
-]);
+LogBox.ignoreLogs(['Billing is unavailable']);
 
 export const UNTITLED_HEADER_OPTIONS = {
   title: '',
@@ -38,207 +35,133 @@ export const UNTITLED_HEADER_OPTIONS = {
   headerStyle: { backgroundColor: 'transparent' },
 };
 
+type RootStackParamList = {
+  MainTabs: undefined;
+  SignIn: undefined;
+};
+
 type ViewerTabNavigatorParams = {
   Campaign: undefined;
   Profile: undefined;
   Entitlements: undefined;
-  CustomerManager: undefined;
 };
 
-export interface ViewerTabProps<
-  RouteParam extends keyof ViewerTabNavigatorParams,
-> {
+export interface ViewerTabProps<RouteParam extends keyof ViewerTabNavigatorParams> {
   navigation: NativeStackNavigationProp<ViewerTabNavigatorParams, RouteParam>;
 }
 
 const Tab = createBottomTabNavigator<ViewerTabNavigatorParams>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+// Add this wrapper component
+const TabButton = ({ testID, ...props }: any) => (
+  <TouchableOpacity
+    {...props}
+    testID={testID}
+    delayLongPress={props.delayLongPress || undefined} />
+);
+
+const Tabs = () => (
+  <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
+    <Tab.Screen
+      name="Campaign"
+      component={CampaignScreen}
+      options={{
+        tabBarButton: props => <TabButton
+          {...props}
+          testID="campaign_tab" />
+      }} />
+    <Tab.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{
+        tabBarButton: props => <TabButton
+          {...props}
+          testID="profile_tab" />
+      }} />
+    <Tab.Screen
+      name="Entitlements"
+      component={EntitlementsScreen}
+      options={{
+        tabBarButton: props => <TabButton
+          {...props}
+          testID="entitlements_tab" />
+      }} />
+  </Tab.Navigator>
+);
 
 const App = () => {
+  const navigationRef = useNavigationContainerRef<RootStackParamList>();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [namiSku, setNamiSku] = useState<NamiSKU>(undefined);
+  const [namiSku, setNamiSku] = useState<NamiSKU | undefined>(undefined);
+  const [wasOnSignIn, setWasOnSignIn] = useState(false);
 
-  useNamiFlowListener();
+  useNamiFlowListener(navigationRef, setProducts, setSubscriptions, setNamiSku);
 
   useEffect(() => {
     const subscription = Linking.addListener('url', handleDeepLink);
+    Linking.getInitialURL().then(url => url && handleDeepLink({ url }));
+    return () => subscription.remove();
+  }, []);
+  useEffect(() => {
 
-    Linking.getInitialURL().then(url => {
-      if (url) {
-        handleDeepLink({ url });
+    const unsubscribe = navigationRef.current?.addListener?.('state', () => {
+      const currentRoute = navigationRef.current?.getCurrentRoute();
+      if (!currentRoute) return;
+
+      if (currentRoute.name === 'SignIn') {
+        setWasOnSignIn(true);
+      } else if (wasOnSignIn) {
+        setWasOnSignIn(false);
+
+        console.log('[App] SignIn dismissed');
+
+        NamiFlowManager.resume();
+        // setTimeout(() => {
+        //   console.log('[App] SignIn dismissed, resuming Nami Flow');
+        //   NamiFlowManager.resume();
+        // }, 1000);
       }
     });
 
     return () => {
-      subscription.remove();
+      unsubscribe?.();
     };
-  }, []);
+  }, [wasOnSignIn]);
 
   useEffect(() => {
-    async function startBuySubscription(skuId: string) {
-      await requestSubscription({ sku: skuId });
-    }
+    const buySkuListener = NamiPaywallManager.registerBuySkuHandler(async (sku: NamiSKU) => {
+      await startSkuPurchase(sku, setProducts, setSubscriptions, setNamiSku);
+    });
 
-    async function startBuyOneTime(skuId: string) {
-      await requestPurchase({ sku: skuId });
-    }
+    const purchaseUpdate = purchaseUpdatedListener(async (purchase: ProductPurchase | SubscriptionPurchase) => {
+      await handlePurchaseUpdate(purchase, namiSku, products, subscriptions);
+    });
 
-    const purchaseUpdate: EmitterSubscription = purchaseUpdatedListener(
-      async (purchase: ProductPurchase | SubscriptionPurchase) => {
-        const receipt = purchase.transactionReceipt
-          ? purchase.transactionReceipt
-          : (purchase as unknown as {originalJson: string}).originalJson;
-
-        if (receipt) {
-          try {
-            await finishTransaction({ purchase });
-            let price = '';
-            let currency = '';
-
-            console.log(subscriptions);
-            console.log(JSON.stringify(purchase));
-
-            if (purchase as SubscriptionPurchase) {
-              const subscriptionProduct: Subscription = subscriptions[0];
-              price = subscriptionProduct.price;
-              currency = subscriptionProduct.currency;
-            } else {
-              const oneTimeProduct: Product = products[0];
-              price = oneTimeProduct.price;
-              currency = oneTimeProduct.currency;
-            }
-
-            if (Platform.OS === 'ios' || Platform.isTV) {
-              console.log('Preparing to call buySkuCompleteApple');
-
-              console.log(namiSku);
-              console.log(purchase.transactionId);
-              console.log(purchase.originalTransactionIdentifierIOS);
-
-              NamiPaywallManager.buySkuComplete({
-                product: namiSku,
-                transactionID: purchase.transactionId ?? '',
-                originalTransactionID:
-                  purchase.originalTransactionIdentifierIOS ??
-                  purchase.transactionId ??
-                  '',
-                price: price,
-                currencyCode: currency,
-              });
-            } else if (Platform.OS === 'android') {
-              if (Platform.constants.Manufacturer === 'Amazon') {
-                console.log('Preparing to call buySkuCompleteAmazon');
-                NamiPaywallManager.buySkuComplete({
-                  product: namiSku,
-                  receiptId: purchase.transactionId ?? '',
-                  localizedPrice: price,
-                  userId: purchase.userIdAmazon ?? '',
-                  marketplace: purchase.userMarketplaceAmazon ?? '',
-                });
-              } else {
-                console.log('Preparing to call buySkuCompleteGooglePlay');
-                NamiPaywallManager.buySkuComplete({
-                  product: namiSku,
-                  purchaseToken: purchase.purchaseToken ?? '',
-                  orderId: purchase.transactionId ?? '',
-                });
-              }
-            }
-          } catch (error) {
-            console.log({ message: 'finishTransaction', error });
-          }
-        }
-      },
-    );
-
-    const purchaseError: EmitterSubscription = purchaseErrorListener(
-      (error: PurchaseError) => {
-        console.log('purchase error', JSON.stringify(error));
-        NamiPaywallManager.buySkuCancel();
-      },
-    );
-
-    const buySkuListener = NamiPaywallManager.registerBuySkuHandler(
-      async (sku: NamiSKU) => {
-        console.log(
-          'buy sku handler - need to start purchase flow for sku:',
-          sku.skuId,
-          sku.promoId || 'no promoId',
-          sku.promoToken || 'no promoToken',
-        );
-
-        setNamiSku(sku);
-
-        if (sku.type == 'subscription') {
-          try {
-            const subscriptions = await getSubscriptions({
-              skus: [sku.skuId],
-            });
-            console.log(JSON.stringify(subscriptions));
-            setSubscriptions(subscriptions);
-          } catch (error) {
-            console.log({ message: 'getSubscriptions', error });
-          }
-          startBuySubscription(sku.skuId);
-        } else {
-          try {
-            const products = await getProducts({
-              skus: [sku.skuId],
-            });
-            console.log(JSON.stringify(products));
-            setProducts(products);
-          } catch (error) {
-            console.log({ message: 'getProducts', error });
-          }
-          startBuyOneTime(sku.skuId);
-        }
-      },
-    );
+    const purchaseError = purchaseErrorListener((error: PurchaseError) => {
+      console.log('purchase error', JSON.stringify(error));
+      NamiPaywallManager.buySkuCancel();
+    });
 
     return () => {
       buySkuListener;
-      purchaseUpdate;
-      purchaseError;
+      purchaseUpdate.remove();
+      purchaseError.remove();
     };
   }, [subscriptions, products, namiSku]);
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator screenOptions={UNTITLED_HEADER_OPTIONS}>
-        <Tab.Screen
-          name="Campaign"
-          component={CampaignScreen}
-          options={{
-            tabBarButton: (props) => (
-              <TouchableOpacity
-                {...props}
-                testID="campaign_tab" />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{
-            tabBarButton: (props) => (
-              <TouchableOpacity
-                {...props}
-                testID="profile_tab" />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Entitlements"
-          component={EntitlementsScreen}
-          options={{
-            tabBarButton: (props) => (
-              <TouchableOpacity
-                {...props}
-                testID="entitlements_tab" />
-            ),
-          }}
-        />
-      </Tab.Navigator>
+    <NavigationContainer ref={navigationRef}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen
+          name="MainTabs"
+          component={Tabs} />
+        <Stack.Screen
+          name="SignIn"
+          component={SignInScreen}
+          options={{ presentation: 'modal' }} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

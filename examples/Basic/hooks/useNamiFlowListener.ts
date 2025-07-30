@@ -52,19 +52,34 @@ export function useNamiFlowListener(
         }
 
         case 'buysku': {
+          const rawSku = data?.sku;
+          if (
+            rawSku &&
+            typeof rawSku.skuId === 'string' &&
+            typeof rawSku.type === 'string'
+          ) {
+            const normalizedSku: NamiSKU = {
+              skuId: rawSku.skuId,
+              type: rawSku.type,
+              name: rawSku.name ?? '',
+              id: rawSku.id ?? '',
+              promoId: rawSku.promoId,
+              promoToken: rawSku.promoOfferToken,
+              promoOffer: rawSku.computedSignature ?? null,
+            };
 
-          const sku = data?.sku ?? null;
-          if (sku) {
-            log.debug('[NamiFlowManager] handoff sku:', sku);
+            log.debug('[NamiFlowManager] normalized sku:', normalizedSku);
+
             await startSkuPurchase(
-              sku,
+              normalizedSku,
               setProducts,
               setSubscriptions,
               setNamiSku
             );
+          } else {
+            log.warn('[NamiFlowManager] Invalid or missing SKU in handoff:', rawSku);
           }
           break;
-
         }
 
         case 'push': {
