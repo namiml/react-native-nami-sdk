@@ -4,6 +4,7 @@ export interface Spec extends TurboModule {
     isFlowOpen(): Promise<boolean>;
     registerStepHandoff(): void;
     resume(): void;
+    pause(): void;
     registerEventHandler(): void;
 }
 declare const _default: Spec;

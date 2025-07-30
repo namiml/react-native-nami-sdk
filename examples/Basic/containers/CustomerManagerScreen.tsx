@@ -4,7 +4,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -19,12 +18,11 @@ const TEST_KEY = 'key1';
 type CustomerManagerScreenProps = ViewerTabProps<'CustomerManager'>;
 
 const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
-  const [value, onChangeValue] = useState<string>('');
   const [attribute, setAttribute] = useState<string>('');
   const [inAnonymousMode, setInAnonymousMode] = useState<boolean>(false);
 
   const handleSetAttribute = () => {
-    NamiCustomerManager.setCustomerAttribute(TEST_KEY, value);
+    NamiCustomerManager.setCustomerAttribute(TEST_KEY, 'value1');
     handleGetAttribute();
   };
 
@@ -38,7 +36,6 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
       await NamiCustomerManager.getCustomerAttribute(TEST_KEY);
     console.log('customer attribute', attributeNami);
     setAttribute(attributeNami ? attributeNami : '');
-    onChangeValue('');
   };
 
   const handleAnonymousMode = async () => {
@@ -56,6 +53,7 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
     if (inAnonymousMode) {
       handleAnonymousMode();
     }
+
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
     //Note: not needed in depts
@@ -79,14 +77,6 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
           Set Customer Attribute
         </Text>
         <View style={styles.inputContainer}>
-          <TextInput
-            testID="customer_attribute_input"
-            style={styles.input}
-            onChangeText={onChangeValue}
-            value={value}
-            placeholder="value"
-            keyboardType="default"
-          />
           <TouchableOpacity
             testID="send_btn"
             style={styles.sendBtn}

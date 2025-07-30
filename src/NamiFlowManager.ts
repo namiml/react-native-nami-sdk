@@ -46,6 +46,11 @@ export const NamiFlowManager = {
     RNNamiFlowManager.resume?.();
   },
 
+  pause: (): void => {
+    console.info('[NamiFlowManager] pause from handoff requested');
+    RNNamiFlowManager.pause();
+  },
+
   registerEventHandler: (
     callback: (payload: Record<string, unknown>) => void,
   ): (() => void) => {

@@ -114,6 +114,7 @@ export type NamiSKU = {
   type: NamiSKUType;
   promoId?: string | null;
   promoToken?: string | null;
+  promoOffer?: { [key: string]: string } | null;
 };
 
 export enum NamiPurchaseState {

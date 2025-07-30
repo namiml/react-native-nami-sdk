@@ -72,17 +72,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
     const isFlowOpen = await NamiFlowManager.isFlowOpen();
     log.debug('NamiSDK: flow open? ', isFlowOpen);
-
-    // if (isFlowOpen) {
-    //   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-    //   const doSomethingWithDelay = async () => {
-    //     await sleep(2000); // sleep for 2 seconds
-    //     NamiFlowManager.finish();
-    //   };
-
-    //   doSomethingWithDelay();
-    // };
   };
 
   const showPaywallIfHidden = async () => {

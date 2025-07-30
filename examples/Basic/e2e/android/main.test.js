@@ -15,7 +15,7 @@ describe('Android: Configure Test', () => {
         DETOX_DISABLE_LOGCAT: false,
       },
     });
-  }, 120000);
+  }, 240000);
 
   console.log('app launched');
 

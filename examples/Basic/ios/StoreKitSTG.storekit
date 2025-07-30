@@ -1,4 +1,14 @@
 {
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
   "identifier" : "FDFB3E3C",
   "nonRenewingSubscriptions" : [
 
@@ -11,6 +21,8 @@
     "_developerTeamID" : "K6APTMK8Y8",
     "_failTransactionsEnabled" : false,
     "_lastSynchronizedDate" : 719266999.81882799,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
     "_storeKitErrors" : [
       {
         "current" : null,
@@ -98,7 +110,10 @@
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Plus Annual",
           "subscriptionGroupID" : "21032408",
-          "type" : "RecurringSubscription"
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
         },
         {
           "adHocOffers" : [
@@ -123,7 +138,10 @@
           "recurringSubscriptionPeriod" : "P6M",
           "referenceName" : "Plus Bi-Annual",
           "subscriptionGroupID" : "21032408",
-          "type" : "RecurringSubscription"
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
         },
         {
           "adHocOffers" : [
@@ -161,7 +179,10 @@
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Plus Monthly",
           "subscriptionGroupID" : "21032408",
-          "type" : "RecurringSubscription"
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
         },
         {
           "adHocOffers" : [
@@ -191,7 +212,10 @@
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "VIP Annual",
           "subscriptionGroupID" : "21032408",
-          "type" : "RecurringSubscription"
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
         },
         {
           "adHocOffers" : [
@@ -216,7 +240,10 @@
           "recurringSubscriptionPeriod" : "P6M",
           "referenceName" : "VIP Bi-Annual",
           "subscriptionGroupID" : "21032408",
-          "type" : "RecurringSubscription"
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
         },
         {
           "adHocOffers" : [
@@ -246,13 +273,16 @@
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "VIP Monthly",
           "subscriptionGroupID" : "21032408",
-          "type" : "RecurringSubscription"
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
         }
       ]
     }
   ],
   "version" : {
-    "major" : 3,
+    "major" : 4,
     "minor" : 0
   }
 }

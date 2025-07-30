@@ -69,6 +69,10 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             skuDict["promoId"] = promoId
         }
 
+        if let computed = sku.computedSignature {
+            skuDict["promoOffer"] = computed
+        }
+
         return NSDictionary(dictionary: skuDict.compactMapValues { $0 })
     }
 
