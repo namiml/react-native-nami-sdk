@@ -69,7 +69,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
             skuDict["promoId"] = promoId
         }
 
-        if let computed = sku.computedSig {
+        if let computed = sku.computedSignature {
             skuDict["promoOffer"] = computed
         }
 

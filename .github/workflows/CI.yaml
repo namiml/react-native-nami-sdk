@@ -317,6 +317,11 @@ jobs:
         run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator.device.avdName)" >> $GITHUB_OUTPUT
         working-directory: source/examples/Basic
 
+      - name: Start ADB daemon early
+        run: |
+          adb start-server
+          adb devices
+
       - name: Detox test
         uses: reactivecircus/android-emulator-runner@v2
         with:
