@@ -362,18 +362,18 @@ jobs:
         env:
           TESTNAMITV_APPLE_STG_APP_PLATFORM_ID: '${{ secrets.APPLE_STG_APP_PLATFORM_ID }}'
 
-      - name: List current pwd before patch
-        run: ls -la ./
-        working-directory: source/examples/TestNamiTV
+      # - name: List current pwd before patch
+      #   run: ls -la ./
+      #   working-directory: source/examples/TestNamiTV
   
-      - name: List target file before patch
-        run: ls -la node_modules/
-        working-directory: source/examples/TestNamiTV
+      # - name: List target file before patch
+      #   run: ls -la node_modules/
+      #   working-directory: source/examples/TestNamiTV
   
-      - name: Apply Patches
-        run: |
-          patch -p0 < patches/react-native-tvos-codegen.patch
-        working-directory: source/examples/TestNamiTV
+      # - name: Apply Patches
+      #   run: |
+      #     patch -p0 < patches/react-native-tvos-codegen.patch
+      #   working-directory: source/examples/TestNamiTV
 
       - name: Install test tvOS dependencies
         run: |
