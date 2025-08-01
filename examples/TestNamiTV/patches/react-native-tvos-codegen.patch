@@ -1,0 +1,38 @@
+--- node_modules/react-native/package.json	2025-07-07 16:11:05
++++ node_modules/react-native/package.json	2025-07-07 16:12:13
+@@ -150,21 +150,19 @@
+     "@react-native-tvos/virtualized-lists": "0.79.5-0"
+   },
+   "codegenConfig": {
+-    "libraries": [
+-      {
+-        "name": "FBReactNativeSpec",
+-        "type": "modules",
+-        "ios": {},
+-        "android": {},
+-        "jsSrcsDir": "src"
+-      },
+-      {
+-        "name": "rncore",
+-        "type": "components",
+-        "ios": {},
+-        "android": {},
+-        "jsSrcsDir": "src"
+-      }
+-    ]
++   {
++     "name": "FBReactNativeSpec",
++     "type": "modules",
++     "ios": {},
++     "android": {},
++     "jsSrcsDir": "src"
++   },
++   {
++     "name": "rncore",
++     "type": "components",
++     "ios": {},
++     "android": {},
++     "jsSrcsDir": "src"
++   }
+   }
+ }
