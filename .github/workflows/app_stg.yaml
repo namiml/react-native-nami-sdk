@@ -362,6 +362,10 @@ jobs:
         env:
           TESTNAMITV_APPLE_STG_APP_PLATFORM_ID: '${{ secrets.APPLE_STG_APP_PLATFORM_ID }}'
 
+      - name: List target file before patch
+        run: ls -la node_modules/react-native-tvos/package.json
+        working-directory: source/examples/TestNamiTV
+  
       - name: Apply Patches
         run: |
           patch -p0 < patches/react-native-tvos-codegen.patch
