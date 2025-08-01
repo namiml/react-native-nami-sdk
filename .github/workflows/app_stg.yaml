@@ -362,11 +362,6 @@ jobs:
         env:
           TESTNAMITV_APPLE_STG_APP_PLATFORM_ID: '${{ secrets.APPLE_STG_APP_PLATFORM_ID }}'
 
-      - name: Apply Patches
-        run: |
-          patch -p0 < patches/react-native-tvos-codegen.patch
-        working-directory: source/examples/TestNamiTV
-
       - name: Install test tvOS dependencies
         run: |
           RCT_NEW_ARCH_ENABLED=1 SWIFT_VERSION=5 pod install --repo-update
