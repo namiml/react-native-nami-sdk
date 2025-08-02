@@ -5,20 +5,69 @@ import React, {
   useLayoutEffect,
   useCallback,
 } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NamiCustomerManager, CustomerJourneyState } from 'react-native-nami-sdk';
 import { ViewerTabProps } from '../App';
 
 import theme from '../theme';
 
-const Dot = ({ isActive = false }) => (
-  <View style={[styles.cir, isActive && styles.active]} />
+interface DotConfig {
+  id: string;
+  property: keyof CustomerJourneyState;
+  label: string;
+}
+
+const DOT_CONFIGS: DotConfig[] = [
+  {
+    id: 'trial_period_dot',
+    property: 'inTrialPeriod',
+    label: 'In Trial Period',
+  },
+  {
+    id: 'offer_period_dot',
+    property: 'inIntroOfferPeriod',
+    label: 'In Intro Offer Period',
+  },
+  {
+    id: 'cancelled_dot',
+    property: 'isCancelled',
+    label: 'Has Cancelled',
+  },
+  {
+    id: 'subscriber_dot',
+    property: 'formerSubscriber',
+    label: 'Former Subscriber',
+  },
+  {
+    id: 'grace_period_dot',
+    property: 'inGracePeriod',
+    label: 'In Grace Period',
+  },
+  {
+    id: 'account_hold_dot',
+    property: 'inAccountHold',
+    label: 'In Account Hold',
+  },
+  {
+    id: 'pause_dot',
+    property: 'inPause',
+    label: 'In Pause',
+  },
+];
+
+const Dot = ({
+  isActive = false,
+  testId,
+}: {
+  isActive?: boolean;
+  testId?: string;
+}) => (
+  <View
+    testID={testId}
+    accessibilityValue={{ text: `${isActive}` }}
+    style={[styles.cir, isActive && styles.active]}
+  />
 );
 
 type ProfileScreenProps = ViewerTabProps<'Profile'>;
@@ -31,33 +80,56 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
 
-  const onLoginPress = useCallback(() => {
-    // b909a31c-7a73-11ed-a1eb-0242ac120002
-    // f1851c87-e0ff-4349-a824-cd9b5e5211b9
-    NamiCustomerManager.login('E97EDA7D-F1BC-48E1-8DF4-F67EF4A4E4FF');
+  const defaultJourneyState: CustomerJourneyState = {
+    inTrialPeriod: false,
+    inIntroOfferPeriod: false,
+    isCancelled: false,
+    formerSubscriber: false,
+    inGracePeriod: false,
+    inAccountHold: false,
+    inPause: false,
+  };
+
+  const checkIsLoggedIn = useCallback(() => {
+    // workaround for tests purposes
+    NamiCustomerManager.isLoggedIn().then(() =>
+      setTimeout(() => {
+        NamiCustomerManager.isLoggedIn().then(isLogin => {
+          setIsUserLogin(isLogin);
+        });
+      }, 500),
+    );
   }, []);
+
+  const onLoginPress = useCallback(() => {
+    NamiCustomerManager.login('123456');
+    checkIsLoggedIn();
+  }, [checkIsLoggedIn]);
 
   const onLogoutPress = useCallback(() => {
     NamiCustomerManager.logout();
-  }, []);
+    checkIsLoggedIn();
+  }, [checkIsLoggedIn]);
 
-  const getJourneyState = useCallback(async () => {
-    const myJourneyState = await NamiCustomerManager.journeyState();
-    console.log('myJourneyState', myJourneyState);
-    setJourneyState(myJourneyState);
-  }, []);
 
-  const checkIsLoggedIn = async () => {
-    const isLoggedIn = await NamiCustomerManager.isLoggedIn();
-    setIsUserLogin(isLoggedIn);
-    console.log('isLoggedIn', isLoggedIn);
+  const getJourneyState = () => {
+    NamiCustomerManager.journeyState().then(myJourneyState => {
+      console.log('myJourneyState', myJourneyState);
+      setJourneyState(myJourneyState ?? defaultJourneyState);
+    });
   };
-  const checkId = async () => {
-    const loggedId = await NamiCustomerManager.loggedInId();
-    const deviceId = await NamiCustomerManager.deviceId();
-    setExternalId(loggedId);
-    setDisplayedDeviceId(deviceId);
-  };
+
+  const checkId = useCallback(() => {
+    if (isUserLogin) {
+      NamiCustomerManager.loggedInId().then(loggedId => {
+        setExternalId(loggedId);
+      });
+    } else {
+      NamiCustomerManager.deviceId().then(deviceId => {
+        setDisplayedDeviceId(deviceId);
+      });
+    }
+  }, [isUserLogin]);
 
   useEffect(() => {
     checkIsLoggedIn();
@@ -76,27 +148,43 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             setIsUserLogin(success);
             checkId();
           }
+          if (action === 'login' && !success && error === 400) {
+            onLogoutPress();
+            onLoginPress();
+          }
           if (action === 'logout' && success) {
             setIsUserLogin(!success);
             checkId();
           }
+          if (action === 'nami_device_id_set' && success) {
+            checkId();
+          }
+          if (action === 'nami_device_id_cleared' && success) {
+            checkId();
+          }
         },
       );
+
+    NamiCustomerManager.setCustomerDataPlatformId('4444');
+
     return () => {
       subscriptionJourneyStateRemover();
       subscriptionAccountStateRemover();
     };
-  }, [getJourneyState]);
+  }, [checkId, checkIsLoggedIn, onLoginPress, onLogoutPress]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
         return (
           <TouchableOpacity
+            testID="login_btn"
             style={styles.headerButton}
             onPress={isUserLogin ? onLogoutPress : onLoginPress}
           >
-            <Text style={styles.headerButtonText}>
+            <Text
+              testID="login_btn_text"
+              style={styles.headerButtonText}>
               {isUserLogin ? 'Logout' : 'Login'}
             </Text>
           </TouchableOpacity>
@@ -106,15 +194,24 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }, [navigation, isUserLogin, onLogoutPress, onLoginPress]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
+    <SafeAreaView
+      style={styles.container}
+      edges={['right', 'bottom', 'left']}
+      testID="profile_screen">
+      <Text
+        testID="profile_title"
+        style={styles.title}>
+        Profile
+      </Text>
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>
           {isUserLogin ? 'REGISTERED_USER' : 'ANONYMOUS USER'}
         </Text>
         <View style={styles.idSection}>
-          <Text style={styles.idLabel}>
-            {isUserLogin ? 'External Id' : 'Device Id'}
+          <Text
+            testID="user_id"
+            style={styles.idLabel}>
+            {isUserLogin ? 'Customer Id' : 'Device Id'}
           </Text>
           <Text style={styles.id}>
             {isUserLogin ? externalId : displayedDeviceId}
@@ -122,41 +219,21 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.section}>
-        <Text style={styles.sectionHeader}>JORNEY STATE</Text>
-        <View style={styles.block}>
-          {journeyState && (
-            <>
-              <View style={styles.item}>
-                <Dot isActive={journeyState?.inTrialPeriod} />
-                <Text style={styles.itemText}>In Trial Period</Text>
+        <Text style={styles.sectionHeader}>JOURNEY STATE</Text>
+        {journeyState && (
+          <View style={styles.block}>
+            {DOT_CONFIGS.map(({ id, property, label }) => (
+              <View
+                key={id}
+                style={styles.item}>
+                <Dot
+                  testId={id}
+                  isActive={journeyState?.[property]} />
+                <Text style={styles.itemText}>{label}</Text>
               </View>
-              <View style={styles.item}>
-                <Dot isActive={journeyState?.inIntroOfferPeriod} />
-                <Text style={styles.itemText}>In Intro Offer Period</Text>
-              </View>
-              <View style={styles.item}>
-                <Dot isActive={journeyState?.isCancelled} />
-                <Text style={styles.itemText}>Has Cancelled</Text>
-              </View>
-              <View style={styles.item}>
-                <Dot isActive={journeyState?.formerSubscriber} />
-                <Text style={styles.itemText}>Former Subscriber</Text>
-              </View>
-              <View style={styles.item}>
-                <Dot isActive={journeyState?.inGracePeriod} />
-                <Text style={styles.itemText}>In Grace Period</Text>
-              </View>
-              <View style={styles.item}>
-                <Dot isActive={journeyState?.inAccountHold} />
-                <Text style={styles.itemText}>In Acount Hold</Text>
-              </View>
-              <View style={styles.item}>
-                <Dot isActive={journeyState?.inPause} />
-                <Text style={styles.itemText}>In Pause</Text>
-              </View>
-            </>
-          )}
-        </View>
+            ))}
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );

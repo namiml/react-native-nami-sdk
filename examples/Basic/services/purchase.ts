@@ -32,11 +32,11 @@ export async function startSkuPurchase(
       console.log('[startSkuPurchase] Requesting subscription for:', sku.skuId, 'with token:', sku.promoToken);
 
       if (Platform.OS === 'android' && sku.promoToken) {
-        console.log('[startSkuPurchase] Requesting subscription for:', sku.skuId, 'with token:', sku.promoToken);
 
 
         const androidSub = subs[0] as SubscriptionOfferDetails;
         const offerToken = sku.promoToken ?? androidSub.subscriptionOffers?.[0]?.offerToken;
+        console.log('[startSkuPurchase] Requesting subscription for:', sku.skuId, 'with token:', sku.promoToken);
 
         await requestSubscription({
           sku: sku.skuId,

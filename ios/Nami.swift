@@ -63,8 +63,19 @@ class RNNami: NSObject {
             config.initialConfig = initialConfig
         }
 
+        var didCallBack = false
         Nami.configure(with: config) { sdkConfigured in
-            resolve(["success": sdkConfigured])
+            didCallBack = true
+            NSLog("RNNami: configure() completion called, sdkConfigured: \(sdkConfigured)")
+            DispatchQueue.main.async {
+                resolve(["success": sdkConfigured])
+            }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            if !didCallBack {
+                NSLog("RNNami: configure() completion NEVER CALLED — potential hang!")
+            }
         }
     }
 
