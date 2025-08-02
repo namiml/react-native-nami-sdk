@@ -41,82 +41,112 @@ class RNNamiCustomerManager: RCTEventEmitter {
 
     @objc(setCustomerAttribute:value:)
     func setCustomerAttribute(key: String, value: String) {
-        NamiCustomerManager.setCustomerAttribute(key, value)
+        DispatchQueue.main.async {
+            NamiCustomerManager.setCustomerAttribute(key, value)
+        }
     }
 
     @objc(getCustomerAttribute:resolver:rejecter:)
     func getCustomerAttribute(key: String, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let customerAttribute = NamiCustomerManager.getCustomerAttribute(key: key)
-        resolve(customerAttribute)
+        DispatchQueue.main.async {
+            resolve(customerAttribute)
+        }
     }
 
     @objc(clearCustomerAttribute:)
     func clearCustomerAttribute(key: String) {
-        NamiCustomerManager.clearCustomerAttribute(key)
+        DispatchQueue.main.async {
+            NamiCustomerManager.clearCustomerAttribute(key)
+        }
     }
 
     @objc(clearAllCustomerAttributes)
     func clearAllCustomerAttributes() {
-        NamiCustomerManager.clearAllCustomerAttributes()
+        DispatchQueue.main.async {
+            NamiCustomerManager.clearAllCustomerAttributes()
+        }
     }
 
     @objc(setCustomerDataPlatformId:)
     func setCustomerDataPlatformId(cdpId: String) {
-        NamiCustomerManager.setCustomerDataPlatformId(with: cdpId)
+        DispatchQueue.main.async {
+            NamiCustomerManager.setCustomerDataPlatformId(with: cdpId)
+        }
     }
 
     @objc(clearCustomerDataPlatformId)
     func clearCustomerDataPlatformId() {
-        NamiCustomerManager.clearCustomerDataPlatformId()
+        DispatchQueue.main.async {
+            NamiCustomerManager.clearCustomerDataPlatformId()
+        }
     }
 
     @objc(setAnonymousMode:)
     func setAnonymousMode(anonymousMode: Bool) {
-        NamiCustomerManager.setAnonymousMode(anonymousMode)
+        DispatchQueue.main.async {
+            NamiCustomerManager.setAnonymousMode(anonymousMode)
+        }
     }
 
     @objc(inAnonymousMode:rejecter:)
     func inAnonymousMode(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let inAnonymousMode: Bool = NamiCustomerManager.inAnonymousMode()
-        resolve(inAnonymousMode)
+        DispatchQueue.main.async {
+            resolve(inAnonymousMode)
+        }
     }
 
     @objc(journeyState:rejecter:)
     func journeyState(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         if let journeyState = NamiCustomerManager.journeyState() {
             let dictionary = journeyStateToDictionary(journeyState)
-            resolve(dictionary)
+            DispatchQueue.main.async {
+                resolve(dictionary)
+            }
         } else {
-            resolve(nil)
+            DispatchQueue.main.async {
+                resolve(nil)
+            }
         }
     }
 
     @objc(isLoggedIn:rejecter:)
     func isLoggedIn(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let isLoggedIn = NamiCustomerManager.isLoggedIn()
-        resolve(isLoggedIn)
+        DispatchQueue.main.async {
+            resolve(isLoggedIn)
+        }
     }
 
     @objc(loggedInId:rejecter:)
     func loggedInId(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let id = NamiCustomerManager.loggedInId()
-        resolve(id)
+        DispatchQueue.main.async {
+            resolve(id)
+        }
     }
 
     @objc(deviceId:rejecter:)
     func deviceId(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let id = NamiCustomerManager.deviceId()
-        resolve(id)
+        DispatchQueue.main.async {
+            resolve(id)
+        }
     }
 
     @objc(login:)
     func login(customerId: String) {
-        NamiCustomerManager.login(withId: customerId)
+        DispatchQueue.main.async {
+            NamiCustomerManager.login(withId: customerId)
+        }
     }
 
     @objc(logout)
     func logout() {
-        NamiCustomerManager.logout()
+        DispatchQueue.main.async {
+            NamiCustomerManager.logout()
+        }
     }
 
     @objc(registerJourneyStateHandler)
