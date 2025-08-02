@@ -339,6 +339,7 @@ jobs:
           disable-animations: false
           disable-linux-hw-accel: false
           working-directory: source/examples/Basic
+          script: echo "Generated AVD snapshot for caching."
 
       - name: Run Detox tests
         run: |
