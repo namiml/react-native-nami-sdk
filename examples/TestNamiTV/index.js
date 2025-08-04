@@ -2,7 +2,7 @@
  * @format
  */
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import { AppRegistry } from 'react-native';
 import { Nami } from 'react-native-nami-sdk';
 import App from './App';

@@ -41,52 +41,40 @@ class RNNamiCustomerManager: RCTEventEmitter {
 
     @objc(setCustomerAttribute:value:)
     func setCustomerAttribute(key: String, value: String) {
-        DispatchQueue.main.async {
-            NamiCustomerManager.setCustomerAttribute(key, value)
-        }
+        NamiCustomerManager.setCustomerAttribute(key, value)
     }
 
     @objc(getCustomerAttribute:resolver:rejecter:)
     func getCustomerAttribute(key: String, resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
-        let customerAttribute = NamiCustomerManager.getCustomerAttribute(key: key)
         DispatchQueue.main.async {
+            let customerAttribute = NamiCustomerManager.getCustomerAttribute(key: key)
             resolve(customerAttribute)
         }
     }
 
     @objc(clearCustomerAttribute:)
     func clearCustomerAttribute(key: String) {
-        DispatchQueue.main.async {
-            NamiCustomerManager.clearCustomerAttribute(key)
-        }
+        NamiCustomerManager.clearCustomerAttribute(key)
     }
 
     @objc(clearAllCustomerAttributes)
     func clearAllCustomerAttributes() {
-        DispatchQueue.main.async {
-            NamiCustomerManager.clearAllCustomerAttributes()
-        }
+        NamiCustomerManager.clearAllCustomerAttributes()
     }
 
     @objc(setCustomerDataPlatformId:)
     func setCustomerDataPlatformId(cdpId: String) {
-        DispatchQueue.main.async {
-            NamiCustomerManager.setCustomerDataPlatformId(with: cdpId)
-        }
+        NamiCustomerManager.setCustomerDataPlatformId(with: cdpId)
     }
 
     @objc(clearCustomerDataPlatformId)
     func clearCustomerDataPlatformId() {
-        DispatchQueue.main.async {
-            NamiCustomerManager.clearCustomerDataPlatformId()
-        }
+        NamiCustomerManager.clearCustomerDataPlatformId()
     }
 
     @objc(setAnonymousMode:)
     func setAnonymousMode(anonymousMode: Bool) {
-        DispatchQueue.main.async {
-            NamiCustomerManager.setAnonymousMode(anonymousMode)
-        }
+        NamiCustomerManager.setAnonymousMode(anonymousMode)
     }
 
     @objc(inAnonymousMode:rejecter:)

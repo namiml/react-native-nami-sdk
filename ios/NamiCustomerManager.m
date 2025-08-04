@@ -6,8 +6,9 @@
 //
 
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(RNNamiCustomerManager, NSObject)
+@interface RCT_EXTERN_MODULE(RNNamiCustomerManager, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(setCustomerAttribute:(NSString *)key value:(NSString *)value)
 

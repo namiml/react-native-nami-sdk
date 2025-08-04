@@ -3,7 +3,7 @@ module.exports = {
     [
       '@react-native/babel-preset',
       {
-        unstable_enablePackageExports: true,
+        unstable_transformProfile: 'hermes-stable',
       },
     ],
   ],
