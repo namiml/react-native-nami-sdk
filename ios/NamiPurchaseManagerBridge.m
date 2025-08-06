@@ -13,7 +13,7 @@
 
 #import "React/RCTViewManager.h"
 
-@interface RCT_EXTERN_MODULE(RNNamiPurchaseManager, NSObject)
+@interface RCT_EXTERN_MODULE(RNNamiPurchaseManager, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(allPurchases:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 

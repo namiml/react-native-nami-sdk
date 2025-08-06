@@ -6,8 +6,9 @@
 //
 
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(RNNamiCampaignManager, NSObject)
+@interface RCT_EXTERN_MODULE(RNNamiCampaignManager, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(launch:(nullable NSString *)label withUrl:(nullable NSString *)withUrl context:(nullable NSDictionary *)context completion:(RCTResponseSenderBlock)callback paywallCompletion:(RCTResponseSenderBlock)paywallCallback);
 

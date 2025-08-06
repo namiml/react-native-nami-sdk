@@ -6,8 +6,9 @@
 //
 
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(RNNamiEntitlementManager, NSObject)
+@interface RCT_EXTERN_MODULE(RNNamiEntitlementManager, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(isEntitlementActive:(nullable NSString *)referenceId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 

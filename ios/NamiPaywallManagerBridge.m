@@ -13,7 +13,7 @@
 
 #import "React/RCTViewManager.h"
 
-@interface RCT_EXTERN_MODULE(RNNamiPaywallManager, NSObject)
+@interface RCT_EXTERN_MODULE(RNNamiPaywallManager, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(buySkuComplete:(NSDictionary)dict)
 

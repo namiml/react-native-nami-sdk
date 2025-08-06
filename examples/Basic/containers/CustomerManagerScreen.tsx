@@ -21,9 +21,9 @@ const CustomerManagerScreen: FC<CustomerManagerScreenProps> = () => {
   const [attribute, setAttribute] = useState<string>('');
   const [inAnonymousMode, setInAnonymousMode] = useState<boolean>(false);
 
-  const handleSetAttribute = () => {
+  const handleSetAttribute = async () => {
     NamiCustomerManager.setCustomerAttribute(TEST_KEY, 'value1');
-    handleGetAttribute();
+    await handleGetAttribute();
   };
 
   const handleClearAttribute = () => {
