@@ -74,20 +74,26 @@ class RNNami: NSObject {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             if !didCallBack {
-                NSLog("RNNami: configure() completion NEVER CALLED — potential hang!")
+                NSLog("RNNami: configure() completion NEVER CALLED, reporting failure.")
+                resolve(["success": false])
             }
         }
     }
 
     @objc
-    func sdkConfigured(_ resolve: RCTPromiseResolveBlock, rejecter _: RCTPromiseRejectBlock) {
-        resolve(Nami.sdkConfigured())
+    func sdkConfigured(_ resolve: @escaping RCTPromiseResolveBlock, rejecter _: RCTPromiseRejectBlock) {
+        let sdkConfigured = Nami.sdkConfigured()
+        DispatchQueue.main.async {
+            resolve(sdkConfigured)
+        }
     }
 
     @objc(sdkVersion:rejecter:)
     func sdkVersion(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         let version = Nami.sdkVersion()
-        resolve(version)
+        DispatchQueue.main.async {
+            resolve(version)
+        }
     }
 
     func isNewArchitectureEnabled() -> Bool {

@@ -2,7 +2,7 @@
  * @format
  */
 import React, { useEffect, useState } from 'react';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, InteractionManager } from 'react-native';
 import { AppRegistry } from 'react-native';
 import { Nami } from 'react-native-nami-sdk';
 import App from './App';
@@ -41,46 +41,50 @@ const Root = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function configureNami() {
-      try {
-        const sdkVersion = await Nami.sdkVersion();
-        console.log('Nami SDK Version: ', sdkVersion);
-        const alreadyConfigured = await Nami.sdkConfigured();
+    const interactionTask = InteractionManager.runAfterInteractions(() => {
+      async function configureNami() {
+        try {
+          const sdkVersion = await Nami.sdkVersion();
+          console.log('Nami SDK Version: ', sdkVersion);
+          const alreadyConfigured = await Nami.sdkConfigured();
 
-        if (alreadyConfigured) {
-          console.log('Nami SDK already configured. Skipping setup.');
-          setIsConfigurationComplete(true);
-        } else {
-          const success = await Nami.configure(configDict);
-
-          if (success) {
-            console.log('Nami configured successfully');
+          if (alreadyConfigured) {
+            console.log('Nami SDK already configured. Skipping setup.');
             setIsConfigurationComplete(true);
           } else {
-            console.warn('Nami configuration returned success: false');
-            setSdkError('Nami SDK configuration returned false');
+            const success = await Nami.configure(configDict);
+
+            if (success) {
+              console.log('Nami configured successfully');
+              setIsConfigurationComplete(true);
+            } else {
+              console.warn('Nami configuration returned success: false');
+              setSdkError('Nami SDK configuration returned false');
+            }
+          }
+        } catch (e) {
+          console.error('Nami configuration error:', e);
+          setSdkError('Exception during Nami SDK configuration');
+        } finally {
+          setIsLoading(false);
+
+          if (Platform.constants.Manufacturer === 'Amazon') {
+            NamiPaywallManager.setProductDetails(getAmazonProducts(), true);
+          } else {
+            await initStoreConnection();
           }
         }
-      } catch (e) {
-        console.error('Nami configuration error:', e);
-        setSdkError('Exception during Nami SDK configuration');
-      } finally {
-        setIsLoading(false);
-
-        if (Platform.constants.Manufacturer === 'Amazon') {
-          -          NamiPaywallManager.setProductDetails(getAmazonProducts(), true);
-        } else {
-          await initStoreConnection();
-        };
       }
-    }
-    configureNami();
+
+      configureNami();
+    });
+
+    return () => interactionTask.cancel();
   }, []);
 
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        {/* Loading spinner or message */}
         <Text>Starting Nami SDK...</Text>
       </View>
     );
@@ -94,7 +98,7 @@ const Root = () => {
         </Text>
         <Text>{sdkError}</Text>
         <Text style={{ marginTop: 12 }}>
-          Check logs or the configuration object your are passing into
+          Check logs or the configuration object you are passing into
           Nami.configure.
         </Text>
       </View>
