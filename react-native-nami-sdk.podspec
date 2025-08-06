@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
   s.swift_version = '5.0'  # or your supported version
 
-  s.dependency 'Nami', '3.3.2.8'
+  s.dependency 'Nami', '3.3.2.9'
   s.dependency 'React'
 
   s.pod_target_xcconfig = {
