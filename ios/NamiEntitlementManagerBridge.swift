@@ -22,8 +22,18 @@ class RNNamiEntitlementManager: RCTEventEmitter {
         RNNamiEntitlementManager.shared = self
     }
 
-    override static func requiresMainQueueSetup() -> Bool {
-        return false
+    override class func requiresMainQueueSetup() -> Bool { true }
+
+    private var hasListeners = false
+    override func startObserving() { hasListeners = true }
+    override func stopObserving() { hasListeners = false }
+
+    private func safeSend(withName name: String, body: Any?) {
+        guard hasListeners else {
+            print("[RNNamiEntitlementManager] Warning: no listeners, so event not being sent to JS.")
+            return
+        }
+        sendEvent(withName: name, body: body)
     }
 
     override func supportedEvents() -> [String]! {
@@ -74,9 +84,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     func refresh() {
         NamiEntitlementManager.refresh { entitlements in
             let dicts = entitlements.map { self.entitlementToDictionary($0) }
-            DispatchQueue.main.async {
-                RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
-            }
+            self.safeSend(withName: "EntitlementsChanged", body: dicts)
         }
     }
 
@@ -84,9 +92,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     func registerActiveEntitlementsHandler() {
         NamiEntitlementManager.registerActiveEntitlementsHandler { entitlements in
             let dicts = entitlements.map { self.entitlementToDictionary($0) }
-            DispatchQueue.main.async {
-                RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
-            }
+            self.safeSend(withName: "EntitlementsChanged", body: dicts)
         }
     }
 

@@ -17,7 +17,7 @@ RCT_EXTERN_METHOD(finish)
 RCT_EXTERN_METHOD(isFlowOpen:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 + (BOOL)requiresMainQueueSetup {
-  return NO;
+  return YES;
 }
 
 @end

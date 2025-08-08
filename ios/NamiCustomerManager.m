@@ -44,7 +44,7 @@ RCT_EXTERN_METHOD(registerAccountStateHandler)
 
 
 + (BOOL)requiresMainQueueSetup {
-  return NO;
+  return YES;
 }
 
 @end

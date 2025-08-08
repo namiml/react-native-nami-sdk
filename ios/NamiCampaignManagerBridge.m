@@ -21,7 +21,7 @@ RCT_EXTERN_METHOD(refresh:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRe
 RCT_EXTERN_METHOD(registerAvailableCampaignsHandler)
 
 + (BOOL)requiresMainQueueSetup {
-  return NO;
+  return YES;
 }
 
 @end

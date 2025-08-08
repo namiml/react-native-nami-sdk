@@ -30,7 +30,7 @@ RCT_EXTERN_METHOD(presentCodeRedemptionSheet)
 RCT_EXTERN_METHOD(restorePurchases)
 
 + (BOOL)requiresMainQueueSetup {
-  return NO;
+  return YES;
 }
 
 @end

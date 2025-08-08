@@ -19,11 +19,20 @@ class RNNamiFlowManager: RCTEventEmitter {
 
     override init() {
         super.init()
-        RNNamiFlowManager.shared = self
     }
 
-    override static func requiresMainQueueSetup() -> Bool {
-        return false
+    override class func requiresMainQueueSetup() -> Bool { true }
+
+    private var hasListeners = false
+    override func startObserving() { hasListeners = true }
+    override func stopObserving() { hasListeners = false }
+
+    private func safeSend(withName name: String, body: Any?) {
+        guard hasListeners else {
+            print("[RNNamiFlowManager] Warning: no listeners, so event not being sent to JS.")
+            return
+        }
+        sendEvent(withName: name, body: body)
     }
 
     override func supportedEvents() -> [String]! {
@@ -39,36 +48,26 @@ class RNNamiFlowManager: RCTEventEmitter {
                 payload["handoffData"] = data
             }
 
-            DispatchQueue.main.async {
-                RNNamiFlowManager.shared?.sendEvent(withName: "Handoff", body: payload)
-            }
+            self.safeSend(withName: "Handoff", body: payload)
         }
     }
 
     @objc func registerEventHandler() {
         NamiFlowManager.registerEventHandler { payload in
-            DispatchQueue.main.async {
-                RNNamiFlowManager.shared?.sendEvent(withName: "FlowEvent", body: payload)
-            }
+            self.safeSend(withName: "FlowEvent", body: payload)
         }
     }
 
     @objc func resume() {
-        DispatchQueue.main.async {
-            NamiFlowManager.resume()
-        }
+        NamiFlowManager.resume()
     }
 
     @objc func pause() {
-        DispatchQueue.main.async {
-            NamiFlowManager.pause()
-        }
+        NamiFlowManager.pause()
     }
 
     @objc func finish() {
-        DispatchQueue.main.async {
-            NamiFlowManager.finish()
-        }
+        NamiFlowManager.finish()
     }
 
     @objc func isFlowOpen(_ resolve: @escaping RCTPromiseResolveBlock, rejecter _: @escaping RCTPromiseRejectBlock) {

@@ -46,7 +46,7 @@ RCT_EXTERN_METHOD(setAppSuppliedVideoDetails:(NSString *)url name:(nullable NSSt
 RCT_EXTERN_METHOD(allowUserInteraction:(BOOL *)allowed)
 
 + (BOOL)requiresMainQueueSetup {
-  return NO;
+  return YES;
 }
 
 @end
