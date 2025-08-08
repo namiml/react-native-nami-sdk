@@ -20,7 +20,20 @@ class RNNamiCampaignManager: RCTEventEmitter {
 
     override init() {
         super.init()
-        RNNamiCampaignManager.shared = self
+    }
+
+    override class func requiresMainQueueSetup() -> Bool { true }
+
+    private var hasListeners = false
+    override func startObserving() { hasListeners = true }
+    override func stopObserving() { hasListeners = false }
+
+    private func safeSend(withName name: String, body: Any?) {
+        guard hasListeners else {
+            print("[RNNamiCampaignManager] Warning: no listeners, so event not being sent to JS.")
+            return
+        } // optional but avoids warnings
+        sendEvent(withName: name, body: body)
     }
 
     override func supportedEvents() -> [String]! {
@@ -138,7 +151,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
             "timeSpentOnPaywall": paywallEvent.timeSpentOnPaywall,
         ]
 
-        RNNamiCampaignManager.shared?.sendEvent(withName: "NamiPaywallEvent", body: payload)
+        safeSend(withName: "NamiPaywallEvent", body: payload)
     }
 
     func handleLaunch(callback: RCTResponseSenderBlock?, success: Bool, error: Error?) {
@@ -292,7 +305,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
     func registerForAvailableCampaigns() {
         NamiCampaignManager.registerAvailableCampaignsHandler { availableCampaigns in
             let dictionaries = availableCampaigns.map { campaign in self.campaignInToDictionary(campaign) }
-            RNNamiCampaignManager.shared?.sendEvent(withName: "AvailableCampaignsChanged", body: dictionaries)
+            self.safeSend(withName: "AvailableCampaignsChanged", body: dictionaries)
         }
     }
 }

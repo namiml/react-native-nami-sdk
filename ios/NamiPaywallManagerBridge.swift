@@ -19,7 +19,20 @@ class RNNamiPaywallManager: RCTEventEmitter {
 
     override init() {
         super.init()
-        RNNamiPaywallManager.shared = self
+    }
+
+    override class func requiresMainQueueSetup() -> Bool { true }
+
+    private var hasListeners = false
+    override func startObserving() { hasListeners = true }
+    override func stopObserving() { hasListeners = false }
+
+    private func safeSend(withName name: String, body: Any?) {
+        guard hasListeners else {
+            print("[RNNamiPaywallManager] Warning: no listeners, so event not being sent to JS.")
+            return
+        } // optional but avoids warnings
+        sendEvent(withName: name, body: body)
     }
 
     override func supportedEvents() -> [String]! {
@@ -80,7 +93,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerBuySkuHandler() {
         NamiPaywallManager.registerBuySkuHandler { sku in
             let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
-            RNNamiPaywallManager.shared?.sendEvent(withName: "RegisterBuySKU", body: dictionary)
+            self.safeSend(withName: "RegisterBuySKU", body: dictionary)
         }
     }
 
@@ -88,7 +101,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerCloseHandler() {
         NamiPaywallManager.registerCloseHandler { _ in
             let dictionary = NSDictionary(dictionary: ["PaywallCloseRequested": true].compactMapValues { $0 })
-            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallCloseRequested", body: dictionary)
+            self.safeSend(withName: "PaywallCloseRequested", body: dictionary)
         }
     }
 
@@ -96,7 +109,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerSignInHandler() {
         NamiPaywallManager.registerSignInHandler { _ in
             let dictionary = NSDictionary(dictionary: ["PaywallSignInRequested": true].compactMapValues { $0 })
-            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallSignInRequested", body: dictionary)
+            self.safeSend(withName: "PaywallSignInRequested", body: dictionary)
         }
     }
 
@@ -104,14 +117,14 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerRestoreHandler() {
         NamiPaywallManager.registerRestoreHandler {
             let dictionary = NSDictionary(dictionary: ["PaywallRestoreRequested": true].compactMapValues { $0 })
-            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallRestoreRequested", body: dictionary)
+            self.safeSend(withName: "PaywallRestoreRequested", body: dictionary)
         }
     }
 
     @objc(registerDeeplinkActionHandler)
     func registerDeeplinkActionHandler() {
         NamiPaywallManager.registerDeeplinkActionHandler { url in
-            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallDeeplinkAction", body: url)
+            self.safeSend(withName: "PaywallDeeplinkAction", body: url)
         }
     }
 

@@ -19,7 +19,20 @@ class RNNamiPurchaseManager: RCTEventEmitter {
 
     override init() {
         super.init()
-        RNNamiPurchaseManager.shared = self
+    }
+
+    override class func requiresMainQueueSetup() -> Bool { true }
+
+    private var hasListeners = false
+    override func startObserving() { hasListeners = true }
+    override func stopObserving() { hasListeners = false }
+
+    private func safeSend(withName name: String, body: Any?) {
+        guard hasListeners else {
+            print("[RNNamiPurchaseManager] Warning: no listeners, so event not being sent to JS.")
+            return
+        }
+        sendEvent(withName: name, body: body)
     }
 
     override func supportedEvents() -> [String]! {
@@ -158,7 +171,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
                 "purchaseState": stateString,
                 "error": error?.localizedDescription,
             ]
-            self.sendEvent(withName: "PurchasesChanged", body: payload)
+            self.safeSend(withName: "PurchasesChanged", body: payload)
         }
     }
 
@@ -187,7 +200,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
                 "newPurchases": newPurchasesDictionaries,
                 "oldPurchases": oldPurchasesDictionaries,
             ]
-            RNNamiPurchaseManager.shared?.sendEvent(withName: "RestorePurchasesStateChanged", body: payload)
+            self.safeSend(withName: "RestorePurchasesStateChanged", body: payload)
         }
     }
 
@@ -216,7 +229,7 @@ class RNNamiPurchaseManager: RCTEventEmitter {
                 "newPurchases": newPurchasesDictionaries,
                 "oldPurchases": oldPurchasesDictionaries,
             ]
-            RNNamiPurchaseManager.shared?.sendEvent(withName: "RestorePurchasesStateChanged", body: payload)
+            self.safeSend(withName: "RestorePurchasesStateChanged", body: payload)
         }
     }
 

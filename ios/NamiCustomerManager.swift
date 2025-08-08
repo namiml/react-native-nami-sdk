@@ -19,7 +19,20 @@ class RNNamiCustomerManager: RCTEventEmitter {
 
     override init() {
         super.init()
-        RNNamiCustomerManager.shared = self
+    }
+
+    override class func requiresMainQueueSetup() -> Bool { true }
+
+    private var hasListeners = false
+    override func startObserving() { hasListeners = true }
+    override func stopObserving() { hasListeners = false }
+
+    private func safeSend(withName name: String, body: Any?) {
+        guard hasListeners else {
+            print("[RNNamiCustomerManager] Warning: no listeners, so event not being sent to JS.")
+            return
+        } // optional but avoids warnings
+        sendEvent(withName: name, body: body)
     }
 
     override func supportedEvents() -> [String]! {
@@ -141,7 +154,7 @@ class RNNamiCustomerManager: RCTEventEmitter {
     func registerJourneyStateHandler() {
         NamiCustomerManager.registerJourneyStateHandler { journeyState in
             let dictionary = self.journeyStateToDictionary(journeyState)
-            RNNamiCustomerManager.shared?.sendEvent(withName: "JourneyStateChanged", body: dictionary)
+            self.safeSend(withName: "JourneyStateChanged", body: dictionary)
         }
     }
 
@@ -182,7 +195,7 @@ class RNNamiCustomerManager: RCTEventEmitter {
                 "success": success,
                 "error": error?._code as Any,
             ]
-            RNNamiCustomerManager.shared?.sendEvent(withName: "AccountStateChanged", body: payload)
+            self.safeSend(withName: "AccountStateChanged", body: payload)
         }
     }
 }

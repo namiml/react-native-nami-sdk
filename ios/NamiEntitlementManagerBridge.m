@@ -21,7 +21,7 @@ RCT_EXTERN_METHOD(registerActiveEntitlementsHandler)
 RCT_EXTERN_METHOD(clearProvisionalEntitlementGrants)
 
 + (BOOL)requiresMainQueueSetup {
-  return NO;
+  return YES;
 }
 
 @end
