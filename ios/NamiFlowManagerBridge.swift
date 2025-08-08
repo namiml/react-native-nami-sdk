@@ -39,17 +39,13 @@ class RNNamiFlowManager: RCTEventEmitter {
                 payload["handoffData"] = data
             }
 
-            DispatchQueue.main.async {
-                RNNamiFlowManager.shared?.sendEvent(withName: "Handoff", body: payload)
-            }
+            RNNamiFlowManager.shared?.sendEvent(withName: "Handoff", body: payload)
         }
     }
 
     @objc func registerEventHandler() {
         NamiFlowManager.registerEventHandler { payload in
-            DispatchQueue.main.async {
-                RNNamiFlowManager.shared?.sendEvent(withName: "FlowEvent", body: payload)
-            }
+            RNNamiFlowManager.shared?.sendEvent(withName: "FlowEvent", body: payload)
         }
     }
 

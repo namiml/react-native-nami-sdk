@@ -80,9 +80,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerBuySkuHandler() {
         NamiPaywallManager.registerBuySkuHandler { sku in
             let dictionary = RNNamiPurchaseManager.skuToSKUDict(sku)
-            DispatchQueue.main.async {
-                RNNamiPaywallManager.shared?.sendEvent(withName: "RegisterBuySKU", body: dictionary)
-            }
+            RNNamiPaywallManager.shared?.sendEvent(withName: "RegisterBuySKU", body: dictionary)
         }
     }
 
@@ -90,9 +88,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerCloseHandler() {
         NamiPaywallManager.registerCloseHandler { _ in
             let dictionary = NSDictionary(dictionary: ["PaywallCloseRequested": true].compactMapValues { $0 })
-            DispatchQueue.main.async {
-                RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallCloseRequested", body: dictionary)
-            }
+            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallCloseRequested", body: dictionary)
         }
     }
 
@@ -100,9 +96,7 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerSignInHandler() {
         NamiPaywallManager.registerSignInHandler { _ in
             let dictionary = NSDictionary(dictionary: ["PaywallSignInRequested": true].compactMapValues { $0 })
-            DispatchQueue.main.async {
-                RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallSignInRequested", body: dictionary)
-            }
+            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallSignInRequested", body: dictionary)
         }
     }
 
@@ -110,18 +104,14 @@ class RNNamiPaywallManager: RCTEventEmitter {
     func registerRestoreHandler() {
         NamiPaywallManager.registerRestoreHandler {
             let dictionary = NSDictionary(dictionary: ["PaywallRestoreRequested": true].compactMapValues { $0 })
-            DispatchQueue.main.async {
-                RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallRestoreRequested", body: dictionary)
-            }
+            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallRestoreRequested", body: dictionary)
         }
     }
 
     @objc(registerDeeplinkActionHandler)
     func registerDeeplinkActionHandler() {
         NamiPaywallManager.registerDeeplinkActionHandler { url in
-            DispatchQueue.main.async {
-                RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallDeeplinkAction", body: url)
-            }
+            RNNamiPaywallManager.shared?.sendEvent(withName: "PaywallDeeplinkAction", body: url)
         }
     }
 

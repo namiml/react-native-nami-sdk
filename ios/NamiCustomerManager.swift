@@ -141,9 +141,7 @@ class RNNamiCustomerManager: RCTEventEmitter {
     func registerJourneyStateHandler() {
         NamiCustomerManager.registerJourneyStateHandler { journeyState in
             let dictionary = self.journeyStateToDictionary(journeyState)
-            DispatchQueue.main.async {
-                RNNamiCustomerManager.shared?.sendEvent(withName: "JourneyStateChanged", body: dictionary)
-            }
+            RNNamiCustomerManager.shared?.sendEvent(withName: "JourneyStateChanged", body: dictionary)
         }
     }
 
@@ -184,9 +182,7 @@ class RNNamiCustomerManager: RCTEventEmitter {
                 "success": success,
                 "error": error?._code as Any,
             ]
-            DispatchQueue.main.async {
-                RNNamiCustomerManager.shared?.sendEvent(withName: "AccountStateChanged", body: payload)
-            }
+            RNNamiCustomerManager.shared?.sendEvent(withName: "AccountStateChanged", body: payload)
         }
     }
 }

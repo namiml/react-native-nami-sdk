@@ -74,9 +74,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     func refresh() {
         NamiEntitlementManager.refresh { entitlements in
             let dicts = entitlements.map { self.entitlementToDictionary($0) }
-            DispatchQueue.main.async {
-                RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
-            }
+            RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
         }
     }
 
@@ -84,9 +82,7 @@ class RNNamiEntitlementManager: RCTEventEmitter {
     func registerActiveEntitlementsHandler() {
         NamiEntitlementManager.registerActiveEntitlementsHandler { entitlements in
             let dicts = entitlements.map { self.entitlementToDictionary($0) }
-            DispatchQueue.main.async {
-                RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
-            }
+            RNNamiEntitlementManager.shared?.sendEvent(withName: "EntitlementsChanged", body: dicts)
         }
     }
 

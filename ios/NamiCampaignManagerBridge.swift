@@ -138,9 +138,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
             "timeSpentOnPaywall": paywallEvent.timeSpentOnPaywall,
         ]
 
-        DispatchQueue.main.async {
-            RNNamiCampaignManager.shared?.sendEvent(withName: "NamiPaywallEvent", body: payload)
-        }
+        RNNamiCampaignManager.shared?.sendEvent(withName: "NamiPaywallEvent", body: payload)
     }
 
     func handleLaunch(callback: RCTResponseSenderBlock?, success: Bool, error: Error?) {
@@ -294,9 +292,7 @@ class RNNamiCampaignManager: RCTEventEmitter {
     func registerForAvailableCampaigns() {
         NamiCampaignManager.registerAvailableCampaignsHandler { availableCampaigns in
             let dictionaries = availableCampaigns.map { campaign in self.campaignInToDictionary(campaign) }
-            DispatchQueue.main.async {
-                RNNamiCampaignManager.shared?.sendEvent(withName: "AvailableCampaignsChanged", body: dictionaries)
-            }
+            RNNamiCampaignManager.shared?.sendEvent(withName: "AvailableCampaignsChanged", body: dictionaries)
         }
     }
 }
