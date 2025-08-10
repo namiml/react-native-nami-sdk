@@ -1,3 +1,15 @@
 <manifest package="com.namiml.reactnative">
 
+
+    <application>
+        <activity
+            android:name=".ReactOverlayActivity"
+            android:theme="@style/Theme.TransparentReact"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:noHistory="true"
+            android:excludeFromRecents="true"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" />
+    </application>
 </manifest>

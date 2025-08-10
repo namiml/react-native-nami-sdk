@@ -29,6 +29,8 @@ public class NamiBridgePackage extends TurboReactPackage {
             case NamiPaywallManagerBridgeModule.NAME -> new NamiPaywallManagerBridgeModule(context);
             case NamiPurchaseManagerBridgeModule.NAME ->
                     new NamiPurchaseManagerBridgeModule(context);
+            case NamiOverlayControlBridgeModule.NAME ->
+                    new NamiOverlayControlBridgeModule(context);
             default -> null;
         };
     }
@@ -122,6 +124,19 @@ public class NamiBridgePackage extends TurboReactPackage {
                     new ReactModuleInfo(
                             NamiPurchaseManagerBridgeModule.NAME,
                             NamiPurchaseManagerBridgeModule.NAME,
+                            false,
+                            false,
+                            true,
+                            false,
+                            BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+                    )
+            );
+
+            moduleInfos.put(
+                    NamiOverlayControlBridgeModule.NAME,
+                    new ReactModuleInfo(
+                            NamiOverlayControlBridgeModule.NAME,
+                            NamiOverlayControlBridgeModule.NAME,
                             false,
                             false,
                             true,
