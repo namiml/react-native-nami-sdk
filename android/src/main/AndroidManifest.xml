@@ -1,4 +1,5 @@
-<manifest package="com.namiml.reactnative">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.namiml.reactnative">
 
 
     <application>
