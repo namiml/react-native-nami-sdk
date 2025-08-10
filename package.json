@@ -1,6 +1,6 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "3.3.2-4",
+  "version": "3.3.2-5",
   "description": "React Native Module for Nami - Easy subscriptions & in-app purchases, with powerful built-in paywalls and A/B testing.",
   "main": "index.ts",
   "types": "dist/index.d.ts",
@@ -10,6 +10,13 @@
     "jsSrcsDir": "./specs",
     "android": {
       "javaPackageName": "com.namiml.reactnative"
+    }
+  },
+  "react-native": {
+    "android": {
+      "sourceDir": "android",
+      "packageImportPath": "com.namiml.reactnative.NamiBridgePackage",
+      "libraryName": "react-native-nami-sdk"
     }
   },
   "scripts": {

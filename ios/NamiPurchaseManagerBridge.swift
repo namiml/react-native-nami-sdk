@@ -9,9 +9,9 @@ import Foundation
 import NamiApple
 import React
 
-// #if RCT_NEW_ARCH_ENABLED
-//     extension RNNamiPurchaseManager: RCTTurboModule {}
-// #endif
+#if RCT_NEW_ARCH_ENABLED
+    extension RNNamiPurchaseManager: RCTTurboModule {}
+#endif
 
 @objc(RNNamiPurchaseManager)
 class RNNamiPurchaseManager: RCTEventEmitter {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Platform, Linking } from 'react-native';
-import { NamiFlowManager, NamiCustomerManager } from 'react-native-nami-sdk';
+import { NamiFlowManager, NamiCustomerManager, NamiOverlayControl } from 'react-native-nami-sdk';
 import { logger } from 'react-native-logs';
 import {
   check,
@@ -28,6 +28,66 @@ function setCustomerAttributesFromHandoff(data: any) {
     });
   }
 }
+
+async function requestPermissionWithOverlay(
+  permissionType: 'push' | 'location',
+  permissionRequest: () => Promise<any>,
+  data?: any
+): Promise<void> {
+  try {
+    await NamiOverlayControl.presentOverlay();
+    const off = NamiOverlayControl.onOverlayReady(async () => {
+      try {
+        const result = await permissionRequest();
+        let granted = false;
+
+        if (permissionType === 'push') {
+          granted = Platform.OS === 'ios'
+            ? !!(result.alert || result.authorizationStatus === 1)
+            : result === RESULTS.GRANTED;
+        } else {
+          granted = result === RESULTS.GRANTED;
+        }
+
+        // Centralized attribute setting
+        NamiCustomerManager.setCustomerAttribute(
+          permissionType === 'push' ? 'pushAuthorized' : 'locationAuthorized',
+          granted ? 'true' : 'false'
+        );
+
+        // Set handoff data if granted
+        if (granted && data) setCustomerAttributesFromHandoff(data);
+
+        await NamiOverlayControl.finishOverlay({ granted, status: result });
+
+        // Centralized flow resume
+        NamiFlowManager.resume();
+      } catch (error) {
+        console.error(`[NamiFlowManager] Error in overlay ${permissionType}:`, error);
+        await NamiOverlayControl.finishOverlay({ granted: false, error: error.message });
+        NamiFlowManager.resume();
+      } finally {
+        off();
+      }
+    });
+  } catch (error) {
+    console.warn(`[NamiFlowManager] Overlay failed for ${permissionType}, using fallback:`, error);
+    // Fallback with centralized handling
+    const result = await permissionRequest();
+    const granted = permissionType === 'push'
+      ? (Platform.OS === 'ios' ? !!(result.alert || result.authorizationStatus === 1) : result === RESULTS.GRANTED)
+      : result === RESULTS.GRANTED;
+
+    NamiCustomerManager.setCustomerAttribute(
+      permissionType === 'push' ? 'pushAuthorized' : 'locationAuthorized',
+      granted ? 'true' : 'false'
+    );
+    if (granted && data) setCustomerAttributesFromHandoff(data);
+    NamiFlowManager.resume();
+  }
+}
+
+
 export function useNamiFlowListener(
   navigationRef: NavigationContainerRefWithCurrent<any>,
   setProducts: (products: Product[]) => void,
@@ -84,89 +144,40 @@ export function useNamiFlowListener(
 
         case 'push': {
           if (Platform.OS === 'ios') {
-            PushNotificationIOS.requestPermissions().then(result => {
-              const granted = !!(
-                result.alert || result.authorizationStatus === 1
-              );
-              NamiCustomerManager.setCustomerAttribute(
-                'pushAuthorized',
-                granted ? 'true' : 'false',
-              );
-              if (granted) setCustomerAttributesFromHandoff(data);
-              NamiFlowManager.resume();
-            });
+            await requestPermissionWithOverlay('push', () =>
+              PushNotificationIOS.requestPermissions(), data
+            );
           } else if (Platform.OS === 'android') {
-            try {
-              const permission =
-                'android.permission.POST_NOTIFICATIONS' as unknown as Permission;
-              log.info('[NamiFlowManager] check notification permission');
-
-              const status = await check(permission);
-              if (status === RESULTS.GRANTED) {
-                log.info('[NamiFlowManager] notification permission granted');
-                NamiCustomerManager.setCustomerAttribute(
-                  'pushAuthorized',
-                  'true',
-                );
-                setCustomerAttributesFromHandoff(data);
-                NamiFlowManager.resume();
-              } else {
-                log.info('[NamiFlowManager] notification request permission');
-                const grantStatus = await request(permission);
-                const granted = grantStatus === RESULTS.GRANTED;
-                NamiCustomerManager.setCustomerAttribute(
-                  'pushAuthorized',
-                  granted ? 'true' : 'false',
-                );
-                if (granted) setCustomerAttributesFromHandoff(data);
-                NamiFlowManager.resume();
-              }
-            } catch (err) {
-              // Log the error and continue flow
-              log.warn(
-                '[NamiFlowManager] Error checking/requesting POST_NOTIFICATIONS permission:',
-                err,
-              );
-              NamiFlowManager.resume();
+            const permission = 'android.permission.POST_NOTIFICATIONS' as unknown as Permission;
+            const status = await check(permission);
+            if (status === RESULTS.GRANTED) {
+              await requestPermissionWithOverlay('push', () => Promise.resolve(RESULTS.GRANTED), data);
+            } else {
+              await requestPermissionWithOverlay('push', () => request(permission), data);
             }
           } else {
+            log.warn('[NamiFlowManager] Push notifications not supported on this platform');
             NamiFlowManager.resume();
           }
           break;
         }
 
         case 'location': {
-          let permission;
-          if (Platform.OS === 'ios') {
-            permission = PERMISSIONS.IOS.LOCATION_WHEN_IN_USE;
-          } else if (Platform.OS === 'android') {
-            permission = PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
-          }
+          const permission = Platform.OS === 'ios'
+            ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
+            : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
+
           if (permission) {
-            check(permission).then(status => {
-              if (status === RESULTS.GRANTED) {
-                NamiCustomerManager.setCustomerAttribute(
-                  'locationAuthorized',
-                  'true',
-                );
-                NamiFlowManager.resume();
-              } else if (status === RESULTS.DENIED) {
-                request(permission).then(grantStatus => {
-                  NamiCustomerManager.setCustomerAttribute(
-                    'locationAuthorized',
-                    grantStatus === RESULTS.GRANTED ? 'true' : 'false',
-                  );
-                  NamiFlowManager.resume();
-                });
-              } else {
-                NamiCustomerManager.setCustomerAttribute(
-                  'locationAuthorized',
-                  'false',
-                );
-                NamiFlowManager.resume();
-              }
-            });
+            const status = await check(permission);
+            if (status === RESULTS.GRANTED) {
+              await requestPermissionWithOverlay('location', () => Promise.resolve(RESULTS.GRANTED), data);
+            } else if (status === RESULTS.DENIED) {
+              await requestPermissionWithOverlay('location', () => request(permission), data);
+            } else {
+              await requestPermissionWithOverlay('location', () => Promise.resolve(RESULTS.BLOCKED), data);
+            }
           } else {
+            log.warn('[NamiFlowManager] Location permissions not supported on this platform');
             NamiFlowManager.resume();
           }
           break;
