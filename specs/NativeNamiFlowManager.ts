@@ -9,6 +9,7 @@ export interface Spec extends TurboModule {
   resume(): void;
   pause(): void;
   registerEventHandler(): void;
+  purchaseSuccess(): void;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNNamiFlowManager');
