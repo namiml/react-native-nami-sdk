@@ -6,6 +6,7 @@ export interface Spec extends TurboModule {
     resume(): void;
     pause(): void;
     registerEventHandler(): void;
+    purchaseSuccess(): void;
 }
 declare const _default: Spec;
 export default _default;

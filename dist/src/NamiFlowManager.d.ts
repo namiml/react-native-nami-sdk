@@ -11,4 +11,5 @@ export declare const NamiFlowManager: {
     registerEventHandler: (callback: (payload: Record<string, unknown>) => void) => (() => void);
     finish: () => void;
     isFlowOpen: () => Promise<boolean>;
+    purchaseSuccess: () => void;
 };
