@@ -128,7 +128,7 @@ const App = () => {
     return () => {
       unsubscribe?.();
     };
-  }, [navigationRef, wasOnSignIn]);
+  }, [wasOnSignIn]);
 
   useEffect(() => {
     const buySkuListener = NamiPaywallManager.registerBuySkuHandler(async (sku: NamiSKU) => {
