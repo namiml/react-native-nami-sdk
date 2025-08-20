@@ -9,10 +9,6 @@ import Foundation
 import NamiApple
 import React
 
-#if RCT_NEW_ARCH_ENABLED
-    extension RNNamiPaywallManager: RCTTurboModule {}
-#endif
-
 @objc(RNNamiPaywallManager)
 class RNNamiPaywallManager: RCTEventEmitter {
     public static var shared: RNNamiPaywallManager?

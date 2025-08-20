@@ -4,6 +4,7 @@ import React, {
   useState,
   useLayoutEffect,
   useCallback,
+  useMemo,
 } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -80,7 +81,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const [externalId, setExternalId] = useState<string | undefined>(undefined);
   const [displayedDeviceId, setDisplayedDeviceId] = useState<string>('');
 
-  const defaultJourneyState: CustomerJourneyState = {
+  const defaultJourneyState: CustomerJourneyState = useMemo(() => ({
     inTrialPeriod: false,
     inIntroOfferPeriod: false,
     isCancelled: false,
@@ -88,7 +89,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     inGracePeriod: false,
     inAccountHold: false,
     inPause: false,
-  };
+  }), []);
 
   const checkIsLoggedIn = useCallback(() => {
     // workaround for tests purposes
@@ -112,12 +113,12 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }, [checkIsLoggedIn]);
 
 
-  const getJourneyState = () => {
+  const getJourneyState = useCallback(() => {
     NamiCustomerManager.journeyState().then(myJourneyState => {
       console.log('myJourneyState', myJourneyState);
       setJourneyState(myJourneyState ?? defaultJourneyState);
     });
-  };
+  }, [defaultJourneyState]);
 
   const checkId = useCallback(() => {
     if (isUserLogin) {
@@ -171,7 +172,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       subscriptionJourneyStateRemover();
       subscriptionAccountStateRemover();
     };
-  }, [checkId, checkIsLoggedIn, onLoginPress, onLogoutPress]);
+  }, [checkId, checkIsLoggedIn, getJourneyState, onLoginPress, onLogoutPress]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
