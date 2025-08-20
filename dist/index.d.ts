@@ -5,6 +5,5 @@ export { NamiEntitlementManager } from './src/NamiEntitlementManager';
 export { NamiPurchaseManager } from './src/NamiPurchaseManager';
 export { NamiPaywallManager } from './src/NamiPaywallManager';
 export { NamiFlowManager } from './src/NamiFlowManager';
-import './src/NamiOverlayControl';
 export { NamiOverlayControl } from './src/NamiOverlayControl';
 export * from './src/types';

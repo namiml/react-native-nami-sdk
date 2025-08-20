@@ -235,5 +235,5 @@ export function useNamiFlowListener(
       log.debug('[NamiFlowManager] Removing step handoff listener');
       unsubscribe?.();
     };
-  }, [navigationRef, setNamiSku, setProducts, setSubscriptions]);
+  }, []);
 }

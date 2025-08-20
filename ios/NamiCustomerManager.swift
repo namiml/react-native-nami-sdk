@@ -9,6 +9,10 @@ import Foundation
 import NamiApple
 import React
 
+#if RCT_NEW_ARCH_ENABLED
+    extension RNNamiCustomerManager: RCTTurboModule {}
+#endif
+
 @objc(RNNamiCustomerManager)
 class RNNamiCustomerManager: RCTEventEmitter {
     public static var shared: RNNamiCustomerManager?

@@ -1,4 +1,3 @@
-import React from 'react';
 import { AppRegistry, View, StyleSheet } from 'react-native';
 import {
   TurboModuleRegistry,
@@ -12,8 +11,6 @@ const RNNamiOverlayControl: Spec =
   NativeModules.RNNamiOverlayControl;
 
 const emitter = new NativeEventEmitter(NativeModules.RNNamiOverlayControl);
-
-let customOverlayComponent: React.ComponentType<any> | null = null;
 
 export const NamiOverlayControl = {
   emitter,
@@ -35,41 +32,10 @@ export const NamiOverlayControl = {
     const sub = emitter.addListener('NamiOverlayResult', handler);
     return () => sub.remove();
   },
-
-  setCustomOverlayComponent(component: React.ComponentType<any>) {
-    console.log(
-      '[NamiOverlayControl] Setting custom overlay component:',
-      component?.name || 'unknown',
-    );
-    customOverlayComponent = component;
-    console.log(
-      '[NamiOverlayControl] customOverlayComponent is now:',
-      customOverlayComponent?.name || 'unknown',
-    );
-  },
 };
 
-function NamiOverlayHost() {
-  console.log('[NamiOverlayHost] Component function called!');
-  console.log(
-    '[NamiOverlayHost] customOverlayComponent is:',
-    customOverlayComponent?.name || 'null',
-  );
-
-  const handleFinish = (result?: any) => {
-    console.log('[NamiOverlayHost] Overlay finishing with result:', result);
-    NamiOverlayControl.finishOverlay(result);
-  };
-
-  return (
-    <View style={styles.overlay}>
-      {customOverlayComponent &&
-        React.createElement(customOverlayComponent, {
-          visible: true,
-          onFinish: handleFinish,
-        })}
-    </View>
-  );
+export default function NamiOverlayHost() {
+  return <View style={styles.overlay} />;
 }
 
 const styles = StyleSheet.create({
@@ -79,20 +45,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NamiOverlayHost;
-
-// Register component immediately and handle hot reload
-const registerComponent = () => {
-  try {
-    AppRegistry.registerComponent('NamiOverlayHost', () => NamiOverlayHost);
-    console.log('[NamiOverlayControl] NamiOverlayHost registered successfully');
-  } catch (error) {
-    console.error(
-      '[NamiOverlayControl] Failed to register NamiOverlayHost:',
-      error,
-    );
-  }
-};
-
-// Component registration
-registerComponent();
+AppRegistry.registerComponent('NamiOverlayHost', () => NamiOverlayHost);

@@ -75,6 +75,11 @@ class NamiFlowManagerBridgeModule internal constructor(
         promise.resolve(NamiFlowManager.isFlowOpen())
     }
 
+    @ReactMethod
+    fun purchaseSuccess() {
+        NamiFlowManager.purchaseSuccess()
+    }
+
     private fun sendEvent(
         eventName: String,
         params: WritableMap?,
