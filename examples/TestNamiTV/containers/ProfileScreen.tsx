@@ -112,12 +112,12 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }, [checkIsLoggedIn]);
 
 
-  const getJourneyState = () => {
+  const getJourneyState = useCallback(() => {
     NamiCustomerManager.journeyState().then(myJourneyState => {
       console.log('myJourneyState', myJourneyState);
       setJourneyState(myJourneyState ?? defaultJourneyState);
     });
-  };
+  }, [defaultJourneyState]);
 
   const checkId = useCallback(() => {
     if (isUserLogin) {
@@ -171,7 +171,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       subscriptionJourneyStateRemover();
       subscriptionAccountStateRemover();
     };
-  }, [checkId, checkIsLoggedIn, onLoginPress, onLogoutPress]);
+  }, [checkId, checkIsLoggedIn, getJourneyState, onLoginPress, onLogoutPress]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

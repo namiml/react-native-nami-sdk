@@ -1,3 +1,4 @@
+import React from 'react';
 import { NativeEventEmitter } from 'react-native';
 export declare const NamiOverlayControl: {
     emitter: NativeEventEmitter;
@@ -5,5 +6,7 @@ export declare const NamiOverlayControl: {
     finishOverlay(result?: any): Promise<void>;
     onOverlayReady(handler: () => void): () => void;
     onOverlayResult(handler: (result: any) => void): () => void;
+    setCustomOverlayComponent(component: React.ComponentType<any>): void;
 };
-export default function NamiOverlayHost(): any;
+declare function NamiOverlayHost(): any;
+export default NamiOverlayHost;

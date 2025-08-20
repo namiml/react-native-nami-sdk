@@ -5,5 +5,7 @@ export { NamiEntitlementManager } from './src/NamiEntitlementManager';
 export { NamiPurchaseManager } from './src/NamiPurchaseManager';
 export { NamiPaywallManager } from './src/NamiPaywallManager';
 export { NamiFlowManager } from './src/NamiFlowManager';
+// Import overlay control to ensure component registration
+import './src/NamiOverlayControl';
 export { NamiOverlayControl } from './src/NamiOverlayControl';
 export * from './src/types';

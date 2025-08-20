@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Linking } from 'react-native';
-import { NamiFlowManager, NamiCustomerManager } from 'react-native-nami-sdk';
+import { NamiFlowManager, NamiCustomerManager, NamiOverlayControl } from 'react-native-nami-sdk';
 import { logger } from 'react-native-logs';
+import { SignInOverlay } from '../components/SignInOverlay';
 
-import { NavigationContainerRefWithCurrent } from '@react-navigation/native';
 import type { Product, Subscription } from 'react-native-iap';
 import type { NamiSKU } from 'react-native-nami-sdk';
 import {
@@ -22,7 +22,6 @@ function setCustomerAttributesFromHandoff(data: any) {
   }
 }
 export function useNamiFlowListener(
-  navigationRef: NavigationContainerRefWithCurrent<any>,
   setProducts: (products: Product[]) => void,
   setSubscriptions: (subs: Subscription[]) => void,
   setNamiSku: (sku: NamiSKU) => void,
@@ -37,10 +36,26 @@ export function useNamiFlowListener(
       switch (tag) {
 
         case 'signin': {
-          NamiFlowManager.pause();
+          log.info('[NamiFlowManager] Handling signin handoff with overlay');
+          // Register the SignInOverlay component
+          NamiOverlayControl.setCustomOverlayComponent(SignInOverlay);
 
-          if (navigationRef?.current?.navigate) {
-            navigationRef.current.navigate('SignIn');
+          // Set up result listener
+          const unsubscribe = NamiOverlayControl.onOverlayResult((result: any) => {
+            NamiCustomerManager.setCustomerAttribute('signInFromOnboardingComplete', 'true');
+            log.info('[NamiFlowManager] SignIn overlay result:', result);
+            unsubscribe();
+            NamiFlowManager.resume();
+          });
+
+          // Present overlay
+          try {
+            await NamiOverlayControl.presentOverlay();
+            log.info('[NamiFlowManager] SignIn overlay presented successfully');
+          } catch (error) {
+            log.error('[NamiFlowManager] Failed to present signin overlay:', error);
+            unsubscribe();
+            NamiFlowManager.resume();
           }
           break;
         }
@@ -129,5 +144,5 @@ export function useNamiFlowListener(
       log.debug('[NamiFlowManager] Removing step handoff listener');
       unsubscribe?.();
     };
-  }, []);
+  }, [setNamiSku, setProducts, setSubscriptions]);
 }

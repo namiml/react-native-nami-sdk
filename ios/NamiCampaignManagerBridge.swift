@@ -10,10 +10,6 @@ import NamiApple
 import os
 import React
 
-#if RCT_NEW_ARCH_ENABLED
-    extension RNNamiCampaignManager: RCTTurboModule {}
-#endif
-
 @objc(RNNamiCampaignManager)
 class RNNamiCampaignManager: RCTEventEmitter {
     public static var shared: RNNamiCampaignManager?

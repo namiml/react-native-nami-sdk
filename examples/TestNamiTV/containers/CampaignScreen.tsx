@@ -19,13 +19,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 type CampaignScreenProps = ViewerTabProps<'Campaign'>;
 
 const HeaderRight = ({ onRefreshPress }: {onRefreshPress: () => void}) => (
-  <TouchableOpacity
-    testID="refresh_campaigns"
-    style={styles.headerButton}
-    onPress={onRefreshPress}
-  >
-    <Text style={styles.headerButtonText}>Refresh</Text>
-  </TouchableOpacity>
+  <View style={styles.headerContainer}>
+    <TouchableOpacity
+      testID="refresh_campaigns"
+      style={styles.headerButton}
+      onPress={onRefreshPress}
+    >
+      <Text style={styles.headerButtonText}>Refresh</Text>
+    </TouchableOpacity>
+  </View>
 );
 
 const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
@@ -37,7 +39,10 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       NamiCampaignManager.registerAvailableCampaignsHandler(
         availableCampaigns => {
           console.log('availableCampaigns', availableCampaigns);
-          setCampaigns(availableCampaigns);
+          const sortedCampaigns = availableCampaigns
+            .filter(campaign => Boolean(campaign.value))
+            .sort((a, b) => (a.value || '').localeCompare(b.value || ''));
+          setCampaigns(sortedCampaigns);
         },
       );
     return () => {
@@ -49,9 +54,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   const getAllCampaigns = useCallback(async () => {
     const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
-    const validCampaigns = fetchedCampaigns.filter(campaign =>
-      Boolean(campaign.value),
-    );
+    const validCampaigns = fetchedCampaigns
+      .filter(campaign => Boolean(campaign.value))
+      .sort((a, b) => (a.value || '').localeCompare(b.value || ''));
     setCampaigns(validCampaigns);
     console.log('validCampaigns', validCampaigns);
   }, []);
@@ -89,13 +94,12 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     }
   }, []);
 
-  const onItemPressDefault = useCallback(() => triggerLaunch(null, null), []);
 
   const onRefreshPress = useCallback(async () => {
     const fetchedCampaigns = await NamiCampaignManager.refresh();
-    const refreshedCampaigns = fetchedCampaigns.filter(campaign =>
-      Boolean(campaign.value),
-    );
+    const refreshedCampaigns = fetchedCampaigns
+      .filter(campaign => Boolean(campaign.value))
+      .sort((a, b) => (a.value || '').localeCompare(b.value || ''));
     setCampaigns(refreshedCampaigns);
   }, []);
 
@@ -131,16 +135,6 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
   const SeparatorComponent = () => <View style={styles.separator} />;
 
-  const renderDefault = () => {
-    return (
-      <TouchableOpacity
-        onPress={() => onItemPressDefault()}
-        style={styles.itemDef}
-      >
-        <Text style={styles.itemText}>default</Text>
-      </TouchableOpacity>
-    );
-  };
 
   return (
     <SafeAreaView
@@ -148,13 +142,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       edges={['right', 'bottom', 'left']}>
       <View>
         <Text style={styles.title}>Campaigns</Text>
-        <View style={styles.marginTop20}>
-          <Text style={styles.sectionHeader}>LIVE UNLABELED CAMPAIGNS</Text>
-          {renderDefault()}
-        </View>
       </View>
       <View style={styles.bottomContent}>
-        <Text style={styles.sectionHeader}>LIVE LABELED CAMPAIGNS</Text>
+        <Text style={styles.sectionHeader}>Live Placements</Text>
         <FlatList
           data={campaigns}
           renderItem={renderCampaigns}
@@ -213,11 +203,16 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginBottom: 5,
   },
-  headerButton: {
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 15,
+  },
+  headerButton: {
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    marginLeft: 10,
   },
   headerButtonText: {
     color: theme.links,
