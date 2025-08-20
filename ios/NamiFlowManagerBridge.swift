@@ -72,8 +72,4 @@ class RNNamiFlowManager: RCTEventEmitter {
             resolve(isFlowOpen)
         }
     }
-
-    @objc func purchaseSuccess() {
-        // NamiFlowManager.purchaseSuccess()
-    }
 }
