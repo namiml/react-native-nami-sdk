@@ -2,10 +2,6 @@ import Foundation
 import React
 import UIKit
 
-// Import the C function
-@_silgen_name("NamiOverlayHostView")
-func NamiOverlayHostView(_ bridge: RCTBridge, _ moduleName: String, _ initialProps: [String: Any]?) -> UIView
-
 @objc(RNNamiOverlayControl)
 class NamiOverlayControlBridge: RCTEventEmitter {
     private var overlayViewController: UIViewController?
@@ -18,7 +14,7 @@ class NamiOverlayControlBridge: RCTEventEmitter {
     }
 
     override func supportedEvents() -> [String]! {
-        return ["NamiOverlayReady", "NamiOverlayResult", "NamiOverlayClose"]
+        return ["NamiOverlayReady", "NamiOverlayResult"]
     }
 
     override func startObserving() { hasListeners = true }
@@ -60,35 +56,25 @@ class NamiOverlayControlBridge: RCTEventEmitter {
             }
 
             // Create a React Native view controller for the overlay
-            guard let _ = self.bridge else {
+            guard let bridge = self.bridge else {
                 reject("NO_BRIDGE", "React Native bridge not available", nil)
                 return
             }
 
-            // Use RCTAppDelegate's rootViewFactory for Fabric compatibility
-            var rootView: UIView
-            let screenBounds = UIScreen.main.bounds
+            let rootView = RCTRootView(
+                bridge: bridge,
+                moduleName: "NamiOverlayHost",
+                initialProperties: [:]
+            )
 
-            print("[RNNamiOverlayControl] Using NamiOverlayHostView helper function")
-            if let rootViewFactory = (RCTSharedApplication()?.delegate as? RCTAppDelegate)?.rootViewFactory {
-                rootView = rootViewFactory.view(withModuleName: "NamiOverlayHost", initialProperties: [:])
-                rootView.frame = screenBounds
-
-                print("[RNNamiOverlayControl] RootView created and frame set: \(rootView), bounds: \(screenBounds)")
-
-            } else {
-                rootView = UIView()
-                rootView.backgroundColor = UIColor.clear
-                print("[RNNamiOverlayControl] RootView fallback created and frame set: \(rootView), bounds: \(screenBounds)")
-            }
-
-            print("[RNNamiOverlayControl] Creating overlay view controller")
             let overlayViewController = UIViewController()
             overlayViewController.view = rootView
             overlayViewController.modalPresentationStyle = .overFullScreen
             overlayViewController.modalTransitionStyle = .crossDissolve
+            overlayViewController.view.backgroundColor = UIColor.clear
 
             self.overlayViewController = overlayViewController
+
             // Find the top-most presented view controller
             var topController = rootVC
             while let presented = topController.presentedViewController {
@@ -105,10 +91,8 @@ class NamiOverlayControlBridge: RCTEventEmitter {
             }
 
             self.isPresenting = true
-            print("[RNNamiOverlayControl] About to present overlay on topController: \(topController)")
 
             topController.present(overlayViewController, animated: false) {
-                print("[RNNamiOverlayControl] Overlay presentation completed")
                 self.isPresenting = false
                 // Emit ready event after presentation completes
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -128,12 +112,7 @@ class NamiOverlayControlBridge: RCTEventEmitter {
                 return
             }
 
-            // First emit close event to trigger React component onClose
-            if self.hasListeners {
-                self.safeSend(withName: "NamiOverlayClose", body: nil)
-            }
-
-            // Then emit result to listeners
+            // Emit result to listeners
             if self.hasListeners {
                 self.safeSend(withName: "NamiOverlayResult", body: result)
             }

@@ -1,6 +1,6 @@
 name: CI PR Checks
 env:
-  DEVELOPER_DIR: /Applications/Xcode_16.0.0.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
 on: pull_request
 
 jobs:
