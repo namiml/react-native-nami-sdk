@@ -2,10 +2,6 @@ import Foundation
 import React
 import UIKit
 
-#if RCT_NEW_ARCH_ENABLED
-    extension RNNamiPaywallManager: RCTTurboModule {}
-#endif
-
 @objc(RNNamiOverlayControl)
 class NamiOverlayControlBridge: RCTEventEmitter {
     private var overlayViewController: UIViewController?

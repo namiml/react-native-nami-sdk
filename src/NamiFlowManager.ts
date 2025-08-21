@@ -66,8 +66,4 @@ export const NamiFlowManager = {
   isFlowOpen: async (): Promise<boolean> => {
     return RNNamiFlowManager.isFlowOpen();
   },
-
-  purchaseSuccess: (): void => {
-    RNNamiFlowManager.purchaseSuccess();
-  },
 };

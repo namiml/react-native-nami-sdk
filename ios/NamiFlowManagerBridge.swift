@@ -9,10 +9,6 @@ import Foundation
 import NamiApple
 import React
 
-#if RCT_NEW_ARCH_ENABLED
-    extension RNNamiFlowManager: RCTTurboModule {}
-#endif
-
 @objc(RNNamiFlowManager)
 class RNNamiFlowManager: RCTEventEmitter {
     public static var shared: RNNamiFlowManager?
@@ -75,9 +71,5 @@ class RNNamiFlowManager: RCTEventEmitter {
             let isFlowOpen = NamiFlowManager.isFlowOpen()
             resolve(isFlowOpen)
         }
-    }
-
-    @objc func purchaseSuccess() {
-        // NamiFlowManager.purchaseSuccess()
     }
 }
