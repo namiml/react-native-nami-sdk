@@ -352,6 +352,7 @@ jobs:
 
       - name: Install test app dependencies
         run: |
+          npm cache clean --force
           npm run clean && npm run getsdk && npm run build
         working-directory: source/examples/TestNamiTV
 
