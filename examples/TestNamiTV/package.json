@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "clean": "rm -rf node_modules package-lock.json",
-    "getsdk": "sh -c 'npm install --force ../../$(node scripts/print-latest-sdk-pack-name.mjs)'",
+    "getsdk": "sh -c 'npm install --prefer-online --force ../../$(node scripts/print-latest-sdk-pack-name.mjs)'",
     "build": "npm install --force ; rm -rf node_modules/react-native-nami-sdk/examples",
     "android": "react-native run-android",
     "android-clean": "cd android && rm -rf .gradle && rm -rf .idea android.iml local.properties .cxx app/.cxx",
