@@ -106,7 +106,7 @@ export const NamiPaywallManager = {
     RNNamiPaywallManager.buySkuCancel();
   },
 
-  setProductDetails: (productDetails: string, allowOffers?: boolean): void => {
+  setProductDetails: (productDetails: string, allowOffers: boolean): void => {
     RNNamiPaywallManager.setProductDetails(productDetails, allowOffers);
   },
 
