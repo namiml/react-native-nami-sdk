@@ -76,7 +76,7 @@ export interface Spec extends TurboModule {
 
   buySkuCancel(): void;
 
-  setProductDetails(productDetails: string, allowOffers?: boolean): void;
+  setProductDetails(productDetails: string, allowOffers: boolean): void;
 
   setAppSuppliedVideoDetails(url: string, name?: string): void;
 
