@@ -3,6 +3,7 @@ package com.namiml.reactnative
 import android.app.Activity
 import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 import com.facebook.react.bridge.*
 import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
@@ -13,13 +14,12 @@ import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
 import com.namiml.paywall.model.NamiPaywallEvent
 import com.namiml.paywall.model.PaywallLaunchContext
-import androidx.core.net.toUri
 
 @ReactModule(name = NamiCampaignManagerBridgeModule.NAME)
 class NamiCampaignManagerBridgeModule internal constructor(
-    private val reactContext: ReactApplicationContext
-) : ReactContextBaseJavaModule(reactContext), TurboModule {
-
+    private val reactContext: ReactApplicationContext,
+) : ReactContextBaseJavaModule(reactContext),
+    TurboModule {
     companion object {
         const val NAME = "RNNamiCampaignManager"
         const val CAMPAIGN_ID = "campaignId"
@@ -42,10 +42,7 @@ class NamiCampaignManagerBridgeModule internal constructor(
         const val NAMI_PAYWALL_EVENT = "NamiPaywallEvent"
     }
 
-
-    override fun getName(): String {
-        return NAME
-    }
+    override fun getName(): String = NAME
 
     private fun campaignToReadableMap(campaign: NamiCampaign): ReadableMap {
         val readableMap = Arguments.createMap()
@@ -94,7 +91,37 @@ class NamiCampaignManagerBridgeModule internal constructor(
                     val keyIterator = attr.keySetIterator()
                     while (keyIterator.hasNextKey()) {
                         val key = keyIterator.nextKey()
-                        customAttributes[key] = attr.getString(key) ?: ""
+                        try {
+                            // Handle different data types and store with proper types
+                            val value: Any =
+                                when (attr.getType(key)) {
+                                    ReadableType.String -> attr.getString(key) ?: ""
+                                    ReadableType.Boolean -> attr.getBoolean(key)
+                                    ReadableType.Number -> {
+                                        // Try to get as int first, then as double
+                                        try {
+                                            attr.getInt(key)
+                                        } catch (e: Exception) {
+                                            attr.getDouble(key)
+                                        }
+                                    }
+                                    ReadableType.Null -> ""
+                                    ReadableType.Array -> attr.getArray(key)?.toArrayList() ?: emptyList<Any>()
+                                    ReadableType.Map -> attr.getMap(key)?.toHashMap() ?: emptyMap<String, Any>()
+                                }
+                            customAttributes[key] = value
+                        } catch (e: Exception) {
+                            // Log the error and try to store the value as a string representation
+                            Log.w(NAME, "Error parsing customAttribute '$key': ${e.message}. Attempting string conversion.")
+                            try {
+                                // Fallback: try to get the dynamic value and convert to string
+                                val dynamicValue = attr.getDynamic(key)
+                                customAttributes[key] = dynamicValue.asString() ?: ""
+                            } catch (fallbackError: Exception) {
+                                // If all else fails, log and skip this attribute
+                                Log.e(NAME, "Failed to parse customAttribute '$key': ${fallbackError.message}. Skipping.")
+                            }
+                        }
                     }
                     Log.d(NAME, "customAttributes $customAttributes")
                 }
@@ -120,8 +147,7 @@ class NamiCampaignManagerBridgeModule internal constructor(
 
         if (theActivity != null) {
             reactApplicationContext.runOnUiQueueThread {
-                val paywallActionCallback = {
-                        paywallEvent: NamiPaywallEvent ->
+                val paywallActionCallback = { paywallEvent: NamiPaywallEvent ->
                     handlePaywallCallback(
                         paywallEvent,
                         actionCallback,
@@ -184,7 +210,13 @@ class NamiCampaignManagerBridgeModule internal constructor(
                     putString("id", paywallEvent.sku?.id ?: "")
                     putString("skuId", paywallEvent.sku?.skuId ?: "")
                     putString("name", paywallEvent.sku?.name ?: "")
-                    putString("type", paywallEvent.sku?.type.toString().lowercase())
+                    putString(
+                        "type",
+                        paywallEvent.sku
+                            ?.type
+                            .toString()
+                            .lowercase(),
+                    )
                 }
             resultMap.putMap(SKU, skuMap)
         }
@@ -222,8 +254,8 @@ class NamiCampaignManagerBridgeModule internal constructor(
         emitEvent(NAMI_PAYWALL_EVENT, resultMap)
     }
 
-    private fun createPurchaseArray(purchases: List<NamiPurchase>?): WritableArray {
-        return WritableNativeArray().apply {
+    private fun createPurchaseArray(purchases: List<NamiPurchase>?): WritableArray =
+        WritableNativeArray().apply {
             purchases?.forEach { purchase ->
                 try {
                     pushMap(purchase.toPurchaseDict())
@@ -232,7 +264,6 @@ class NamiCampaignManagerBridgeModule internal constructor(
                 }
             }
         }
-    }
 
     private fun emitEvent(
         event: String,
@@ -279,8 +310,8 @@ class NamiCampaignManagerBridgeModule internal constructor(
         val isCampaignAvailable =
             when {
                 campaignSource == null -> NamiCampaignManager.isCampaignAvailable()
-                campaignSource.toUri().scheme != null -> NamiCampaignManager.isCampaignAvailable(
-                    campaignSource.toUri())
+                campaignSource.toUri().scheme != null ->
+                    NamiCampaignManager.isCampaignAvailable(campaignSource.toUri())
                 else -> NamiCampaignManager.isCampaignAvailable(campaignSource)
             }
         promise.resolve(isCampaignAvailable)
