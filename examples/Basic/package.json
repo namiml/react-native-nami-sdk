@@ -41,7 +41,7 @@
     "react-native-base64": "^0.2.1",
     "react-native-iap": "12.16.0",
     "react-native-logs": "^5.1.0",
-    "react-native-nami-sdk": "file:../../react-native-nami-sdk-3.3.3-5.tgz",
+    "react-native-nami-sdk": "file:../../react-native-nami-sdk-3.3.3-6.tgz",
     "react-native-permissions": "^5.4.1",
     "react-native-reanimated": "3.18.0",
     "react-native-safe-area-context": "^4.10.7",

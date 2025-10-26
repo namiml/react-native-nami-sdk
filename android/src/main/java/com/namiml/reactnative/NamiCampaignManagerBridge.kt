@@ -9,6 +9,7 @@ import com.facebook.react.module.annotations.ReactModule
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.facebook.react.turbomodule.core.interfaces.TurboModule
 import com.namiml.billing.NamiPurchase
+import com.namiml.campaign.LaunchCampaignError
 import com.namiml.campaign.LaunchCampaignResult
 import com.namiml.campaign.NamiCampaign
 import com.namiml.campaign.NamiCampaignManager
@@ -277,17 +278,46 @@ class NamiCampaignManagerBridgeModule internal constructor(
         }
     }
 
+    /**
+     * Maps Android LaunchCampaignError enum values to iOS-compatible error codes
+     * to ensure consistent error handling across platforms in React Native.
+     */
+    private fun mapErrorCodeToIOS(androidError: LaunchCampaignError): Int =
+        when (androidError) {
+            LaunchCampaignError.DEFAULT_CAMPAIGN_NOT_FOUND -> 0
+            LaunchCampaignError.LABELED_CAMPAIGN_NOT_FOUND -> 1
+            LaunchCampaignError.CAMPAIGN_DATA_NOT_FOUND -> 2
+            LaunchCampaignError.PAYWALL_ALREADY_DISPLAYED -> 3
+            LaunchCampaignError.SDK_NOT_INITIALIZED -> 4
+            LaunchCampaignError.URL_CAMPAIGN_NOT_FOUND -> 6
+            LaunchCampaignError.PRODUCT_GROUPS_NOT_FOUND -> 8
+        }
+
     private fun handleResult(
         result: LaunchCampaignResult,
         resultCallback: Callback,
     ) {
-        val resultMap = Arguments.createMap()
         when (result) {
             is LaunchCampaignResult.Success -> {
                 resultCallback.invoke(true)
             }
             is LaunchCampaignResult.Failure -> {
-                resultCallback.invoke(false, "${result.error}")
+                val error = result.error
+                val errorInfo =
+                    if (error is LaunchCampaignError) {
+                        Arguments.createMap().apply {
+                            putInt("code", mapErrorCodeToIOS(error))
+                            putString("domain", "LaunchCampaignError")
+                            putString("message", error.errorMessage.ifEmpty { error.toString() })
+                        }
+                    } else {
+                        Arguments.createMap().apply {
+                            putInt("code", -1)
+                            putString("domain", "Unknown")
+                            putString("message", error.toString())
+                        }
+                    }
+                resultCallback.invoke(false, errorInfo)
             }
         }
     }
