@@ -52,7 +52,11 @@ class NamiFlowManagerBridgeModule internal constructor(
     @ReactMethod
     fun resume() {
         Handler(Looper.getMainLooper()).postDelayed({
-            NamiFlowManager.resume()
+            if (reactApplicationContext.hasCurrentActivity()) {
+                NamiFlowManager.resume(reactApplicationContext.currentActivity)
+            } else {
+                NamiFlowManager.resume()
+            }
         }, 100L)
     }
 

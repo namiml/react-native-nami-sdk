@@ -71,6 +71,7 @@ export interface Spec extends TurboModule {
         value?: string;
     }[]>;
     isCampaignAvailable(source?: string): Promise<boolean>;
+    isFlow(label?: string | null, withUrl?: string | null): Promise<boolean>;
     refresh(): Promise<{
         id?: string;
         rule?: string;

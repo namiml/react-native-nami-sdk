@@ -17,6 +17,7 @@ export declare const NamiCampaignManager: {
         value?: string;
     }[]>;
     isCampaignAvailable: (campaignName: string | null) => Promise<boolean>;
+    isFlow: (label?: string | null, withUrl?: string | null) => Promise<boolean>;
     refresh: () => Promise<{
         id?: string;
         rule?: string;
