@@ -97,6 +97,10 @@ export const NamiCampaignManager = {
     );
   },
 
+  isFlow: async (label?: string | null, withUrl?: string | null) => {
+    return await RNNamiCampaignManager.isFlow(label, withUrl);
+  },
+
   refresh: async () => {
     return await RNNamiCampaignManager.refresh();
   },

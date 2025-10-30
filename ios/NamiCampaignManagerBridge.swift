@@ -289,6 +289,22 @@ class RNNamiCampaignManager: RCTEventEmitter {
         resolve(isCampaignAvailable)
     }
 
+    @objc(isFlow:withUrl:resolver:rejecter:)
+    func isFlow(
+        label: String?,
+        withUrl: String?,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject _: @escaping RCTPromiseRejectBlock
+    ) {
+        var url: URL?
+        if let withUrl = withUrl {
+            url = URL(string: withUrl)
+        }
+
+        let result = NamiCampaignManager.isFlow(label: label, url: url)
+        resolve(result)
+    }
+
     @objc(refresh:rejecter:)
     func refresh(resolve: @escaping RCTPromiseResolveBlock, reject _: @escaping RCTPromiseRejectBlock) {
         NamiCampaignManager.refresh { campaigns in

@@ -15,6 +15,15 @@ export async function handleDeepLink(params: HandleDeepLinkParams) {
   );
   if (isCampaignAvailable && url) {
     console.log('Calling verified deeplink action using launch:', url);
+
+    // Check if the campaign is a Flow campaign and log it
+    try {
+      const isFlow = await NamiCampaignManager.isFlow(undefined, url);
+      console.log(`Deeplink campaign isFlow: ${isFlow} for url: ${url}`);
+    } catch (error) {
+      console.log(`Failed to check if deeplink campaign is Flow: ${error}`);
+    }
+
     NamiCampaignManager.launch(
       undefined,
       url,

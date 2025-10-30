@@ -181,8 +181,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const triggerLaunch = useCallback((label?: any, url?: any) => {
+  const triggerLaunch = useCallback(async (label?: any, url?: any) => {
     checkIfPaywallOpen();
+
+    // Check if the campaign is a Flow campaign and log it
+    try {
+      const isFlow = await NamiCampaignManager.isFlow(label, url);
+      log.debug(`Campaign isFlow: ${isFlow} for label: ${label}, url: ${url}`);
+    } catch (error) {
+      log.debug(`Failed to check if campaign is Flow: ${error}`);
+    }
 
     NamiPaywallManager.setAppSuppliedVideoDetails(
       'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
@@ -246,8 +254,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     async (item: NamiCampaign) => {
       if (await isCampaignAvailable(item.value)) {
         item.type === 'label'
-          ? triggerLaunch(item.value, null)
-          : triggerLaunch(null, item.value);
+          ? await triggerLaunch(item.value, null)
+          : await triggerLaunch(null, item.value);
       }
     },
     [triggerLaunch],

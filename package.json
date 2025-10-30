@@ -1,7 +1,7 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "3.3.3-6",
-  "description": "React Native SDK for Nami - No-code paywall management with A/B testing.",
+  "version": "3.3.4",
+  "description": "React Native SDK for Nami - No-code paywall and onboarding flows with A/B testing.",
   "main": "index.ts",
   "types": "dist/index.d.ts",
   "codegenConfig": {
@@ -35,7 +35,6 @@
   "keywords": [
     "in-app-purchase",
     "ios",
-    "ipados",
     "tvos",
     "paywall",
     "react-native",
@@ -43,7 +42,8 @@
     "subscriptions",
     "iap",
     "play-billing",
-    "payments"
+    "payments",
+    "onboarding"
   ],
   "author": {
     "username": "hellonami",
@@ -52,12 +52,8 @@
   },
   "contributors": [
     {
-      "name": "Francisco Pena",
-      "email": "francisco.pena@namiml.com"
-    },
-    {
-      "name": "Kendall Gelner",
-      "email": "kendall.gelner@namiml.com"
+      "name": "Dan Burcaw",
+      "email": "dan.burcaw@namiml.com"
     }
   ],
   "license": "SEE LICENSE FILE",

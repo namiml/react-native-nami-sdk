@@ -348,6 +348,21 @@ class NamiCampaignManagerBridgeModule internal constructor(
     }
 
     @ReactMethod
+    fun isFlow(
+        label: String?,
+        withUrl: String?,
+        promise: Promise,
+    ) {
+        try {
+            val uri = if (!withUrl.isNullOrEmpty()) withUrl.toUri() else null
+            val result = NamiCampaignManager.isFlow(label = label, uri = uri)
+            promise.resolve(result)
+        } catch (e: Exception) {
+            promise.reject("ISFLOW_ERROR", "Failed to check if campaign is flow: ${e.message}", e)
+        }
+    }
+
+    @ReactMethod
     fun refresh(promise: Promise) {
         NamiCampaignManager.refresh { campaigns ->
             val array = WritableNativeArray()
