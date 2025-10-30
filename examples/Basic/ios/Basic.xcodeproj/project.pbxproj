@@ -64,13 +64,13 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Basic/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Basic-BasicTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Basic-BasicTests.release.xcconfig"; path = "Target Support Files/Pods-Basic-BasicTests/Pods-Basic-BasicTests.release.xcconfig"; sourceTree = "<group>"; };
 		AB3AE9D62E06E9B5009F0273 /* BasicProduction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicProduction.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AB3AE9D72E06E9B5009F0273 /* Basic copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Basic copy-Info.plist"; path = "/Users/dannami/Nami/Source/react-native-nami-sdk/examples/Basic/ios/Basic copy-Info.plist"; sourceTree = "<absolute>"; };
 		AB3AE9D82E085D99009F0273 /* RNConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNConfig.m; sourceTree = "<group>"; };
 		AB3AE9D92E085D99009F0273 /* RNConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNConfig.swift; sourceTree = "<group>"; };
 		AB3AE9DA2E085D99009F0273 /* StoreKitPROD.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitPROD.storekit; sourceTree = "<group>"; };
 		AB3AE9DB2E085D99009F0273 /* StoreKitSTG.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitSTG.storekit; sourceTree = "<group>"; };
 		AB3AE9E42E085D9E009F0273 /* BasicProduction-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BasicProduction-Bridging-Header.h"; sourceTree = "<group>"; };
 		AB3AE9E52E085D9E009F0273 /* Basic-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Basic-Bridging-Header.h"; sourceTree = "<group>"; };
+		ABE34A142EB40E4B0005E90A /* ProdInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProdInfo.plist; sourceTree = "<group>"; };
 		DE5A7CB56876910A7EAAA38F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Basic/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		E17BA4106A5578E286330466 /* libPods-BasicProduction.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BasicProduction.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -125,6 +125,7 @@
 		13B07FAE1A68108700A75B9A /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				ABE34A142EB40E4B0005E90A /* ProdInfo.plist */,
 				AB3AE9D82E085D99009F0273 /* RNConfig.m */,
 				AB3AE9D92E085D99009F0273 /* RNConfig.swift */,
 				AB3AE9DA2E085D99009F0273 /* StoreKitPROD.storekit */,
@@ -169,7 +170,6 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
-				AB3AE9D72E06E9B5009F0273 /* Basic copy-Info.plist */,
 				DE5A7CB56876910A7EAAA38F /* PrivacyInfo.xcprivacy */,
 				13B07FAE1A68108700A75B9A /* Basic */,
 			);
@@ -368,9 +368,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic/Pods-Basic-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic/Pods-Basic-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -385,9 +389,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic-BasicTests/Pods-Basic-BasicTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic-BasicTests/Pods-Basic-BasicTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -402,9 +410,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BasicProduction/Pods-BasicProduction-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BasicProduction/Pods-BasicProduction-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -419,9 +431,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BasicProduction/Pods-BasicProduction-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BasicProduction/Pods-BasicProduction-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -436,9 +452,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic-BasicTests/Pods-Basic-BasicTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic-BasicTests/Pods-Basic-BasicTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -513,9 +533,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic/Pods-Basic-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Basic/Pods-Basic-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -890,7 +914,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = "Basic copy-Info.plist";
+				INFOPLIST_FILE = Basic/ProdInfo.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NamiRN;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -923,7 +947,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "Basic copy-Info.plist";
+				INFOPLIST_FILE = Basic/ProdInfo.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NamiRN;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
