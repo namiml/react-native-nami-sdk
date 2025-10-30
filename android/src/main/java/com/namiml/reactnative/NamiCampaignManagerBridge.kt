@@ -354,7 +354,14 @@ class NamiCampaignManagerBridgeModule internal constructor(
         promise: Promise,
     ) {
         try {
-            val uri = if (!withUrl.isNullOrEmpty()) withUrl.toUri() else null
+            val uri = if (!withUrl.isNullOrEmpty()) {
+                val parsedUri = Uri.parse(withUrl)
+                if (parsedUri.scheme.isNullOrEmpty()) {
+                    promise.reject("ISFLOW_ERROR", "Invalid URL format: missing scheme", null)
+                    return
+                }
+                parsedUri
+            } else null
             val result = NamiCampaignManager.isFlow(label = label, uri = uri)
             promise.resolve(result)
         } catch (e: Exception) {
