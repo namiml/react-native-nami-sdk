@@ -253,9 +253,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const onItemPressPrimary = useCallback(
     async (item: NamiCampaign) => {
       if (await isCampaignAvailable(item.value)) {
-        item.type === 'label'
-          ? await triggerLaunch(item.value, null)
-          : await triggerLaunch(null, item.value);
+        await (item.type === 'label'
+          ? triggerLaunch(item.value, null)
+          : triggerLaunch(null, item.value));
       }
     },
     [triggerLaunch],
