@@ -76,6 +76,7 @@ const Tabs = () => (
       options={{
         title: 'Campaigns',
         tabBarTestID: 'campaign_tab',
+        tabBarAccessibilityLabel: 'campaign_tab',
       }}
     />
     <Tab.Screen
@@ -84,6 +85,7 @@ const Tabs = () => (
       options={{
         title: 'Profile',
         tabBarTestID: 'profile_tab',
+        tabBarAccessibilityLabel: 'profile_tab',
       }}
     />
     <Tab.Screen
@@ -92,6 +94,7 @@ const Tabs = () => (
       options={{
         title: 'Entitlements',
         tabBarTestID: 'entitlements_tab',
+        tabBarAccessibilityLabel: 'entitlements_tab',
       }}
     />
     <Tab.Screen
@@ -100,6 +103,7 @@ const Tabs = () => (
       options={{
         title: 'Customer',
         tabBarTestID: 'customer_manager_tab',
+        tabBarAccessibilityLabel: 'customer_manager_tab',
       }}
     />
   </Tab.Navigator>

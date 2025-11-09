@@ -66,12 +66,7 @@ describe('iOS: Profile and Entitlements screens Test', () => {
 
   it('Should navigate to the Profile tab screen', async () => {
     await expect(element(by.id('campaign_screen'))).toBeVisible();
-    try {
-      await element(by.id('profile_tab')).tap();
-    } catch {
-      // Fallback: try tapping by text if test ID doesn't work
-      await element(by.text('Profile')).tap();
-    }
+    await element(by.id('profile_tab')).tap();
     await expect(element(by.id('profile_title'))).toBeVisible();
   });
 
@@ -114,12 +109,7 @@ describe('iOS: Profile and Entitlements screens Test', () => {
 
   it('Should navigate to the Entitlements tab screen', async () => {
     await expect(element(by.id('profile_screen'))).toBeVisible();
-    try {
-      await element(by.id('entitlements_tab')).tap();
-    } catch {
-      // Fallback: try tapping by text if test ID doesn't work
-      await element(by.text('Entitlements')).tap();
-    }
+    await element(by.id('entitlements_tab')).tap();
     await expect(element(by.id('entitlements_screen'))).toBeVisible();
   });
 
@@ -140,43 +130,22 @@ describe('iOS: Customer Manager screen Test', () => {
   });
 
   it('should navigate to the Customer Manager tab screen', async () => {
-    // Check if tab elements are visible (either by test ID or text)
-    try {
-      await expect(element(by.id('campaign_tab'))).toBeVisible();
-      await expect(element(by.id('profile_tab'))).toBeVisible();
-      await expect(element(by.id('entitlements_tab'))).toBeVisible();
-      await expect(element(by.id('customer_manager_tab'))).toBeVisible();
-    } catch {
-      // Fallback: check by text labels
-      await expect(element(by.text('Campaigns'))).toBeVisible();
-      await expect(element(by.text('Profile'))).toBeVisible();
-      await expect(element(by.text('Entitlements'))).toBeVisible();
-      await expect(element(by.text('Customer'))).toBeVisible();
-    }
+    // Check if tab elements are visible using test IDs only
+    await expect(element(by.id('campaign_tab'))).toBeVisible();
+    await expect(element(by.id('profile_tab'))).toBeVisible();
+    await expect(element(by.id('entitlements_tab'))).toBeVisible();
+    await expect(element(by.id('customer_manager_tab'))).toBeVisible();
 
-    try {
-      await element(by.id('customer_manager_tab')).tap();
-    } catch {
-      // Fallback: try tapping by text if test ID doesn't work
-      await element(by.text('Customer')).tap();
-    }
+    await element(by.id('customer_manager_tab')).tap();
     await expect(element(by.id('customer_manager_screen'))).toBeVisible();
   });
 
   it('should Customer Manager screen have data', async () => {
-    // Check if tab elements are visible (either by test ID or text)
-    try {
-      await expect(element(by.id('campaign_tab'))).toBeVisible();
-      await expect(element(by.id('profile_tab'))).toBeVisible();
-      await expect(element(by.id('entitlements_tab'))).toBeVisible();
-      await expect(element(by.id('customer_manager_tab'))).toBeVisible();
-    } catch {
-      // Fallback: check by text labels
-      await expect(element(by.text('Campaigns'))).toBeVisible();
-      await expect(element(by.text('Profile'))).toBeVisible();
-      await expect(element(by.text('Entitlements'))).toBeVisible();
-      await expect(element(by.text('Customer'))).toBeVisible();
-    }
+    // Check if tab elements are visible using test IDs only
+    await expect(element(by.id('campaign_tab'))).toBeVisible();
+    await expect(element(by.id('profile_tab'))).toBeVisible();
+    await expect(element(by.id('entitlements_tab'))).toBeVisible();
+    await expect(element(by.id('customer_manager_tab'))).toBeVisible();
 
     await expect(element(by.id('customer_manager_title'))).toBeVisible();
     await expect(element(by.id('send_btn'))).toBeVisible();
