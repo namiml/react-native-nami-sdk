@@ -423,7 +423,7 @@ class NamiCampaignManagerBridgeModule internal constructor(
                     null
                 }
 
-            val productGroups = NamiCampaignManager.productGroups(label = label, uri = uri)
+            val productGroups = NamiCampaignManager.getProductGroups(label = label, uri = uri)
             val array = WritableNativeArray()
             productGroups.forEach { group: String ->
                 array.pushString(group)
