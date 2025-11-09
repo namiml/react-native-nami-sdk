@@ -81,6 +81,7 @@ export interface Spec extends TurboModule {
         value?: string;
     }[]>;
     registerAvailableCampaignsHandler(): void;
+    productGroups(label: string | null, withUrl: string | null): Promise<string[]>;
 }
 declare const _default: Spec;
 export default _default;

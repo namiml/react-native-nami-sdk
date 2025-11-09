@@ -320,4 +320,20 @@ class RNNamiCampaignManager: RCTEventEmitter {
             self.safeSend(withName: "AvailableCampaignsChanged", body: dictionaries)
         }
     }
+
+    @objc(productGroups:withUrl:resolver:rejecter:)
+    func productGroups(
+        label: String?,
+        withUrl: String?,
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject _: @escaping RCTPromiseRejectBlock
+    ) {
+        var url: URL?
+        if let withUrl = withUrl {
+            url = URL(string: withUrl)
+        }
+
+        let productGroups = NamiCampaignManager.productGroups(label: label, url: url)
+        resolve(productGroups)
+    }
 }

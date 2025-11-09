@@ -22,6 +22,8 @@ RCT_EXTERN_METHOD(refresh:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRe
 
 RCT_EXTERN_METHOD(registerAvailableCampaignsHandler)
 
+RCT_EXTERN_METHOD(productGroups:(nullable NSString *)label withUrl:(nullable NSString *)withUrl resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+
 + (BOOL)requiresMainQueueSetup {
   return YES;
 }

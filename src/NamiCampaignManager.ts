@@ -115,4 +115,8 @@ export const NamiCampaignManager = {
     RNNamiCampaignManager.registerAvailableCampaignsHandler?.();
     return () => sub.remove();
   },
+
+  getProductGroups: async (label?: string | null, withUrl?: string | null) => {
+    return await RNNamiCampaignManager.productGroups(label ?? null, withUrl ?? null);
+  },
 };

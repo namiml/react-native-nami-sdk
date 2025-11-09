@@ -92,6 +92,8 @@ export interface Spec extends TurboModule {
   >;
 
   registerAvailableCampaignsHandler(): void;
+
+  productGroups(label: string | null, withUrl: string | null): Promise<string[]>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNNamiCampaignManager');

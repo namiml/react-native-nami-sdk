@@ -22,13 +22,15 @@ import {
   TouchableOpacity,
   View,
   Platform,
+  Modal,
 } from 'react-native';
 import { ViewerTabProps } from '../App';
 import theme from '../theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { handleDeepLink } from '../services/deeplinking';
-import customLaunchObject from '../nami_launch_context_custom_object.json';
 import { logger } from 'react-native-logs';
+import { DynamicLaunchContextView } from '../components/LaunchContext/DynamicLaunchContextView';
+import { LaunchContextResult } from '../components/LaunchContext/types';
 
 const log = logger.createLogger();
 
@@ -65,6 +67,9 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const [campaignsAction, setAction] = useState<NamiPaywallAction | string>(
     'INITIAL',
   );
+  const [showLaunchContext, setShowLaunchContext] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState<NamiCampaign | null>(null);
+  const [hasLaunchContextConfig, setHasLaunchContextConfig] = useState(false);
 
   const checkIfPaywallOpen = async () => {
     const isOpen = await NamiPaywallManager.isPaywallOpen();
@@ -111,6 +116,23 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    // Initial load of campaigns
+    getAllCampaigns();
+
+    // Check if launch_context.json has valid configuration
+    try {
+      const launchContextConfig = require('../launch_context.json');
+      const hasConfig = launchContextConfig && (
+        launchContextConfig.productGroups ||
+        launchContextConfig.customObject ||
+        launchContextConfig.customAttributes
+      );
+      setHasLaunchContextConfig(!!hasConfig);
+    } catch (error) {
+      log.debug('No launch_context.json found or invalid configuration');
+      setHasLaunchContextConfig(false);
+    }
+
     const availableCampaignsRemover =
       NamiCampaignManager.registerAvailableCampaignsHandler(
         (availableCampaigns: NamiCampaign[]) => {
@@ -181,7 +203,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const triggerLaunch = useCallback(async (label?: any, url?: any) => {
+  const triggerLaunch = useCallback(async (
+    label?: any,
+    url?: any,
+    launchContext?: LaunchContextResult
+  ) => {
     checkIfPaywallOpen();
 
     // Check if the campaign is a Flow campaign and log it
@@ -197,10 +223,14 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       'app-supplied-video',
     );
 
+    const context = launchContext;
+
+    log.debug('Launching with context:', context);
+
     return NamiCampaignManager.launch(
       label,
       url,
-      { customAttributes: {}, customObject: customLaunchObject },
+      context,
       (successAction, error) => {
         log.debug('successAction', successAction);
         log.debug('error', error);
@@ -253,12 +283,39 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const onItemPressPrimary = useCallback(
     async (item: NamiCampaign) => {
       if (await isCampaignAvailable(item.value)) {
+        // Direct launch without context
         await (item.type === 'label'
           ? triggerLaunch(item.value, null)
           : triggerLaunch(null, item.value));
       }
     },
     [triggerLaunch],
+  );
+
+  const onDetailPress = useCallback(
+    async (item: NamiCampaign) => {
+      if (await isCampaignAvailable(item.value)) {
+        // Show launch context modal for configuration
+        setSelectedCampaign(item);
+        setShowLaunchContext(true);
+      }
+    },
+    [],
+  );
+
+  const handleLaunchWithContext = useCallback(
+    async (context: LaunchContextResult) => {
+      if (!selectedCampaign) return;
+
+      setShowLaunchContext(false);
+
+      await (selectedCampaign.type === 'label'
+        ? triggerLaunch(selectedCampaign.value, null, context)
+        : triggerLaunch(null, selectedCampaign.value, context));
+
+      setSelectedCampaign(null);
+    },
+    [selectedCampaign, triggerLaunch],
   );
 
   const onRefreshPress = useCallback(() => {
@@ -298,23 +355,39 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     const lasItem = index === campaigns.length - 1;
     const itemStyle = lasItem ? [styles.item, styles.lastItem] : styles.item;
     return (
-      <TouchableOpacity
-        testID={`list_item_${item.value}`}
-        accessibilityValue={{ text: JSON.stringify(item) }}
-        onPress={() => onItemPressPrimary(item)}
-        style={itemStyle}
-      >
-        <View
-          testID={`list_item_view_${item.value}`}
+      <View style={styles.itemContainer}>
+        <TouchableOpacity
+          testID={`list_item_${item.value}`}
           accessibilityValue={{ text: JSON.stringify(item) }}
-          style={styles.viewContainer}
+          onPress={() => onItemPressPrimary(item)}
+          style={[itemStyle, styles.itemTouchable]}
         >
-          <Text style={styles.itemText}>{item.value}</Text>
-          {item.type === NamiCampaignRuleType.URL && (
-            <Text style={styles.itemText}>Open as: {item.type}</Text>
-          )}
-        </View>
-      </TouchableOpacity>
+          <View
+            testID={`list_item_view_${item.value}`}
+            accessibilityValue={{ text: JSON.stringify(item) }}
+            style={styles.viewContainer}
+          >
+            <View style={styles.textContainer}>
+              <Text style={styles.itemText}>{item.value}</Text>
+              {item.type === NamiCampaignRuleType.URL && (
+                <Text style={styles.itemText}>Open as: {item.type}</Text>
+              )}
+            </View>
+            {hasLaunchContextConfig && (
+              <TouchableOpacity
+                testID={`detail_button_${item.value}`}
+                onPress={(e) => {
+                  e.stopPropagation();
+                  onDetailPress(item);
+                }}
+                style={styles.inlinEditButton}
+              >
+                <Text style={styles.inlineEditIcon}>✎</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -371,6 +444,29 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
           }
         />
       </View>
+
+      {/* Launch Context Modal */}
+      <Modal
+        visible={showLaunchContext}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => {
+          setShowLaunchContext(false);
+          setSelectedCampaign(null);
+        }}
+      >
+        {selectedCampaign && (
+          <DynamicLaunchContextView
+            campaignLabel={selectedCampaign.type === 'label' ? selectedCampaign.value : undefined}
+            campaignName={selectedCampaign.value}
+            onLaunchWithContext={handleLaunchWithContext}
+            onClose={() => {
+              setShowLaunchContext(false);
+              setSelectedCampaign(null);
+            }}
+          />
+        )}
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -415,6 +511,25 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: theme.links,
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  itemTouchable: {
+    flex: 1,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  inlinEditButton: {
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inlineEditIcon: {
+    fontSize: 18,
+    color: '#007AFF',
   },
   title: {
     fontSize: 26,

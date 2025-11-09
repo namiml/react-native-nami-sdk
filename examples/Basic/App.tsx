@@ -75,44 +75,32 @@ const Tabs = () => (
       name="Campaign"
       component={CampaignScreen}
       options={{
-        tabBarButton: props => (
-          <TouchableOpacity
-            {...props}
-            testID="campaign_tab" />
-        ),
+        title: 'Campaigns',
+        tabBarTestID: 'campaign_tab',
       }}
     />
     <Tab.Screen
       name="Profile"
       component={ProfileScreen}
       options={{
-        tabBarButton: props => (
-          <TouchableOpacity
-            {...props}
-            testID="profile_tab" />
-        ),
+        title: 'Profile',
+        tabBarTestID: 'profile_tab',
       }}
     />
     <Tab.Screen
       name="Entitlements"
       component={EntitlementsScreen}
       options={{
-        tabBarButton: props => (
-          <TouchableOpacity
-            {...props}
-            testID="entitlements_tab" />
-        ),
+        title: 'Entitlements',
+        tabBarTestID: 'entitlements_tab',
       }}
     />
     <Tab.Screen
       name="CustomerManager"
       component={CustomerManagerScreen}
       options={{
-        tabBarButton: props => (
-          <TouchableOpacity
-            {...props}
-            testID="customer_manager_tab" />
-        ),
+        title: 'Customer',
+        tabBarTestID: 'customer_manager_tab',
       }}
     />
   </Tab.Navigator>

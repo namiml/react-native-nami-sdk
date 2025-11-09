@@ -87,6 +87,13 @@ jobs:
           npm run prepare && npm pack
         working-directory: source/
 
+      - name: Extract launch context configuration
+        run: |
+          echo "$LAUNCH_CONTEXT_B64_GZIP" | base64 -d | gunzip > launch_context.json
+        working-directory: source/examples/Basic
+        env:
+          LAUNCH_CONTEXT_B64_GZIP: '${{ secrets.LAUNCH_CONTEXT_B64_GZIP }}'
+
       - name: Install test app dependencies
         run: |
           npm run clean && npm run getsdk && npm run build
@@ -204,6 +211,13 @@ jobs:
           npm install
           npm run prepare && npm pack
         working-directory: source/
+
+      - name: Extract launch context configuration
+        run: |
+          echo "$LAUNCH_CONTEXT_B64_GZIP" | base64 -d | gunzip > launch_context.json
+        working-directory: source/examples/Basic
+        env:
+          LAUNCH_CONTEXT_B64_GZIP: '${{ secrets.LAUNCH_CONTEXT_B64_GZIP }}'
 
       - name: Install test app dependencies
         run: |
@@ -349,6 +363,13 @@ jobs:
           npm install
           npm run prepare && npm pack
         working-directory: source/
+
+      - name: Extract launch context configuration
+        run: |
+          echo "$LAUNCH_CONTEXT_B64_GZIP" | base64 -d | gunzip > launch_context.json
+        working-directory: source/examples/Basic
+        env:
+          LAUNCH_CONTEXT_B64_GZIP: '${{ secrets.LAUNCH_CONTEXT_B64_GZIP }}'
 
       - name: Install test app dependencies
         run: |
