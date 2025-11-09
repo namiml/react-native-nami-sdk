@@ -106,10 +106,11 @@ export const CustomObjectSection: React.FC<CustomObjectSectionProps> = ({
                       style={styles.modalItem}
                       onPress={() => handleSelectObject(item.id)}
                     >
-                      <Text style={[
-                        styles.modalItemText,
-                        item.id === selection.selectedCustomObjectId && styles.selectedItemText,
-                      ]}>
+                      <Text
+                        style={[
+                          styles.modalItemText,
+                          item.id === selection.selectedCustomObjectId && styles.selectedItemText,
+                        ]}>
                         {item.label}
                       </Text>
                     </TouchableOpacity>

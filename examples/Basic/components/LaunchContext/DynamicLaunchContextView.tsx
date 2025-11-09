@@ -178,7 +178,9 @@ export const DynamicLaunchContextView: React.FC<DynamicLaunchContextViewProps> =
     return (
       <View style={styles.centerContainer}>
         <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity style={styles.button} onPress={onClose}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={onClose}>
           <Text style={styles.buttonText}>Close</Text>
         </TouchableOpacity>
       </View>
@@ -189,7 +191,9 @@ export const DynamicLaunchContextView: React.FC<DynamicLaunchContextViewProps> =
     return (
       <View style={styles.centerContainer}>
         <Text style={styles.errorText}>No configuration loaded</Text>
-        <TouchableOpacity style={styles.button} onPress={onClose}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={onClose}>
           <Text style={styles.buttonText}>Close</Text>
         </TouchableOpacity>
       </View>
@@ -212,7 +216,9 @@ export const DynamicLaunchContextView: React.FC<DynamicLaunchContextViewProps> =
         </View>
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}>
         {/* Content Header */}
         {(config.meta?.title || config.meta?.description) && (
           <View style={styles.contentHeader}>
@@ -230,7 +236,7 @@ export const DynamicLaunchContextView: React.FC<DynamicLaunchContextViewProps> =
           <TagFilter
             tags={availableTags}
             selectedTag={selection.currentTag}
-            onTagSelected={(tag) => setSelection({...selection, currentTag: tag})}
+            onTagSelected={(tag) => setSelection({ ...selection, currentTag: tag })}
           />
         )}
 
@@ -266,7 +272,9 @@ export const DynamicLaunchContextView: React.FC<DynamicLaunchContextViewProps> =
 
         {/* Launch Button */}
         {campaignName && (
-          <TouchableOpacity style={styles.launchButton} onPress={handleLaunch}>
+          <TouchableOpacity
+            style={styles.launchButton}
+            onPress={handleLaunch}>
             <Text style={styles.launchButtonText}>
               Launch {campaignName} with context
             </Text>

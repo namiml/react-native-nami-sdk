@@ -134,10 +134,11 @@ export const CustomAttributesSection: React.FC<CustomAttributesSectionProps> = (
                     ]}
                     onPress={() => handlePresetApply(preset.id)}
                   >
-                    <Text style={[
-                      styles.presetChipText,
-                      selection.appliedPresetId === preset.id && styles.presetChipTextSelected,
-                    ]}>
+                    <Text
+                      style={[
+                        styles.presetChipText,
+                        selection.appliedPresetId === preset.id && styles.presetChipTextSelected,
+                      ]}>
                       {preset.label}
                     </Text>
                   </TouchableOpacity>
@@ -233,7 +234,9 @@ const AttributeControl: React.FC<AttributeControlProps> = ({
 
       case 'enum':
         return (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}>
             <View style={styles.enumControl}>
               {attribute.values?.map(value => {
                 const label = attribute.valueLabels?.[value] || value;

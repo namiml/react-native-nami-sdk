@@ -117,6 +117,9 @@ export const NamiCampaignManager = {
   },
 
   getProductGroups: async (label?: string | null, withUrl?: string | null) => {
-    return await RNNamiCampaignManager.productGroups(label ?? null, withUrl ?? null);
+    return await RNNamiCampaignManager.productGroups(
+      label ?? null,
+      withUrl ?? null,
+    );
   },
 };

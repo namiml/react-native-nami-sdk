@@ -121,6 +121,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
     // Check if launch_context.json has valid configuration
     try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const launchContextConfig = require('../launch_context.json');
       const hasConfig = launchContextConfig && (
         launchContextConfig.productGroups ||
@@ -201,7 +202,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getAllCampaigns]);
 
   const triggerLaunch = useCallback(async (
     label?: any,

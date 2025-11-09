@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  View,
   Text,
   TouchableOpacity,
   ScrollView,
@@ -34,10 +33,11 @@ export const TagFilter: React.FC<TagFilterProps> = ({
           ]}
           onPress={() => onTagSelected(tag)}
         >
-          <Text style={[
-            styles.chipText,
-            selectedTag === tag && styles.selectedChipText,
-          ]}>
+          <Text
+            style={[
+              styles.chipText,
+              selectedTag === tag && styles.selectedChipText,
+            ]}>
             {tag.toLowerCase()}
           </Text>
         </TouchableOpacity>

@@ -425,7 +425,7 @@ class NamiCampaignManagerBridgeModule internal constructor(
 
             val productGroups = NamiCampaignManager.productGroups(label = label, uri = uri)
             val array = WritableNativeArray()
-            productGroups.forEach { group ->
+            productGroups.forEach { group: String ->
                 array.pushString(group)
             }
             promise.resolve(array)

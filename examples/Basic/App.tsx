@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Linking,
-  TouchableOpacity,
   LogBox,
 } from 'react-native';
 import {

@@ -75,10 +75,11 @@ export const ProductGroupsSection: React.FC<ProductGroupsSectionProps> = ({
               style={styles.checkboxRow}
               onPress={() => handleGroupToggle(group)}
             >
-              <View style={[
-                styles.checkbox,
-                selection.selectedProductGroupIds.has(group) && styles.checkboxChecked,
-              ]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  selection.selectedProductGroupIds.has(group) && styles.checkboxChecked,
+                ]}>
                 {selection.selectedProductGroupIds.has(group) && (
                   <Text style={styles.checkmark}>✓</Text>
                 )}
