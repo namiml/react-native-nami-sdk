@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Linking,
+  TouchableOpacity,
   LogBox,
 } from 'react-native';
 import {
@@ -74,36 +75,44 @@ const Tabs = () => (
       name="Campaign"
       component={CampaignScreen}
       options={{
-        title: 'Campaigns',
-        tabBarTestID: 'campaign_tab',
-        tabBarAccessibilityLabel: 'campaign_tab',
+        tabBarButton: props => (
+          <TouchableOpacity
+            {...props}
+            testID="campaign_tab" />
+        ),
       }}
     />
     <Tab.Screen
       name="Profile"
       component={ProfileScreen}
       options={{
-        title: 'Profile',
-        tabBarTestID: 'profile_tab',
-        tabBarAccessibilityLabel: 'profile_tab',
+        tabBarButton: props => (
+          <TouchableOpacity
+            {...props}
+            testID="profile_tab" />
+        ),
       }}
     />
     <Tab.Screen
       name="Entitlements"
       component={EntitlementsScreen}
       options={{
-        title: 'Entitlements',
-        tabBarTestID: 'entitlements_tab',
-        tabBarAccessibilityLabel: 'entitlements_tab',
+        tabBarButton: props => (
+          <TouchableOpacity
+            {...props}
+            testID="entitlements_tab" />
+        ),
       }}
     />
     <Tab.Screen
       name="CustomerManager"
       component={CustomerManagerScreen}
       options={{
-        title: 'Customer',
-        tabBarTestID: 'customer_manager_tab',
-        tabBarAccessibilityLabel: 'customer_manager_tab',
+        tabBarButton: props => (
+          <TouchableOpacity
+            {...props}
+            testID="customer_manager_tab" />
+        ),
       }}
     />
   </Tab.Navigator>
