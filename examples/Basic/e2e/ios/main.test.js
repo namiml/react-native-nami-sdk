@@ -130,6 +130,7 @@ describe('iOS: Customer Manager screen Test', () => {
   });
 
   it('should navigate to the Customer Manager tab screen', async () => {
+    // Check if tab elements are visible using test IDs only
     await expect(element(by.id('campaign_tab'))).toBeVisible();
     await expect(element(by.id('profile_tab'))).toBeVisible();
     await expect(element(by.id('entitlements_tab'))).toBeVisible();
@@ -140,6 +141,7 @@ describe('iOS: Customer Manager screen Test', () => {
   });
 
   it('should Customer Manager screen have data', async () => {
+    // Check if tab elements are visible using test IDs only
     await expect(element(by.id('campaign_tab'))).toBeVisible();
     await expect(element(by.id('profile_tab'))).toBeVisible();
     await expect(element(by.id('entitlements_tab'))).toBeVisible();

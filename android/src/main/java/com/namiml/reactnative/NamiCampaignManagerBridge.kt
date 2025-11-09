@@ -354,14 +354,17 @@ class NamiCampaignManagerBridgeModule internal constructor(
         promise: Promise,
     ) {
         try {
-            val uri = if (!withUrl.isNullOrEmpty()) {
-                val parsedUri = Uri.parse(withUrl)
-                if (parsedUri.scheme.isNullOrEmpty()) {
-                    promise.reject("ISFLOW_ERROR", "Invalid URL format: missing scheme", null)
-                    return
+            val uri =
+                if (!withUrl.isNullOrEmpty()) {
+                    val parsedUri = Uri.parse(withUrl)
+                    if (parsedUri.scheme.isNullOrEmpty()) {
+                        promise.reject("ISFLOW_ERROR", "Invalid URL format: missing scheme", null)
+                        return
+                    }
+                    parsedUri
+                } else {
+                    null
                 }
-                parsedUri
-            } else null
             val result = NamiCampaignManager.isFlow(label = label, uri = uri)
             promise.resolve(result)
         } catch (e: Exception) {
@@ -399,5 +402,35 @@ class NamiCampaignManagerBridgeModule internal constructor(
 
     @ReactMethod
     fun removeListeners(count: Int?) {
+    }
+
+    @ReactMethod
+    fun productGroups(
+        label: String?,
+        withUrl: String?,
+        promise: Promise,
+    ) {
+        try {
+            val uri =
+                if (!withUrl.isNullOrEmpty()) {
+                    val parsedUri = Uri.parse(withUrl)
+                    if (parsedUri.scheme.isNullOrEmpty()) {
+                        promise.reject("PRODUCTGROUPS_ERROR", "Invalid URL format: missing scheme", null)
+                        return
+                    }
+                    parsedUri
+                } else {
+                    null
+                }
+
+            val productGroups = NamiCampaignManager.getProductGroups(label = label, uri = uri)
+            val array = WritableNativeArray()
+            productGroups.forEach { group: String ->
+                array.pushString(group)
+            }
+            promise.resolve(array)
+        } catch (e: Exception) {
+            promise.reject("PRODUCTGROUPS_ERROR", "Failed to get product groups: ${e.message}", e)
+        }
     }
 }

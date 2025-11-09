@@ -27,4 +27,5 @@ export declare const NamiCampaignManager: {
         value?: string;
     }[]>;
     registerAvailableCampaignsHandler: (callback: (campaigns: NamiCampaign[]) => void) => (() => void);
+    getProductGroups: (label?: string | null, withUrl?: string | null) => Promise<string[]>;
 };
