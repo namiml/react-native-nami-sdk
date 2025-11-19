@@ -1,6 +1,6 @@
 {
   "name": "react-native-nami-sdk",
-  "version": "3.3.4",
+  "version": "3.3.5",
   "description": "React Native SDK for Nami - No-code paywall and onboarding flows with A/B testing.",
   "main": "index.ts",
   "types": "dist/index.d.ts",
