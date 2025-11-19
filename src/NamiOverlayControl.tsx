@@ -16,7 +16,18 @@ export const NamiOverlayControl = {
   emitter,
 
   presentOverlay(): Promise<void> {
-    return RNNamiOverlayControl.presentOverlay();
+    return RNNamiOverlayControl.presentOverlay().catch((error) => {
+      // Handle the case where an overlay is already active
+      if (error.code === 'OVERLAY_ALREADY_ACTIVE') {
+        console.warn(
+          'NamiOverlayControl: An overlay is already being presented. Ignoring duplicate call.',
+        );
+        // Return a resolved promise to maintain backward compatibility
+        return Promise.resolve();
+      }
+      // Re-throw other errors
+      throw error;
+    });
   },
 
   finishOverlay(result?: any): Promise<void> {

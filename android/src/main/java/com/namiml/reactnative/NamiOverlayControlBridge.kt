@@ -18,12 +18,31 @@ class NamiOverlayControlBridgeModule(private val ctx: ReactApplicationContext)
     const val NAME = "RNNamiOverlayControl"
     var currentOverlayActivity: ReactOverlayActivity? = null
     var lastValidActivity: Activity? = null
+    private var isPresentingOverlay = false
+    private val pendingPromises = mutableListOf<Promise>()
+
+    // Internal method to clear the presenting flag (for use by ReactOverlayActivity)
+    internal fun clearPresentingFlag() {
+      isPresentingOverlay = false
+    }
+
+    // Internal method to check if an overlay is currently being presented
+    internal fun isOverlayActive(): Boolean {
+      return isPresentingOverlay || currentOverlayActivity != null
+    }
   }
 
   override fun getName() = NAME
 
   @ReactMethod
   fun presentOverlay(promise: Promise) {
+    // Check if we're already presenting an overlay
+    if (isPresentingOverlay || currentOverlayActivity != null) {
+      // If there's already an active overlay, reject the new call
+      promise.reject("OVERLAY_ALREADY_ACTIVE", "An overlay is already being presented or is currently active")
+      return
+    }
+
     var theActivity: Activity? = null
     if (reactApplicationContext.hasCurrentActivity()) {
       theActivity = reactApplicationContext.currentActivity
@@ -55,6 +74,8 @@ class NamiOverlayControlBridgeModule(private val ctx: ReactApplicationContext)
       return
     }
 
+    // Set flag to indicate we're presenting an overlay
+    isPresentingOverlay = true
     startOverlayActivity(theActivity, promise)
   }
 
@@ -88,11 +109,15 @@ class NamiOverlayControlBridgeModule(private val ctx: ReactApplicationContext)
           promise.resolve(null)
         } catch (uiError: Exception) {
           Log.e(NAME, "Error in UI thread: ${uiError.message}", uiError)
+          // Clear the presenting flag on error
+          isPresentingOverlay = false
           promise.reject("UI_THREAD_ERROR", "Failed in UI thread: ${uiError.message}", uiError)
         }
       }
     } catch (e: Exception) {
       Log.e(NAME, "Error presenting overlay: ${e.message}", e)
+      // Clear the presenting flag on error
+      isPresentingOverlay = false
       promise.reject("PRESENT_OVERLAY_ERROR", "Failed to present overlay: ${e.message}", e)
     }
   }
@@ -137,6 +162,8 @@ class NamiOverlayControlBridgeModule(private val ctx: ReactApplicationContext)
             overlay.overridePendingTransition(0, 0)
           }
           currentOverlayActivity = null
+          // Clear the presenting flag when overlay is finished
+          isPresentingOverlay = false
 
           // Wait for activity to actually finish before resolving promise
           android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
@@ -153,12 +180,16 @@ class NamiOverlayControlBridgeModule(private val ctx: ReactApplicationContext)
               @Suppress("DEPRECATION")
               overridePendingTransition(0, 0)
             }
+            // Clear the presenting flag when overlay is finished
+            isPresentingOverlay = false
 
             // Wait for activity to actually finish before resolving promise
             android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
               promise.resolve(null)
             }, 100)
           } ?: run {
+            // Clear the presenting flag even if no activity was found
+            isPresentingOverlay = false
             promise.resolve(null)
           }
         }

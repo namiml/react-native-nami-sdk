@@ -24,6 +24,8 @@ class ReactOverlayActivity : ReactActivity() {
     // Clear the reference when activity is destroyed
     if (NamiOverlayControlBridgeModule.currentOverlayActivity == this) {
       NamiOverlayControlBridgeModule.currentOverlayActivity = null
+      // Also clear the presenting flag to prevent stuck states
+      NamiOverlayControlBridgeModule.clearPresentingFlag()
     }
   }
 }
