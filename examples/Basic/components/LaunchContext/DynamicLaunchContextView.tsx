@@ -218,7 +218,9 @@ export const DynamicLaunchContextView: React.FC<DynamicLaunchContextViewProps> =
 
       <ScrollView
         style={styles.scrollView}
-        showsVerticalScrollIndicator={false}>
+        contentContainerStyle={styles.scrollViewContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled">
         {/* Content Header */}
         {(config.meta?.title || config.meta?.description) && (
           <View style={styles.contentHeader}>
@@ -332,6 +334,10 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    paddingBottom: 80,
   },
   centerContainer: {
     flex: 1,
