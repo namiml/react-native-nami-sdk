@@ -68,7 +68,7 @@ class NamiPaywallManagerBridgeModule internal constructor(
             }
 
             if (purchaseSuccess != null) {
-                val activity = latestPaywallActivity ?: currentActivity
+                val activity = latestPaywallActivity ?: reactApplicationContext.getCurrentActivity()
                 if (activity != null) {
                     NamiPaywallManager.buySkuComplete(activity, purchaseSuccess)
                 } else {
@@ -166,7 +166,7 @@ class NamiPaywallManagerBridgeModule internal constructor(
         reactApplicationContext.runOnUiQueueThread {
             latestPaywallActivity?.let {
                 NamiPaywallManager.buySkuCancel(it)
-            } ?: currentActivity?.let {
+            } ?: reactApplicationContext.getCurrentActivity()?.let {
                 NamiPaywallManager.buySkuCancel(it)
             } ?: NamiPaywallManager.buySkuCancel()
         }
