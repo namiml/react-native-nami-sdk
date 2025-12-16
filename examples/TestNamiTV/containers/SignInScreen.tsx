@@ -9,8 +9,9 @@ export const SignInScreen = () => {
   const navigation = useNavigation();
 
   const handleLogin = () => {
-    const randomUUID = uuidv4();
-    NamiCustomerManager.login(randomUUID);
+    //const randomUUID = uuidv4();
+    //NamiCustomerManager.login(randomUUID);
+    NamiCustomerManager.setCustomerAttribute('currentSubscriber', 'true');
     navigation.goBack();
   };
 

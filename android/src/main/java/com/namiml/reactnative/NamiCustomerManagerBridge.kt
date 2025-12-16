@@ -12,6 +12,9 @@ class NamiCustomerManagerBridgeModule internal constructor(
     private val reactContext: ReactApplicationContext
 ) : ReactContextBaseJavaModule(reactContext), TurboModule {
 
+    // Capture the context early to avoid bridge destruction issues
+    private val capturedContext = reactContext
+
     companion object {
         const val NAME = "RNNamiCustomerManager"
     }
@@ -117,9 +120,17 @@ class NamiCustomerManagerBridgeModule internal constructor(
     fun registerJourneyStateHandler() {
         NamiCustomerManager.registerJourneyStateHandler { journeyState ->
             val handledJourneyState = journeyStateToReadableMap(journeyState)
-            reactContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit("JourneyStateChanged", handledJourneyState)
+            try {
+                if (capturedContext.hasActiveCatalystInstance()) {
+                    capturedContext
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                        ?.emit("JourneyStateChanged", handledJourneyState)
+                } else {
+                    android.util.Log.w(NAME, "Cannot emit JourneyStateChanged: Bridge has been destroyed or is inactive")
+                }
+            } catch (e: Exception) {
+                android.util.Log.w(NAME, "Error emitting JourneyStateChanged event: ${e.message}")
+            }
         }
     }
 
@@ -130,9 +141,17 @@ class NamiCustomerManagerBridgeModule internal constructor(
             body.putString("action", action.toString())
             body.putBoolean("success", success)
             body.putString("error", error.toString())
-            reactContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit("AccountStateChanged", body)
+            try {
+                if (capturedContext.hasActiveCatalystInstance()) {
+                    capturedContext
+                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                        ?.emit("AccountStateChanged", body)
+                } else {
+                    android.util.Log.w(NAME, "Cannot emit AccountStateChanged: Bridge has been destroyed or is inactive")
+                }
+            } catch (e: Exception) {
+                android.util.Log.w(NAME, "Error emitting AccountStateChanged event: ${e.message}")
+            }
         }
     }
 

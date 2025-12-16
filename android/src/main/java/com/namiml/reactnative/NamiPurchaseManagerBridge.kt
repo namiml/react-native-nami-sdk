@@ -12,6 +12,9 @@ class NamiPurchaseManagerBridgeModule internal constructor(
     private val reactContext: ReactApplicationContext
 ) : ReactContextBaseJavaModule(reactContext), TurboModule {
 
+    // Capture the context early to avoid bridge destruction issues
+    private val capturedContext = reactContext
+
     companion object {
         const val NAME = "RNNamiPurchaseManager"
     }
@@ -97,9 +100,17 @@ class NamiPurchaseManagerBridgeModule internal constructor(
     }
 
     private fun emitEvent(eventName: String, payload: WritableMap) {
-        reactContext
-            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-            .emit(eventName, payload)
+        try {
+            if (capturedContext.hasActiveCatalystInstance()) {
+                capturedContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                    ?.emit(eventName, payload)
+            } else {
+                Log.w(NAME, "Cannot emit $eventName: Bridge has been destroyed or is inactive")
+            }
+        } catch (e: Exception) {
+            Log.w(NAME, "Error emitting $eventName event: ${e.message}")
+        }
     }
 
     @ReactMethod fun addListener(eventName: String?) {}
