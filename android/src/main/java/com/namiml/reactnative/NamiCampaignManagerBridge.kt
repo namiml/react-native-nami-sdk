@@ -271,14 +271,14 @@ class NamiCampaignManagerBridgeModule internal constructor(
 
     private fun emitEvent(
         event: String,
-        map: WritableMap,
+        payload: Any?,
     ) {
         try {
             // Check if the bridge is still active
             if (capturedContext.hasActiveCatalystInstance()) {
                 val emitter = capturedContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
                 if (emitter is DeviceEventManagerModule.RCTDeviceEventEmitter) {
-                    emitter.emit(event, map)
+                    emitter.emit(event, payload)
                 } else {
                     Log.w(NAME, "Cannot emit $event event: RCTDeviceEventEmitter instance is null")
                 }
