@@ -21,9 +21,6 @@ class NamiCampaignManagerBridgeModule internal constructor(
     private val reactContext: ReactApplicationContext,
 ) : ReactContextBaseJavaModule(reactContext),
     TurboModule {
-
-    // Capture the context early to avoid bridge destruction issues
-    private val capturedContext = reactContext
     companion object {
         const val NAME = "RNNamiCampaignManager"
         const val CAMPAIGN_ID = "campaignId"
@@ -271,22 +268,13 @@ class NamiCampaignManagerBridgeModule internal constructor(
 
     private fun emitEvent(
         event: String,
-        payload: Any?,
+        map: WritableMap,
     ) {
-        try {
-            // Check if the bridge is still active
-            if (capturedContext.hasActiveCatalystInstance()) {
-                val emitter = capturedContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                if (emitter is DeviceEventManagerModule.RCTDeviceEventEmitter) {
-                    emitter.emit(event, payload)
-                } else {
-                    Log.w(NAME, "Cannot emit $event event: RCTDeviceEventEmitter instance is null")
-                }
-            } else {
-                Log.w(NAME, "Cannot emit $event event: Bridge has been destroyed or is inactive")
-            }
-        } catch (e: Exception) {
-            Log.w(NAME, "Error emitting $event event: ${e.message}")
+        val emitter = reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+        if (emitter is DeviceEventManagerModule.RCTDeviceEventEmitter) {
+            emitter.emit(event, map)
+        } else {
+            Log.w(NAME, "Cannot emit $event event: RCTDeviceEventEmitter instance is null")
         }
     }
 
@@ -402,7 +390,9 @@ class NamiCampaignManagerBridgeModule internal constructor(
             availableCampaigns.forEach { campaign ->
                 array.pushMap(campaignToReadableMap(campaign))
             }
-            emitEvent("AvailableCampaignsChanged", array)
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("AvailableCampaignsChanged", array)
         }
     }
 

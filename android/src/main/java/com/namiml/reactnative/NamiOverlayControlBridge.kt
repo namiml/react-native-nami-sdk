@@ -14,9 +14,6 @@ import com.facebook.react.bridge.UiThreadUtil
 class NamiOverlayControlBridgeModule(private val ctx: ReactApplicationContext)
   : ReactContextBaseJavaModule(ctx), TurboModule {
 
-  // Capture the context early to avoid bridge destruction issues
-  private val capturedContext = ctx
-
   companion object {
     const val NAME = "RNNamiOverlayControl"
     var currentOverlayActivity: ReactOverlayActivity? = null
@@ -100,11 +97,9 @@ class NamiOverlayControlBridgeModule(private val ctx: ReactApplicationContext)
           // Emit ready event after a short delay to ensure activity is started
           android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
             try {
-              if (capturedContext.hasActiveCatalystInstance()) {
-                capturedContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                  ?.emit("NamiOverlayReady", null)
-              } else {
-                Log.w(NAME, "Cannot emit NamiOverlayReady: Bridge has been destroyed or is inactive")
+              if (ctx.catalystInstance != null) {
+                ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                  .emit("NamiOverlayReady", null)
               }
             } catch (e: Exception) {
               Log.e(NAME, "Failed to emit NamiOverlayReady: ${e.message}")
@@ -147,11 +142,9 @@ class NamiOverlayControlBridgeModule(private val ctx: ReactApplicationContext)
         }
       }
       try {
-        if (capturedContext.hasActiveCatalystInstance()) {
-          capturedContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-            ?.emit("NamiOverlayResult", payload)
-        } else {
-          Log.w(NAME, "Cannot emit NamiOverlayResult: Bridge has been destroyed or is inactive")
+        if (ctx.catalystInstance != null) {
+          ctx.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            .emit("NamiOverlayResult", payload)
         }
       } catch (e: Exception) {
         Log.e(NAME, "Failed to emit NamiOverlayResult: ${e.message}")

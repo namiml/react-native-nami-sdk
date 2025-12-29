@@ -15,9 +15,6 @@ class NamiPaywallManagerBridgeModule internal constructor(
     reactContext: ReactApplicationContext
 ) : ReactContextBaseJavaModule(reactContext), TurboModule {
 
-    // Capture the context early to avoid bridge destruction issues
-    private val capturedContext = reactContext
-
     companion object {
         const val NAME = "RNNamiPaywallManager"
     }
@@ -86,6 +83,8 @@ class NamiPaywallManagerBridgeModule internal constructor(
     @ReactMethod
     fun registerCloseHandler() {
         NamiPaywallManager.registerCloseHandler { activity ->
+            Log.d(NAME, "close handler called, latestPaywallActivity: $activity")
+
             latestPaywallActivity = activity
             val map = Arguments.createMap().apply {
                 putBoolean("paywallCloseRequested", true)
@@ -194,16 +193,7 @@ class NamiPaywallManagerBridgeModule internal constructor(
     @ReactMethod fun removeListeners(count: Int?) {}
 
     private fun emitEvent(name: String, payload: Any?) {
-        try {
-            // Check if the bridge is still active
-            if (capturedContext.hasActiveCatalystInstance()) {
-                val emitter = capturedContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                emitter?.emit(name, payload)
-            } else {
-                Log.w(NAME, "Cannot emit $name event: Bridge has been destroyed or is inactive")
-            }
-        } catch (e: Exception) {
-            Log.w(NAME, "Error emitting $name event: ${e.message}")
-        }
+        val emitter = reactApplicationContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+        emitter.emit(name, payload)
     }
 }

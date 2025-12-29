@@ -7,21 +7,29 @@ const log = logger.createLogger();
 const eventSubscriptions: (() => void)[] = [];
 
 export function registerNamiPaywallListeners() {
+  console.log('[paywallHandlers] Registering global paywall event handlers...');
+
   eventSubscriptions.push(
-    NamiPaywallManager.registerSignInHandler(() => {
-      log.debug('[paywallHandlers] Sign In requested');
+    NamiPaywallManager.registerSignInHandler(async () => {
+      log.debug('[paywallHandlers] Sign In requested - calling dismiss');
+      await NamiPaywallManager.dismiss();
     }),
 
-    NamiPaywallManager.registerCloseHandler(() => {
-      log.debug('[paywallHandlers] Close requested');
+    NamiPaywallManager.registerCloseHandler(async () => {
+      log.debug('[paywallHandlers] Close requested - calling dismiss');
+      await NamiPaywallManager.dismiss();
     }),
 
-    NamiPaywallManager.registerRestoreHandler(() => {
-      log.debug('[paywallHandlers] Restore requested');
+    NamiPaywallManager.registerRestoreHandler(async () => {
+      log.debug('[paywallHandlers] Restore requested - calling dismiss');
+      await NamiPaywallManager.dismiss();
     }),
 
-    NamiPaywallManager.registerDeeplinkActionHandler((url: string) => {
+    NamiPaywallManager.registerDeeplinkActionHandler(async (url: string) => {
       log.debug('[paywallHandlers] Deeplink Action:', url);
+      NamiPaywallManager.buySkuCancel();
+      await NamiPaywallManager.dismiss();
+
       if (url) {
         handleDeepLink({ url });
       }

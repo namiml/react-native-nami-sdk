@@ -14,9 +14,6 @@ class NamiFlowManagerBridgeModule internal constructor(
     reactContext: ReactApplicationContext,
 ) : ReactContextBaseJavaModule(reactContext),
     TurboModule {
-
-    // Capture the context early to avoid bridge destruction issues
-    private val capturedContext = reactContext
     companion object {
         const val NAME = "RNNamiFlowManager"
     }
@@ -86,17 +83,9 @@ class NamiFlowManagerBridgeModule internal constructor(
         eventName: String,
         params: WritableMap?,
     ) {
-        try {
-            if (capturedContext.hasActiveCatalystInstance()) {
-                capturedContext
-                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                    ?.emit(eventName, params)
-            } else {
-                Log.w(NAME, "Cannot emit $eventName: Bridge has been destroyed or is inactive")
-            }
-        } catch (e: Exception) {
-            Log.w(NAME, "Error emitting $eventName event: ${e.message}")
-        }
+        reactApplicationContext
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+            .emit(eventName, params)
     }
 
     // Required for RN EventEmitter support

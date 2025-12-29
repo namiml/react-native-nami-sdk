@@ -58,7 +58,7 @@ export interface Spec extends TurboModule {
     registerSignInHandler(): void;
     registerRestoreHandler(): void;
     registerDeeplinkActionHandler(): void;
-    dismiss(): Promise<void>;
+    dismiss(): Promise<boolean>;
     show(): void;
     hide(): void;
     isHidden(): Promise<boolean>;
@@ -67,6 +67,8 @@ export interface Spec extends TurboModule {
     setProductDetails(productDetails: string, allowOffers: boolean): void;
     setAppSuppliedVideoDetails(url: string, name?: string): void;
     allowUserInteraction(allowed: boolean): void;
+    testEventEmission(): void;
+    testPaywallCloseEmission(): void;
 }
 declare const _default: Spec;
 export default _default;

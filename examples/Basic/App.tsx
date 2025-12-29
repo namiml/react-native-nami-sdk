@@ -142,7 +142,69 @@ const App = () => {
     return () => subscription.remove();
   }, []);
 
-  // IAP purchase handling
+  // Store handler cleanup functions globally so they can be accessed from CampaignScreen
+  const handlerCleanupRef = useRef<{
+    closeHandler?: () => void;
+    signInHandler?: () => void;
+    restoreHandler?: () => void;
+    deeplinkHandler?: () => void;
+      }>({});
+
+  // Global paywall handlers - register once but DON'T cleanup in useEffect
+  useEffect(() => {
+    console.log('[App] Registering global paywall handlers (no auto-cleanup)...');
+
+    const closeHandler = NamiPaywallManager.registerCloseHandler(async () => {
+      console.log('[App] Global close handler fired - PaywallCloseRequested received');
+      console.log('[App] Calling dismiss...');
+      const result = await NamiPaywallManager.dismiss();
+      console.log('[App] Dismiss result:', result);
+    });
+    console.log('[App] Close handler registered:', closeHandler);
+
+    const signInHandler = NamiPaywallManager.registerSignInHandler(async () => {
+      console.log('[App] Global sign in handler - calling dismiss');
+      await NamiPaywallManager.dismiss();
+    });
+
+    const restoreHandler = NamiPaywallManager.registerRestoreHandler(async () => {
+      console.log('[App] Global restore handler - calling dismiss');
+      await NamiPaywallManager.dismiss();
+    });
+
+    const deeplinkHandler = NamiPaywallManager.registerDeeplinkActionHandler(async (url: string) => {
+      console.log('[App] Global deeplink handler:', url);
+      NamiPaywallManager.buySkuCancel();
+      await NamiPaywallManager.dismiss();
+
+      if (url) {
+        handleDeepLink({ url });
+      }
+    });
+
+    // Store cleanup functions but DON'T call them in useEffect cleanup
+    handlerCleanupRef.current = {
+      closeHandler,
+      signInHandler,
+      restoreHandler,
+      deeplinkHandler,
+    };
+
+    // Export cleanup function globally so CampaignScreen can call it
+    (global as any).cleanupPaywallHandlers = () => {
+      console.log('[App] Manually cleaning up paywall handlers...');
+      handlerCleanupRef.current.closeHandler?.();
+      handlerCleanupRef.current.signInHandler?.();
+      handlerCleanupRef.current.restoreHandler?.();
+      handlerCleanupRef.current.deeplinkHandler?.();
+      handlerCleanupRef.current = {};
+    };
+
+    // NO cleanup in return - handlers persist even if App unmounts
+    // Cleanup will be called manually from CampaignScreen on CLOSE_PAYWALL
+  }, []); // Empty dependency array - register once
+
+  // IAP purchase handling - separate effect with dependencies
   useEffect(() => {
     const buySkuListener = NamiPaywallManager.registerBuySkuHandler(
       async (sku: NamiSKU) => {
@@ -160,7 +222,8 @@ const App = () => {
     });
 
     return () => {
-      buySkuListener;
+      console.log('[App] Cleaning up IAP handlers...');
+      buySkuListener();
       purchaseUpdate.remove();
       purchaseError.remove();
     };

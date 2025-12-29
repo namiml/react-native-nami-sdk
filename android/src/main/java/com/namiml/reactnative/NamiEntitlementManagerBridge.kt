@@ -11,9 +11,6 @@ class NamiEntitlementManagerBridgeModule internal constructor(
     reactContext: ReactApplicationContext
 ) : ReactContextBaseJavaModule(reactContext), TurboModule {
 
-    // Capture the context early to avoid bridge destruction issues
-    private val capturedContext = reactContext
-
     companion object {
         const val NAME = "RNNamiEntitlementManager"
     }
@@ -51,17 +48,9 @@ class NamiEntitlementManagerBridgeModule internal constructor(
                     }
                 }
             }
-            try {
-                if (capturedContext.hasActiveCatalystInstance()) {
-                    capturedContext
-                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                        ?.emit("EntitlementsChanged", resultArray)
-                } else {
-                    android.util.Log.w(NAME, "Cannot emit EntitlementsChanged: Bridge has been destroyed or is inactive")
-                }
-            } catch (e: Exception) {
-                android.util.Log.w(NAME, "Error emitting EntitlementsChanged event: ${e.message}")
-            }
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("EntitlementsChanged", resultArray)
         }
     }
 
@@ -74,17 +63,9 @@ class NamiEntitlementManagerBridgeModule internal constructor(
                     resultArray.pushMap(entitlementDict)
                 }
             }
-            try {
-                if (capturedContext.hasActiveCatalystInstance()) {
-                    capturedContext
-                        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                        ?.emit("EntitlementsChanged", resultArray)
-                } else {
-                    android.util.Log.w(NAME, "Cannot emit EntitlementsChanged: Bridge has been destroyed or is inactive")
-                }
-            } catch (e: Exception) {
-                android.util.Log.w(NAME, "Error emitting EntitlementsChanged event: ${e.message}")
-            }
+            reactApplicationContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit("EntitlementsChanged", resultArray)
         }
     }
 
