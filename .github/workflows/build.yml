@@ -56,14 +56,12 @@ jobs:
       - name: Run Yarn
         run: |
           yarn --frozen-lockfile
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish
         run: |
           npm publish --access public $NPM_TAG
         env:
-          NPM_TAG: ${{ inputs.earlyaccess && '--tag=beta' || '' }}
+          NPM_TAG: ${{ inputs.earlyaccess == 'true' && '--tag=beta' || '' }}
 
       - name: Create Github Release
         run: |-
