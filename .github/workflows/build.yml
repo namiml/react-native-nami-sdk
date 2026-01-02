@@ -61,7 +61,7 @@ jobs:
         run: |
           npm publish --access public $NPM_TAG
         env:
-          NPM_TAG: ${{ inputs.earlyaccess == 'true' && '--tag=beta' || '' }}
+          NPM_TAG: ${{ inputs.earlyaccess == 'true' && '--tag=beta' || ' ' }}
 
       - name: Create Github Release
         run: |-
