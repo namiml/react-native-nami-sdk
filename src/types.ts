@@ -188,6 +188,12 @@ export enum LaunchCampaignError {
   PRODUCT_GROUPS_NOT_FOUND = 8,
 }
 
+export type NamiError = {
+  domain: string;
+  code: number;
+  message: string;
+};
+
 export enum LaunchCampaignResultAction {
   FAILURE = 'FAILURE',
   SUCCESS = 'SUCCESS',

@@ -1,4 +1,5 @@
 import type { TurboModule } from 'react-native';
+import type { NamiError } from '../src/types';
 export interface Spec extends TurboModule {
     launch(label: string | null, withUrl: string | null, context: {
         productGroups?: string[];
@@ -8,7 +9,7 @@ export interface Spec extends TurboModule {
         customObject?: {
             [key: string]: unknown;
         };
-    } | null, completion: (successAction: boolean, error: number | null) => void, paywallCompletion: (event: {
+    } | null, completion: (successAction: boolean, error: NamiError | null) => void, paywallCompletion: (event: {
         campaignId?: string;
         campaignName?: string;
         campaignType?: string;

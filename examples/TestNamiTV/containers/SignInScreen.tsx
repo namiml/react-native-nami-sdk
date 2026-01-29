@@ -3,14 +3,15 @@ import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NamiCustomerManager } from 'react-native-nami-sdk';
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid';
 
 export const SignInScreen = () => {
   const navigation = useNavigation();
 
   const handleLogin = () => {
-    const randomUUID = uuidv4();
-    NamiCustomerManager.login(randomUUID);
+    //const randomUUID = uuidv4();
+    //NamiCustomerManager.login(randomUUID);
+    NamiCustomerManager.setCustomerAttribute('currentSubscriber', 'true');
     navigation.goBack();
   };
 

@@ -80,6 +80,11 @@ export declare enum LaunchCampaignError {
     PRODUCT_DATA_NOT_FOUND = 7,
     PRODUCT_GROUPS_NOT_FOUND = 8
 }
+export type NamiError = {
+    domain: string;
+    code: number;
+    message: string;
+};
 export declare enum LaunchCampaignResultAction {
     FAILURE = "FAILURE",
     SUCCESS = "SUCCESS"

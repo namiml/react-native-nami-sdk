@@ -15,6 +15,10 @@ on:
       BUILD_USER_PAT:
         required: true
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build:
     name: Build Bridge release
@@ -43,23 +47,21 @@ jobs:
         env:
           NAMI_SDK_VERSION: ${{ inputs.version }}
 
-      - name: Setup .npmrc
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Run Yarn
         run: |
           yarn --frozen-lockfile
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish
         run: |
-          npm publish --access public
+          npm publish --access public $NPM_TAG
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TAG: ${{ inputs.earlyaccess && '--tag=beta' || '' }}
 
       - name: Create Github Release
         run: |-

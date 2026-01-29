@@ -71,6 +71,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
   const [selectedCampaign, setSelectedCampaign] = useState<NamiCampaign | null>(null);
   const [hasLaunchContextConfig, setHasLaunchContextConfig] = useState(false);
 
+
   const checkIfPaywallOpen = async () => {
     const isOpen = await NamiPaywallManager.isPaywallOpen();
     log.debug('NamiSDK: paywall open? ', isOpen);
@@ -91,6 +92,7 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       log.debug(error);
     }
   };
+
 
   const getAllCampaigns = useCallback(async () => {
     const fetchedCampaigns = await NamiCampaignManager.allCampaigns();
@@ -115,7 +117,15 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
     return refreshedCampaigns;
   }, []);
 
+
   useEffect(() => {
+    // Debug: Add a direct listener for PaywallCloseRequested event
+    console.log('[CampaignScreen] Setting up direct PaywallCloseRequested listener...');
+    const directListener = NamiPaywallManager.emitter.addListener('PaywallCloseRequested', (data) => {
+      console.log('[CampaignScreen] DIRECT PaywallCloseRequested event received!', data);
+    });
+    console.log('[CampaignScreen] Direct listener created:', directListener);
+
     // Initial load of campaigns
     getAllCampaigns();
 
@@ -154,51 +164,14 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         },
       );
 
-    const subscriptionSignInRemover = NamiPaywallManager.registerSignInHandler(
-      async () => {
-        console.log('[NamiPaywallManager.registerSignInHandler] sign in');
-        await NamiPaywallManager.dismiss();
-      },
-    );
-
-    const subscriptionCloseRemover = NamiPaywallManager.registerCloseHandler(
-      async () => {
-        console.log('[NamiPaywallManager.registerCloseHandler] close');
-        await NamiPaywallManager.dismiss();
-      },
-    );
-
-    const subscriptionRestoreRemover =
-      NamiPaywallManager.registerRestoreHandler(async () => {
-        console.log('[NamiPaywallManager.registerRestoreHandler] restore');
-        await NamiPaywallManager.dismiss();
-      });
-
-    const subscriptionDeeplinkRemover =
-      NamiPaywallManager.registerDeeplinkActionHandler(async url => {
-        console.log(
-          '[NamiPaywallManager.registerDeeplinkActionHandler] deeplink action ',
-          url,
-        );
-
-        // for testing:
-        NamiPaywallManager.buySkuCancel();
-
-        await NamiPaywallManager.dismiss();
-
-        if (url) {
-          handleDeepLink({ url });
-        }
-      });
+    // Paywall event handlers moved to App level to avoid race conditions
 
     getAllCampaigns();
 
     return () => {
+      console.log('[CampaignScreen] Cleaning up listeners...');
+      directListener.remove();
       availableCampaignsRemover();
-      subscriptionSignInRemover();
-      subscriptionCloseRemover();
-      subscriptionRestoreRemover();
-      subscriptionDeeplinkRemover();
     };
     //Note: not needed in depts
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,6 +201,8 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
 
     log.debug('Launching with context:', context);
 
+    // Handlers are now registered globally in App.tsx to survive Android Activity recreation
+
     return NamiCampaignManager.launch(
       label,
       url,
@@ -235,6 +210,16 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       (successAction, error) => {
         log.debug('successAction', successAction);
         log.debug('error', error);
+
+        if (error) {
+          console.log('[CampaignScreen] Launch failed with error:', {
+            domain: error.domain,
+            code: error.code,
+            message: error.message
+          });
+        } else {
+          console.log('[CampaignScreen] Paywall launched successfully');
+        }
 
         checkIfPaywallOpen();
       },
@@ -267,6 +252,56 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
           `NamiPaywallEvent sku promoToken - ${event.sku?.promoToken}"`,
         );
         setAction(event.action);
+
+        // When paywall closes, clean up the global handlers and re-register for next time
+        if (event.action === NamiPaywallAction.CLOSE_PAYWALL) {
+          console.log('[CampaignScreen] CLOSE_PAYWALL event received - cleaning up and re-registering handlers');
+
+          // Clean up existing handlers
+          if ((global as any).cleanupPaywallHandlers) {
+            (global as any).cleanupPaywallHandlers();
+          }
+
+          // Re-register handlers for next paywall launch
+          // This ensures they're ready even if App component was unmounted
+          setTimeout(() => {
+            console.log('[CampaignScreen] Re-registering handlers for next launch...');
+
+            const closeHandler = NamiPaywallManager.registerCloseHandler(async () => {
+              console.log('[CampaignScreen] Re-registered close handler fired');
+              await NamiPaywallManager.dismiss();
+            });
+
+            const signInHandler = NamiPaywallManager.registerSignInHandler(async () => {
+              console.log('[CampaignScreen] Re-registered sign in handler fired');
+              await NamiPaywallManager.dismiss();
+            });
+
+            const restoreHandler = NamiPaywallManager.registerRestoreHandler(async () => {
+              console.log('[CampaignScreen] Re-registered restore handler fired');
+              await NamiPaywallManager.dismiss();
+            });
+
+            const deeplinkHandler = NamiPaywallManager.registerDeeplinkActionHandler(async (url: string) => {
+              console.log('[CampaignScreen] Re-registered deeplink handler fired:', url);
+              NamiPaywallManager.buySkuCancel();
+              await NamiPaywallManager.dismiss();
+
+              if (url) {
+                handleDeepLink({ url });
+              }
+            });
+
+            // Update global cleanup function with new handler references
+            (global as any).cleanupPaywallHandlers = () => {
+              console.log('[CampaignScreen] Cleaning up re-registered handlers...');
+              closeHandler();
+              signInHandler();
+              restoreHandler();
+              deeplinkHandler();
+            };
+          }, 100); // Small delay to ensure cleanup is complete
+        }
       },
     );
   }, []);

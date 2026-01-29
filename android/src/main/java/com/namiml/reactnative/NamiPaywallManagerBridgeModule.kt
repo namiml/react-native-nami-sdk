@@ -83,6 +83,8 @@ class NamiPaywallManagerBridgeModule internal constructor(
     @ReactMethod
     fun registerCloseHandler() {
         NamiPaywallManager.registerCloseHandler { activity ->
+            Log.d(NAME, "close handler called, latestPaywallActivity: $activity")
+
             latestPaywallActivity = activity
             val map = Arguments.createMap().apply {
                 putBoolean("paywallCloseRequested", true)

@@ -58,7 +58,7 @@ export interface Spec extends TurboModule {
     registerSignInHandler(): void;
     registerRestoreHandler(): void;
     registerDeeplinkActionHandler(): void;
-    dismiss(): Promise<void>;
+    dismiss(): Promise<boolean>;
     show(): void;
     hide(): void;
     isHidden(): Promise<boolean>;

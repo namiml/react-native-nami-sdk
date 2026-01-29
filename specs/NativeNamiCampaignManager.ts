@@ -10,7 +10,10 @@ export interface Spec extends TurboModule {
       customAttributes?: { [key: string]: string };
       customObject?: { [key: string]: unknown };
     } | null,
-    completion: (successAction: boolean, error: number | null) => void,
+    completion: (
+      successAction: boolean,
+      error: { domain: string; code: number; message: string } | null,
+    ) => void,
     paywallCompletion: (event: {
       campaignId?: string;
       campaignName?: string;

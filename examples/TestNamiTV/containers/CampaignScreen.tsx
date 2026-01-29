@@ -68,7 +68,15 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
       undefined,
       (successAction, error) => {
         console.log('successAction', successAction);
-        console.log('error', error);
+        if (error) {
+          console.log('Launch failed with error:', {
+            domain: error.domain,
+            code: error.code,
+            message: error.message
+          });
+        } else {
+          console.log('error', error);
+        }
       },
       (event: NamiPaywallEvent) => {
         console.log('event', event);

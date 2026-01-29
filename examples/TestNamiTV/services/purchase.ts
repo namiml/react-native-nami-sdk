@@ -118,6 +118,7 @@ export async function handlePurchaseUpdate(
           storeType: 'Amazon',
         });
       } else {
+        NamiCustomerManager.setCustomerAttribute('currentSubscriber', 'true');
         NamiPaywallManager.buySkuComplete({
           product: sku,
           purchaseToken: purchase.purchaseToken ?? '',
