@@ -8,6 +8,7 @@ import type {
   NamiPaywallEvent,
   PaywallLaunchContext,
   NamiCampaign,
+  NamiError,
 } from './types';
 import { NamiPaywallAction } from './types';
 
@@ -43,7 +44,7 @@ export const NamiCampaignManager = {
     label: string | null,
     withUrl: string | null,
     context: PaywallLaunchContext | null,
-    resultCallback?: (success: boolean, errorCode?: number | null) => void,
+    resultCallback?: (success: boolean, error?: NamiError | null) => void,
     actionCallback?: (event: any) => void,
   ): void {
     if (this.launchSubscription) {

@@ -27,6 +27,4 @@ export declare const NamiPaywallManager: {
     setProductDetails: (productDetails: string, allowOffers: boolean) => void;
     setAppSuppliedVideoDetails: (url: string, name?: string) => void;
     allowUserInteraction: (allowed: boolean) => void;
-    testEventEmission: () => void;
-    testPaywallCloseEmission: () => void;
 };

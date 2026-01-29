@@ -212,7 +212,11 @@ const CampaignScreen: FC<CampaignScreenProps> = ({ navigation }) => {
         log.debug('error', error);
 
         if (error) {
-          console.log('[CampaignScreen] Launch failed with error:', error);
+          console.log('[CampaignScreen] Launch failed with error:', {
+            domain: error.domain,
+            code: error.code,
+            message: error.message
+          });
         } else {
           console.log('[CampaignScreen] Paywall launched successfully');
         }
