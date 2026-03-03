@@ -37,8 +37,6 @@ export function useNamiFlowListener(
       switch (tag) {
 
         case 'signin': {
-          NamiFlowManager.pause();
-
           if (navigationRef?.current?.navigate) {
             navigationRef.current.navigate('SignIn');
           }
